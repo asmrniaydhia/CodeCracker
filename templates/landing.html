@@ -67,7 +67,6 @@
         font-weight: 900;
         transition: all 0.2s ease;
         border-radius: 8px; 
-
         font-size: 1rem;
         padding: 15px 30px;
         line-height: 1; 
@@ -112,8 +111,12 @@
 
       .explore-section {
         background-color: #F5F9EE;
-        padding: 70px 0;
+        padding: 40px 0 80px 10px;
         text-align: center;
+      }
+
+      #explore {
+          scroll-margin-top: 80px; /* sesuaikan dengan tinggi navbar */
       }
 
       .explore-section h2 {
@@ -202,6 +205,22 @@
         background-color: #138496;
         border-color: #117a8b;
       }
+
+      .footer {
+        background-color: #1B3C53;
+        color: white;
+      }
+
+      .footer a {
+        color: #F3C623;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer a:hover {
+        color: #E0B41E;
+        text-decoration: underline;
+      }
     </style>
 
   </head>
@@ -283,6 +302,12 @@
         </div>
       </div>
     </section>
+
+    <footer class="footer p-2">
+      <div class="container text-center">
+        <p class="m-2">&copy; 2025 <strong>CodeCracker</strong>. Semua Hak Dilindungi.</p>
+      </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
   </body>
