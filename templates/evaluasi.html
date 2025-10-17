@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CodeCracker - Evaluasi Akhir</title>
+
+    <!-- Bootstrap (single include) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Font Awesome (ikon navbar) -->
+    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            padding-top: 70px;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+            background-color: #1B3C53;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .navbar:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            transform: translateY(-1px);
+        }
+
+        .navbar-brand {
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            color: white;
+        }
+
+        .nav-link {
+            font-family: 'Open Sans', sans-serif;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+            text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
+            transform: translateY(-1px);
+        }
+
+        :root {
+            --lesson-bg: #f6f7f9;
+            --lesson-surface: #ffffff;
+            --lesson-text: #1b1f24;
+            --lesson-muted: #6b7280;
+            --lesson-border: #e5e7eb;
+            --lesson-brand: #F3C623;
+            --lesson-brand-700: #1B3C53;
+            --lesson-brand-100: #17a2b8;
+            --lesson-radius: 14px;
+            --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
+        }
+
+        /* ===== Layout utama selaras dengan halaman kedua ===== */
+        .lesson-app {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: calc(100vh - 70px);
+            background: var(--lesson-bg);
+            position: relative;
+            transition: grid-template-columns .25s ease;
+        }
+
+        .lesson-app.is-collapsed {
+            grid-template-columns: 56px 1fr;
+        }
+
+        .lesson-titlebar {
+            background: var(--lesson-brand);
+            color: #000;
+            padding: 3px 20px;
+            font-size: 35px;
+            font-weight: 1000;
+            letter-spacing: .9px;
+            text-align: center;
+            box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
+        }
+
+        .lesson-h2 {
+            font-size: 25px;
+            font-weight: bolder;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lesson-h2:before {
+            content: "";
+            width: 6px;
+            height: 28px;
+            border-radius: 3px;
+            background: var(--lesson-brand);
+            display: inline-block;
+        }
+
+        .lesson-wrap {
+            background: #fff;
+            border: 1px solid var(--lesson-border);
+            border-radius: var(--lesson-radius);
+            box-shadow: var(--lesson-shadow);
+            overflow: hidden;
+        }
+
+        .lesson-head {
+            padding: 22px 18px 22px;
+            font-weight: 250;
+            font-size: 20px;
+            text-align: left;
+            /* samakan dengan halaman kedua */
+        }
+
+        .btn-outline-warning {
+            color: #000;
+            border-color: #F3C623;
+        }
+
+        .btn-outline-warning:hover,
+        .btn-outline-warning:focus {
+            background-color: #F3C623;
+            color: #000;
+            border-color: #E0B41E;
+        }
+
+        .teks {
+            color: #000;
+            text-align: justify;
+            font-size: 16.5px;
+            font-weight: 200;
+            /* selaraskan */
+        }
+
+        /* ===== Sidebar SELARAS dengan halaman kedua ===== */
+        .sidebar {
+            width: 250px;
+            transition: width .25s ease, padding .25s ease, background-color .25s ease;
+            background-color: #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            flex-shrink: 0;
+            overflow: auto;
+            padding-bottom: 80px;
+        }
+
+        .lesson-app.is-collapsed .sidebar {
+            width: 56px;
+            padding-right: 6px;
+        }
+
+        .sidebar-content {
+            padding: .5rem .5rem 1rem .5rem;
+            position: fixed;
+            width: 250px;
+            top: 120px;
+        }
+
+        .lesson-app.is-collapsed .sidebar-content {
+            display: none;
+        }
+
+        /* Tombol burger */
+        .sidebar .burger-btn {
+            position: fixed;
+            margin: .5rem;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+            background: #fff;
+            display: grid;
+            place-items: center;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
+            z-index: 15;
+        }
+
+        .burger-icon {
+            width: 20px;
+            height: 2px;
+            background: #1B3C53;
+            border-radius: 2px;
+            position: relative;
+            display: block;
+        }
+
+        .burger-icon::before,
+        .burger-icon::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #1B3C53;
+            border-radius: 2px;
+        }
+
+        .burger-icon::before {
+            top: -6px;
+        }
+
+        .burger-icon::after {
+            top: 6px;
+        }
+
+        /* responsif dasar layout */
+        @media (max-width: 992px) {
+            .lesson-app {
+                grid-template-columns: 56px 1fr;
+            }
+
+            .sidebar {
+                width: 56px;
+            }
+
+            .sidebar-content {
+                display: none;
+            }
+
+            .lesson-titlebar {
+                font-size: 34px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .lesson-titlebar {
+                font-size: 28px;
+            }
+        }
+
+        /* ===== Komponen soal ===== */
+        .question-group {
+            margin-bottom: 30px;
+            padding: 10px;
+            border: 1px solid #f0f0f0;
+            border-radius: 8px;
+            background: #fbfbfc;
+        }
+
+        .question-group p.teks:first-child {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .radio-option {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .input-short-answer {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
+        <div class="container-fluid ps-5 pe-5">
+            <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-book-open"></i>
+                            Belajar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
+                    <button class="btn btn-sm btn-light" type="button">Masuk</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Layout -->
+    <div class="lesson-app" id="lessonApp">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Tombol burger (toggle) -->
+            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
+                aria-label="Tutup sidebar">
+                <span class="burger-icon"></span>
+            </button>
+
+            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
+            <div class="sidebar-content">
+                <!-- Accordion Bootstrap -->
+                <div class="accordion mt-0" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                PENGENALAN
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column">
+                                    <a href="pengenalan.html"
+                                        class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
+                                    <a href="aktivitas1.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                ENKRIPSI
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column">
+                                    <a href="enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
+                                    <a href="aktivitas2.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                CAESAR CIPHER
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column">
+                                    <a href="caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
+                                        Cipher</a>
+                                    <a href="aktivitas3.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                DEKRIPSI
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column">
+                                    <a href="dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi</a>
+                                    <a href="aktivitas4.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                QUIZ
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column">
+                                    <a href="/templates/quiz/quiz1.html"
+                                        class="btn text-start mb-2 btn-outline-warning">Quiz</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSix">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                EVALUASI
+                            </button>
+                        </h2>
+                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
+                            data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column">
+                                    <a href="#" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </aside>
+
+        <!-- Konten Utama -->
+        <div class="p-5">
+            <form class="lesson-main" onsubmit="alert('Evaluasi disubmit!'); return false;">
+                <div class="lesson-titlebar">EVALUASI AKHIR</div>
+                <hr />
+
+                <div class="lesson-wrap mb-4">
+                    <div class="lesson-head pt-3 pb-3">
+                        <h2 class="lesson-h2">Uji Kemampuan: Enkripsi dan Caesar's Cipher</h2>
+                        <p class="teks">Jawablah pertanyaan-pertanyaan berikut dengan memilih opsi yang paling tepat
+                            (Pilihan Ganda)
+                            atau mengisi jawaban yang akurat (Isian Singkat).</p>
+                    </div>
+                </div>
+
+                <div class="lesson-wrap">
+                    <div class="lesson-head">
+                        <h2 class="lesson-h2">Bagian A: Pilihan Ganda</h2>
+
+                        <div class="question-group">
+                            <p class="teks">1. Apa yang dimaksud dengan enkripsi?</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q1" value="a"> a) Mengubah data menjadi bentuk yang dapat
+                                dibaca
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q1" value="b"> b) Mengubah data menjadi bentuk yang tidak
+                                dapat dibaca tanpa kunci
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q1" value="c"> c) Mengirim data melalui internet
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q1" value="d"> d) Menyimpan data di komputer
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">2. Siapa tokoh sejarah yang pertama kali dikaitkan dengan penggunaan
+                                Caesar's Cipher?</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q2" value="a"> a) Albert Einstein
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q2" value="b"> b) Isaac Newton
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q2" value="c"> c) Julius Caesar
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q2" value="d"> d) Leonardo Da Vinci
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">3. Bagaimana cara dekripsi bekerja dalam Caesar’s Cipher?</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q3" value="a"> a) Menggeser huruf ke kanan sebanyak kunci
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q3" value="b"> b) Menggeser huruf ke kiri (berlawanan)
+                                sebanyak kunci
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q3" value="c"> c) Mengganti setiap huruf dengan simbol lain
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q3" value="d"> d) Menghitung panjang kata
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">4. Dalam proses enkripsi, kunci (key) memiliki fungsi utama untuk:</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q4" value="a"> a) Mempersingkat pesan
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q4" value="b"> b) Membuat pesan lebih mudah dibaca
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q4" value="c"> c) Memastikan bahwa hanya penerima yang
+                                memiliki kunci yang dapat melakukan dekripsi
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q4" value="d"> d) Menghapus data asli
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">5. Dalam Caesar's Cipher, jika kunci pergeseran adalah 5, bagaimana huruf
+                                "a" akan diubah (dienkripsi)?</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q5" value="a"> a) Menjadi "b"
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q5" value="b"> b) Menjadi "f"
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q5" value="c"> c) Menjadi "e"
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q5" value="d"> d) Tidak berubah
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">6. Lakukan dekripsi pada teks terenkripsi: "vhodpdw" (kunci pergeseran 3).
+                            </p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q6" value="a"> a) selamat
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q6" value="b"> b) datang
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q6" value="c"> c) malam
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q6" value="d"> d) belajar
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">7. Jika pesan "data" dienkripsi dengan Caesar’s Cipher menggunakan kunci 4,
+                                hasilnya adalah:</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q7" value="a"> a) hexe
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q7" value="b"> b) hdwa
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q7" value="c"> c) hata
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q7" value="d"> d) gaea
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">8. Teks terenkripsi "yqjgtq" didekripsi menjadi "komputer". Berapakah nilai
+                                kunci yang digunakan?</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q8" value="a"> a) Kunci 1
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q8" value="b"> b) Kunci 2
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q8" value="c"> c) Kunci 3
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q8" value="d"> d) Kunci 4
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">9. Mengapa Caesar's Cipher dianggap jauh kurang aman dibandingkan dengan
+                                metode enkripsi modern seperti AES?</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q9" value="a"> a) Karena menggunakan terlalu banyak angka
+                                yang rumit
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q9" value="b"> b) Karena algoritmanya terlalu sulit
+                                dipahami
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q9" value="c"> c) Karena jumlah kunci yang mungkin (25)
+                                sangat sedikit, membuatnya rentan terhadap serangan brute force
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q9" value="d"> d) Karena membutuhkan komputer yang sangat
+                                cepat untuk dekripsi
+                            </label>
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">10. Mengapa Anda TIDAK menggunakan Caesar's Cipher untuk melindungi kata
+                                sandi penting?</p>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q10" value="a"> a) Karena enkripsi tersebut hanya dapat
+                                dilakukan oleh komputer
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q10" value="b"> b) Karena kecepatan enkripsinya terlalu
+                                lambat
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q10" value="c"> c) Karena algoritma tersebut memerlukan
+                                kunci yang terlalu panjang
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" class="teks" name="pg_q10" value="d"> d) Karena kurangnya kerahasiaan kuncinya
+                                dan kecilnya ruang kunci
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lesson-wrap mt-4">
+                    <div class="lesson-head">
+                        <h2 class="lesson-h2">Bagian B: Isian Singkat</h2>
+                        <p class="teks">Isi jawaban yang paling tepat pada kolom di bawah ini. Jawaban harus berupa
+                            <b>satu kata tunggal atau angka</b>, tanpa spasi.</p>
+
+                        <div class="question-group">
+                            <p class="teks">11. Enkripsi adalah proses mengubah data asli (plaintext) menjadi bentuk
+                                acak yang disebut ____________. (Jawaban: Satu kata, huruf kecil)</p>
+                            <label for="is_q11">Jawaban:</label>
+                            <input type="text" id="is_q11" name="is_q11" class="input-short-answer"
+                                placeholder="Contoh: ciphertext">
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">12. Proses yang dilakukan untuk mengubah Ciphertext kembali menjadi data
+                                asli yang dapat dibaca adalah ____________. (Jawaban: Satu kata, huruf kecil)</p>
+                            <label for="is_q12">Jawaban:</label>
+                            <input type="text" id="is_q12" name="is_q12" class="input-short-answer"
+                                placeholder="Contoh: dekripsi">
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">13. Jika pesan "belajar" dienkripsi dengan Caesar’s Cipher menggunakan kunci
+                                2, hasil enkripsinya adalah ____________. (Jawaban: Satu kata, huruf kecil, tanpa spasi)
+                            </p>
+                            <label for="is_q13">Jawaban:</label>
+                            <input type="text" id="is_q13" name="is_q13" class="input-short-answer"
+                                placeholder="Contoh: dgnlctc">
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">14. Teks terenkripsi "vhodpdw". Berapa nilai <b>Kunci Pergeseran</b> jika
+                                pesan asli "selamat"? (Jawaban: angka)</p>
+                            <label for="is_q14">Jawaban:</label>
+                            <input type="number" id="is_q14" name="is_q14" class="input-short-answer" min="1" max="25"
+                                placeholder="Contoh: 3">
+                        </div>
+
+                        <div class="question-group">
+                            <p class="teks">15. Jumlah maksimum <b>kunci pergeseran unik</b> pada Caesar's Cipher adalah
+                                ____________. (Jawaban: angka)</p>
+                            <label for="is_q15">Jawaban:</label>
+                            <input type="number" id="is_q15" name="is_q15" class="input-short-answer" min="1" max="25"
+                                placeholder="Contoh: 25">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2 col-6 mx-auto mt-5">
+                    <button type="submit" class="btn btn-success px-4 py-2">
+                        <b>Selesaikan Evaluasi</b>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Tombol Navigasi -->
+            <div class="d-flex justify-content-end gap-3 mt-4">
+                <a href="#" type="button" class="btn btn-danger px-4 py-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
+                </a>
+                <a href="results.html" type="button" class="btn btn-success px-4 py-2">
+                    Lanjut ke Hasil <i class="fa-solid fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Toggle sidebar collapse -->
+    <script>
+        const app = document.getElementById('lessonApp');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        function toggleSidebar() {
+            const collapsed = app.classList.toggle('is-collapsed');
+            // ARIA untuk aksesibilitas
+            toggleBtn.setAttribute('aria-expanded', String(!collapsed));
+            toggleBtn.setAttribute('aria-label', collapsed ? 'Buka sidebar' : 'Tutup sidebar');
+        }
+        toggleBtn.addEventListener('click', toggleSidebar);
+    </script>
+</body>
+
+</html>

@@ -196,22 +196,15 @@
 
         .sidebar-content {
             padding: .5rem .5rem 1rem .5rem;
-            position: fixed;
-            width: 250px;
-            top: 120px;
         }
 
         .lesson-app.is-collapsed .sidebar-content {
             display: none;
         }
 
-        /* Tombol burger */
-        .sidebar {
-            overflow-y: auto;
-        }
 
+        /* Tombol burger */
         .sidebar .burger-btn {
-            position: fixed;
             margin: .5rem;
             width: 42px;
             height: 42px;
@@ -251,14 +244,10 @@
             top: 6px;
         }
 
-
-
-
         .teks {
             color: #000;
             text-align: justify;
             font-size: 16.5px;
-            font-weight: 200;
         }
 
         /* responsif dasar layout */
@@ -431,7 +420,8 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="/templates/quiz/quiz1.html" class="btn text-start mb-2 btn-outline-warning">Quiz</a>
+                                    <a href="/templates/quiz/quiz1.html"
+                                        class="btn text-start mb-2 btn-outline-warning">Quiz</a>
                                 </div>
                             </div>
                         </div>
@@ -447,7 +437,7 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="/templates/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
+                                    <a href="#" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
                                 </div>
                             </div>
                         </div>
@@ -459,76 +449,37 @@
         <!-- Konten Utama -->
         <div class="p-5">
             <main class="lesson-main">
-                <div class="lesson-titlebar">Pengenalan</div>
+                <div class="lesson-titlebar">QUIZ</div>
                 <hr />
-                <div class="lesson-content">
-                    <h2 class="lesson-h2">Tujuan Pembelajaran</h2>
 
-                    <div class="lesson-card">
-                        <div class="lesson-goals">
-                            <div>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</div>
-                            <div class="lesson-goal">
-                                <div class="lesson-num">1</div>
-                                <div>Menjelaskan pengertian enkripsi dan dekripsi dengan benar.</div>
-                            </div>
-                            <div class="lesson-goal">
-                                <div class="lesson-num">2</div>
-                                <div>Menerapkan algoritma Caesar Cipher untuk mengenkripsi teks sederhana dengan tepat.
-                                </div>
-                            </div>
-                            <div class="lesson-goal">
-                                <div class="lesson-num">3</div>
-                                <div>Mendekripsi ciphertext menjadi plaintext menggunakan kunci tertentu dengan benar.
-                                </div>
-                            </div>
+                <div class="lesson-wrap">
+                    <div class="lesson-head">
+                        <h2 class="lesson-h2">Enkripsi Pesan</h2>
+                        <p class="teks">Seorang teman ingin merahasiakan pesan <b><i>“SEKOLAH”</i></b>. Ia menggunakan
+                            Caesar Cipher
+                            dengan aturan kunci <b><i>2</i></b>.
+                        </p>
+                        <p class="teks">Menurutmu, ciphertext (pesan terenkripsi) yang benar adalah…</p>
+                        <div class="teks multi-choice">
+                            <input type="radio"> UGMQNCJ <br>
+                            <input type="radio"> UFMQMBJ <br>
+                            <input type="radio"> TGMQNBJ <br>
+                            <input type="radio"> UFMQNCJ
                         </div>
-                    </div>
-
-                    <hr />
-
-                    <div class="lesson-wrap">
-                        <div class="lesson-head">
-                            <h2 class="lesson-h2">Ilustrasi Konsep</h2>
-                            <p class="teks"><b>Bayangkan:</b> Kamu ingin mengirimkan sebuah pesan rahasia kepada
-                                sahabatmu. Pesan itu sangat
-                                penting sehingga tidak boleh dibaca oleh orang lain.
-                            </p>
-                            <img src="" alt="">
-                            <p class="teks">Jika kertas itu ditemukan orang lain, mereka tentu bisa langsung membacanya.
-                                Namun,
-                                bagaimana jika setiap huruf dalam pesan tersebut diganti dengan huruf lain sehingga
-                                tidak mudah dipahami? Misalnya huruf <b>A</b> diganti menjadi <b>D</b>, huruf <b>B</b>
-                                menjadi <b>E</b>, huruf <b>C</b>
-                                menjadi <b>F</b>, dan seterusnya. Dengan aturan itu, pesan tadi akan berubah menjadi:
-                            </p>
-                            <img src="" alt="">
-                            <p class="teks">Orang lain yang melihat tulisan ini tentu akan kebingungan. Tetapi
-                                sahabatmu, yang tahu cara membaca sandi tersebut, bisa mengubah kembali menjadi pesan
-                                aslinya.
-                            </p>
-                            <p class="teks"><b>Langkah-langkah kerja enkripsi:</b></p>
-                            <ul class="teks m-3 mt-0">
-                                <li>Tulis pesan asli (plaintext).</li>
-                                <li>Tentukan kunci pergeseran (misalnya 3).</li>
-                                <li>Geser setiap huruf sesuai kunci.</li>
-                                <li>Dapatkan ciphertext.</li>
-                                <li>Lakukan dekripsi untuk mengembalikan pesan asli.</li>
-                            </ul>
-                            <p class="teks">Inilah yang disebut penyandian pesan atau enkripsi. Pesan asli dinamakan
-                                plaintext, hasil enkripsi dinamakan ciphertext, dan proses mengembalikannya ke bentuk
-                                awal disebut dekripsi.</p>
-                        </div>
+                        <button type="submit" class="btn btn-success px-4 py-2">
+                            <b>Cek Jawaban</b>
+                        </button>
                     </div>
                 </div>
             </main>
             <!-- Tombol Navigasi -->
             <div class="d-flex justify-content-end gap-3 mt-4">
-                <button type="button" class="btn btn-danger px-4 py-2">
+                <a href="quiz1.html" type="button" class="btn btn-danger px-4 py-2">
                     <i class="fa-solid fa-arrow-left me-2"></i> Kembali
-                </button>
-                <button type="button" class="btn btn-success px-4 py-2">
+                </a>
+                <a href="quiz2.html" type="button" class="btn btn-success px-4 py-2">
                     Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
-                </button>
+                </a>
             </div>
         </div>
     </div>
