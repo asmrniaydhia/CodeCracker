@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CodeCracker</title>
 
-    <!-- Bootstrap (single include) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Font Awesome (ikon navbar) -->
     <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
 
     <style>
@@ -50,6 +52,9 @@
             text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
             transform: translateY(-1px);
         }
+        
+        /* Menambahkan style untuk icon dari file pertama */
+        .fa-solid {font-size: 0.8em;}
 
         :root {
             --lesson-bg: #f6f7f9;
@@ -251,9 +256,6 @@
             top: 6px;
         }
 
-
-
-
         .teks {
             color: #000;
             text-align: justify;
@@ -289,7 +291,6 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
         <div class="container-fluid ps-5 pe-5">
             <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
@@ -300,14 +301,13 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-book-open"></i>
-                            Belajar</a>
+                        <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-book-open"></i> Belajar</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                        <a class="nav-link" href="leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
@@ -315,26 +315,21 @@
                 </ul>
                 <div class="d-flex">
                     <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
-                    <button class="btn btn-sm btn-light" type="button">Masuk</button>
+                    <a class="btn btn-sm btn-light" href="materi/pengenalan.html" role="button">Masuk</a>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Konten -->
     <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar -->
         <aside class="sidebar">
-            <!-- Tombol burger (toggle) -->
-            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
-                aria-label="Tutup sidebar">
+            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true" aria-label="Tutup sidebar">
                 <span class="burger-icon"></span>
             </button>
 
-            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
             <div class="sidebar-content">
-                <!-- Accordion Bootstrap -->
                 <div class="accordion mt-0" id="accordionExample">
+                    <!-- Pengantar -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -346,17 +341,21 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
+<<<<<<< Updated upstream
                                     <a href="pengenalan.html"
                                         class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
                                     <a href="aktivitas1.html"
                                         class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
                                         <span>Aktivitas</span>
                                     </a>
+=======
+
+>>>>>>> Stashed changes
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    <!-- Enkripsi -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -368,16 +367,23 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
+<<<<<<< Updated upstream
                                     <a href="enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
                                     <a href="aktivitas2.html"
                                         class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
                                         <span>Aktivitas</span>
                                     </a>
+=======
+                                    <button class="btn text-start mb-2 btn-outline-warning">Materi</button>
+                                    <button class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas 2</span>
+                                    </button>
+>>>>>>> Stashed changes
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    <!-- Caesar Cipher -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -389,17 +395,24 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
+<<<<<<< Updated upstream
                                     <a href="caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
                                         Cipher</a>
                                     <a href="aktivitas3.html"
                                         class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
                                         <span>Aktivitas</span>
                                     </a>
+=======
+                                    <button class="btn text-start mb-2 btn-outline-warning">Materi</button>
+                                    <button class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas 3</span>
+                                    </button>
+>>>>>>> Stashed changes
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    <!-- Dekripsi -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFour">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -411,6 +424,7 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
+<<<<<<< Updated upstream
                                     <a href="dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi</a>
                                     <a href="aktivitas4.html"
                                         class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
@@ -448,6 +462,12 @@
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
                                     <a href="/templates/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
+=======
+                                    <button class="btn text-start mb-2 btn-outline-warning">Materi</button>
+                                    <button class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas 4</span>
+                                    </button>
+>>>>>>> Stashed changes
                                 </div>
                             </div>
                         </div>
@@ -456,7 +476,6 @@
             </div>
         </aside>
 
-        <!-- Konten Utama -->
         <div class="p-5">
             <main class="lesson-main">
                 <div class="lesson-titlebar">Pengenalan</div>
@@ -473,13 +492,11 @@
                             </div>
                             <div class="lesson-goal">
                                 <div class="lesson-num">2</div>
-                                <div>Menerapkan algoritma Caesar Cipher untuk mengenkripsi teks sederhana dengan tepat.
-                                </div>
+                                <div>Menerapkan algoritma Caesar Cipher untuk mengenkripsi teks sederhana dengan tepat.</div>
                             </div>
                             <div class="lesson-goal">
                                 <div class="lesson-num">3</div>
-                                <div>Mendekripsi ciphertext menjadi plaintext menggunakan kunci tertentu dengan benar.
-                                </div>
+                                <div>Mendekripsi ciphertext menjadi plaintext menggunakan kunci tertentu dengan benar.</div>
                             </div>
                         </div>
                     </div>
@@ -489,23 +506,11 @@
                     <div class="lesson-wrap">
                         <div class="lesson-head">
                             <h2 class="lesson-h2">Ilustrasi Konsep</h2>
-                            <p class="teks"><b>Bayangkan:</b> Kamu ingin mengirimkan sebuah pesan rahasia kepada
-                                sahabatmu. Pesan itu sangat
-                                penting sehingga tidak boleh dibaca oleh orang lain.
-                            </p>
+                            <p class="teks"><b>Bayangkan:</b> Kamu ingin mengirimkan sebuah pesan rahasia kepada sahabatmu. Pesan itu sangat penting sehingga tidak boleh dibaca oleh orang lain.</p>
                             <img src="" alt="">
-                            <p class="teks">Jika kertas itu ditemukan orang lain, mereka tentu bisa langsung membacanya.
-                                Namun,
-                                bagaimana jika setiap huruf dalam pesan tersebut diganti dengan huruf lain sehingga
-                                tidak mudah dipahami? Misalnya huruf <b>A</b> diganti menjadi <b>D</b>, huruf <b>B</b>
-                                menjadi <b>E</b>, huruf <b>C</b>
-                                menjadi <b>F</b>, dan seterusnya. Dengan aturan itu, pesan tadi akan berubah menjadi:
-                            </p>
+                            <p class="teks">Jika kertas itu ditemukan orang lain, mereka tentu bisa langsung membacanya. Namun, bagaimana jika setiap huruf dalam pesan tersebut diganti dengan huruf lain sehingga tidak mudah dipahami? Misalnya huruf <b>A</b> diganti menjadi <b>D</b>, huruf <b>B</b> menjadi <b>E</b>, huruf <b>C</b> menjadi <b>F</b>, dan seterusnya. Dengan aturan itu, pesan tadi akan berubah menjadi:</p>
                             <img src="" alt="">
-                            <p class="teks">Orang lain yang melihat tulisan ini tentu akan kebingungan. Tetapi
-                                sahabatmu, yang tahu cara membaca sandi tersebut, bisa mengubah kembali menjadi pesan
-                                aslinya.
-                            </p>
+                            <p class="teks">Orang lain yang melihat tulisan ini tentu akan kebingungan. Tetapi sahabatmu, yang tahu cara membaca sandi tersebut, bisa mengubah kembali menjadi pesan aslinya.</p>
                             <p class="teks"><b>Langkah-langkah kerja enkripsi:</b></p>
                             <ul class="teks m-3 mt-0">
                                 <li>Tulis pesan asli (plaintext).</li>
@@ -514,14 +519,12 @@
                                 <li>Dapatkan ciphertext.</li>
                                 <li>Lakukan dekripsi untuk mengembalikan pesan asli.</li>
                             </ul>
-                            <p class="teks">Inilah yang disebut penyandian pesan atau enkripsi. Pesan asli dinamakan
-                                plaintext, hasil enkripsi dinamakan ciphertext, dan proses mengembalikannya ke bentuk
-                                awal disebut dekripsi.</p>
+                            <p class="teks">Inilah yang disebut penyandian pesan atau enkripsi. Pesan asli dinamakan plaintext, hasil enkripsi dinamakan ciphertext, dan proses mengembalikannya ke bentuk awal disebut dekripsi.</p>
                         </div>
                     </div>
                 </div>
             </main>
-            <!-- Tombol Navigasi -->
+
             <div class="d-flex justify-content-end gap-3 mt-4">
                 <button type="button" class="btn btn-danger px-4 py-2">
                     <i class="fa-solid fa-arrow-left me-2"></i> Kembali
@@ -533,20 +536,18 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- NEW: Toggle sidebar collapse -->
     <script>
         const app = document.getElementById('lessonApp');
         const toggleBtn = document.getElementById('sidebarToggle');
 
         function toggleSidebar() {
             const collapsed = app.classList.toggle('is-collapsed');
-            // ARIA untuk aksesibilitas
             toggleBtn.setAttribute('aria-expanded', String(!collapsed));
             toggleBtn.setAttribute('aria-label', collapsed ? 'Buka sidebar' : 'Tutup sidebar');
         }
+
         toggleBtn.addEventListener('click', toggleSidebar);
     </script>
 </body>
