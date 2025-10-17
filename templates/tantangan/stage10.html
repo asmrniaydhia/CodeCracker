@@ -286,7 +286,7 @@
             const correctEncrypt = "MRHSRIWME EQER";
             if (decryptAnswer === correctDecrypt && encryptAnswer === correctEncrypt) {
                 feedbackEl.textContent = "SELAMAT! Kota terselamatkan berkatmu, Agen 7.";
-                feedbackEl.className = 'text-success';
+                feedbackEl.className = 'text-success'; 
                 localStorage.setItem('stage10Completed', 'true');
                 setTimeout(() => {
                     window.location.href = "tantangan.html";
