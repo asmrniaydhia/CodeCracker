@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CodeCracker - Tantangan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
@@ -168,11 +170,13 @@
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid px-lg-5 px-3">
             <a class="navbar-brand" href="#"><i class="fas fa-user-secret"></i> CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -181,7 +185,8 @@
                         <a class="nav-link" href="#"><i class="fa-solid fa-book-open"></i> Belajar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+                        <a class="nav-link active" href="tantangan.html"><i class="fa-solid fa-gamepad"></i>
+                            Tantangan</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
@@ -206,7 +211,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const challengesGrid = document.getElementById('challenges-grid');
             const totalStages = 10;
 
@@ -246,9 +251,9 @@
                 }
 
                 cardWrapper.innerHTML = `
-                    <a href="${isLocked ? '#' : `stage${i}.html`}" style="display: contents;">
+                    <a href="${isLocked ? '#' : `/templates/tantangan/stage${i}.html`}" style="display: contents;">
                         <div class="challenge-thumbnail">
-                            <img src="C:\\SEMESTER 5\\CodeCracker\\assets\\challenge_${i}.png" alt="Tantangan ${i}">
+                            <img src="/assets/challenge_${i}.png" alt="Tantangan ${i}">
                         </div>
                         <div class="challenge-info">
                             <div class="challenge-number">Episode</div>
@@ -270,5 +275,7 @@
             }
         });
     </script>
+
 </body>
+
 </html>
