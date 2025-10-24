@@ -13,202 +13,69 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f8f9fa;
+        body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
+        .navbar { background-color: #1B3C53; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); height: 70px; }
+        .navbar-brand { font-family: 'Lato', sans-serif; font-weight: 900; color: white; font-size: 1.6rem; }
+        .stage-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .stage-header { background: linear-gradient(135deg, #2c5364 0%, #1B3C53 100%); color: white; padding: 2rem; border-radius: 10px 10px 0 0; text-align: center; }
+        .stage-number { font-family: 'Lato', sans-serif; font-size: 3rem; font-weight: 900; }
+        .stage-title { font-family: 'Lato', sans-serif; font-size: 1.5rem; font-weight: 700; margin-top: 0.5rem; }
+        .stage-content { background: white; padding: 2rem; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        .story-section { margin-bottom: 2rem; padding: 1.5rem; background-color: #e8f4f8; border-radius: 8px; border-left: 4px solid #1B3C53; }
+        .story-text { color: #333; line-height: 1.8; text-align: justify; }
+        .action-buttons { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 2rem; }
+        .btn-petunjuk { background-color: #17a2b8; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; width: 100%; max-width: 300px; }
+        .btn-start-challenge { background: linear-gradient(135deg, #F3C623 0%, #d4a91e 100%); color: #0f2027; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; padding: 0.75rem 2rem; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(243, 198, 35, 0.4); text-transform: uppercase; width: 100%; max-width: 300px; }
+        .petunjuk-content { display: none; background-color: #d1ecf1; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid #17a2b8; }
+        .navigation-buttons { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 3rem; border-top: 1px solid #eee; padding-top: 2rem; }
+        .btn-nav { padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; width: 100%; max-width: 300px; text-align: center; }
+        .btn-kembali { background-color: #6c757d; color: white; }
+        .btn-sebelumnya { background-color: #5a6268; color: white; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; }
+        .challenge-modal { background: white; border-radius: 15px; max-width: 600px; width: 90%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        .challenge-header { background: linear-gradient(135deg, #0f2027 0%, #1B3C53 100%); padding: 1.2rem; text-align: center; border-bottom: 3px solid #F3C623; border-radius: 15px 15px 0 0; }
+        .challenge-header h2 { font-family: 'Lato', sans-serif; font-weight: 900; color: #F3C623; font-size: 1.6rem; margin: 0; }
+        .challenge-content { padding: 2rem; }
+        .challenge-footer { padding: 1.2rem; text-align: right; border-top: 1px solid #eee; }
+        .combo-task { margin-bottom: 1.5rem; }
+        .combo-task input { width: 100%; padding: 10px; font-size: 1.2rem; text-align: center; border: 2px solid #ccc; border-radius: 5px; text-transform: uppercase; }
+        #feedback { text-align: center; font-weight: bold; margin-top: 15px; min-height: 25px; }
+
+        /* Victory Modal Styles */
+        #victoryModal .victory-modal {
+            background: linear-gradient(135deg, #F3C623 0%, #F5B041 100%);
+            color: #1B3C53;
+            text-align: center;
+            padding: 2rem;
+            border: 5px solid white;
         }
-        .navbar {
+        #victoryModal h2 {
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            font-size: 2.5rem;
+            text-transform: uppercase;
+        }
+        #victoryModal .btn-finish {
             background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            height: 70px;
-        }
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
             color: white;
-            font-size: 1.6rem;
-        }
-        .stage-container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .stage-header {
-            background: linear-gradient(135deg, #2c5364 0%, #1B3C53 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 10px 10px 0 0;
-            text-align: center;
-        }
-        .stage-number {
-            font-family: 'Lato', sans-serif;
-            font-size: 3rem;
-            font-weight: 900;
-        }
-        .stage-title {
-            font-family: 'Lato', sans-serif;
-            font-size: 1.5rem;
             font-weight: 700;
-            margin-top: 0.5rem;
-        }
-        .stage-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .story-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background-color: #e8f4f8;
-            border-radius: 8px;
-            border-left: 4px solid #1B3C53;
-        }
-        .story-text {
-            color: #333;
-            line-height: 1.8;
-            text-align: justify;
-        }
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        .btn-petunjuk {
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 300px;
-        }
-        .btn-start-challenge {
-            background: linear-gradient(135deg, #F3C623 0%, #d4a91e 100%);
-            color: #0f2027;
-            font-family: 'Lato', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
             padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(243, 198, 35, 0.4);
-            text-transform: uppercase;
-            width: 100%;
-            max-width: 300px;
-        }
-        .petunjuk-content {
-            display: none;
-            background-color: #d1ecf1;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-            border-left: 4px solid #17a2b8;
-        }
-        .navigation-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 3rem;
-            border-top: 1px solid #eee;
-            padding-top: 2rem;
-        }
-        .btn-nav {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
             text-decoration: none;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
+            border-radius: 50px;
+            margin-top: 1rem;
+            display: inline-block;
+            transition: transform 0.2s ease;
         }
-        .btn-kembali {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-sebelumnya {
-            background-color: #5a6268;
-            color: white;
-        }
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        .challenge-modal {
-            background: white;
-            border-radius: 15px;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-        .challenge-header {
-            background: linear-gradient(135deg, #0f2027 0%, #1B3C53 100%);
-            padding: 1.2rem;
-            text-align: center;
-            border-bottom: 3px solid #F3C623;
-            border-radius: 15px 15px 0 0;
-        }
-        .challenge-header h2 {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: #F3C623;
-            font-size: 1.6rem;
-            margin: 0;
-        }
-        .challenge-content {
-            padding: 2rem;
-        }
-        .challenge-footer {
-            padding: 1.2rem;
-            text-align: right;
-            border-top: 1px solid #eee;
-        }
-        .combo-task {
-            margin-bottom: 1.5rem;
-        }
-        .combo-task input {
-            width: 100%;
-            padding: 10px;
-            font-size: 1.2rem;
-            text-align: center;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            text-transform: uppercase;
-        }
-        #feedback {
-            text-align: center;
-            font-weight: bold;
-            margin-top: 15px;
-            min-height: 25px;
+        #victoryModal .btn-finish:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
     <nav class="navbar navbar-dark fixed-top">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="tantangan.html">
-                <i class="fas fa-user-secret"></i> CodeCracker
-            </a>
-        </div>
+        <div class="container-fluid"><a class="navbar-brand" href="tantangan.html"><i class="fas fa-user-secret"></i> CodeCracker</a></div>
     </nav>
     <div class="stage-container">
         <div class="stage-header">
@@ -219,14 +86,12 @@
             <div class="story-section">
                 <p class="story-text">"Ini pesan terakhir CipherX, selamatkan kota!" Ini adalah tantangan terakhirmu. Kamu harus mendekripsi pesan masuk, lalu mengenkripsi pesan balasan untuk memberikan kode penangkapan.</p>
             </div>
+            
             <div class="action-buttons">
-                <button class="btn-petunjuk" onclick="togglePetunjuk()">
-                    <i class="fas fa-lightbulb"></i> Tampilkan Petunjuk
-                </button>
-                <button class="btn-start-challenge" onclick="openChallengeModal()">
-                    Mulai Tantangan
-                </button>
+                <button class="btn-petunjuk" onclick="togglePetunjuk()"><i class="fas fa-lightbulb"></i> Tampilkan Petunjuk</button>
+                <button class="btn-start-challenge" onclick="openChallengeModal()">Mulai Tantangan</button>
             </div>
+
             <div id="petunjuk" class="petunjuk-content">
                 <h5>Petunjuk Misi Final:</h5>
                 <p>Kerjakan satu per satu.</p>
@@ -235,27 +100,22 @@
                     <li><strong>Bagian 2 (Enkripsi):</strong> Enkripsi <strong>INDONESIA AMAN</strong> menggunakan kunci 4 (maju). Spasi tidak dienkripsi.</li>
                 </ol>
             </div>
+
             <div class="navigation-buttons">
-                <a href="stage9.html" class="btn-nav btn-sebelumnya">
-                    <i class="fas fa-arrow-left"></i> Stage Sebelumnya
-                </a>
-                <a href="tantangan.html" class="btn-nav btn-kembali">
-                    <i class="fas fa-list"></i> Kembali ke Daftar Tantangan
-                </a>
+                <a href="stage9.html" class="btn-nav btn-sebelumnya"><i class="fas fa-arrow-left"></i> Stage Sebelumnya</a>
+                <a href="tantangan.html" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
             </div>
         </div>
     </div>
+    
     <div class="modal-overlay" id="challengeModal">
         <div class="challenge-modal">
-            <div class="challenge-header">
-                <h2>Tantangan: Kombinasi</h2>
-            </div>
+            <div class="challenge-header"><h2>Tantangan: Kombinasi</h2></div>
             <div class="challenge-content">
                 <div class="combo-task">
                     <label><strong>Bagian 1:</strong> Dekripsi <strong>ZHOFRPH</strong> (Kunci 3)</label>
                     <input type="text" id="decrypt-input" placeholder="Hasil Dekripsi">
-                </div>
-                <hr>
+                </div><hr>
                 <div class="combo-task">
                     <label><strong>Bagian 2:</strong> Enkripsi <strong>INDONESIA AMAN</strong> (Kunci 4)</label>
                     <input type="text" id="encrypt-input" placeholder="Hasil Enkripsi">
@@ -268,30 +128,60 @@
             </div>
         </div>
     </div>
+    
+    <div class="modal-overlay" id="victoryModal">
+        <div class="challenge-modal victory-modal">
+            <h2><i class="fas fa-trophy"></i> Misi Selesai!</h2>
+            <p class="lead mt-3">Selamat, Agen 7! Kamu telah berhasil menghentikan CipherX dan menyelamatkan kota. Keahlian kriptografimu telah terbukti.</p>
+            <a href="tantangan.html" class="btn-finish">Kembali ke Markas</a>
+        </div>
+    </div>
+
     <script>
-        function togglePetunjuk() {
-            document.getElementById('petunjuk').style.display = document.getElementById('petunjuk').style.display === 'block' ? 'none' : 'block';
+        function togglePetunjuk() { document.getElementById('petunjuk').style.display = document.getElementById('petunjuk').style.display === 'block' ? 'none' : 'block'; }
+        function openChallengeModal() { document.getElementById('challengeModal').style.display = 'flex'; }
+        function closeChallengeModal() { document.getElementById('challengeModal').style.display = 'none'; }
+        
+        function triggerConfetti() {
+            var duration = 5 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
         }
-        function openChallengeModal() {
-            document.getElementById('challengeModal').style.display = 'flex';
-        }
-        function closeChallengeModal() {
-            document.getElementById('challengeModal').style.display = 'none';
-        }
+
         function checkAnswer() {
             const decryptAnswer = document.getElementById('decrypt-input').value.toUpperCase();
             const encryptAnswer = document.getElementById('encrypt-input').value.toUpperCase();
             const feedbackEl = document.getElementById('feedback');
             const correctDecrypt = "WELCOME";
-            const correctEncrypt = "MRHSRIWME EQER";
+            const correctEncrypt = "MRHSIRWME EQER";
+            
             if (decryptAnswer === correctDecrypt && encryptAnswer === correctEncrypt) {
-                feedbackEl.textContent = "SELAMAT! Kota terselamatkan berkatmu, Agen 7.";
-                feedbackEl.className = 'text-success';
+                // Jawaban benar
+                closeChallengeModal(); // Tutup modal tantangan
                 localStorage.setItem('stage10Completed', 'true');
+                
+                // Panggil efek confetti dan tampilkan modal kemenangan
+                triggerConfetti();
                 setTimeout(() => {
-                    window.location.href = "tantangan.html";
-                }, 2000);
+                    document.getElementById('victoryModal').style.display = 'flex';
+                }, 500);
+
             } else {
+                // Jawaban salah
                 let errorMsg = "Kode salah. ";
                 if (decryptAnswer !== correctDecrypt) errorMsg += "Periksa kembali hasil dekripsimu. ";
                 if (encryptAnswer !== correctEncrypt) errorMsg += "Periksa kembali hasil enkripsimu.";
