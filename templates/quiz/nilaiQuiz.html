@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>Nilai Quiz</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-5">
+  <h2>Hasil Nilai Quiz</h2>
+  <div class="alert alert-info mt-3">
+    Nilai kamu adalah: <strong id="skor">0</strong>
+  </div>
+
+  <script>
+    const nilai = localStorage.getItem('cc_quiz_score_v2');
+    document.getElementById('skor').textContent = nilai ? nilai : 'Belum ada nilai';
+  </script>
+</body>
+</html>
