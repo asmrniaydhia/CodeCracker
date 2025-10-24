@@ -8,243 +8,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f8f9fa;
-        }
-
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            height: 70px;
-        }
-
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: white;
-            font-size: 1.6rem;
-        }
-
-        .stage-container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .stage-header {
-            background: linear-gradient(135deg, #2c5364 0%, #1B3C53 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 10px 10px 0 0;
-            text-align: center;
-        }
-
-        .stage-number {
-            font-family: 'Lato', sans-serif;
-            font-size: 3rem;
-            font-weight: 900;
-        }
-
-        .stage-title {
-            font-family: 'Lato', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-top: 0.5rem;
-        }
-
-        .stage-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .story-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background-color: #e8f4f8;
-            border-radius: 8px;
-            border-left: 4px solid #1B3C53;
-        }
-
-        .story-text {
-            color: #333;
-            line-height: 1.8;
-            text-align: justify;
-        }
-
-        .action-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .btn-petunjuk {
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .btn-start-challenge {
-            background: linear-gradient(135deg, #F3C623 0%, #d4a91e 100%);
-            color: #0f2027;
-            font-family: 'Lato', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(243, 198, 35, 0.4);
-            text-transform: uppercase;
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .petunjuk-content {
-            display: none;
-            background-color: #d1ecf1;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-            border-left: 4px solid #17a2b8;
-        }
-
-        .navigation-buttons {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            margin-top: 3rem;
-            border-top: 1px solid #eee;
-            padding-top: 2rem;
-        }
-
-        .btn-nav {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
-        }
-
-        .btn-kembali {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .challenge-modal {
-            background: white;
-            border-radius: 15px;
-            max-width: 600px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .challenge-header {
-            background: linear-gradient(135deg, #0f2027 0%, #1B3C53 100%);
-            padding: 1.2rem;
-            text-align: center;
-            border-bottom: 3px solid #F3C623;
-            border-radius: 15px 15px 0 0;
-        }
-
-        .challenge-header h2 {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: #F3C623;
-            font-size: 1.6rem;
-            margin: 0;
-        }
-
-        .challenge-content {
-            padding: 2rem;
-        }
-
-        .challenge-footer {
-            padding: 1.2rem;
-            text-align: right;
-            border-top: 1px solid #eee;
-        }
-
-        .btn-close-modal {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .btn-check-answer {
-            background-color: #28a745;
-            color: white;
-        }
-
-        .droppable-area {
+        body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
+        .navbar { background-color: #1B3C53; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); height: 70px; }
+        .navbar-brand { font-family: 'Lato', sans-serif; font-weight: 900; color: white; font-size: 1.6rem; }
+        .stage-container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+        .stage-header { background: linear-gradient(135deg, #2c5364 0%, #1B3C53 100%); color: white; padding: 2rem; border-radius: 10px 10px 0 0; text-align: center; }
+        .stage-number { font-family: 'Lato', sans-serif; font-size: 3rem; font-weight: 900; }
+        .stage-title { font-family: 'Lato', sans-serif; font-size: 1.5rem; font-weight: 700; margin-top: 0.5rem; }
+        .stage-content { background: white; padding: 2rem; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); }
+        .story-section { margin-bottom: 2rem; padding: 1.5rem; background-color: #e8f4f8; border-radius: 8px; border-left: 4px solid #1B3C53; }
+        .story-text { color: #333; line-height: 1.8; text-align: justify; }
+        .action-buttons { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 2rem; }
+        .btn-petunjuk { background-color: #17a2b8; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; width: 100%; max-width: 300px; }
+        .btn-start-challenge { background: linear-gradient(135deg, #F3C623 0%, #d4a91e 100%); color: #0f2027; font-family: 'Lato', sans-serif; font-weight: 700; font-size: 1.1rem; padding: 0.75rem 2rem; border: none; border-radius: 8px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(243, 198, 35, 0.4); text-transform: uppercase; width: 100%; max-width: 300px; }
+        .petunjuk-content { display: none; background-color: #d1ecf1; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid #17a2b8; }
+        .navigation-buttons { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 3rem; border-top: 1px solid #eee; padding-top: 2rem; }
+        .btn-nav { padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; border: none; cursor: pointer; width: 100%; max-width: 300px; text-align: center; }
+        .btn-kembali { background-color: #6c757d; color: white; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; }
+        .challenge-modal { background: white; border-radius: 15px; max-width: 600px; width: 90%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5); }
+        .challenge-header { background: linear-gradient(135deg, #0f2027 0%, #1B3C53 100%); padding: 1.2rem; text-align: center; border-bottom: 3px solid #F3C623; border-radius: 15px 15px 0 0; }
+        .challenge-header h2 { font-family: 'Lato', sans-serif; font-weight: 900; color: #F3C623; font-size: 1.6rem; margin: 0; }
+        .challenge-content { padding: 2rem; }
+        .challenge-footer { padding: 1.2rem; text-align: right; border-top: 1px solid #eee; }
+        .btn-close-modal { background-color: #6c757d; color: white; }
+        .btn-check-answer { background-color: #28a745; color: white; }
+        .droppable-area, .draggable-container {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 20px 0;
             padding: 15px;
-            border: 2px dashed #ccc;
-            border-radius: 10px;
-            min-height: 70px;
+            min-height: 80px;
             flex-wrap: wrap;
         }
-
-        .draggable,
-        .letter-box {
+        .droppable-area {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+        }
+        .draggable, .letter-box {
             width: 50px;
             height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #e9ecef;
-            border: 1px solid #dee2e6;
             border-radius: 5px;
             font-size: 1.5rem;
             font-weight: bold;
         }
-
+        .letter-box {
+             background-color: #e9ecef;
+             border: 1px solid #dee2e6;
+        }
         .draggable {
             cursor: grab;
             background-color: #ffc107;
+            border: 1px solid #e0a800;
         }
-
-        .draggable-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+        .dragging {
+            opacity: 0.5;
         }
-
         #feedback {
             text-align: center;
             font-weight: bold;
@@ -299,13 +121,7 @@
             <div class="challenge-content">
                 <p class="text-center">Enkripsi kata <strong>RAHASIA</strong> menggunakan <strong>kunci 3</strong> dengan menarik huruf yang benar ke dalam kotak.</p>
                 <div class="droppable-area" id="answer-area">
-                    <div class="letter-box"></div>
-                    <div class="letter-box"></div>
-                    <div class="letter-box"></div>
-                    <div class="letter-box"></div>
-                    <div class="letter-box"></div>
-                    <div class="letter-box"></div>
-                    <div class="letter-box"></div>
+                    <div class="letter-box"></div><div class="letter-box"></div><div class="letter-box"></div><div class="letter-box"></div><div class="letter-box"></div><div class="letter-box"></div><div class="letter-box"></div>
                 </div>
                 <hr>
                 <div class="draggable-container" id="draggable-letters"></div>
@@ -320,22 +136,35 @@
 
     <script>
         function togglePetunjuk() {
-            const petunjuk = document.getElementById('petunjuk');
-            petunjuk.style.display = petunjuk.style.display === 'block' ? 'none' : 'block';
+            document.getElementById('petunjuk').style.display = document.getElementById('petunjuk').style.display === 'block' ? 'none' : 'block';
         }
 
         function openChallengeModal() {
             document.getElementById('challengeModal').style.display = 'flex';
         }
 
+        function resetChallenge() {
+            const draggableContainer = document.getElementById('draggable-letters');
+            const answerBoxes = document.querySelectorAll('.letter-box');
+            answerBoxes.forEach(box => {
+                if (box.children.length > 0) {
+                    draggableContainer.appendChild(box.firstElementChild);
+                }
+            });
+            document.getElementById('feedback').textContent = '';
+        }
+
         function closeChallengeModal() {
+            resetChallenge();
             document.getElementById('challengeModal').style.display = 'none';
         }
 
         const correctOrder = ['U', 'D', 'K', 'D', 'V', 'L', 'D'];
         const options = ['D', 'L', 'D', 'U', 'K', 'D', 'V', 'R', 'L', 'I'];
         const draggableContainer = document.getElementById('draggable-letters');
+        const droppableArea = document.getElementById('answer-area');
 
+        // Isi kontainer dengan pilihan huruf
         options.sort(() => Math.random() - 0.5).forEach(letter => {
             const div = document.createElement('div');
             div.className = 'draggable';
@@ -344,20 +173,46 @@
             draggableContainer.appendChild(div);
         });
 
+        // Tambahkan event listener untuk semua item yang bisa diseret
         document.querySelectorAll('.draggable').forEach(draggable => {
-            draggable.addEventListener('dragstart', () => draggable.classList.add('dragging'));
-            draggable.addEventListener('dragend', () => draggable.classList.remove('dragging'));
+            draggable.addEventListener('dragstart', () => {
+                draggable.classList.add('dragging');
+            });
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+            });
         });
 
+        // Fungsi untuk menangani drop event
+        function handleDrop(e) {
+            e.preventDefault();
+            const dragging = document.querySelector('.dragging');
+            if (!dragging) return;
+
+            const target = e.currentTarget;
+
+            // Jika target adalah kotak jawaban yang sudah terisi, tukar posisi
+            if (target.classList.contains('letter-box') && target.children.length > 0) {
+                const existingChild = target.firstElementChild;
+                const sourceContainer = dragging.parentElement;
+                
+                sourceContainer.appendChild(existingChild);
+                target.appendChild(dragging);
+            } 
+            // Jika target adalah kontainer pilihan atau kotak jawaban kosong
+            else {
+                target.appendChild(dragging);
+            }
+        }
+
+        // Jadikan kontainer pilihan sebagai area drop untuk mengembalikan huruf
+        draggableContainer.addEventListener('dragover', e => e.preventDefault());
+        draggableContainer.addEventListener('drop', handleDrop);
+
+        // Jadikan setiap kotak jawaban sebagai area drop
         document.querySelectorAll('.letter-box').forEach(droppable => {
             droppable.addEventListener('dragover', e => e.preventDefault());
-            droppable.addEventListener('drop', e => {
-                e.preventDefault();
-                const dragging = document.querySelector('.dragging');
-                if (droppable.children.length === 0) {
-                    droppable.appendChild(dragging);
-                }
-            });
+            droppable.addEventListener('drop', handleDrop);
         });
 
         function checkAnswer() {
