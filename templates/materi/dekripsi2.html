@@ -6,11 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CodeCracker</title>
 
-    <!-- Bootstrap (single include) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- Font Awesome (ikon navbar) -->
     <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="materi.css">
 
     <style>
         body {
@@ -120,6 +125,35 @@
             padding: 13px;
         }
 
+        .lesson-goals {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .lesson-goal {
+            background: #fbfbfc;
+            border: 1px solid var(--lesson-border);
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 15px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .lesson-goal .lesson-num {
+            min-width: 30px;
+            height: 35px;
+            border-radius: 7px;
+            display: grid;
+            place-items: center;
+            background: var(--lesson-brand-100);
+            color: var(--lesson-brand-700);
+            font-weight: 700;
+            border: 1px solid #cfe7d9;
+        }
+
         .lesson-wrap {
             background: #fff;
             border: 1px solid var(--lesson-border);
@@ -133,6 +167,14 @@
             font-weight: 250;
             font-size: 20px;
             text-align: center;
+        }
+
+        .lesson-child {
+            padding: 22px 18px 6px;
+            font-weight: 500;
+            font-size: 15px;
+            text-align: center;
+            font-style: italic;
         }
 
         .btn-outline-warning {
@@ -167,15 +209,22 @@
 
         .sidebar-content {
             padding: .5rem .5rem 1rem .5rem;
+            position: fixed;
+            width: 250px;
+            top: 120px;
         }
 
         .lesson-app.is-collapsed .sidebar-content {
             display: none;
         }
 
-
         /* Tombol burger */
+        .sidebar {
+            overflow-y: auto;
+        }
+
         .sidebar .burger-btn {
+            position: fixed;
             margin: .5rem;
             width: 42px;
             height: 42px;
@@ -219,161 +268,32 @@
             color: #000;
             text-align: justify;
             font-size: 16.5px;
+            font-weight: 200;
         }
 
-        /* === Quiz Layout Tambahan === */
-        .quiz-card {
-            background: var(--lesson-surface);
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            padding: 18px 20px;
+        /* responsif dasar layout */
+        @media (max-width: 992px) {
+            .lesson-app {
+                grid-template-columns: 56px 1fr;
+            }
+
+            .sidebar {
+                width: 56px;
+            }
+
+            .sidebar-content {
+                display: none;
+            }
+
+            .lesson-titlebar {
+                font-size: 34px;
+            }
         }
 
-        .quiz-title {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: .75rem;
-        }
-
-        .quiz-subtitle {
-            font-size: 20px;
-            margin-bottom: 1rem;
-        }
-
-        .option-list {
-            display: grid;
-            gap: .75rem;
-        }
-
-        .option {
-            border: 1px solid var(--lesson-border);
-            border-radius: 12px;
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #fbfbfc;
-            cursor: pointer;
-            transition: border-color .15s ease, box-shadow .15s ease;
-        }
-
-        .option:hover {
-            border-color: #cfd3da;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .04);
-        }
-
-        .option input {
-            accent-color: #1B3C53;
-        }
-
-        .option.checked {
-            border-color: #1B3C53;
-            background: #fff;
-        }
-
-        .quiz-flag {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .quiz-actions {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 12px;
-        }
-
-        .side-card {
-            background: var(--lesson-surface);
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            padding: 10px 15px;
-        }
-
-        .bubbles {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 14px;
-        }
-
-        .bubble {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: grid;
-            place-items: center;
-            font-weight: 700;
-            border: 1px solid #e5e7eb;
-            cursor: pointer;
-            /* <<< supaya terlihat bisa diklik */
-            user-select: none;
-        }
-
-        .bubble.current {
-            background: #1B3C53;
-            color: #fff;
-        }
-
-        .bubble.empty {
-            background: #e5e7eb;
-            color: #6b7280;
-        }
-
-        .bubble.answered {
-            background: #17a2b8;
-            color: #fff;
-        }
-
-        .bubble.flagged {
-            background: #ffe266;
-            color: #000;
-        }
-
-        .legend {
-            display: grid;
-            gap: 10px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .legend-dot {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-        }
-
-        .dot-current {
-            background: #1B3C53;
-        }
-
-        .dot-answered {
-            background: #17a2b8;
-        }
-
-        .dot-flagged {
-            background: #ffe266;
-        }
-
-        .dot-empty {
-            background: #e5e7eb;
-        }
-
-        .task-input,
-        .task-select {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+        @media (max-width: 760px) {
+            .lesson-titlebar {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
@@ -480,7 +400,9 @@
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
                                     <a href="caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher</a>
+                                        Cipher 1</a>
+                                    <a href="caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
+                                        Cipher 2</a>
                                     <a href="aktivitas3.html"
                                         class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
                                         <span>Aktivitas</span>
@@ -501,7 +423,8 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi</a>
+                                    <a href="dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
+                                    <a href="dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
                                     <a href="aktivitas4.html"
                                         class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
                                         <span>Aktivitas</span>
@@ -521,7 +444,7 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="/templates/quiz/quiz1.html"
+                                    <a href="templates/quiz/quiz1.html"
                                         class="btn text-start mb-2 btn-outline-warning">Quiz</a>
                                 </div>
                             </div>
@@ -538,7 +461,8 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="#" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
+                                    <a href="templates/evaluasi/evaluasi.html"
+                                        class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
                                 </div>
                             </div>
                         </div>
@@ -550,80 +474,136 @@
         <!-- Konten Utama -->
         <div class="p-5">
             <main class="lesson-main">
-                <div class="lesson-titlebar">QUIZ</div>
+                <div class="lesson-titlebar">Dekripsi</div>
                 <hr />
 
-                <div class="lesson-wrap p-3">
-                    <div class="row g-4">
-                        <!-- Kiri: Soal -->
-                        <div class="col-12 col-lg-8">
-                            <div class="quiz-card">
-                                <div class="quiz-title lesson-h2">Evaluasi </div>
-                                
-                                <div class="quiz-flag">
-                                    <input id="flag" type="checkbox">
-                                    <label for="flag">Ragu-ragu</label>
-                                </div>
+                <div class="lesson-wrap">
+                    <div class="lesson-head">
+                        <h2 class="lesson-h2">Proses Dekripsi</h2>
+                        <p class="teks">Proses dekripsi bukanlah sekadar tebak-tebakan atau keberuntungan, melainkan
+                            proses yang sangat terstruktur. Keberhasilan dekripsi sepenuhnya bergantung pada penggunaan
+                            elemen-elemen yang sama persis dengan yang digunakan saat enkripsi. Artinya, dekripsi harus
+                            mengikuti aturan main yang sudah ditetapkan.</p>
+                        <p class="teks">Untuk berhasil membuka pesan, kita memerlukan tiga unsur utama yang harus cocok:
+                        </p>
+                        <ol class="teks m-3 mt-0">
+                            <li><b>Ciphertext:</b> Ini adalah bahan baku yang diolah, yaitu pesan yang sudah diacak dan
+                                sulit
+                                dimengerti, yang tiba di sisi penerima. Ciphertext ibarat kotak yang disegel dan siap
+                                dibuka.</li>
+                            <li><b>Aturan Dekripsi (Algoritma):</b> Ini adalah rumus khusus atau serangkaian langkah
+                                yang
+                                digunakan untuk membalikkan Ciphertext menjadi Plaintext. Aturan dekripsi harus
+                                merupakan kebalikan sempurna dari aturan enkripsi.
+                                <p class="lesson-child lesson-h2">Jika enkripsi menggunakan Algoritma "memutar
+                                    ke kanan",
+                                    maka dekripsi harus menggunakan Algoritma "memutar ke kiri".</p>
+                            </li>
+                            <li><b>Kunci (Key):</b> Ini adalah informasi rahasia terpenting. Kunci bisa berupa angka,
+                                kata
+                                sandi, atau data rahasia lainnya yang menentukan hasil akhir. Tanpa Kunci yang benar,
+                                Algoritma hanya akan menghasilkan kode acak lain, bukan Plaintext aslinya. Kunci ibarat
+                                kata sandi yang hanya kamu dan penerima yang tahu.</li>
+                        </ol>
+                        <p class="teks">Dekripsi adalah proses terbalik yang mengubah kode acak menjadi pesan bermakna.
+                            Berikut adalah alur lengkapnya:</p>
+                        <ol class="teks m-3 mt-0">
+                            <li><b>Ciphertext Diterima dan Diidentifikasi:</b> Penerima menerima pesan teracak.
+                                Misalnya,
+                                mereka menerima kode <b>ZRUOG</b>. Tugas pertama adalah mengetahui Algoritma apa yang
+                                digunakan
+                                untuk mengenkripsi pesan ini.</li>
+                            <li><b>Aplikasi Kunci dan Algoritma:</b> Penerima yang sah, yang telah memiliki Kunci
+                                Dekripsi yang
+                                cocok, memasukkan Ciphertext bersamaan dengan Kunci tersebut ke dalam Algoritma
+                                Dekripsi. Inilah momen ketika Algoritma mulai bekerja keras memecahkan sandi.</li>
+                            <li><b>Algoritma Membalikkan Proses:</b> Menerapkan Kunci secara mundur. Misalnya, jika
+                                Kunci
+                                adalah geser maju 3, maka dekripsi adalah geser mundur 3.</li>
+                            <li><b>Validasi dan Penyelesaian:</b> Jika Kunci yang digunakan benar dan Algoritma
+                                diterapkan
+                                dengan tepat, sistem akan berhasil mengubah seluruh Ciphertext.</li>
+                            <li><b>Plaintext Diperoleh:</b> Hasil akhirnya adalah WORLD. Pesan rahasia kini terbaca.
+                            </li>
+                        </ol>
+                        <p class="teks">Proses yang efisien dan akurat inilah yang memungkinkan miliaran pesan
+                            terenkripsi di seluruh dunia dapat dibaca dan dipercaya setiap harinya. Tanpa kunci yang
+                            tepat, Ciphertext akan selamanya menjadi misteri.</p>
+                    </div>
+                </div>
+                <hr>
+                <div class="lesson-wrap">
 
-                                <div class="quiz-actions">
-                                    <a href="quiz4.html" class="btn btn-danger px-4 py-2">&laquo; Sebelumnya</a>
-                                    <a href="#" class="btn btn-success px-4 py-2">Selanjutnya
-                                        &raquo;</a>
-                                </div>
+                    <div class="lesson-head">
+                        <h2 class="lesson-h2">Dekripsi Langkah demi Langkah</h2>
+                        <p class="teks">
+                            Masukkan ciphertext (pesan terenkripsi) dan kunci geser untuk melihat proses
+                            dekripsi
+                            secara bertahap dengan tabel alfabet berwarna.
+                        </p>
+
+                        <div class="input-section">
+                            <div class="mb-3">
+                                <label for="ciphertext" class="form-label">Ciphertext (Pesan
+                                    Terenkripsi):</label>
+                                <input type="text" class="form-control" id="ciphertext" placeholder="Contoh: ZRUOG"
+                                    value="ZRUOG">
+                                <small class="text-muted">Hanya huruf A-Z yang akan diproses</small>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="key" class="form-label">Kunci Geser (1-25):</label>
+                                <input type="number" class="form-control" id="key" min="1" max="25" value="3">
+                            </div>
+
+                            <button class="btn btn-custom w-100" onclick="startDecryption()">
+                                Mulai Proses Dekripsi
+                            </button>
                         </div>
 
-                        <!-- Kanan: Panel -->
-                        <div class="col-12 col-lg-4">
-                            <div class="side-card mb-3 text-center">
-                                <h5 class="text-danger fw-bold">Waktu Tersisa:</h5>
+                        <div class="legend-box">
+                            <div class="legend-item">
+                                <div class="legend-color source"></div>
+                                <span><strong>Huruf Ciphertext</strong></span>
                             </div>
-
-                            <div class="side-card mb-3">
-                                <h5 class="mb-3">Daftar Soal</h5>
-                                <div class="bubbles">
-                                    <!-- data-href = target halaman -->
-                                    <div class="bubble empty" data-href="quiz1.html">1</div>
-                                    <div class="bubble empty" data-href="quiz2.html">2</div>
-                                    <div class="bubble empty" data-href="quiz3.html">3</div>
-                                    <div class="bubble empty" data-href="quiz4.html">4</div>
-                                    <div class="bubble empty" data-href="quiz5.html">5</div>
-                                    <div class="bubble empty" data-href="quiz5.html">6</div>
-                                    <div class="bubble empty" data-href="quiz5.html">7</div>
-                                    <div class="bubble empty" data-href="quiz5.html">8</div>
-                                    <div class="bubble empty" data-href="quiz5.html">9</div>
-                                    <div class="bubble empty" data-href="quiz5.html">10</div>
-                                    <div class="bubble empty" data-href="quiz5.html">11</div>
-                                    <div class="bubble empty" data-href="quiz5.html">12</div>
-                                    <div class="bubble empty" data-href="quiz5.html">13</div>
-                                    <div class="bubble empty" data-href="quiz5.html">14</div>
-                                    <div class="bubble empty" data-href="quiz5.html">15</div>
-                                </div>
-                            </div>
-
-                            <div class="side-card">
-                                <h5 class="mb-3">Keterangan</h5>
-                                <div class="legend">
-                                    <div class="legend-item"><span class="legend-dot dot-current"></span> Nomor soal
-                                        saat ini</div>
-                                    <div class="legend-item"><span class="legend-dot dot-answered"></span> Soal sudah
-                                        terjawab</div>
-                                    <div class="legend-item"><span class="legend-dot dot-flagged"></span> Jawaban
-                                        ragu-ragu</div>
-                                    <div class="legend-item"><span class="legend-dot dot-empty"></span> Soal belum
-                                        terjawab</div>
-                                </div>
+                            <div class="legend-item">
+                                <div class="legend-color target"></div>
+                                <span><strong>Hasil Dekripsi</strong></span>
                             </div>
                         </div>
                     </div>
                 </div>
+                <hr>
+                <div id="stepContainer" class="step-container"></div>
             </main>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    <!-- <li class="page-item disabled">
+                        <a class="page-link">Previous</a>
+                    </li> -->
+                    <li class="page-item"><a class="page-link" href="dekripsi.html">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="dekripsi2.html">2</a></li>
+                    <!-- <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li> -->
+                </ul>
+            </nav>
+            <!-- Tombol Navigasi -->
+            <div class="d-flex justify-content-end gap-3 mt-4">
+                <a href="aktivitas3.html" type="button" class="btn btn-danger px-4 py-2">
+                    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
+                </a>
+                <a href="aktivitas4.html" type="button" class="btn btn-success px-4 py-2">
+                    Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
+
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="quiz.js"></script>
+    <script src="materi.js"></script>
     <script src="/templates/temp.js"></script>
 
 </body>
