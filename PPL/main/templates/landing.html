@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CodeCracker</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <style>
+      body {
+        padding-top: 70px;
+        font-family: 'Open Sans', sans-serif;
+      }
+      
+      html {
+          scroll-behavior: smooth;
+      }
+      
+      .navbar {
+        background-color: #1B3C53;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
+        transition: box-shadow 0.3s ease, transform 0.3s ease; 
+      }
+      
+      .navbar:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        transform: translateY(-1px);
+      }
+      
+      .navbar-brand {
+        font-family: 'Lato', sans-serif;
+        font-weight: 900;
+        color: white; 
+      }
+
+      .nav-link {
+        font-family: 'Open Sans', sans-serif;
+        color: white; 
+        transition: all 0.3s ease; 
+      }
+
+      .nav-link:hover {
+        color: white;
+        text-shadow: 0 0 5px rgba(168, 213, 226, 0.5); 
+        transform: translateY(-1px); 
+      }
+
+      .fa-solid {
+        font-size: 0.8em;
+      }
+      
+      .btn-light {
+          font-weight: 600;
+      }
+
+      .btn-start {
+        background-color: #F3C623; 
+        border: 2px solid #F3C623; 
+        color: #1B3C53; 
+        font-weight: 900;
+        transition: all 0.2s ease;
+        border-radius: 8px; 
+        font-size: 1rem;
+        padding: 15px 30px;
+        line-height: 1; 
+      }
+      .btn-start:hover {
+        background-color: #E0B41E; 
+        border-color: #E0B41E;
+        color: #1B3C53;
+        transform: translateY(-1px); 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+      }
+
+      .landing-hero {
+        padding: 60px 0 130px;
+        text-align: left; 
+      }
+      
+      .hero-title {
+        font-family: 'Lato', sans-serif;
+        font-weight: 900;
+        font-size: 3rem;
+        color: #1B3C53;
+        margin-bottom: 10px;
+      }
+      
+      .hero-subtitle {
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        font-size: 1.5rem;
+        color: #1B3C53;
+        margin-bottom: 20px;
+      }
+      
+      .hero-description {
+        font-family: 'Open Sans', sans-serif;
+        font-size: 1.1rem;
+        color: #333;
+        max-width: 750px; 
+        line-height: 1.6;
+        margin-bottom: 30px; 
+      }
+
+      .hero-image {
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+          height: 70%; 
+      }
+
+      .hero-image img {
+          max-width: 70%; 
+          height: auto;
+          display: block; 
+      }
+
+      @media (max-width: 767.98px) {
+          .landing-hero {
+              padding-bottom: 60px; /* Kurangi padding bawah pada layar kecil */
+          }
+          .hero-description {
+              max-width: 100%; /* Biarkan deskripsi mengisi lebar penuh pada layar kecil */
+          }
+          .hero-image {
+              margin-top: 40px; /* Tambah margin di atas gambar pada layar kecil */
+          }
+      }
+
+      .explore-section {
+        background-color: #F5F9EE;
+        padding: 40px 0 80px 10px;
+        text-align: center;
+      }
+
+      #explore {
+          scroll-margin-top: 80px; 
+      }
+
+      .explore-section h2 {
+        font-family: 'Lato', sans-serif;
+        font-weight: 900;
+        font-size: 2.5rem;
+        color: #1B3C53;
+        margin-bottom: 50px;
+      }
+
+      .explore-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin: 15px;
+        text-align: center;
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .explore-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      }
+
+      .explore-card img {
+        max-width: 100px;
+        margin-bottom: 20px;
+      }
+
+      .explore-card h3 {
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #1B3C53;
+        margin-bottom: 15px;
+      }
+
+      .explore-card p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 25px;
+        flex-grow: 1;
+      }
+
+      .explore-card .btn {
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: all 0.2s ease;
+        display: inline-block;
+      }
+
+      .explore-card .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+      }
+
+      .explore-card .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+      }
+
+      .explore-card .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: #333;
+      }
+
+      .explore-card .btn-warning:hover {
+        background-color: #e0a800;
+        border-color: #d39e00;
+        color: #333;
+      }
+
+      .explore-card .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+      }
+
+      .explore-card .btn-info:hover {
+        background-color: #138496;
+        border-color: #117a8b;
+      }
+
+      .explore-card i {
+        font-size: 3rem;       
+        color: #1B3C53;         
+        margin-bottom: 20px;   
+      }
+
+      .footer {
+        background-color: #1B3C53;
+        color: white;
+      }
+
+      .footer a {
+        color: #F3C623;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer a:hover {
+        color: #E0B41E;
+        text-decoration: underline;
+      }
+    </style>
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">       
+      <div class="container-fluid ps-5 pe-5">
+        <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/materi/pengenalan"><i class="fa-solid fa-book-open"></i> Belajar</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
+            </li>
+          </ul>
+          <div class="d-flex">
+            <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
+            <a class="btn btn-sm btn-light" href="materi/pengenalan.html" role="button">Masuk</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <section class="landing-hero">
+      <div class="container-fluid ps-5 pe-5">
+        <div class="row align-items-center"> <div class="col-md-7 col-lg-6"> <h1 class="hero-title">CodeCracker</h1>
+            <div class="hero-subtitle">
+              Media Pembelajaran Interaktif<br>
+              Algoritma Caesar Chiper
+            </div>
+            <p class="hero-description">
+              CodeCracker adalah media pembelajaran interaktif yang dirancang untuk membantu siswa memahami konsep Algoritma Caesar Cipher. Melalui aplikasi ini, siswa dapat mempelajari cara kerja enkripsi sederhana dengan metode geser huruf serta langsung berlatih memecahkan kode melalui latihan dan tantangan yang menarik. Penyajian materi dibuat interaktif agar lebih mudah dipahami dan menyenangkan bagi siswa.
+            </p>
+            
+            <a href="#explore" class="btn btn-start" type="button">
+                Mulai Belajar
+            </a>
+          </div>
+          <div class="col-md-5 col-lg-6 d-none d-md-block"> <div class="hero-image">
+                <img src="/assets/landing.png" alt="Ilustrasi Siswa Belajar Caesar Cipher CodeCracker">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="explore-section" id="explore">
+      <div class="container">
+        <h2>Fitur - Fitur</h2>
+        <div class="row justify-content-center">
+          <div class="col-md-4 col-sm-10 mb-4">
+            <div class="explore-card">
+              <i class="fa-solid fa-book-open"></i>
+              <h3>Belajar</h3>
+              <p>Pelajari dasar-dasar Algoritma Caesar Cipher secara mendalam melalui tutorial interaktif.</p>
+              <a class="btn" href="materi/pengenalan.html" role="button" style="background-color: #F3C623;">Mulai Belajar</a>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-10 mb-4">
+            <div class="explore-card">
+              <i class="fa-solid fa-gamepad"></i>
+              <h3>Tantangan</h3>
+              <p>Uji kemampuanmu dalam memecahkan kode dan naik ke peringkat tertinggi di leaderboard.</p>
+              <button class="btn" style="background-color: #F3C623;">Mulai Tantangan</button>
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-10 mb-4">
+            <div class="explore-card">
+              <i class="fa-solid fa-trophy"></i> 
+              <h3>Leaderboard</h3>
+              <p>Lihat peringkatmu dan bandingkan hasil dengan teman-teman di leaderboard.</p>
+              <button class="btn" style="background-color: #F3C623;">Lihat Peringkat</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer p-2">
+      <div class="container text-center">
+        <p class="m-2"> &copy; 2025 <strong>CodeCracker</strong>. Semua Hak Dilindungi.</p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  </body>
+</html>
