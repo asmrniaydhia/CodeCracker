@@ -24,10 +24,31 @@
       padding: 40px;
       text-align: center;
       color: #fff;
+      position: relative; /* Tambahkan ini untuk penempatan teks di atas gambar */
     }
-    .left-panel img {
-      max-width: 200px;
-      margin-bottom: 15px;
+    /* Hapus atau modifikasi styling untuk logo dan teks jika ilustrasi menggantikan */
+    .left-panel .illustration-container {
+        position: relative;
+        width: 100%;
+        max-width: 400px; /* Sesuaikan ukuran maksimal ilustrasi */
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .left-panel .illustration-container img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 15px; /* Spasi antara gambar dan teks di bawahnya */
+    }
+    .left-panel .brand-text {
+        position: absolute; /* Posisikan teks di atas gambar */
+        bottom: 40px; /* Sesuaikan jarak dari bawah panel */
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
     }
     .left-panel h2 {
       font-family: 'Lato', sans-serif;
@@ -69,39 +90,63 @@
     }
     
     .btn-custom {
-    background: #1B3C53;
-    color: #fff;
-    border: none;
-    font-weight: 600;
-    padding: 12px;
-    border-radius: 6px;
-    width: 100%;
-    transition: all 0.3s ease;
-    cursor: pointer;
+      background: #1B3C53;
+      color: #fff;
+      border: none;
+      font-weight: 600;
+      padding: 12px;
+      border-radius: 6px;
+      width: 100%;
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .btn-custom:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    background: #1B3C53; 
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      background: #1B3C53; 
     }
 
     .btn-custom:active {
-    transform: translateY(1px);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      transform: translateY(1px);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Media queries untuk tampilan responsif */
+    @media (max-width: 768px) {
+        body {
+            flex-direction: column; /* Ubah tata letak menjadi kolom pada layar kecil */
+        }
+        .left-panel {
+            padding: 20px;
+            min-height: 250px; /* Kurangi tinggi panel kiri pada mobile */
+        }
+        .left-panel .illustration-container {
+            max-width: 250px; /* Kecilkan ukuran ilustrasi pada mobile */
+            margin-bottom: 10px;
+        }
+        .left-panel .brand-text {
+            position: static; /* Biarkan teks mengalir normal pada mobile */
+            transform: none;
+            margin-top: 10px;
+        }
+        .right-panel {
+            padding: 20px;
+        }
     }
 
   </style>
 </head>
 <body>
-  <!-- Panel Kiri -->
   <div class="left-panel">
-    <img src="logo.png" alt="Logo CodeCracker">
-    <h2>CodeCracker</h2>
-    <p>Belajar & Pecahkan Kode Bersama!</p>
+    <div class="illustration-container">
+      <img src="/assets/daftarSiswa.png" alt="Ilustrasi Siswa Daftar CodeCracker">
+    </div>
+    <div class="brand-text"> <h2>CodeCracker</h2>
+      <p>Belajar & Pecahkan Kode Bersama!</p>
+    </div>
   </div>
 
-  <!-- Panel Kanan -->
   <div class="right-panel">
     <div class="form-container">
       <h3>Daftar Siswa</h3>

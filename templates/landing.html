@@ -104,9 +104,34 @@
         font-family: 'Open Sans', sans-serif;
         font-size: 1.1rem;
         color: #333;
-        max-width: 750px;
+        max-width: 750px; 
         line-height: 1.6;
         margin-bottom: 30px; 
+      }
+
+      .hero-image {
+          display: flex; 
+          justify-content: center; 
+          align-items: center; 
+          height: 70%; 
+      }
+
+      .hero-image img {
+          max-width: 70%; 
+          height: auto;
+          display: block; 
+      }
+
+      @media (max-width: 767.98px) {
+          .landing-hero {
+              padding-bottom: 60px; /* Kurangi padding bawah pada layar kecil */
+          }
+          .hero-description {
+              max-width: 100%; /* Biarkan deskripsi mengisi lebar penuh pada layar kecil */
+          }
+          .hero-image {
+              margin-top: 40px; /* Tambah margin di atas gambar pada layar kecil */
+          }
       }
 
       .explore-section {
@@ -207,8 +232,8 @@
       }
 
       .explore-card i {
-        font-size: 3rem;      
-        color: #1B3C53;        
+        font-size: 3rem;       
+        color: #1B3C53;         
         margin-bottom: 20px;   
       }
 
@@ -231,7 +256,8 @@
 
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">      
+
+    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">       
       <div class="container-fluid ps-5 pe-5">
         <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -262,18 +288,24 @@
     
     <section class="landing-hero">
       <div class="container-fluid ps-5 pe-5">
-        <h1 class="hero-title">CodeCracker</h1>
-        <div class="hero-subtitle">
-          Media Pembelajaran Interaktif<br>
-          Algoritma Caesar Chiper
+        <div class="row align-items-center"> <div class="col-md-7 col-lg-6"> <h1 class="hero-title">CodeCracker</h1>
+            <div class="hero-subtitle">
+              Media Pembelajaran Interaktif<br>
+              Algoritma Caesar Chiper
+            </div>
+            <p class="hero-description">
+              CodeCracker adalah media pembelajaran interaktif yang dirancang untuk membantu siswa memahami konsep Algoritma Caesar Cipher. Melalui aplikasi ini, siswa dapat mempelajari cara kerja enkripsi sederhana dengan metode geser huruf serta langsung berlatih memecahkan kode melalui latihan dan tantangan yang menarik. Penyajian materi dibuat interaktif agar lebih mudah dipahami dan menyenangkan bagi siswa.
+            </p>
+            
+            <a href="#explore" class="btn btn-start" type="button">
+                Mulai Belajar
+            </a>
+          </div>
+          <div class="col-md-5 col-lg-6 d-none d-md-block"> <div class="hero-image">
+                <img src="/assets/landing.png" alt="Ilustrasi Siswa Belajar Caesar Cipher CodeCracker">
+            </div>
+          </div>
         </div>
-        <p class="hero-description">
-          CodeCracker adalah media pembelajaran interaktif yang dirancang untuk membantu siswa memahami konsep Algoritma Caesar Cipher. Melalui aplikasi ini, siswa dapat mempelajari cara kerja enkripsi sederhana dengan metode geser huruf serta langsung berlatih memecahkan kode melalui latihan dan tantangan yang menarik. Penyajian materi dibuat interaktif agar lebih mudah dipahami dan menyenangkan bagi siswa.
-        </p>
-        
-        <a href="#explore" class="btn btn-start" type="button">
-            Mulai Belajar
-        </a>
       </div>
     </section>
 
