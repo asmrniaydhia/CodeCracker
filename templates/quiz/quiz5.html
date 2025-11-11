@@ -390,14 +390,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-book-open"></i>
+                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i class="fa-solid fa-book-open"></i>
                             Belajar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
@@ -645,7 +645,8 @@
 
                                 <div class="quiz-actions">
                                     <a href="quiz4.html" class="btn btn-danger px-4 py-2">&laquo; Sebelumnya</a>
-                                    <a href="nilaiQuiz.html" class="btn btn-success px-4 py-2">Selanjutnya &raquo;</a>
+                                    <a href="nilaiQuiz.html" class="btn btn-success px-4 py-2">Lanjut ke Hasil
+                                        &raquo;</a>
                                 </div>
                             </div>
                         </div>
@@ -653,7 +654,7 @@
                         <!-- Kanan: Panel -->
                         <div class="col-12 col-lg-4">
                             <div class="side-card mb-3 text-center">
-                                <h5 class="text-danger fw-bold">Waktu Tersisa: 29:34</h5>
+                                <h5 class="text-danger fw-bold">Waktu Tersisa:</h5>
                             </div>
 
                             <div class="side-card mb-3">
@@ -691,17 +692,8 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="quiz.js"></script>
+    <script src="/templates/temp.js"></script>
 
-    <script>
-        // Sidebar toggle
-        const app = document.getElementById('lessonApp');
-        const toggleBtn = document.getElementById('sidebarToggle');
-        toggleBtn.addEventListener('click', () => {
-            const collapsed = app.classList.toggle('is-collapsed');
-            toggleBtn.setAttribute('aria-expanded', String(!collapsed));
-        });
-
-    </script>
 </body>
 
 </html>

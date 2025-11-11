@@ -1,18 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CodeCracker</title>
+    <title>CodeCracker — Petunjuk Evaluasi</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-
     <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
+
+    <!-- stylesheet global kamu -->
+    <link rel="stylesheet" href="materi.css">
 
     <style>
         body {
@@ -26,36 +30,35 @@
 
         .navbar {
             background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .5);
+            transition: box-shadow .3s, transform .3s;
         }
 
         .navbar:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .7);
             transform: translateY(-1px);
         }
 
         .navbar-brand {
             font-family: 'Lato', sans-serif;
             font-weight: 900;
-            color: white;
+            color: #fff;
         }
 
         .nav-link {
-            font-family: 'Open Sans', sans-serif;
-            color: white;
-            transition: all 0.3s ease;
+            color: #fff;
+            transition: all .3s;
         }
 
         .nav-link:hover {
-            color: white;
-            text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
+            color: #fff;
+            text-shadow: 0 0 5px rgba(168, 213, 226, .5);
             transform: translateY(-1px);
         }
 
         :root {
             --lesson-bg: #f6f7f9;
-            --lesson-surface: #ffffff;
+            --lesson-surface: #fff;
             --lesson-text: #1b1f24;
             --lesson-muted: #6b7280;
             --lesson-border: #e5e7eb;
@@ -72,7 +75,7 @@
             min-height: calc(100vh - 70px);
             background: var(--lesson-bg);
             position: relative;
-            transition: grid-template-columns .25s ease;
+            transition: grid-template-columns .25s;
         }
 
         .lesson-app.is-collapsed {
@@ -90,11 +93,31 @@
             box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
         }
 
-        .lesson-content {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .sidebar {
+            width: 250px;
+            transition: width .25s, padding .25s, background-color .25s;
+            background: #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            overflow: auto;
+            padding-bottom: 80px;
+        }
+
+        .lesson-app.is-collapsed .sidebar {
+            width: 56px;
+            padding-right: 6px;
+        }
+
+        .sidebar-content {
+            padding: .5rem;
+            position: fixed;
+            width: 250px;
+            top: 120px;
+        }
+
+        .lesson-app.is-collapsed .sidebar-content {
+            display: none;
         }
 
         .lesson-h2 {
@@ -114,98 +137,8 @@
             display: inline-block;
         }
 
-        .lesson-card {
-            background: var(--lesson-surface);
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            padding: 13px;
-        }
-
-        .lesson-goals {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .lesson-goal {
-            background: #fbfbfc;
-            border: 1px solid var(--lesson-border);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 15px;
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .lesson-goal .lesson-num {
-            min-width: 30px;
-            height: 35px;
-            border-radius: 7px;
-            display: grid;
-            place-items: center;
-            background: var(--lesson-brand-100);
-            color: var(--lesson-brand-700);
-            font-weight: 700;
-            border: 1px solid #cfe7d9;
-        }
-
-        .lesson-wrap {
-            background: #fff;
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            overflow: hidden;
-        }
-
-        .lesson-head {
-            padding: 22px 18px 6px;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .btn-outline-warning {
-            color: #000;
-            border-color: #F3C623;
-        }
-
-        .btn-outline-warning:hover,
-        .btn-outline-warning:focus {
-            background-color: #F3C623;
-            color: #000;
-            border-color: #E0B41E;
-        }
-
-        /* ===== Sidebar ===== */
-        .sidebar {
-            width: 250px;
-            transition: width .25s ease, padding .25s ease, background-color .25s ease;
-            background-color: #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            flex-shrink: 0;
-            overflow: auto;
-            padding-bottom: 80px;
-        }
-
-        .lesson-app.is-collapsed .sidebar {
-            width: 56px;
-            padding-right: 6px;
-        }
-
-        .sidebar-content {
-            padding: .5rem .5rem 1rem .5rem;
-        }
-
-        .lesson-app.is-collapsed .sidebar-content {
-            display: none;
-        }
-
-
-        /* Tombol burger */
         .sidebar .burger-btn {
+            position: fixed;
             margin: .5rem;
             width: 42px;
             height: 42px;
@@ -245,65 +178,40 @@
             top: 6px;
         }
 
-        .teks {
-            color: #000;
-            text-align: justify;
-            font-size: 16.5px;
-        }
-
-        .container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .choices,
-        .dropzone {
-            border: 2px dashed #aaa;
-            border-radius: 10px;
-            padding: 10px;
-            width: 45%;
-            min-height: 150px;
-            background-color: #fff;
-        }
-
-        .choice {
-            background-color: #1B3C53;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 8px 10px;
-            margin: 5px 0;
-            cursor: grab;
-            color: white;
-            font-weight: 400;
-        }
-
-        .dropzone.dragover {
-            border-color: #007bff;
-            background-color: #e6f0ff;
-        }
-
-        button {
-            margin-top: 15px;
-            padding: 8px 15px;
+        .btn-start {
+            background-color: #198754;
             border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: medium;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 12px 18px;
+            box-shadow: 0 8px 22px rgba(25, 135, 84, .25);
+            transition: transform .2s, box-shadow .2s, filter .2s;
         }
 
-        #check {
-            background-color: #28a745;
-            color: white;
+        .btn-start:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(25, 135, 84, .33);
+            filter: brightness(1.02);
         }
 
-        #reset {
-            background-color: #dc3545;
-            color: white;
-            margin-right: 8px;
+        .btn-back {
+            border-radius: 12px;
+            padding: 12px 18px;
         }
 
-        /* responsif dasar layout */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsif */
         @media (max-width: 992px) {
             .lesson-app {
                 grid-template-columns: 56px 1fr;
@@ -318,11 +226,11 @@
             }
 
             .lesson-titlebar {
-                font-size: 34px;
+                font-size: 32px;
             }
         }
 
-        @media (max-width: 760px) {
+        @media (max-width: 576px) {
             .lesson-titlebar {
                 font-size: 28px;
             }
@@ -341,18 +249,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i class="fa-solid fa-book-open"></i>
-                            Belajar</a>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#"><i
+                                class="fa-solid fa-book-open"></i> Belajar</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
+                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
                     </li>
                 </ul>
                 <div class="d-flex">
@@ -363,20 +266,18 @@
         </div>
     </nav>
 
-    <!-- Konten -->
+    <!-- Layout -->
     <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar -->
+        <!-- Sidebar (pakai struktur yang sama seperti template kamu) -->
         <aside class="sidebar">
-            <!-- Tombol burger (toggle) -->
             <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
                 aria-label="Tutup sidebar">
                 <span class="burger-icon"></span>
             </button>
 
-            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
             <div class="sidebar-content">
-                <!-- Accordion Bootstrap -->
                 <div class="accordion mt-0" id="accordionExample">
+                    <!-- PENGENALAN -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingOne">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -391,14 +292,13 @@
                                     <a href="pengenalan.html"
                                         class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
                                     <a href="aktivitas1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- ENKRIPSI -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -412,14 +312,13 @@
                                 <div class="d-flex flex-column">
                                     <a href="enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
                                     <a href="aktivitas2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- CAESAR CIPHER -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingThree">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -432,18 +331,15 @@
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
                                     <a href="caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 1</a>
-                                    <a href="caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 2</a>
+                                        Cipher</a>
                                     <a href="aktivitas3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+                    <!-- DEKRIPSI -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFour">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -455,16 +351,15 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
-                                    <a href="dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
+                                    <a href="dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi</a>
                                     <a href="aktivitas4.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- QUIZ -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFive">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -476,12 +371,14 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="templates/quiz/quiz1.html"
+                                    <a href="templates/quiz/quiz.html"
                                         class="btn text-start mb-2 btn-outline-warning">Quiz</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- EVALUASI -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingSix">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -493,11 +390,13 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="templates/evaluasi/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
+                                    <a href="templates/evaluasi/evaluasi.html"
+                                        class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </aside>
@@ -505,111 +404,80 @@
         <!-- Konten Utama -->
         <div class="p-5">
             <main class="lesson-main">
-                <div class="lesson-titlebar">Aktivitas</div>
+                <div class="lesson-titlebar">Quiz</div>
                 <hr />
 
                 <div class="lesson-wrap">
                     <div class="lesson-head">
-                        <h2 class="lesson-h2">Mengurutkan Proses Enkripsi dengan Benar</h2>
-                        <p class="teks">Pada bagian ini, Anda diminta untuk mengurutkan langkah-langkah yang benar dalam
-                            proses enkripsi dan dekripsi. Urutkan langkah-langkah yang sesuai dengan alur yang benar
-                            dalam melakukan enkripsi dan dekripsi data.
-                        </p>
-                        <p class="teks"><b>Instruksi Pengerjaan:</b> Langkah-langkah berikut telah tercampur, dan tugas
-                            Anda
-                            adalah menyeret langkah-langkah ini ke dalam urutan yang benar.</p>
-                        <div class="teks container">
-                            <div class="choices" id="choices">
-                                <div class="choice" id="5" draggable="true">Data atau pesan asli dapat dibaca oleh
-                                    penerima
+                        <h2 class="lesson-h2"><i class="fa-solid fa-clipboard-check me-2"></i>Petunjuk Pengerjaan</h2>
+
+                        <!-- Badge ringkas (opsional) -->
+                        <!-- <p class="teks mb-2">
+                            <span class="badge text-bg-warning text-dark me-2">
+                                <i class="fa-solid fa-shield-halved me-1"></i> Closed-book
+                            </span>
+                        </p> -->
+
+                        <!-- Meta ringkasan -->
+                        <p class="teks"><strong>Ringkasan:</strong> 5 Soal • 30 Menit</p>
+
+                        <!-- Daftar petunjuk -->
+                        <ol class="teks m-3 mt-0">
+                            <li>Baca setiap soal dengan cermat sebelum menjawab.</li>
+                            <li>Waktu total pengerjaan adalah <strong>30 menit</strong>.</li>
+                            <li>Tidak ada pengurangan nilai untuk jawaban salah.</li>
+                            <li>Jangan menutup/refresh halaman selama quiz.</li>
+                            <li>Pastikan koneksi stabil dan perangkat memiliki daya cukup.</li>
+                            <li>Setelah menekan <em>Mulai</em>, timer akan berjalan.</li>
+                        </ol>
+
+                        <!-- Aksi -->
+                        <div class="d-flex justify-content-end gap-3 mt-4 justify-content-between mt-3">
+                            <a href="dekripsi.html" class="btn btn-danger px-4 py-2">
+                                <i class="fa-solid fa-arrow-left me-2"></i>Kembali
+                            </a>
+
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="form-check m-0">
+                                    <input class="form-check-input" type="checkbox" id="agreeCheck">
+                                    <label class="form-check-label" for="agreeCheck">Saya siap dan memahami
+                                        petunjuk</label>
                                 </div>
-                                <div class="choice" id="1" draggable="true">Data asli (plaintext) diterima</div>
-                                <div class="choice" id="3" draggable="true">Data terenkripsi (ciphertext) dikirim ke
-                                    penerima
-                                </div>
-                                <div class="choice" id="4" draggable="true">Penerima menggunakan kunci dekripsi untuk
-                                    mengubah
-                                    ciphertext menjadi plaintext</div>
-                                <div class="choice" id="2" draggable="true">Proses enkripsi dilakukan dengan algoritma
-                                    dan kunci enkripsi</div>
+                                <button id="startBtn" class="btn btn-success px-4 py-2">
+                                    Mulai Quiz <i class="fa-solid fa-arrow-right ms-2"></i>
+                                </button>
                             </div>
-                            <div class="dropzone" id="dropzone"></div>
-                        </div>
-                        <div>
-                            <button id="reset">Reset</button>
-                            <button id="check">Cek Jawaban</button>
                         </div>
                     </div>
                 </div>
             </main>
-            <!-- Tombol Navigasi -->
-            <div class="d-flex justify-content-end gap-3 mt-4">
-                <a href="enkripsi.html" type="button" class="btn btn-danger px-4 py-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
-                </a>
-                <a href="caesarcipher.html" type="button" class="btn btn-success px-4 py-2">
-                    Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0" style="border-radius:16px;">
+                <div class="modal-header" style="background:var(--lesson-brand);">
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-circle-exclamation me-2"></i>Mulai Quiz?
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    Setelah dimulai, timer berjalan dan halaman evaluasi akan terbuka. Pastikan kamu sudah siap.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <a href="quiz1.html" class="btn btn-success fw-bold">Ya, Mulai!</a>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="materi.js"></script>
+    <script src="quiz.js"></script>
     <script src="/templates/temp.js"></script>
-
-    <!-- Drag and Drop -->
-    <script>
-        const dropzone = document.getElementById('dropzone');
-        const choiceBox = document.getElementById('choices');
-
-        // Simpan urutan awal persis seperti di HTML (acak)
-        const originalOrder = Array.from(choiceBox.querySelectorAll('.choice')).map(el => el.id);
-
-        // Pasang handler drag & drop (pakai ID, tidak membuat elemen baru)
-        document.querySelectorAll('.choice').forEach(choice => {
-            choice.addEventListener('dragstart', e => {
-                e.dataTransfer.setData('text/plain', choice.id);
-                choice.classList.add('dragging');
-            });
-            choice.addEventListener('dragend', () => {
-                choice.classList.remove('dragging');
-            });
-        });
-
-        [dropzone, choiceBox].forEach(zone => {
-            zone.addEventListener('dragover', e => {
-                e.preventDefault();
-                zone.classList.add('dragover');
-            });
-            zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
-            zone.addEventListener('drop', e => {
-                e.preventDefault();
-                zone.classList.remove('dragover');
-                const id = e.dataTransfer.getData('text/plain');
-                const el = document.getElementById(id);
-                if (el && zone !== el.parentElement) zone.appendChild(el);
-            });
-        });
-
-        // ✅ Reset: kembalikan sesuai urutan awal (TANPA sort)
-        document.getElementById('reset').onclick = () => {
-            originalOrder.forEach(id => {
-                const el = document.getElementById(id);
-                choiceBox.appendChild(el);
-            });
-            dropzone.querySelectorAll('.choice').forEach(() => { }); // no-op; semua sudah dipindah di atas
-        };
-
-        // Cek jawaban
-        document.getElementById('check').onclick = () => {
-            const items = Array.from(dropzone.querySelectorAll('.choice')).map(el => el.id);
-            const correct = ["1", "2", "3", "4", "5"];
-            const ok = items.length === correct.length && items.every((v, i) => v === correct[i]);
-            alert(ok ? "✅ Jawaban benar! Urutannya sudah sesuai." : "❌ Urutan belum benar. Coba lagi!");
-        };
-    </script>
 </body>
 
 </html>

@@ -310,14 +310,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i class="fa-solid fa-book-open"></i>
+                        <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-book-open"></i>
                             Belajar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                        <a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
@@ -474,79 +474,151 @@
         <!-- Konten Utama -->
         <div class="p-5">
             <main class="lesson-main">
-                <div class="lesson-titlebar">Dekripsi</div>
-                <hr />
-
+                <div class="lesson-titlebar">Caesar Cipher</div>
+                <hr>
                 <div class="lesson-wrap">
                     <div class="lesson-head">
-                        <h2 class="lesson-h2">Pengertian Dekripsi</h2>
-                        <p class="teks">Setelah kita belajar tentang enkripsi yaitu proses menyembunyikan atau mengunci
-                            pesan dengan mengubahnya dari Plaintext menjadi Ciphertext, sekarang kita akan mempelajari
-                            proses kebalikannya, yaitu dekripsi. Secara sederhana, dekripsi adalah proses yang bertugas
-                            untuk mengembalikan pesan yang sudah disamarkan atau diacak (Ciphertext) ke bentuk aslinya
-                            (Plaintext) sehingga pesan tersebut dapat dibaca dan dipahami kembali oleh penerima yang
-                            berhak.</p>
-                        <p class="teks">Dekripsi adalah langkah terakhir yang sangat penting dalam komunikasi aman. Jika
-                            enkripsi diibaratkan sebagai proses mengunci sebuah kotak harta karun sebelum dikirim, maka
-                            dekripsi adalah proses membuka kunci kotak tersebut di tempat tujuan. Tanpa dekripsi,
-                            Ciphertext hanya akan selamanya menjadi tumpukan kode acak yang tidak berarti, seperti
-                            lembaran kertas yang penuh dengan coretan asing. Bayangkan pesan penting apa pun, mulai dari
-                            transaksi bank hingga pesan cinta rahasia, akan sia-sia jika tidak bisa didekripsi.</p>
-                        <p class="teks">Contoh Sederhana Dekripsi: Mari kita lihat kembali contoh Caesar Cipher. Kamu
-                            mendapat pesan terenkripsi: <b><i>"KHOOR"</i></b>. Kamu tahu bahwa pesan ini dienkripsi
-                            dengan geser 3
-                            huruf ke depan. Agar pesan terbaca, kamu harus melakukan dekripsi dengan aturan sebaliknya:
-                            geser 3 huruf mundur.</p>
+                        <h2 class="lesson-h2">Enkripsi Langkah demi Langkah</h2>
+                        <p class="teks">
+                            Masukkan plaintext (pesan asli) dan kunci geser untuk melihat proses
+                            enkripsi secara bertahap dengan tabel alfabet berwarna.
+                        </p>
 
-                        <p class="teks">Hasil dekripsinya adalah: <b><i>HELLO</i></b>. Proses mental yang kamu lakukan
-                            untuk
-                            membalikkan sandi inilah yang disebut dekripsi.</p>
-                        <!-- Pentingnya dari sudut sejarah -->
+                        <div class="input-section">
+                            <div class="mb-3">
+                                <label for="plaintext" class="form-label">Plaintext (Pesan Asli):</label>
+                                <input type="text" class="form-control" id="plaintext" placeholder="Contoh: HELLO"
+                                    value="HELLO">
+                                <small class="text-muted">Hanya huruf A-Z yang akan diproses</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="key" class="form-label">Kunci Geser (1-25):</label>
+                                <input type="number" class="form-control" id="key" min="1" max="25" value="3">
+                            </div>
+
+                            <button class="btn btn-custom w-100" onclick="startEncryption()">
+                                Mulai Proses Enkripsi
+                            </button>
+                        </div>
+
+                        <div class="legend-box">
+                            <div class="legend-item">
+                                <div class="legend-color source"></div>
+                                <span><strong>Huruf Plaintext</strong></span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color target"></div>
+                                <span><strong>Hasil Enkripsi</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div id="stepContainer" class="step-container"></div>
+                <hr>
+                <div class="lesson-wrap">
+                    <div class="lesson-head">
+                        <h2 class="lesson-h2">Kelebihan Caesar Cipher</h2>
+                        <p class="teks">Walaupun sederhana, Sandi Caesar memiliki sejumlah kelebihan yang membuatnya
+                            tetap menarik untuk dipelajari, terutama oleh siswa. Namun, di sisi lain, sandi ini juga
+                            memiliki kelemahan yang menyebabkan ia tidak lagi dipakai untuk keamanan sungguhan di
+                            zaman
+                            sekarang. Berikut adalah kelebihan dari sandi Caesar:</p>
+                        <ol class="teks m-3 mt-0">
+                            <li><b>Mudah dipelajari dan dipahami.</b> <br>
+                                Sandi Caesar tidak membutuhkan pengetahuan rumit atau alat tambahan. Siapa pun yang
+                                bisa
+                                membaca alfabet sudah dapat mempraktikkan sandi ini. Prosesnya hanya menggeser huruf
+                                dengan jumlah tertentu sesuai kunci. Karena itu, sandi ini sangat cocok dijadikan
+                                materi
+                                pertama untuk mengenalkan dunia penyandian pesan. Anak-anak, remaja, bahkan orang
+                                dewasa
+                                sekalipun bisa dengan cepat mengerti cara kerjanya.
+                            </li>
+                            <li><b>Dapat dijadikan permainan rahasia antar teman.</b> <br>
+                                Sifat sederhana dari sandi ini membuatnya menyenangkan untuk dipakai dalam
+                                permainan.
+                                Misalnya, dua orang teman bisa saling menulis catatan rahasia menggunakan sandi
+                                Caesar,
+                                lalu menantang teman lain untuk memecahkannya. Aktivitas seperti ini tidak hanya
+                                seru,
+                                tetapi juga melatih kreativitas, kesabaran, dan kemampuan berpikir logis.
+                            </li>
+                            <li><b>Tidak membutuhkan alat khusus.</b> <br>
+                                Untuk menggunakan sandi Caesar, yang dibutuhkan hanyalah kertas dan pensil, atau
+                                bahkan
+                                hanya dengan ingatan. Tidak perlu komputer, aplikasi, atau perangkat teknologi.
+                                Cukup
+                                dengan mengetahui kunci pergeseran, pesan dapat langsung dibuat dan dibaca kembali.
+                                Hal
+                                ini membuat sandi Caesar mudah dipraktikkan di mana saja, termasuk di dalam kelas,
+                                di
+                                rumah, atau bahkan saat sedang bermain bersama teman.
+                            </li>
+                            <li><b>Cocok untuk memperkenalkan konsep enkripsi kepada siswa.</b> <br>
+                                Karena kesederhanaannya, sandi Caesar sering digunakan sebagai pintu masuk untuk
+                                memahami dunia enkripsi. Dengan sandi ini, siswa bisa belajar bahwa pesan bisa
+                                diubah
+                                menjadi bentuk rahasia (ciphertext), kemudian dikembalikan lagi menjadi bentuk asli
+                                (plaintext). Konsep-konsep dasar seperti kunci, pergeseran huruf, serta proses
+                                enkripsi
+                                dan dekripsi bisa dijelaskan dengan cara yang menyenangkan dan mudah dimengerti.
+                            </li>
+                        </ol>
                     </div>
                 </div>
                 <hr>
                 <div class="lesson-wrap">
                     <div class="lesson-head">
-                        <h2 class="lesson-h2">Dekripsi dalam Kehidupan Sehari-hari</h2>
-                        <p class="teks">Dekripsi tidak hanya ada dalam cerita sandi kuno, tetapi merupakan bagian
-                            integral dari rutinitas digital kita. Setiap proses "membuka kunci" informasi rahasia di
-                            dunia digital adalah dekripsi.</p>
-                        <ul class="teks m-3 mt-0">
-                            <li><b>Pesan WhatsApp (End-to-End Encryption):</b> Ketika temanmu mengirim pesan, pesan itu
-                                dienkripsi. Saat pesan sampai ke HP-mu, ponselmu otomatis melakukan dekripsi agar kamu
-                                bisa membaca isinya dengan jelas. Proses ini terjadi sangat cepat sehingga tidak kamu
-                                sadari.</li>
-                            <li><b>Membuka File yang Diproteksi:</b> Jika kamu membuka file yang diberi password
-                                (misalnya
-                                dokumen Word atau PDF), proses memasukkan password yang benar untuk melihat isinya
-                                adalah bentuk dekripsi. Password yang kamu masukkan berfungsi sebagai kunci.</li>
-                            <li><b>Akses Data Game:</b> Beberapa game menyimpan data pemain dalam bentuk kode
-                                terenkripsi. Saat
-                                kamu masuk, game melakukan dekripsi agar data kamu (skor, level, item) bisa ditampilkan
-                                kembali di layar.</li>
-                            <li><b>Membaca Soal yang Dilindungi:</b> Guru bisa menyimpan soal ulangan dalam bentuk
-                                terenkripsi.
-                                Saat waktunya tiba, guru menggunakan kunci dekripsi (bisa berupa password) agar soal
-                                bisa dibaca siswa dan dicetak.</li>
-                        </ul>
-                    </div>
-                </div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Pentingnya Dekripsi</h2>
-                        <p class="teks">Dekripsi adalah langkah penting dalam rantai komunikasi yang aman. Walaupun
-                            enkripsi bertugas melindungi kerahasiaan data selama pengiriman, dekripsi memastikan bahwa
-                            data tersebut akhirnya bisa dimanfaatkan. Tanpa kemampuan mendekripsi, pesan yang sudah
-                            terenkripsi hanya akan menjadi huruf-huruf aneh yang tidak berguna.</p>
-                            <img src="/assets/des2.png" alt="" width="400px" height="">
-                        <p class="teks">Bayangkan kamu menerima pesan dari gurumu berisi instruksi penting untuk
-                            kegiatan esok hari. Karena pesannya dienkripsi, kamu tidak bisa langsung mengerti. Jika kamu
-                            tidak tahu cara mendekripsinya, kamu akan kebingungan dan gagal menjalankan instruksi
-                            penting tersebut. Dengan kata lain, dekripsi adalah jaminan bahwa tujuan akhir dari
-                            komunikasi, yaitu menyampaikan informasi rahasia kepada pihak yang berhak, terpenuhi. Hal
-                            ini berkaitan langsung dengan pilar keamanan Kerahasiaan dan Integritas, karena pesan yang
-                            berhasil didekripsi menunjukkan bahwa data tersebut asli dan bisa dipercaya.</p>
+                        <h2 class="lesson-h2">Kekurangan Caesar Cipher</h2>
+                        <ol class="teks m-3 mt-0">
+                            <li><b>Mudah dipecahkan karena jumlah kunci sangat terbatas.</b> <br>
+                                Dalam alfabet berjumlah 26 huruf, sandi Caesar hanya memiliki 25 kemungkinan kunci
+                                (selain kunci 0 yang tidak mengubah pesan sama sekali). Itu artinya, jika seseorang
+                                mencoba satu per satu pergeseran huruf, ia pasti akan menemukan pesan aslinya.
+                                Inilah
+                                yang membuat sandi Caesar dianggap lemah dari segi keamanan.
+                            </li>
+                            <li><b>Mudah ditebak dengan metode coba-coba (brute force).</b> <br>
+                                Karena kuncinya sedikit, siapa pun bisa dengan cepat mencoba semua kemungkinan.
+                                Proses
+                                ini tidak memerlukan kemampuan khusus. Bahkan dengan sedikit kesabaran, pesan
+                                rahasia
+                                yang dienkripsi dengan sandi Caesar bisa dibuka dalam waktu singkat. Hal ini tentu
+                                berbeda dengan enkripsi modern yang memiliki jutaan kemungkinan kunci sehingga
+                                hampir
+                                mustahil dipecahkan dengan cara coba-coba.
+                            </li>
+                            <li><b>Huruf yang sering muncul bisa memberi petunjuk.</b> <br>
+                                Dalam bahasa tertentu, seperti bahasa Indonesia atau bahasa Inggris, ada huruf-huruf
+                                yang paling sering muncul, misalnya huruf vokal A, I, U, E, O, atau huruf konsonan
+                                tertentu seperti N dan R. Jika sebuah ciphertext terlihat memiliki huruf yang
+                                berulang-ulang, orang yang mencoba memecahkan pesan bisa menebaknya berdasarkan
+                                kebiasaan bahasa. Misalnya, jika huruf yang paling sering muncul dalam ciphertext
+                                adalah
+                                “X”, besar kemungkinan huruf aslinya adalah “A” atau “E”.
+                            </li>
+                            <li><b>Tidak dipakai lagi untuk keamanan sungguhan di zaman modern.</b> <br>
+                                Walaupun menarik dan menyenangkan, sandi Caesar sudah tidak mungkin dipakai dalam
+                                komunikasi sungguhan, apalagi dalam bidang penting seperti perbankan, pemerintahan,
+                                atau
+                                komunikasi digital. Alasannya jelas: terlalu mudah dipecahkan. Jika digunakan untuk
+                                mengamankan data pribadi atau rahasia negara, sandi ini tidak akan bertahan lama.
+                                Oleh
+                                karena itu, sandi Caesar lebih sering dipakai sebagai alat pembelajaran atau
+                                permainan,
+                                bukan untuk menjaga rahasia sungguhan.
+                            </li>
+                        </ol>
+                        <p class="teks">Walaupun memiliki kelemahan besar, sandi Caesar tetap penting untuk
+                            dipelajari.
+                            Sandi ini bagaikan “pintu pertama” yang membuka jalan menuju pemahaman enkripsi dan
+                            dekripsi. Dari sinilah siswa bisa memahami konsep dasar bagaimana sebuah pesan bisa
+                            diubah
+                            dan kemudian dikembalikan lagi. Justru karena kelemahannya, siswa bisa belajar mengapa
+                            manusia kemudian mengembangkan metode enkripsi yang lebih rumit dan lebih kuat di zaman
+                            modern. </p>
                     </div>
                 </div>
             </main>
@@ -555,8 +627,8 @@
                     <!-- <li class="page-item disabled">
                         <a class="page-link">Previous</a>
                     </li> -->
-                    <li class="page-item active"><a class="page-link" href="dekripsi.html">1</a></li>
-                    <li class="page-item"><a class="page-link" href="dekripsi2.html">2</a></li>
+                    <li class="page-item"><a class="page-link" href="caesarcipher.html">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="caesarcipher2.html">2</a></li>
                     <!-- <li class="page-item">
                         <a class="page-link" href="#">Next</a>
                     </li> -->
@@ -564,10 +636,10 @@
             </nav>
             <!-- Tombol Navigasi -->
             <div class="d-flex justify-content-end gap-3 mt-4">
-                <a href="aktivitas3.html" type="button" class="btn btn-danger px-4 py-2">
+                <a href="aktivitas2.html" type="button" class="btn btn-danger px-4 py-2">
                     <i class="fa-solid fa-arrow-left me-2"></i> Kembali
                 </a>
-                <a href="aktivitas4.html" type="button" class="btn btn-success px-4 py-2">
+                <a href="aktivitas3.html" type="button" class="btn btn-success px-4 py-2">
                     Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
                 </a>
             </div>
@@ -578,6 +650,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="materi.js"></script>
     <script src="/templates/temp.js"></script>
+
 </body>
 
 </html>

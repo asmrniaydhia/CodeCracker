@@ -390,14 +390,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#"><i class="fa-solid fa-book-open"></i>
+                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i class="fa-solid fa-book-open"></i>
                             Belajar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
@@ -632,17 +632,8 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="quiz.js"></script>
+    <script src="/templates/temp.js"></script>
 
-    <script>
-        // Sidebar toggle
-        const app = document.getElementById('lessonApp');
-        const toggleBtn = document.getElementById('sidebarToggle');
-        toggleBtn.addEventListener('click', () => {
-            const collapsed = app.classList.toggle('is-collapsed');
-            toggleBtn.setAttribute('aria-expanded', String(!collapsed));
-        });
-
-    </script>
 </body>
 
 </html>

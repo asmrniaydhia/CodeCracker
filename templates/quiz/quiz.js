@@ -106,8 +106,8 @@ window.addEventListener('beforeunload', saveCurrentPageState);
 
 (function() {
   const TIMER_KEY = 'cc_quiz_timer_v1';
-  const DURATION_MINUTES = 30; // durasi total
-  const END_PAGE = 'selesai.html'; // halaman tujuan jika waktu habis
+  const DURATION_MINUTES = 20; // durasi total
+  const END_PAGE = 'quiz.html'; // halaman tujuan jika waktu habis
 
   const timerDisplay = document.querySelector('.side-card .text-danger.fw-bold');
 
