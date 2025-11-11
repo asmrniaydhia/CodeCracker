@@ -118,7 +118,7 @@
 
 .alphabet-table {
     display: grid;
-    grid-template-columns: repeat(13, 1fr);
+    grid-template-columns: repeat(26, 1fr);
     gap: 4px;
     margin: 15px 0;
     font-family: 'Courier New', monospace;

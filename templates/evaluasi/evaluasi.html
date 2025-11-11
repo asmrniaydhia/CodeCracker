@@ -268,14 +268,17 @@
 
     <!-- Layout -->
     <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar (pakai struktur yang sama seperti template kamu) -->
+        <!-- Sidebar -->
         <aside class="sidebar">
+            <!-- Tombol burger (toggle) -->
             <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
                 aria-label="Tutup sidebar">
                 <span class="burger-icon"></span>
             </button>
 
+            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
             <div class="sidebar-content">
+                <!-- Accordion Bootstrap -->
                 <div class="accordion mt-0" id="accordionExample">
                     <!-- PENGENALAN -->
                     <div class="accordion-item">
@@ -289,15 +292,16 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="pengenalan.html"
+                                    <a href="../materi/pengenalan.html"
                                         class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
-                                    <a href="aktivitas1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
+                                    <a href="../materi/aktivitas1.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <!-- ENKRIPSI -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingTwo">
@@ -310,9 +314,15 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
-                                    <a href="aktivitas2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
+                                    <a href="../materi/enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
+                                    <a href="../materi/aktivitas2.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
+                                    <a href="../kuis/kuis.html?target=kuis1.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Kuis Enkripsi</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -330,10 +340,18 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher</a>
-                                    <a href="aktivitas3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
+                                    <a href="../materi/caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
+                                        Cipher 1</a>
+                                    <a href="../materi/caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
+                                        Cipher 2</a>
+                                    <a href="../materi/aktivitas3.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
+                                    <a href="../kuis/kuis.html?target=kuis2.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Kuis Caesar Cipher</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -351,28 +369,35 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi</a>
-                                    <a href="aktivitas4.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100"><span>Aktivitas</span></a>
+                                    <a href="../materi/dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
+                                    <a href="../materi/dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
+                                    <a href="../materi/aktivitas4.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Aktivitas</span>
+                                    </a>
+                                    <a href="../kuis/kuis.html?target=kuis3.html"
+                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
+                                        <span>Kuis Dekripsi</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- QUIZ -->
+                    <!-- KUIS  -->
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="headingFive">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                                 data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                QUIZ
+                                KUIS
                             </button>
                         </h2>
                         <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="/templates/quiz/quiz1.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Quiz</a>
+                                    <a href="../kuis/kuis.html?target=kuis4.html"
+                                        class="btn text-start mb-2 btn-outline-warning">Kuis</a>
                                 </div>
                             </div>
                         </div>
@@ -390,13 +415,11 @@
                             data-bs-parent="#accordionExample">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
-                                    <a href="/templates/evaluasi.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
+                                    <a href="../evaluasi/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </aside>
