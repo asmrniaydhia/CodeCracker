@@ -1,398 +1,710 @@
 <!DOCTYPE html>
 <html lang="id">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Stage 5: Menemukan Pola - Agen 7</title>
-        <script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stage 5: Menemukan Pola - Agen 7</title>
+    
+    <script>
         if (localStorage.getItem('stage4Completed') !== 'true') {
+            alert("Anda harus menyelesaikan Stage 4 terlebih dahulu!");
             window.location.href = 'tantangan.html';
         }
     </script>
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-            rel="stylesheet">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap"
-            rel="stylesheet">
-        <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-            background-color: #f8f9fa;
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            padding-top: 70px; 
+            font-family: 'Open Sans', sans-serif; 
+            background-color: #f8f9fa; 
         }
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            height: 70px;
+        .navbar { 
+            background-color: #1B3C53; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); 
+            height: 70px; 
         }
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
+        .navbar-brand { 
+            font-family: 'Lato', sans-serif; 
+            font-weight: 900; 
+            color: white; 
+            font-size: 1.6rem; 
+        }
+        
+        .game-stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            font-size: 1.6rem;
-        }
-        .stage-container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-        .stage-header {
-            background: linear-gradient(135deg, #2c5364 0%, #1B3C53 100%);
-            color: white;
-            padding: 2rem;
-            border-radius: 10px 10px 0 0;
-            text-align: center;
-        }
-        .stage-number {
-            font-family: 'Lato', sans-serif;
-            font-size: 3rem;
-            font-weight: 900;
-        }
-        .stage-title {
-            font-family: 'Lato', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-top: 0.5rem;
-        }
-        .stage-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .story-section {
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background-color: #e8f4f8;
-            border-radius: 8px;
-            border-left: 4px solid #1B3C53;
-        }
-        .story-text {
-            color: #333;
-            line-height: 1.8;
-            text-align: justify;
-        }
-        .action-buttons {
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
             display: flex;
-            flex-direction: column;
+            justify-content: space-around;
             align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            flex-wrap: wrap;
             gap: 1rem;
-            margin-top: 2rem;
         }
-        .btn-petunjuk {
-            background-color: #17a2b8;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            max-width: 300px;
+        .stat-item { 
+            text-align: center; 
+            min-width: 100px; 
         }
-        .btn-start-challenge {
-            background: linear-gradient(135deg, #F3C623 0%, #d4a91e 100%);
-            color: #0f2027;
-            font-family: 'Lato', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(243, 198, 35, 0.4);
-            text-transform: uppercase;
-            width: 100%;
-            max-width: 300px;
+        .stat-label { 
+            font-size: 0.85rem; 
+            opacity: 0.9; 
+            margin-bottom: 0.25rem; 
         }
-        .petunjuk-content {
-            display: none;
-            background-color: #d1ecf1;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-            border-left: 4px solid #17a2b8;
+        .stat-value { 
+            font-family: 'Lato', sans-serif; 
+            font-size: 1.5rem; 
+            font-weight: 900; 
         }
-        .navigation-buttons {
+        .timer-warning { 
+            animation: pulse-red 1s infinite; 
+        }
+        @keyframes pulse-red { 
+            0%, 100% { color: #fff; } 
+            50% { color: #ff6b6b; } 
+        }
+
+        .stage-container { 
+            max-width: 900px; 
+            margin: 2rem auto; 
+            padding: 0 1rem; 
+        }
+        .stage-header { 
+            background: linear-gradient(135deg, #2c5364 0%, #1B3C53 100%); 
+            color: white; 
+            padding: 2rem 1rem; 
+            border-radius: 10px 10px 0 0; 
+            text-align: center; 
+        }
+        .stage-number { 
+            font-family: 'Lato', sans-serif; 
+            font-size: clamp(2rem, 5vw, 3rem); 
+            font-weight: 900; 
+        }
+        .stage-title { 
+            font-family: 'Lato', sans-serif; 
+            font-size: clamp(1.1rem, 3vw, 1.5rem); 
+            font-weight: 700; 
+            margin-top: 0.5rem; 
+        }
+        .stage-content { 
+            background: white; 
+            padding: 2rem 1rem; 
+            border-radius: 0 0 10px 10px; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+        }
+        
+        .story-section { 
+            margin-bottom: 2rem; 
+            padding: 1.5rem; 
+            background-color: #e8f4f8; 
+            border-radius: 8px; 
+            border-left: 4px solid #1B3C53; 
+        }
+        .story-text { 
+            color: #333; 
+            line-height: 1.8; 
+            text-align: justify; 
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        
+        .petunjuk-content { 
+            background-color: #d1ecf1; 
+            padding: 1.5rem; 
+            border-radius: 8px; 
+            margin-bottom: 1.5rem; 
+            border-left: 4px solid #17a2b8; 
+        }
+        
+        .challenge-area { 
+            margin-top: 2rem; 
+            border-top: 2px solid #eee; 
+            padding-top: 2rem; 
+        }
+        .question-container { 
+            display: none; 
+        }
+        .question-container.active { 
+            display: block; 
+            animation: fadeIn 0.5s; 
+        }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        .question-text { 
+            font-size: clamp(1.1rem, 2.5vw, 1.3rem); 
+            font-weight: 600; 
+            margin-bottom: 1rem; 
+            color: #1B3C53;
+        }
+        .answer-input { 
+            font-size: clamp(1rem, 2vw, 1.1rem); 
+            text-align: center; 
+            text-transform: uppercase; 
+            padding: 0.75rem;
+        }
+        .feedback { 
+            font-weight: bold; 
+            margin-top: 1rem; 
+            min-height: 25px; 
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        .feedback-correct { color: #198754; }
+        .feedback-wrong { color: #dc3545; }
+
+        .matching-game-large {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+        .match-column { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+        }
+        .match-item {
+            width: clamp(100px, 20vw, 140px);
+            height: clamp(90px, 18vw, 120px);
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 1rem;
-            margin-top: 3rem;
-            border-top: 1px solid #eee;
-            padding-top: 2rem;
-        }
-        .btn-nav {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            border: none;
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: bold;
+            border: 3px solid #dee2e6;
+            border-radius: 10px;
+            background-color: #f1f1f1;
             cursor: pointer;
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
+            transition: all 0.2s ease;
         }
-        .btn-kembali {
-            background-color: #6c757d;
-            color: white;
+        .match-item.selected { 
+            border-color: #0d6efd; 
+            background-color: #e0e9ff; 
+            transform: scale(1.05); 
         }
-        .btn-sebelumnya {
-            background-color: #5a6268;
-            color: white;
+        .match-item.matched { 
+            border-color: #198754; 
+            background-color: #d1e7dd; 
+            cursor: not-allowed; 
+            opacity: 0.6; 
         }
+        
+        .btn-periksa { 
+            padding: 0.75rem 1.5rem; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            border: none; 
+            cursor: pointer; 
+            width: 100%; 
+            max-width: 300px; 
+            margin: 1rem auto;
+            display: block;
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .navigation-buttons { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 1rem; 
+            margin-top: 3rem; 
+            border-top: 1px solid #eee; 
+            padding-top: 2rem; 
+        }
+        .btn-nav { 
+            padding: 0.75rem 1.5rem; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            text-decoration: none; 
+            border: none; 
+            cursor: pointer; 
+            width: 100%; 
+            max-width: 300px; 
+            text-align: center; 
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+        .btn-kembali { 
+            background-color: #6c757d; 
+            color: white; 
+        }
+        .btn-sebelumnya { 
+            background-color: #5a6268; 
+            color: white; 
+        }
+
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
+            z-index: 9998;
             justify-content: center;
             align-items: center;
         }
-        .challenge-modal {
+        .modal-content {
             background: white;
             border-radius: 15px;
-            max-width: 600px;
+            max-width: 500px;
             width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-        .challenge-header {
-            background: linear-gradient(135deg, #0f2027 0%, #1B3C53 100%);
-            padding: 1.2rem;
-            text-align: center;
-            border-bottom: 3px solid #F3C623;
-            border-radius: 15px 15px 0 0;
-        }
-        .challenge-header h2 {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: #F3C623;
-            font-size: 1.6rem;
-            margin: 0;
-        }
-        .challenge-content {
             padding: 2rem;
-        }
-        .challenge-footer {
-            padding: 1.2rem;
-            text-align: right;
-            border-top: 1px solid #eee;
-        }
-        .confirmation-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .confirmation-buttons .btn {
-            padding: 0.5rem 2rem;
-            font-size: 1.1rem;
-        }
-        #feedback {
             text-align: center;
-            font-weight: bold;
-            margin-top: 15px;
-            min-height: 25px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
         }
-        .matching-game {
-            display: flex;
-            justify-content: space-around;
+        .success-animation {
+            font-family: 'Lato', sans-serif;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: 900;
+            color: #28a745;
+            animation: bounceIn 1s ease;
         }
-        .column {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .match-item {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #e9ecef;
-            border: 2px solid #dee2e6;
-            border-radius: 5px;
-            font-size: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .match-item.selected {
-            background-color: #ffc107;
-            border-color: #f8c952;
-        }
-        .match-item.matched {
-            background-color: #28a745;
-            color: white;
-            border-color: #218838;
-            cursor: not-allowed;
+        @keyframes bounceIn {
+            0% { transform: scale(0.1); opacity: 0; }
+            60% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); }
         }
     </style>
-    </head>
-    <body>
-        <nav class="navbar navbar-dark fixed-top">
-            <div class="container-fluid"><a class="navbar-brand"
-                    href="tantangan.html"><i class="fas fa-user-secret"></i>
-                    CodeCracker</a></div>
-        </nav>
-        <div class="stage-container">
-            <div class="stage-header">
-                <h1 class="stage-number">STAGE 5</h1>
-                <p class="stage-title">Menemukan Pola</p>
+</head>
+<body>
+    <nav class="navbar navbar-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="tantangan.html"><i class="fas fa-user-secret"></i> CodeCracker</a>
+        </div>
+    </nav>
+
+    <div class="stage-container">
+        <div class="game-stats">
+            <div class="stat-item">
+                <div class="stat-label">WAKTU STAGE</div>
+                <div class="stat-value" id="timer">10:00</div>
             </div>
-            <div class="stage-content">
-                <div class="story-section">
-                    <p
-                        class="story-text">"Komandan ingin tahu pola pergeseran yang digunakan musuh,"
-                        bunyi pesan berikutnya. Dengan menemukan pola, kamu bisa
-                        memecahkan lebih banyak pesan dengan cepat.</p>
-                    <p class="story-text">Tantangan kali ini menguji pemahamanmu
-                        tentang konsistensi kunci pergeseran. Kamu harus
-                        mencocokkan pasangan huruf untuk menemukan kuncinya.</p>
-                </div>
-
-                <div class="action-buttons">
-                    <button class="btn-petunjuk" onclick="togglePetunjuk()"><i
-                            class="fas fa-lightbulb"></i> Tampilkan
-                        Petunjuk</button>
-                    <button class="btn-start-challenge"
-                        onclick="openChallengeModal()">Mulai Tantangan</button>
-                </div>
-
-                <div id="petunjuk" class="petunjuk-content">
-                    <h5>Petunjuk Menemukan Pola:</h5>
-                    <p>Kunci pergeseran adalah jarak antara huruf asli dan huruf
-                        terenkripsi. Hitung berapa langkah yang dibutuhkan untuk
-                        setiap pasangan.</p>
-                    <ul>
-                        <li>Untuk A → E, hitung: A ke B (1), B ke C (2), C ke D
-                            (3), D ke E (4). Jadi, pergeserannya 4.</li>
-                        <li>Lakukan hal yang sama untuk pasangan lainnya.</li>
-                    </ul>
-                </div>
-                <div class="navigation-buttons">
-                    <a href="stage4.html" class="btn-nav btn-sebelumnya"><i
-                            class="fas fa-arrow-left"></i> Stage Sebelumnya</a>
-                    <a href="tantangan.html" class="btn-nav btn-kembali"><i
-                            class="fas fa-list"></i> Kembali ke Daftar
-                        Tantangan</a>
-                </div>
+            <div class="stat-item">
+                <div class="stat-label">TOTAL SKOR</div>
+                <div class="stat-value" id="total-score">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">PERCOBAAN</div>
+                <div class="stat-value" id="attempts">0</div>
             </div>
         </div>
-        <div class="modal-overlay" id="challengeModal">
-            <div class="challenge-modal">
-                <div class="challenge-header"><h2>Tantangan: Pasangkan
-                        Huruf</h2></div>
-                <div class="challenge-content">
-                    <p class="text-center">Pasangkan huruf di kolom kiri dengan
-                        pasangannya yang benar di kolom kanan.</p>
-                    <div class="matching-game">
-                        <div class="column" id="col1">
+
+        <div class="stage-header">
+            <h1 class="stage-number">STAGE 5</h1>
+            <p class="stage-title">Menemukan Pola</p>
+        </div>
+
+        <div class="stage-content">
+            <div class="story-section">
+                <p class="story-text">"Agen 7, ini adalah salah satu tes terakhirmu. CipherX mengirim pesan menggunakan pola kunci yang konsisten. Tugasmu adalah menemukan pola itu dan menggunakannya untuk melawan mereka. Satu kesalahan kecil bisa membuyarkan seluruh operasi. Perhatikan polanya!"</p>
+            </div>
+
+            <div class="petunjuk-content">
+                <h5><i class="fas fa-lightbulb"></i> Petunjuk Misi:</h5>
+                <p>Pola pergeseran adalah jarak yang konsisten antara huruf asli dan huruf terenkripsi.</p>
+                <ul>
+                    <li>Jika kamu melihat 'A' menjadi 'E', hitung jaraknya (A→B→C→D→E). Jaraknya adalah 4.</li>
+                    <li>Jika 'C' menjadi 'G', hitung (C→D→E→F→G). Jaraknya juga 4.</li>
+                    <li>Ini berarti Kunci yang digunakan adalah <strong>4</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="challenge-area">
+                
+                <div class="question-container active" id="question-1">
+                    <p class="question-text"><strong>SoAL 1/3:</strong> Temukan Kunci</p>
+                    <p>Analis kami mencegat satu pesan. Huruf ciphertext adalah '<strong>E</strong>', yang kami tahu pasti aslinya adalah '<strong>A</strong>'. Berapa Kunci pergeseran yang digunakan?</p>
+                    <input type="text" class="form-control answer-input" id="q1-answer" placeholder="Ketik angka kuncinya">
+                    <button class="btn btn-primary btn-periksa" onclick="checkAnswer(1)">Periksa Jawaban</button>
+                    <p class="feedback" id="q1-feedback"></p>
+                </div>
+                
+                <div class="question-container" id="question-2">
+                    <p class="question-text"><strong>Soal 2/3:</strong> Konfirmasi Pola</p>
+                    <p>Bagus, kuncinya adalah <strong>4</strong>. Sekarang, konfirmasikan polanya! Cocokkan huruf asli (kiri) dengan hasil enkripsi <strong>Kunci 4</strong> (kanan).</p>
+                    <div class="matching-game-large">
+                        <div class="match-column" id="q2-col1">
                             <div class="match-item" data-id="1">A</div>
                             <div class="match-item" data-id="2">C</div>
                             <div class="match-item" data-id="3">H</div>
                         </div>
-                        <div class="column" id="col2">
+                        <div class="match-column" id="q2-col2">
                         </div>
                     </div>
-                    <hr>
-                    <p class="text-center mt-3">Setelah mencocokkan,
-                        konfirmasikan: Apakah pola pergeserannya menggunakan
-                        <strong>Kunci 4</strong>?</p>
-                    <div class="confirmation-buttons">
-                        <button class="btn btn-success"
-                            onclick="checkAnswer(true)">Benar</button>
-                        <button class="btn btn-danger"
-                            onclick="checkAnswer(false)">Salah</button>
-                    </div>
-                    <p id="feedback"></p>
+                    <button class="btn btn-primary btn-periksa" onclick="checkAnswer(2)">Periksa Jawaban</button>
+                    <p class="feedback" id="q2-feedback"></p>
                 </div>
-                <div class="challenge-footer">
-                    <button class="btn btn-secondary"
-                        onclick="closeChallengeModal()">Tutup</button>
+
+                <div class="question-container" id="question-3">
+                    <p class="question-text"><strong>Soal 3/3:</strong> Gunakan Kunci Pola</p>
+                    <p>Kerja bagus, polanya terkonfirmasi. Sekarang gunakan <strong>Kunci 4</strong> yang kamu temukan untuk mengirim pesan balasan terenkripsi. Enkripsi kata <strong>SIAGA</strong>.</p>
+                    <input type="text" class="form-control answer-input" id="q3-answer" placeholder="Ketik hasil enkripsi (5 huruf)">
+                    <button class="btn btn-primary btn-periksa" onclick="checkAnswer(3)">Periksa Jawaban</button>
+                    <p class="feedback" id="q3-feedback"></p>
                 </div>
+
+            </div>
+
+            <div class="navigation-buttons">
+                <a href="stage4.html" class="btn-nav btn-sebelumnya"><i class="fas fa-arrow-left"></i> Stage Sebelumnya</a>
+                <a href="tantangan.html" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
             </div>
         </div>
-        <script>
-        function togglePetunjuk() { document.getElementById('petunjuk').style.display = document.getElementById('petunjuk').style.display === 'block' ? 'none' : 'block'; }
-        function openChallengeModal() { document.getElementById('challengeModal').style.display = 'flex'; }
-        function closeChallengeModal() { document.getElementById('challengeModal').style.display = 'none'; }
+    </div>
 
-        // --- Matching Game Logic ---
-        let selectedItem = null;
-        let matchedPairs = 0;
-        const totalPairs = 3;
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content">
+            <div class="success-animation">🎉 Hebat!</div>
+            <p class="lead mt-3">Stage 5 Selesai! Pola ditemukan.</p>
+            <p>Mempersiapkan Stage 6...</p>
+        </div>
+    </div>
 
-        const col2 = document.getElementById('col2');
-        const pairs = [
-            { id: 1, letter: 'E' },
-            { id: 2, letter: 'G' },
-            { id: 3, letter: 'L' }
-        ];
-        
-        pairs.sort(() => Math.random() - 0.5).forEach(pair => {
-            const item = document.createElement('div');
-            item.className = 'match-item';
-            item.dataset.id = pair.id;
-            item.textContent = pair.letter;
-            col2.appendChild(item);
+    <div class="modal-overlay" id="timeoutModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-clock"></i> Waktu Habis!</h2>
+            <p class="lead mt-3">Waktu untuk stage ini telah berakhir. Kamu harus mengulang dari soal pertama.</p>
+            <button class="btn btn-danger btn-periksa" onclick="restartStage()">Ulangi Stage 5</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="penaltyModal">
+        <div class="modal-content" style="background-color: #f8d7da; border: 2px solid #dc3545;">
+            <h2><i class="fas fa-exclamation-triangle"></i> Jawaban Salah!</h2>
+            <p class="lead mt-3">Waktu berkurang 5 detik.</p>
+            <button class="btn btn-danger btn-periksa" onclick="closePenaltyModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        const STAGE_ID = 5;
+        const PREVIOUS_STAGE_IDS = [1, 2, 3, 4]; // <-- ID stage sebelumnya (1, 2, 3, 4)
+        const NEXT_STAGE_URL = "stage6.html";
+        const STAGE_CONFIG = {
+            // MODIFIKASI: Waktu diubah ke 600 (10 menit)
+            timeLimit: 600,
+            questions: [
+                // MODIFIKASI: Poin ditambahkan (30, 30, 40)
+                { id: 1, type: 'input', answer: '4', points: 30 },
+                { id: 2, type: 'matching', answer: '1-E,2-G,3-L', points: 30 },
+                { id: 3, type: 'input', answer: 'WMEKE', points: 40 }
+            ]
+        };
+
+        let gameSession = JSON.parse(sessionStorage.getItem('gameSession')) || { totalScore: 0, stageProgress: {} };
+        let stageState = {
+            currentQuestion: 1,
+            attempts: 0,
+            startTime: null,
+            timerInterval: null,
+            timeLeft: STAGE_CONFIG.timeLimit,
+            stageScore: 0,
+            questionStartTime: null,
+            wrongAnswerCount: 0 // <-- Ditambahkan untuk melacak jawaban salah
+        };
+        let q2MatcherState = { selected: null, matches: 0, totalPairs: 3, pairs: [] };
+
+        const timerEl = document.getElementById('timer');
+        const totalScoreEl = document.getElementById('total-score');
+        const attemptsEl = document.getElementById('attempts');
+        const successModal = document.getElementById('successModal');
+        const timeoutModal = document.getElementById('timeoutModal');
+        const penaltyModal = document.getElementById('penaltyModal'); // <-- Variabel modal penalti
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initStage();
         });
 
-        document.querySelectorAll('.match-item').forEach(item => {
-            item.addEventListener('click', () => {
-                if (item.classList.contains('matched')) return;
+        function initStage() {
+            stageState.currentQuestion = 1;
+            stageState.timeLeft = STAGE_CONFIG.timeLimit;
+            stageState.wrongAnswerCount = 0;
+            
+            let progress = gameSession.stageProgress[`stage${STAGE_ID}`];
+            stageState.attempts = progress?.attempts || 0;
 
-                if (!selectedItem) {
-                    selectedItem = item;
-                    item.classList.add('selected');
-                } else {
-                    if (selectedItem.parentElement === item.parentElement) {
-                        selectedItem.classList.remove('selected');
-                        selectedItem = item;
-                        item.classList.add('selected');
-                        return;
-                    }
-
-                    if (item.dataset.id === selectedItem.dataset.id) {
-                        item.classList.add('matched');
-                        selectedItem.classList.add('matched');
-                        matchedPairs++;
-                    }
-                    
-                    selectedItem.classList.remove('selected');
-                    selectedItem = null;
-                }
+            // --- MODIFIKASI: LOGIKA SKOR CHECKPOINT ---
+            // 1. Hitung total skor dari SEMUA stage sebelumnya (1, 2, 3, 4)
+            let checkpointScore = 0;
+            PREVIOUS_STAGE_IDS.forEach(id => {
+                checkpointScore += gameSession.stageProgress[`stage${id}`]?.score || 0;
             });
-        });
+            
+            // 2. Set total skor global HANYA ke skor checkpoint
+            gameSession.totalScore = checkpointScore;
 
+            // 3. Skor untuk percobaan *saat ini* di stage ini dimulai dari 0
+            stageState.stageScore = 0; 
+            // --- AKHIR MODIFIKASI ---
 
-        function checkAnswer(isTrue) {
-            const feedbackEl = document.getElementById('feedback');
-            if (matchedPairs < totalPairs) {
-                feedbackEl.textContent = "Cocokkan semua pasangan huruf terlebih dahulu!";
-                feedbackEl.className = 'text-warning';
+            if (!progress) {
+                gameSession.stageProgress[`stage${STAGE_ID}`] = { attempts: 0, score: 0, time: 0 };
+            }
+            
+            // Tampilkan total skor (yang sekarang = skor checkpoint)
+            totalScoreEl.textContent = gameSession.totalScore;
+            updateTimerDisplay();
+            attemptsEl.textContent = stageState.attempts;
+            
+            document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
+            document.getElementById('question-1').classList.add('active');
+            document.querySelectorAll('.feedback').forEach(f => f.textContent = '');
+            document.querySelectorAll('.form-control').forEach(i => i.value = '');
+            
+            document.querySelectorAll('.btn-periksa').forEach(btn => {
+                btn.disabled = false;
+                btn.textContent = "Periksa Jawaban";
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-primary');
+            });
+
+            initQuestion2();
+            startStage();
+        }
+
+        function startStage() {
+            stageState.startTime = Date.now();
+            stageState.questionStartTime = Date.now();
+            if (stageState.timerInterval) clearInterval(stageState.timerInterval);
+            stageState.timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function restartStage() {
+            timeoutModal.style.display = 'none';
+            stageState.attempts++; // Tambah percobaan
+            gameSession.stageProgress[`stage${STAGE_ID}`].attempts = stageState.attempts;
+            
+            // Simpan progres percobaan, lalu panggil initStage()
+            // initStage() akan otomatis me-reset skor ke checkpoint (skor Stage 1-4)
+            saveSession(); 
+            initStage();
+        }
+        
+        function updateTimer() {
+            stageState.timeLeft--;
+            updateTimerDisplay();
+            if (stageState.timeLeft <= 60) {
+                timerEl.classList.add('timer-warning');
+            }
+            if (stageState.timeLeft <= 0) {
+                handleTimeOut();
+            }
+        }
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(stageState.timeLeft / 60);
+            const seconds = stageState.timeLeft % 60;
+            timerEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function handleTimeOut() {
+            clearInterval(stageState.timerInterval);
+            timeoutModal.style.display = 'flex';
+        }
+        
+        // <-- Fungsi untuk menutup modal penalti -->
+        function closePenaltyModal() {
+            penaltyModal.style.display = 'none';
+        }
+        
+        function showQuestion(qNum) {
+            if (qNum > STAGE_CONFIG.questions.length) {
+                handleStageComplete();
                 return;
             }
+            
+            const currentQ = document.getElementById(`question-${stageState.currentQuestion}`);
+            const nextQ = document.getElementById(`question-${qNum}`);
+            
+            if (currentQ) currentQ.classList.remove('active');
+            if (nextQ) nextQ.classList.add('active');
+            
+            stageState.currentQuestion = qNum;
+            stageState.questionStartTime = Date.now();
+        }
 
-            if (isTrue) {
-                feedbackEl.textContent = "Kamu cepat membaca pola sandi. Menuju stage berikutnya...";
-                feedbackEl.className = 'text-success';
-                localStorage.setItem('stage5Completed', 'true');
-                setTimeout(() => { window.location.href = "stage6.html"; }, 2000);
+        function checkAnswer(qNum) {
+            const config = STAGE_CONFIG.questions[qNum - 1];
+            const feedbackEl = document.getElementById(`q${qNum}-feedback`);
+            let isCorrect = false;
+
+            try {
+                switch (config.type) {
+                    case 'input':
+                        const inputEl = document.getElementById(`q${qNum}-answer`);
+                        const userAnswer = inputEl.value.toUpperCase().trim();
+                        isCorrect = (userAnswer === config.answer);
+                        break;
+                    
+                    case 'matching':
+                        isCorrect = (q2MatcherState.matches === q2MatcherState.totalPairs);
+                        break;
+                }
+
+                if (isCorrect) {
+                    // --- MODIFIKASI: LOGIKA SKOR BERBASIS WAKTU ---
+                    const questionTime = Math.floor((Date.now() - stageState.questionStartTime) / 1000);
+                    
+                    const maxPoints = config.points; // Poin maks dari config (30, 30, 40)
+                    const minPoints = 10; // Poin minimal
+                    const timeForMaxPoints = 60; // Waktu ideal 60 detik
+
+                    let questionScore;
+                    if (questionTime <= timeForMaxPoints) {
+                        questionScore = maxPoints; // Poin penuh
+                    } else {
+                        // Poin berkurang setelah 60 detik
+                        let penalty = (questionTime - timeForMaxPoints) * 0.5; // Kurangi 0.5 poin per detik
+                        questionScore = Math.floor(maxPoints - penalty);
+                    }
+                    
+                    questionScore = Math.max(minPoints, questionScore); 
+                    // --- AKHIR LOGIKA SKOR ---
+
+                    stageState.stageScore += questionScore; // Tambah ke skor stage ini
+                    stageState.wrongAnswerCount = 0;
+                    
+                    // --- UPDATE SKOR DI LAYAR ---
+                    // Tampilkan total skor (Checkpoint) DITAMBAH skor stage saat ini
+                    totalScoreEl.textContent = gameSession.totalScore + stageState.stageScore;
+                    
+                    feedbackEl.textContent = `✓ Benar! (+${questionScore} Poin) Lanjut ke soal berikutnya...`;
+                    feedbackEl.className = "feedback feedback-correct";
+                    
+                    const button = document.querySelector(`#question-${qNum} .btn-periksa`);
+                    button.disabled = true;
+                    button.textContent = "Jawaban Diterima";
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-success');
+                    
+                    setTimeout(() => {
+                        showQuestion(qNum + 1);
+                    }, 1500);
+
+                } else {
+                    // --- MODIFIKASI: PENALTI JAWABAN SALAH ---
+                    stageState.wrongAnswerCount++;
+                    feedbackEl.textContent = "✗ Jawaban salah. Analisis kembali dengan teliti!";
+                    feedbackEl.className = "feedback feedback-wrong";
+
+                    // Kurangi waktu 5 detik
+                    stageState.timeLeft = Math.max(0, stageState.timeLeft - 5);
+                    updateTimerDisplay(); // Update timer di UI
+                    
+                    // Tampilkan modal penalti
+                    penaltyModal.style.display = 'flex';
+                    // Tutup modal otomatis setelah 2 detik
+                    setTimeout(closePenaltyModal, 2000); 
+                    // --- AKHIR PENALTI ---
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                feedbackEl.textContent = "Terjadi error. Coba lagi.";
+                feedbackEl.className = "feedback feedback-wrong";
+            }
+        }
+
+        function handleStageComplete() {
+            clearInterval(stageState.timerInterval);
+            const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
+            
+            const finalStageScore = Math.max(10, stageState.stageScore);
+            
+            // --- MODIFIKASI: PENYIMPANAN SKOR ---
+            // (gameSession.totalScore sudah di-set ke checkpoint di initStage())
+            
+            // 1. Tambahkan skor stage ini ke total global
+            gameSession.totalScore += finalStageScore;
+            
+            // 2. Simpan skor *hanya stage ini* ke progresnya
+            gameSession.stageProgress[`stage${STAGE_ID}`].score = finalStageScore;
+            gameSession.stageProgress[`stage${STAGE_ID}`].time = timeTaken;
+            saveSession();
+            
+            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            successModal.style.display = 'flex';
+            
+            setTimeout(() => {
+                window.location.href = NEXT_STAGE_URL;
+            }, 3000);
+        }
+
+        function saveSession() {
+            sessionStorage.setItem('gameSession', JSON.stringify(gameSession));
+        }
+        
+        function initQuestion2() {
+            const col1 = document.getElementById('q2-col1');
+            const col2 = document.getElementById('q2-col2');
+            
+            q2MatcherState = { selected: null, matches: 0, totalPairs: 3, pairs: [] };
+            col2.innerHTML = '';
+            
+            const rightOptions = [
+                { id: 1, text: 'E' },
+                { id: 3, text: 'L' },
+                { id: 2, text: 'G' }
+            ];
+            
+            rightOptions.sort(() => Math.random() - 0.5);
+            
+            rightOptions.forEach(opt => {
+                const item = document.createElement('div');
+                item.className = 'match-item';
+                item.dataset.id = opt.id;
+                item.textContent = opt.text;
+                item.addEventListener('click', () => onMatchItemClick(item, 2));
+                col2.appendChild(item);
+            });
+            
+            col1.querySelectorAll('.match-item').forEach(item => {
+                item.classList.remove('selected', 'matched');
+                item.replaceWith(item.cloneNode(true));
+            });
+            document.querySelectorAll('#q2-col1 .match-item').forEach(item => {
+                item.addEventListener('click', () => onMatchItemClick(item, 1));
+            });
+        }
+        
+        function onMatchItemClick(item, colNum) {
+            if (item.classList.contains('matched')) return;
+
+            const state = q2MatcherState;
+            
+            if (state.selected) {
+                if (state.selected.element.parentElement.id === item.parentElement.id) {
+                    state.selected.element.classList.remove('selected');
+                    state.selected = null;
+                } else {
+                    if (state.selected.id === item.dataset.id) {
+                        state.selected.element.classList.add('matched');
+                        item.classList.add('matched');
+                        state.selected = null;
+                        state.matches++;
+                        if (state.matches === state.totalPairs) {
+                            document.getElementById('q2-feedback').textContent = "Semua cocok! Silakan periksa jawaban.";
+                            document.getElementById('q2-feedback').className = "feedback feedback-correct";
+                        }
+                    } else {
+                        state.selected.element.classList.remove('selected');
+                        state.selected = null;
+                        document.getElementById('q2-feedback').textContent = "Tidak cocok. Coba lagi.";
+                        document.getElementById('q2-feedback').className = "feedback feedback-wrong";
+                        setTimeout(() => document.getElementById('q2-feedback').textContent = "", 1500);
+                    }
+                }
             } else {
-                feedbackEl.textContent = "Analisis lagi. Pola pergeserannya konsisten.";
-                feedbackEl.className = 'text-danger';
+                item.classList.add('selected');
+                state.selected = { element: item, id: item.dataset.id, col: colNum };
             }
         }
     </script>
-    </body>
+</body>
 </html>

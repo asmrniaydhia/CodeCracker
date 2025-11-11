@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>CodeCracker - Tantangan</title>
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-            rel="stylesheet">
-        <link
-            href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap"
-            rel="stylesheet">
-        <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-        /* General Body and Navbar Styles */
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCracker - Tantangan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* [ ... CSS Anda tidak berubah ... ] */
         body {
             padding-top: 70px;
             font-family: 'Open Sans', sans-serif;
@@ -265,9 +261,8 @@
             font-size: 1.3rem;
         }
     </style>
-    </head>
+</head>
 
-<<<<<<< Updated upstream:templates/tantangan/tantangan.html
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid px-lg-5 px-3">
@@ -308,96 +303,29 @@
                 <div class="scroll-indicator" id="scrollIndicator">
                     <span>Scroll untuk melanjutkan</span>
                     <i class="fas fa-chevron-down"></i>
-=======
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-            <div class="container-fluid px-lg-5 px-3">
-                <a class="navbar-brand" href="#"><i
-                        class="fas fa-user-secret"></i> CodeCracker</a>
-                <button class="navbar-toggler" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i
-                                    class="fa-solid fa-book-open"></i>
-                                Belajar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="tantangan.html"><i
-                                    class="fa-solid fa-gamepad"></i>
-                                Tantangan</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i
-                                    class="fa-solid fa-trophy"></i>
-                                Leaderboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i
-                                    class="fa-solid fa-info-circle"></i>
-                                Informasi</a>
-                        </li>
-                    </ul>
->>>>>>> Stashed changes:templates/tantangan.html
                 </div>
             </div>
-        </nav>
-
-        <div class="modal-overlay" id="prologModal">
-            <div class="prolog-modal">
-                <div class="prolog-header">
-                    <h2><i class="fas fa-user-secret"></i> MISI AGEN 7</h2>
-                    <p class="subtitle">Prolog: Permulaan Misi</p>
-                </div>
-                <div class="prolog-content" id="prologContent">
-                    <p class="prolog-text">Di tengah malam yang sunyi, pesan
-                        terenkripsi tiba di markas besar Divisi Kriptografi
-                        Nasional. "Agen 7, dunia bergantung padamu." Begitulah
-                        bunyi pesan itu. Sejak saat itu, seorang agen muda
-                        bernama Agen 7 resmi memulai misinya — memecahkan kode
-                        rahasia peninggalan CipherX, musuh legendaris yang
-                        dikenal mahir menyembunyikan pesan lewat sandi
-                        Caesar.</p>
-                    <p class="prolog-text">Perjalanan ini tidak akan mudah.
-                        Setiap episode akan menguji kemampuan dekripsi dan
-                        logika Agen 7. Namun dengan ketekunan dan keberanian,
-                        tidak ada kode yang tidak bisa dipecahkan.</p>
-                    <div class="scroll-indicator" id="scrollIndicator">
-                        <span>Scroll untuk melanjutkan</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-                <div class="prolog-footer">
-                    <button class="btn-next" id="btnNext" disabled>Mulai Misi <i
-                            class="fas fa-arrow-right"></i></button>
-                </div>
+            <div class="prolog-footer">
+                <button class="btn-next" id="btnNext" disabled>Mulai Misi <i class="fas fa-arrow-right"></i></button>
             </div>
         </div>
+    </div>
 
-        <div class="challenges-header">
-            <div class="container-fluid text-center">
-                <h1>Tantangan</h1>
-            </div>
+    <div class="challenges-header">
+        <div class="container-fluid text-center">
+            <h1>Tantangan</h1>
         </div>
+    </div>
 
-        <div class="challenges-container">
-            <div class="challenges-grid" id="challenges-grid"></div>
-        </div>
+    <div class="challenges-container">
+        <div class="challenges-grid" id="challenges-grid"></div>
+    </div>
 
-<<<<<<< Updated upstream:templates/tantangan/tantangan.html
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-=======
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <script>
->>>>>>> Stashed changes:templates/tantangan.html
         // --- POP-UP MODAL LOGIC ---
+        // [ ... Logika Modal Anda tidak berubah ... ]
         const prologModal = document.getElementById('prologModal');
         const prologContent = document.getElementById('prologContent');
         const btnNext = document.getElementById('btnNext');
@@ -428,7 +356,7 @@
         }
         btnNext.addEventListener('click', () => {
             prologModal.classList.remove('active');
-            window.location.href = 'stage1.html';
+            window.location.href = 'stage1.html'; // Ini sudah benar karena stage1.html ada di folder yang sama
         });
 
         // --- CHALLENGE CARD GENERATION LOGIC ---
@@ -440,7 +368,7 @@
 
             let lastCompletedStage = 0;
             for (let i = 1; i <= totalStages; i++) {
-                if (localStorage.getItem(stage${i}Completed) === 'true') {
+                if (localStorage.getItem(`stage${i}Completed`) === 'true') {
                     lastCompletedStage = i;
                 }
             }
@@ -455,12 +383,12 @@
                     challengesGrid.appendChild(currentRow);
                 }
 
-                const isCompleted = localStorage.getItem(stage${i}Completed) === 'true';
+                const isCompleted = localStorage.getItem(`stage${i}Completed`) === 'true';
                 const isLocked = i > lastCompletedStage + 1;
 
                 const cardWrapper = document.createElement('a');
                 cardWrapper.className = 'challenge-card';
-                cardWrapper.href = stage${i}.html;
+                cardWrapper.href = isLocked ? '#' : `stage${i}.html`; // Ini sudah benar
                 cardWrapper.dataset.stage = i;
                 
                 let statusText = 'Belum Selesai';
@@ -475,24 +403,21 @@
                     statusClass = 'selesai';
                 }
                 
+                // ==================== PERBAIKAN DI SINI ====================
+                // Menggunakan "../../assets/" untuk 'naik' dua folder
                 cardWrapper.innerHTML = `
-<<<<<<< Updated upstream:templates/tantangan/tantangan.html
-                    <a href="${isLocked ? '#' : `/templates/tantangan/stage${i}.html`}" style="display: contents;">
-=======
-                    <a href="${isLocked ? '#' : /templates/tantangan/stage${i}.html}" style="display: contents;">
->>>>>>> Stashed changes:templates/tantangan.html
-                        <div class="challenge-thumbnail">
-                            <img src="/assets/challenge_${i}.png" alt="Tantangan ${i}">
-                        </div>
-                        <div class="challenge-info">
-                            <div class="challenge-number">Episode</div>
-                            <div class="episode-number">${i}</div>
-                        </div>
-                        <div class="challenge-status">
-                            <span class="status-badge ${statusClass}">${statusText}</span>
-                        </div>
-                    </a>
+                    <div class="challenge-thumbnail">
+                        <img src="../../assets/challenge_${i}.png" alt="Tantangan ${i}">
+                    </div>
+                    <div class="challenge-info">
+                        <div class="challenge-number">Episode</div>
+                        <div class="episode-number">${i}</div>
+                    </div>
+                    <div class="challenge-status">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
                 `;
+                // =========================================================
                 
                 if (!isLocked) {
                     cardWrapper.addEventListener('click', (e) => {
@@ -504,7 +429,7 @@
                             prologModal.classList.add('active');
                             setTimeout(checkInitialScroll, 100);
                         } else {
-                            window.location.href = stage${stage}.html;
+                            window.location.href = `stage${stage}.html`; // Ini sudah benar
                         }
                     });
                 }
@@ -513,9 +438,5 @@
         });
     </script>
 
-<<<<<<< Updated upstream:templates/tantangan/tantangan.html
 </body>
-=======
-    </body>
->>>>>>> Stashed changes:templates/tantangan.html
 </html>
