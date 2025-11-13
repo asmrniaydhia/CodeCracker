@@ -49,5 +49,5 @@ urlpatterns = [
     path('siswa-daftar/', views.siswa_daftar, name='siswa_daftar'),
     path('pilihan-daftar/', views.pilihan_daftar, name='pilihan_daftar'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
-    path('tes/', views.tes, name='tes'),
+    path('tes/', views.tes, name='tes'), 
 ]
