@@ -70,14 +70,14 @@
 
     <div class="row g-4">
       <div class="col-md-6">
-        <a href="siswa-daftar.html" class="role-card">
+        <a href="{% url 'siswa_daftar' %}" class="role-card">
           <i class="fa-solid fa-graduation-cap"></i>
           <h3>Saya seorang Siswa</h3>
           <p class="role-description">Pelajari algoritma, ikuti tantangan seru, dan naikkan peringkat di leaderboard.</p>
         </a>
       </div>
       <div class="col-md-6">
-        <a href="/templates/halaman guru/dashboard.html" class="role-card">
+        <a href="{% url 'pilihan_daftar' %}" class="role-card">
           <i class="fa-solid fa-chalkboard-user"></i>
           <h3>Saya seorang Guru</h3>
           <p class="role-description">Kelola kelas Anda, bagikan materi, dan pantau kemajuan siswa dengan mudah.</p>

@@ -2,5 +2,52 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),  # root dari app main
+    # Evaluasi
+    path('evaluasi/', views.evaluasi, name='evaluasi'),
+    path('evaluasi/nilai/', views.nilai_eval, name='nilai_eval'),
+
+    # Halaman guru
+    path('guru/dashboard/', views.dashboard, name='dashboard'),
+    path('guru/data-nilai/', views.data_nilai, name='data_nilai'),
+    path('guru/data-siswa/', views.data_siswa, name='data_siswa'),
+
+    # Kuis
+    path('kuis/', views.kuis, name='kuis'),
+    path('kuis/1/', views.kuis1, name='kuis1'),
+    path('kuis/2/', views.kuis2, name='kuis2'),
+    path('kuis/3/', views.kuis3, name='kuis3'),
+    path('kuis/4/', views.kuis4, name='kuis4'),
+    path('kuis/nilai/', views.nilai_kuis, name='nilai_kuis'),
+
+    # Materi
+    path('materi/aktivitas1/', views.aktivitas1, name='aktivitas1'),
+    path('materi/aktivitas2/', views.aktivitas2, name='aktivitas2'),
+    path('materi/aktivitas3/', views.aktivitas3, name='aktivitas3'),
+    path('materi/aktivitas4/', views.aktivitas4, name='aktivitas4'),
+    path('materi/caesar/', views.caesar, name='caesar'),
+    path('materi/caesar2/', views.caesar2, name='caesar2'),
+    path('materi/deskripsi/', views.deskripsi, name='deskripsi'),
+    path('materi/deskripsi2/', views.deskripsi2, name='deskripsi2'),
+    path('materi/enkripsi/', views.enkripsi, name='enkripsi'),
+    path('materi/pengenalan/', views.pengenalan, name='pengenalan'),
+
+    # Tantangan
+    path('tantangan/stage1/', views.stage1, name='stage1'),
+    path('tantangan/stage2/', views.stage2, name='stage2'),
+    path('tantangan/stage3/', views.stage3, name='stage3'),
+    path('tantangan/stage4/', views.stage4, name='stage4'),
+    path('tantangan/stage5/', views.stage5, name='stage5'),
+    path('tantangan/stage6/', views.stage6, name='stage6'),
+    path('tantangan/stage7/', views.stage7, name='stage7'),
+    path('tantangan/stage8/', views.stage8, name='stage8'),
+    path('tantangan/stage9/', views.stage9, name='stage9'),
+    path('tantangan/stage10/', views.stage10, name='stage10'),
+    path('tantangan/tantangan/', views.tantangan, name='tantangan'),
+
+    path('', views.landing, name='landing'),
+    path('guru-daftar/', views.guru_daftar, name='guru_daftar'),
+    path('siswa-daftar/', views.siswa_daftar, name='siswa_daftar'),
+    path('pilihan-daftar/', views.pilihan_daftar, name='pilihan_daftar'),
+    path('leaderboard/', views.leaderboard, name='leaderboard'),
+    path('tes/', views.tes, name='tes'),
 ]

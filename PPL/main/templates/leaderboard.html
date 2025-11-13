@@ -175,22 +175,18 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="materi/pengenalan.html"><i class="fa-solid fa-book-open"></i> Belajar</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'pengenalan' %}"><i class="fa-solid fa-book-open"></i> Belajar</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+              <a class="nav-link" href="{% url 'tantangan' %}"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+              <a class="nav-link" href="{% url 'leaderboard' %}"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
             </li>
           </ul>
-          <div class="d-flex">
-            <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
-            <a class="btn btn-sm btn-light" href="materi/pengenalan.html" role="button">Masuk</a>
-          </div>
         </div>
       </div>
     </nav>
