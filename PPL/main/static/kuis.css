@@ -1,0 +1,154 @@
+/* === Quiz Layout Tambahan === */
+.quiz-card {
+  background: var(--lesson-surface);
+  border: 1px solid var(--lesson-border);
+  border-radius: var(--lesson-radius);
+  box-shadow: var(--lesson-shadow);
+  padding: 18px 20px;
+}
+
+.quiz-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.quiz-subtitle {
+  font-size: 20px;
+  margin-bottom: 1rem;
+}
+
+.option-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.option {
+  border: 1px solid var(--lesson-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fbfbfc;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.option:hover {
+  border-color: #cfd3da;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.option input {
+  accent-color: #1b3c53;
+}
+
+.option.checked {
+  border-color: #1b3c53;
+  background: #fff;
+}
+
+.quiz-flag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.quiz-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.side-card {
+  background: var(--lesson-surface);
+  border: 1px solid var(--lesson-border);
+  border-radius: var(--lesson-radius);
+  box-shadow: var(--lesson-shadow);
+  padding: 10px 15px;
+}
+
+.bubbles {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.bubble {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  /* <<< supaya terlihat bisa diklik */
+  user-select: none;
+}
+
+.bubble.current {
+  background: #1b3c53;
+  color: #fff;
+}
+
+.bubble.empty {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+.bubble.answered {
+  background: #17a2b8;
+  color: #000;
+}
+
+.bubble.flagged {
+  background: #ffe266;
+  color: #000;
+}
+
+.legend {
+  display: grid;
+  gap: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.legend-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.dot-current {
+  background: #1b3c53;
+}
+
+.dot-answered {
+  background: #17a2b8;
+}
+
+.dot-flagged {
+  background: #ffe266;
+}
+
+.dot-empty {
+  background: #e5e7eb;
+}
+
+.task-input,
+.task-select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+}

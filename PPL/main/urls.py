@@ -12,11 +12,11 @@ urlpatterns = [
     path('guru/data-siswa/', views.data_siswa, name='data_siswa'),
 
     # Kuis
-    path('kuis/', views.kuis, name='kuis'),
-    path('kuis/1/', views.kuis1, name='kuis1'),
-    path('kuis/2/', views.kuis2, name='kuis2'),
-    path('kuis/3/', views.kuis3, name='kuis3'),
-    path('kuis/4/', views.kuis4, name='kuis4'),
+    path('kuis/kuis', views.kuis, name='kuis'),
+    path('kuis/kuis1', views.kuis1, name='kuis1'),
+    path('kuis/kuis2', views.kuis2, name='kuis2'),
+    path('kuis/kuis3', views.kuis3, name='kuis3'),
+    # path('kuis/<int:kuis_id>/', views.detail_kuis, name='detail_kuis'),
     path('kuis/nilai/', views.nilai_kuis, name='nilai_kuis'),
 
     # Materi
@@ -26,8 +26,8 @@ urlpatterns = [
     path('materi/aktivitas4/', views.aktivitas4, name='aktivitas4'),
     path('materi/caesar/', views.caesar, name='caesar'),
     path('materi/caesar2/', views.caesar2, name='caesar2'),
-    path('materi/deskripsi/', views.deskripsi, name='deskripsi'),
-    path('materi/deskripsi2/', views.deskripsi2, name='deskripsi2'),
+    path('materi/dekripsi/', views.dekripsi, name='dekripsi'),
+    path('materi/dekripsi2/', views.dekripsi2, name='dekripsi2'),
     path('materi/enkripsi/', views.enkripsi, name='enkripsi'),
     path('materi/pengenalan/', views.pengenalan, name='pengenalan'),
 

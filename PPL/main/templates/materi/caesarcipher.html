@@ -1,646 +1,156 @@
-<!doctype html>
-<html lang="en">
+{% extends "base_lesson.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CodeCracker</title>
+{% block title %}Caesar Cipher - CodeCracker{% endblock %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
+{% block content %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-
-    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="materi.css">
-
-    <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
-
-        .navbar:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-            transform: translateY(-1px);
-        }
-
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: white;
-        }
-
-        .nav-link {
-            font-family: 'Open Sans', sans-serif;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: white;
-            text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
-            transform: translateY(-1px);
-        }
-
-        :root {
-            --lesson-bg: #f6f7f9;
-            --lesson-surface: #ffffff;
-            --lesson-text: #1b1f24;
-            --lesson-muted: #6b7280;
-            --lesson-border: #e5e7eb;
-            --lesson-brand: #F3C623;
-            --lesson-brand-700: #1B3C53;
-            --lesson-brand-100: #17a2b8;
-            --lesson-radius: 14px;
-            --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-        }
-
-        .lesson-app {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 70px);
-            background: var(--lesson-bg);
-            position: relative;
-            transition: grid-template-columns .25s ease;
-        }
-
-        .lesson-app.is-collapsed {
-            grid-template-columns: 56px 1fr;
-        }
-
-        .lesson-titlebar {
-            background: var(--lesson-brand);
-            color: #000;
-            padding: 3px 20px;
-            font-size: 35px;
-            font-weight: 1000;
-            letter-spacing: .9px;
-            text-align: center;
-            box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
-        }
-
-        .lesson-content {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .lesson-h2 {
-            font-size: 25px;
-            font-weight: bolder;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .lesson-h2:before {
-            content: "";
-            width: 6px;
-            height: 28px;
-            border-radius: 3px;
-            background: var(--lesson-brand);
-            display: inline-block;
-        }
-
-        .lesson-card {
-            background: var(--lesson-surface);
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            padding: 13px;
-        }
-
-        .lesson-goals {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .lesson-goal {
-            background: #fbfbfc;
-            border: 1px solid var(--lesson-border);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 15px;
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .lesson-goal .lesson-num {
-            min-width: 30px;
-            height: 35px;
-            border-radius: 7px;
-            display: grid;
-            place-items: center;
-            background: var(--lesson-brand-100);
-            color: var(--lesson-brand-700);
-            font-weight: 700;
-            border: 1px solid #cfe7d9;
-        }
-
-        .lesson-wrap {
-            background: #fff;
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            overflow: hidden;
-        }
-
-        .lesson-head {
-            padding: 22px 18px 6px;
-            font-weight: 250;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .lesson-child {
-            padding: 22px 18px 6px;
-            font-weight: 500;
-            font-size: 15px;
-            text-align: center;
-            font-style: italic;
-        }
-
-        .btn-outline-warning {
-            color: #000;
-            border-color: #F3C623;
-        }
-
-        .btn-outline-warning:hover,
-        .btn-outline-warning:focus {
-            background-color: #F3C623;
-            color: #000;
-            border-color: #E0B41E;
-        }
-
-        /* ===== Sidebar ===== */
-        .sidebar {
-            width: 250px;
-            transition: width .25s ease, padding .25s ease, background-color .25s ease;
-            background-color: #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            flex-shrink: 0;
-            overflow: auto;
-            padding-bottom: 80px;
-        }
-
-        .lesson-app.is-collapsed .sidebar {
-            width: 56px;
-            padding-right: 6px;
-        }
-
-        .sidebar-content {
-            padding: .5rem .5rem 1rem .5rem;
-            position: fixed;
-            width: 250px;
-            top: 120px;
-        }
-
-        .lesson-app.is-collapsed .sidebar-content {
-            display: none;
-        }
-
-        /* Tombol burger */
-        .sidebar {
-            overflow-y: auto;
-        }
-
-        .sidebar .burger-btn {
-            position: fixed;
-            margin: .5rem;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
-        }
-
-        .burger-icon {
-            width: 20px;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-            position: relative;
-            display: block;
-        }
-
-        .burger-icon::before,
-        .burger-icon::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-        }
-
-        .burger-icon::before {
-            top: -6px;
-        }
-
-        .burger-icon::after {
-            top: 6px;
-        }
-
-        .teks {
-            color: #000;
-            text-align: justify;
-            font-size: 16.5px;
-            font-weight: 200;
-        }
-
-        /* responsif dasar layout */
-        @media (max-width: 992px) {
-            .lesson-app {
-                grid-template-columns: 56px 1fr;
-            }
-
-            .sidebar {
-                width: 56px;
-            }
-
-            .sidebar-content {
-                display: none;
-            }
-
-            .lesson-titlebar {
-                font-size: 34px;
-            }
-        }
-
-        @media (max-width: 760px) {
-            .lesson-titlebar {
-                font-size: 28px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
-        <div class="container-fluid ps-5 pe-5">
-            <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i
-                                class="fa-solid fa-book-open"></i>
-                            Belajar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i
-                                class="fa-solid fa-gamepad"></i> Tantangan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i>
-                            Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
-                    <button class="btn btn-sm btn-light" type="button">Masuk</button>
-                </div>
+<!-- Konten Utama -->
+<div class="p-5">
+    <main class="lesson-main">
+        <div class="lesson-titlebar">Caesar Cipher</div>
+        <hr>
+        <div class="lesson-wrap">
+            <div class="lesson-head">
+                <h2 class="lesson-h2">Mengenal Caesar Cipher</h2>
+                <p class="teks">Ketika kita mendengar kata Caesar, kita mungkin teringat pada seorang tokoh
+                    besar dalam sejarah dunia, yaitu Julius Caesar. Ia adalah seorang jenderal dan pemimpin
+                    terkenal dari Romawi kuno. Selain ahli strategi perang, Caesar juga dikenal karena
+                    menggunakan sandi rahasia untuk berkomunikasi dengan para prajurit dan pejabatnya.</p>
+                <p class="teks">Pada masa itu, peperangan sering bergantung pada komunikasi. Jika pesan rahasia
+                    tentang rencana perang jatuh ke tangan musuh, akibatnya bisa fatal. Karena itulah Caesar
+                    menemukan cara agar pesannya tetap aman: ia menggeser huruf-huruf dalam pesan dengan aturan
+                    tertentu. Dengan demikian, hanya orang-orang yang mengetahui aturan pergeseran itu yang bisa
+                    memahami isi pesannya.</p>
+                <img src="/assets/cs1.png" alt="cs1" width="400px" height="">
+                <p class="teks">Misalnya, kalau Caesar ingin mengirim pesan <b>“SERANG”</b> dan menggunakan
+                    aturan
+                    geser 3 huruf, maka pesannya menjadi <b>“VHUDQJ”</b>. Prajurit yang menerima pesan itu tahu
+                    cara
+                    membacanya, tetapi musuh yang tidak tahu aturan hanya melihat kumpulan huruf aneh.</p>
+                <p class="teks">Dari cerita inilah sandi ini diberi nama Caesar’s Cipher atau Sandi Caesar.
+                    Walaupun sederhana, sandi ini sangat bersejarah. Ia menjadi salah satu bentuk enkripsi
+                    pertama yang tercatat dan masih diajarkan hingga kini sebagai contoh paling mudah dipahami.
+                </p>
             </div>
         </div>
-    </nav>
-
-    <!-- Konten -->
-    <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Tombol burger (toggle) -->
-            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
-                aria-label="Tutup sidebar">
-                <span class="burger-icon"></span>
-            </button>
-
-            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
-            <div class="sidebar-content">
-                <!-- Accordion Bootstrap -->
-                <div class="accordion mt-0" id="accordionExample">
-                    <!-- PENGENALAN -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                PENGENALAN
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/pengenalan.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
-                                    <a href="../materi/aktivitas1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ENKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                ENKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
-                                    <a href="../materi/aktivitas2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Enkripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CAESAR CIPHER -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                CAESAR CIPHER
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 1</a>
-                                    <a href="../materi/caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 2</a>
-                                    <a href="../materi/aktivitas3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Caesar Cipher</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DEKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                DEKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
-                                    <a href="../materi/dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
-                                    <a href="../materi/aktivitas4.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Dekripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KUIS  -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                KUIS
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../kuis/kuis.html?target=kuis4.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Kuis</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- EVALUASI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingSix">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                EVALUASI
-                            </button>
-                        </h2>
-                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../evaluasi/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <hr>
+        <div class="lesson-wrap">
+            <div class="lesson-head">
+                <h2 class="lesson-h2">Pengertian Sandi Caesar</h2>
+                <p class="teks">Sandi Caesar adalah salah satu metode penyandian pesan paling sederhana dan
+                    paling terkenal sepanjang sejarah. Cara kerjanya adalah dengan mengganti setiap huruf dalam
+                    pesan asli (plaintext) menjadi huruf lain yang berada beberapa langkah setelahnya dalam
+                    urutan alfabet. Jumlah langkah pergeseran inilah yang disebut kunci. Jadi, plaintext adalah
+                    teks asli yang dapat dibaca dengan mudah oleh siapa pun, sedangkan ciphertext adalah teks
+                    rahasia hasil enkripsi yang tidak dapat langsung dimengerti tanpa mengetahui kuncinya.</p>
+                <p class="teks">Untuk memahami pengertiannya, mari kita bayangkan situasi sehari-hari. Misalnya
+                    kamu ingin menulis pesan kepada sahabatmu: <b>“JANGAN LUPA BELAJAR.”</b> Kalau kamu
+                    menuliskannya
+                    begitu saja, siapa pun yang melihat akan langsung tahu maksudnya. Tetapi jika kamu
+                    menggunakan sandi Caesar dengan kunci 3, maka pesan itu akan berubah menjadi: <b>“MDQJHQ
+                        OXSD
+                        EHO DMDU.”</b> Nah, orang lain yang tidak tahu aturan pergeseran huruf pasti akan
+                    bingung dan
+                    menganggap itu hanya kumpulan huruf acak. Namun sahabatmu yang tahu kuncinya bisa langsung
+                    menggeser huruf-huruf mundur 3 langkah untuk menemukan isi pesan yang sebenarnya.</p>
+                <p class="teks">Hal menarik dari sandi Caesar adalah aturan utamanya hanya satu: geser huruf
+                    sejauh kunci tertentu. Tidak ada aturan tambahan yang rumit. Itulah sebabnya sandi ini mudah
+                    dipelajari, bahkan oleh anak sekolah dasar sekalipun. Walaupun sederhana, sandi ini bisa
+                    menunjukkan gambaran nyata bagaimana sebuah pesan dapat diubah menjadi sesuatu yang tidak
+                    dimengerti, dan bagaimana pesan itu hanya bisa dipahami kembali oleh orang yang tahu
+                    kuncinya.</p>
+                <p class="teks">Contoh lain:</p>
+                <p class="teks">Plaintext: <b><i>SEKOLAH</i></b> <br> Kunci: <b><i>2</i></b></p>
+                <p class="teks">Dari contoh ini kita bisa melihat bagaimana setiap huruf bergeser dua langkah ke
+                    depan:</p>
+                <img src="/assets/sekolah.gif" alt="sekolah-gif" class="mt-0" width="1000px" height="450px">
+                <p class="mt-0">Ciphertext: <b><i>UGMQNCJ</i></b></p>
+                <p class="teks">Hasil akhirnya terlihat asing, tetapi sebenarnya itu hanyalah bentuk tersamar
+                    dari kata <b><i>“SEKOLAH.”</i></b></p>
             </div>
-        </aside>
+        </div>
+        <hr>
+        <div class="lesson-wrap">
+            <div class="lesson-head">
+                <h2 class="lesson-h2">Cara Kerja Caesar Cipher</h2>
+                <p class="teks">Proses kerja sandi Caesar bisa dijelaskan dengan langkah-langkah sederhana,
+                    namun setiap langkah memiliki makna yang penting.</p>
+                <ol class="teks m-3 mt-0">
+                    <li>Pilih pesan asli (plaintext). Pertama-tama, kita harus menentukan pesan apa yang
+                        ingin
+                        kita rahasiakan. Pesan ini bisa berupa kata singkat, kalimat, bahkan paragraf.
+                        Misalnya
+                        kita pilih kata: “BELAJAR.” Pesan ini jelas terbaca oleh siapa pun.</li>
+                    <li>Tentukan kunci pergeseran. Setelah itu, tentukan kunci. Kunci adalah angka yang
+                        menunjukkan berapa langkah huruf akan digeser. Misalnya kita menggunakan kunci 3.
+                        Artinya, setiap huruf dalam plaintext akan digeser 3 langkah ke depan dalam alfabet.
+                    </li>
+                    <li>Geser setiap huruf sejauh kunci. Inilah inti dari proses enkripsi. Kita ambil setiap
+                        huruf dalam plaintext, lalu geser ke depan sebanyak kunci yang telah ditentukan.
+                    </li>
+                    <img src="/assets/belajar.gif" alt="belajar-gif" class="mt-0" width="1000px" height="450px">
+                    <li>Setelah semua huruf digeser, hasilnya adalah: <b><i>EHODMDU</i></b>.</li>
+                    <li>Hasil akhir adalah ciphertext. Ciphertext adalah bentuk rahasia dari pesan kita.
+                        Kata
+                        “BELAJAR” yang tadinya mudah dibaca, kini berubah menjadi “EHODMDU” yang tampak aneh
+                        dan
+                        membingungkan. Ciphertext inilah yang nantinya bisa kita berikan kepada orang lain.
+                    </li>
+                    <li>Untuk membaca kembali (dekripsi), lakukan kebalikannya. Orang yang menerima
+                        ciphertext
+                        tidak bisa langsung mengerti pesannya. Ia harus tahu kuncinya, yaitu angka
+                        pergeseran
+                        yang digunakan. Jika ia tahu kuncinya adalah 3, maka ia tinggal menggeser
+                        huruf-huruf
+                        mundur 3 langkah untuk menemukan plaintext kembali. Dari “EHODMDU” akan kembali
+                        terbaca
+                        sebagai “BELAJAR.”</li>
+                </ol>
+                <p class="teks">Dari langkah-langkah di atas, kita bisa melihat bahwa sandi Caesar bekerja
+                    dengan cara yang sangat logis. Ia tidak mengubah arti huruf, hanya mengubah posisi huruf
+                    dalam alfabet. Itulah mengapa metode ini disebut sandi geser (shift cipher).</p>
+                <p class="teks">Bayangkan alfabet sebagai lingkaran besar berisi huruf-huruf A sampai Z.
+                    Jika
+                    kita berdiri di huruf B, lalu melangkah 3 kali ke depan, kita akan sampai di huruf E.
+                    Begitu
+                    pula dengan huruf lain. Jadi, sandi Caesar sebenarnya hanyalah permainan “jalan-jalan”
+                    di
+                    sekitar alfabet dengan aturan jumlah langkah tertentu.</p>
+                <p class="teks">Karena prosesnya berulang dan konsisten, siapa pun yang mengetahui kuncinya
+                    bisa
+                    melakukan enkripsi maupun dekripsi dengan mudah. Namun, bagi orang yang tidak tahu
+                    kunci,
+                    ciphertext hanya akan tampak seperti rangkaian huruf yang tidak masuk akal.</p>
+            </div>
+        </div>
+    </main>
 
-        <!-- Konten Utama -->
-        <div class="p-5">
-            <main class="lesson-main">
-                <div class="lesson-titlebar">Caesar Cipher</div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Mengenal Caesar Cipher</h2>
-                        <p class="teks">Ketika kita mendengar kata Caesar, kita mungkin teringat pada seorang tokoh
-                            besar dalam sejarah dunia, yaitu Julius Caesar. Ia adalah seorang jenderal dan pemimpin
-                            terkenal dari Romawi kuno. Selain ahli strategi perang, Caesar juga dikenal karena
-                            menggunakan sandi rahasia untuk berkomunikasi dengan para prajurit dan pejabatnya.</p>
-                        <p class="teks">Pada masa itu, peperangan sering bergantung pada komunikasi. Jika pesan rahasia
-                            tentang rencana perang jatuh ke tangan musuh, akibatnya bisa fatal. Karena itulah Caesar
-                            menemukan cara agar pesannya tetap aman: ia menggeser huruf-huruf dalam pesan dengan aturan
-                            tertentu. Dengan demikian, hanya orang-orang yang mengetahui aturan pergeseran itu yang bisa
-                            memahami isi pesannya.</p>
-                        <img src="/assets/cs1.png" alt="cs1" width="400px" height="">
-                        <p class="teks">Misalnya, kalau Caesar ingin mengirim pesan <b>“SERANG”</b> dan menggunakan
-                            aturan
-                            geser 3 huruf, maka pesannya menjadi <b>“VHUDQJ”</b>. Prajurit yang menerima pesan itu tahu
-                            cara
-                            membacanya, tetapi musuh yang tidak tahu aturan hanya melihat kumpulan huruf aneh.</p>
-                        <p class="teks">Dari cerita inilah sandi ini diberi nama Caesar’s Cipher atau Sandi Caesar.
-                            Walaupun sederhana, sandi ini sangat bersejarah. Ia menjadi salah satu bentuk enkripsi
-                            pertama yang tercatat dan masih diajarkan hingga kini sebagai contoh paling mudah dipahami.
-                        </p>
-                    </div>
-                </div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Pengertian Sandi Caesar</h2>
-                        <p class="teks">Sandi Caesar adalah salah satu metode penyandian pesan paling sederhana dan
-                            paling terkenal sepanjang sejarah. Cara kerjanya adalah dengan mengganti setiap huruf dalam
-                            pesan asli (plaintext) menjadi huruf lain yang berada beberapa langkah setelahnya dalam
-                            urutan alfabet. Jumlah langkah pergeseran inilah yang disebut kunci. Jadi, plaintext adalah
-                            teks asli yang dapat dibaca dengan mudah oleh siapa pun, sedangkan ciphertext adalah teks
-                            rahasia hasil enkripsi yang tidak dapat langsung dimengerti tanpa mengetahui kuncinya.</p>
-                        <p class="teks">Untuk memahami pengertiannya, mari kita bayangkan situasi sehari-hari. Misalnya
-                            kamu ingin menulis pesan kepada sahabatmu: <b>“JANGAN LUPA BELAJAR.”</b> Kalau kamu
-                            menuliskannya
-                            begitu saja, siapa pun yang melihat akan langsung tahu maksudnya. Tetapi jika kamu
-                            menggunakan sandi Caesar dengan kunci 3, maka pesan itu akan berubah menjadi: <b>“MDQJHQ
-                                OXSD
-                                EHO DMDU.”</b> Nah, orang lain yang tidak tahu aturan pergeseran huruf pasti akan
-                            bingung dan
-                            menganggap itu hanya kumpulan huruf acak. Namun sahabatmu yang tahu kuncinya bisa langsung
-                            menggeser huruf-huruf mundur 3 langkah untuk menemukan isi pesan yang sebenarnya.</p>
-                        <p class="teks">Hal menarik dari sandi Caesar adalah aturan utamanya hanya satu: geser huruf
-                            sejauh kunci tertentu. Tidak ada aturan tambahan yang rumit. Itulah sebabnya sandi ini mudah
-                            dipelajari, bahkan oleh anak sekolah dasar sekalipun. Walaupun sederhana, sandi ini bisa
-                            menunjukkan gambaran nyata bagaimana sebuah pesan dapat diubah menjadi sesuatu yang tidak
-                            dimengerti, dan bagaimana pesan itu hanya bisa dipahami kembali oleh orang yang tahu
-                            kuncinya.</p>
-                        <p class="teks">Contoh lain:</p>
-                        <p class="teks">Plaintext: <b><i>SEKOLAH</i></b> <br> Kunci: <b><i>2</i></b></p>
-                        <p class="teks">Dari contoh ini kita bisa melihat bagaimana setiap huruf bergeser dua langkah ke
-                            depan:</p>
-                        <img src="/assets/sekolah.gif" alt="sekolah-gif" class="mt-0" width="1000px" height="450px">
-                        <p class="mt-0">Ciphertext: <b><i>UGMQNCJ</i></b></p>
-                        <p class="teks">Hasil akhirnya terlihat asing, tetapi sebenarnya itu hanyalah bentuk tersamar
-                            dari kata <b><i>“SEKOLAH.”</i></b></p>
-                    </div>
-                </div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Cara Kerja Caesar Cipher</h2>
-                        <p class="teks">Proses kerja sandi Caesar bisa dijelaskan dengan langkah-langkah sederhana,
-                            namun setiap langkah memiliki makna yang penting.</p>
-                        <ol class="teks m-3 mt-0">
-                            <li>Pilih pesan asli (plaintext). Pertama-tama, kita harus menentukan pesan apa yang
-                                ingin
-                                kita rahasiakan. Pesan ini bisa berupa kata singkat, kalimat, bahkan paragraf.
-                                Misalnya
-                                kita pilih kata: “BELAJAR.” Pesan ini jelas terbaca oleh siapa pun.</li>
-                            <li>Tentukan kunci pergeseran. Setelah itu, tentukan kunci. Kunci adalah angka yang
-                                menunjukkan berapa langkah huruf akan digeser. Misalnya kita menggunakan kunci 3.
-                                Artinya, setiap huruf dalam plaintext akan digeser 3 langkah ke depan dalam alfabet.
-                            </li>
-                            <li>Geser setiap huruf sejauh kunci. Inilah inti dari proses enkripsi. Kita ambil setiap
-                                huruf dalam plaintext, lalu geser ke depan sebanyak kunci yang telah ditentukan.
-                            </li>
-                            <img src="/assets/belajar.gif" alt="belajar-gif" class="mt-0" width="1000px" height="450px">
-                            <li>Setelah semua huruf digeser, hasilnya adalah: <b><i>EHODMDU</i></b>.</li>
-                            <li>Hasil akhir adalah ciphertext. Ciphertext adalah bentuk rahasia dari pesan kita.
-                                Kata
-                                “BELAJAR” yang tadinya mudah dibaca, kini berubah menjadi “EHODMDU” yang tampak aneh
-                                dan
-                                membingungkan. Ciphertext inilah yang nantinya bisa kita berikan kepada orang lain.
-                            </li>
-                            <li>Untuk membaca kembali (dekripsi), lakukan kebalikannya. Orang yang menerima
-                                ciphertext
-                                tidak bisa langsung mengerti pesannya. Ia harus tahu kuncinya, yaitu angka
-                                pergeseran
-                                yang digunakan. Jika ia tahu kuncinya adalah 3, maka ia tinggal menggeser
-                                huruf-huruf
-                                mundur 3 langkah untuk menemukan plaintext kembali. Dari “EHODMDU” akan kembali
-                                terbaca
-                                sebagai “BELAJAR.”</li>
-                        </ol>
-                        <p class="teks">Dari langkah-langkah di atas, kita bisa melihat bahwa sandi Caesar bekerja
-                            dengan cara yang sangat logis. Ia tidak mengubah arti huruf, hanya mengubah posisi huruf
-                            dalam alfabet. Itulah mengapa metode ini disebut sandi geser (shift cipher).</p>
-                        <p class="teks">Bayangkan alfabet sebagai lingkaran besar berisi huruf-huruf A sampai Z.
-                            Jika
-                            kita berdiri di huruf B, lalu melangkah 3 kali ke depan, kita akan sampai di huruf E.
-                            Begitu
-                            pula dengan huruf lain. Jadi, sandi Caesar sebenarnya hanyalah permainan “jalan-jalan”
-                            di
-                            sekitar alfabet dengan aturan jumlah langkah tertentu.</p>
-                        <p class="teks">Karena prosesnya berulang dan konsisten, siapa pun yang mengetahui kuncinya
-                            bisa
-                            melakukan enkripsi maupun dekripsi dengan mudah. Namun, bagi orang yang tidak tahu
-                            kunci,
-                            ciphertext hanya akan tampak seperti rangkaian huruf yang tidak masuk akal.</p>
-                    </div>
-                </div>
-            </main>
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center mt-3">
-                    <!-- <li class="page-item disabled">
+    <!-- Pagination -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-3">
+            <!-- <li class="page-item disabled">
                         <a class="page-link">Previous</a>
                     </li> -->
-                    <li class="page-item active"><a class="page-link" href="caesarcipher.html">1</a></li>
-                    <li class="page-item"><a class="page-link" href="caesarcipher2.html">2</a></li>
-                    <!-- <li class="page-item">
+            <li class="page-item active"><a class="page-link" href="caesarcipher.html">1</a></li>
+            <li class="page-item"><a class="page-link" href="caesarcipher2.html">2</a></li>
+            <!-- <li class="page-item">
                         <a class="page-link" href="#">Next</a>
                     </li> -->
-                </ul>
-            </nav>
-            <!-- Tombol Navigasi -->
-            <div class="d-flex justify-content-end gap-3 mt-4">
-                <a href="aktivitas2.html" type="button" class="btn btn-danger px-4 py-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
-                </a>
-                <a href="aktivitas3.html" type="button" class="btn btn-success px-4 py-2">
-                    Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>
-            </div>
-        </div>
+        </ul>
+    </nav>
+
+    <!-- Navigasi bawah -->
+    <div class="d-flex justify-content-end gap-3 mt-4">
+        <a href="{% url 'enkripsi' %}" class="btn btn-danger px-4 py-2 disabled">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Kembali
+        </a>
+        <a href="{% url 'caesar2' %}" class="btn btn-success px-4 py-2">
+            Selanjutnya
+            <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
     </div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="materi.js"></script>
-    <script src="/templates/temp.js"></script>
-
-</body>
-
-</html>
+{% endblock %}

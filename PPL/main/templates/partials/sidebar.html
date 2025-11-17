@@ -58,7 +58,7 @@
                         <div class="d-flex flex-column">
                             <a href="{% url 'caesar' %}" class="btn text-start mb-2 btn-outline-warning w-100">Caesar Cipher 1</a>
                             <a href="{% url 'caesar2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Caesar Cipher 2</a>
-                            <a href="{% url 'aktivitas2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
+                            <a href="{% url 'aktivitas3' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
                             <a href="{% url 'kuis2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Kuis Caesar Cipher</a>
                         </div>
                     </div>
@@ -76,27 +76,10 @@
                 <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <div class="d-flex flex-column">
-                            <a href="#" class="btn text-start mb-2 btn-outline-warning w-100">Dekripsi 1</a>
-                            <a href="#" class="btn text-start mb-2 btn-outline-warning w-100">Dekripsi 2</a>
-                            <a href="#" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
-                            <a href="#" class="btn text-start mb-2 btn-outline-warning w-100">Kuis Dekripsi</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- KUIS -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingFive">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapseFive">
-                        KUIS
-                    </button>
-                </h2>
-                <div id="collapseFive" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                        <div class="d-flex flex-column">
-                            <a href="#" class="btn text-start mb-2 btn-outline-warning w-100">Kuis</a>
+                            <a href="{% url 'dekripsi' %}" class="btn text-start mb-2 btn-outline-warning w-100">Dekripsi 1</a>
+                            <a href="{% url 'dekripsi2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Dekripsi 2</a>
+                            <a href="{% url 'aktivitas4' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
+                            <a href="{% url 'kuis3' %}" class="btn text-start mb-2 btn-outline-warning w-100">Kuis Dekripsi</a>
                         </div>
                     </div>
                 </div>
