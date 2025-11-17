@@ -1,3 +1,4 @@
+{# templates/partials/sidebar.html #}
 <aside class="sidebar">
     <!-- Tombol Burger (toggle sidebar) -->
     <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true" aria-label="Tutup sidebar">
@@ -58,7 +59,7 @@
                         <div class="d-flex flex-column">
                             <a href="{% url 'caesar' %}" class="btn text-start mb-2 btn-outline-warning w-100">Caesar Cipher 1</a>
                             <a href="{% url 'caesar2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Caesar Cipher 2</a>
-                            <a href="{% url 'aktivitas2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
+                            <a href="{% url 'aktivitas3' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
                             <a href="{% url 'kuis2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Kuis Caesar Cipher</a>
                         </div>
                     </div>
@@ -124,7 +125,6 @@
 </aside>
 
 <style>
-    /* INI ADALAH CSS SIDEBAR YANG KAMU BILANG “INI YANG SEHARUSNYA” — TIDAK DIUBAH SAMA SEKALI */
     .sidebar {
         width: 250px;
         transition: width .25s ease, padding .25s ease, background-color .25s ease;
@@ -150,7 +150,6 @@
         display: none;
     }
 
-    /* Tombol burger — persis seperti di file kamu */
     .sidebar .burger-btn {
         margin: .5rem;
         width: 42px;
@@ -186,7 +185,6 @@
     .burger-icon::before { top: -6px; }
     .burger-icon::after  { top: 6px;  }
 
-    /* Responsive — persis seperti file kamu */
     @media (max-width: 992px) {
         .lesson-app { grid-template-columns: 56px 1fr; }
         .sidebar { width: 56px; }

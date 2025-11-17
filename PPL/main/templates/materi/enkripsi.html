@@ -1,679 +1,192 @@
-<!doctype html>
-<html lang="en">
+{% extends "base_lesson.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CodeCracker</title>
+{% block title %}Enkripsi - CodeCracker{% endblock %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+{% block extra_css %}
+<style>
+    /* CSS DARI FILE KAMU — HANYA YANG DIPAKAI DI HALAMAN INI */
+    :root {
+        --lesson-bg: #f6f7f9;
+        --lesson-surface: #ffffff;
+        --lesson-text: #1b1f24;
+        --lesson-muted: #6b7280;
+        --lesson-border: #e5e7eb;
+        --lesson-brand: #F3C623;
+        --lesson-brand-700: #1B3C53;
+        --lesson-brand-100: #17a2b8;
+        --lesson-radius: 14px;
+        --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
+    }
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    .lesson-titlebar {
+        background: var(--lesson-brand);
+        color: #000;
+        padding: 3px 20px;
+        font-size: 35px;
+        font-weight: 1000;
+        letter-spacing: .9px;
+        text-align: center;
+        box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
+    }
 
-    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
+    .lesson-h2 {
+        font-size: 25px;
+        font-weight: bolder;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .lesson-h2:before {
+        content: "";
+        width: 6px;
+        height: 28px;
+        border-radius: 3px;
+        background: var(--lesson-brand);
+        display: inline-block;
+    }
 
-    <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-        }
+    .lesson-wrap {
+        background: #fff;
+        border: 1px solid var(--lesson-border);
+        border-radius: var(--lesson-radius);
+        box-shadow: var(--lesson-shadow);
+        overflow: hidden;
+    }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    .lesson-head {
+        padding: 22px 18px 6px;
+        font-weight: 250;
+        font-size: 20px;
+        text-align: center;
+    }
 
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
+    .lesson-child {
+        padding: 22px 18px 6px;
+        font-weight: 500;
+        font-size: 15px;
+        text-align: center;
+        font-style: italic;
+    }
 
-        .navbar:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-            transform: translateY(-1px);
-        }
+    .teks {
+        color: #000;
+        text-align: justify;
+        font-size: 16.5px;
+        font-weight: 200;
+    }
 
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: white;
-        }
-
-        .nav-link {
-            font-family: 'Open Sans', sans-serif;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: white;
-            text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
-            transform: translateY(-1px);
-        }
-
-        :root {
-            --lesson-bg: #f6f7f9;
-            --lesson-surface: #ffffff;
-            --lesson-text: #1b1f24;
-            --lesson-muted: #6b7280;
-            --lesson-border: #e5e7eb;
-            --lesson-brand: #F3C623;
-            --lesson-brand-700: #1B3C53;
-            --lesson-brand-100: #17a2b8;
-            --lesson-radius: 14px;
-            --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-        }
-
-        .lesson-app {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 70px);
-            background: var(--lesson-bg);
-            position: relative;
-            transition: grid-template-columns .25s ease;
-        }
-
-        .lesson-app.is-collapsed {
-            grid-template-columns: 56px 1fr;
-        }
-
+    /* Responsif */
+    @media (max-width: 992px) {
         .lesson-titlebar {
-            background: var(--lesson-brand);
-            color: #000;
-            padding: 3px 20px;
-            font-size: 35px;
-            font-weight: 1000;
-            letter-spacing: .9px;
-            text-align: center;
-            box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
+            font-size: 34px;
         }
+    }
 
-        .lesson-content {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+    @media (max-width: 760px) {
+        .lesson-titlebar {
+            font-size: 28px;
         }
+    }
+</style>
+{% endblock %}
 
-        .lesson-h2 {
-            font-size: 25px;
-            font-weight: bolder;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+{% block content %}
+    <!-- KONTEN ENKRIPSI — 100% IDENTIK DENGAN FILE KAMU -->
+    <div class="lesson-titlebar">Enkripsi</div>
+    <hr />
 
-        .lesson-h2:before {
-            content: "";
-            width: 6px;
-            height: 28px;
-            border-radius: 3px;
-            background: var(--lesson-brand);
-            display: inline-block;
-        }
-
-        .lesson-card {
-            background: var(--lesson-surface);
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            padding: 13px;
-        }
-
-        .lesson-goals {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .lesson-goal {
-            background: #fbfbfc;
-            border: 1px solid var(--lesson-border);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 15px;
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .lesson-goal .lesson-num {
-            min-width: 30px;
-            height: 35px;
-            border-radius: 7px;
-            display: grid;
-            place-items: center;
-            background: var(--lesson-brand-100);
-            color: var(--lesson-brand-700);
-            font-weight: 700;
-            border: 1px solid #cfe7d9;
-        }
-
-        .lesson-wrap {
-            background: #fff;
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            overflow: hidden;
-        }
-
-        .lesson-head {
-            padding: 22px 18px 6px;
-            font-weight: 250;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .lesson-child {
-            padding: 22px 18px 6px;
-            font-weight: 500;
-            font-size: 15px;
-            text-align: center;
-            font-style: italic;
-        }
-
-        .btn-outline-warning {
-            color: #000;
-            border-color: #F3C623;
-        }
-
-        .btn-outline-warning:hover,
-        .btn-outline-warning:focus {
-            background-color: #F3C623;
-            color: #000;
-            border-color: #E0B41E;
-        }
-
-        /* ===== Sidebar ===== */
-        .sidebar {
-            width: 250px;
-            transition: width .25s ease, padding .25s ease, background-color .25s ease;
-            background-color: #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            flex-shrink: 0;
-            overflow: auto;
-            padding-bottom: 80px;
-        }
-
-        .lesson-app.is-collapsed .sidebar {
-            width: 56px;
-            padding-right: 6px;
-        }
-
-        .sidebar-content {
-            padding: .5rem .5rem 1rem .5rem;
-            position: fixed;
-            width: 250px;
-            top: 120px;
-        }
-
-        .lesson-app.is-collapsed .sidebar-content {
-            display: none;
-        }
-
-        /* Tombol burger */
-        .sidebar {
-            overflow-y: auto;
-        }
-
-        .sidebar .burger-btn {
-            position: fixed;
-            margin: .5rem;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
-        }
-
-        .burger-icon {
-            width: 20px;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-            position: relative;
-            display: block;
-        }
-
-        .burger-icon::before,
-        .burger-icon::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-        }
-
-        .burger-icon::before {
-            top: -6px;
-        }
-
-        .burger-icon::after {
-            top: 6px;
-        }
-
-        .teks {
-            color: #000;
-            text-align: justify;
-            font-size: 16.5px;
-            font-weight: 200;
-        }
-
-        /* responsif dasar layout */
-        @media (max-width: 992px) {
-            .lesson-app {
-                grid-template-columns: 56px 1fr;
-            }
-
-            .sidebar {
-                width: 56px;
-            }
-
-            .sidebar-content {
-                display: none;
-            }
-
-            .lesson-titlebar {
-                font-size: 34px;
-            }
-        }
-
-        @media (max-width: 760px) {
-            .lesson-titlebar {
-                font-size: 28px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
-        <div class="container-fluid ps-5 pe-5">
-            <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i class="fa-solid fa-book-open"></i>
-                            Belajar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
-                    <button class="btn btn-sm btn-light" type="button">Masuk</button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Konten -->
-    <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Tombol burger (toggle) -->
-            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
-                aria-label="Tutup sidebar">
-                <span class="burger-icon"></span>
-            </button>
-
-            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
-            <div class="sidebar-content">
-                <!-- Accordion Bootstrap -->
-                <div class="accordion mt-0" id="accordionExample">
-                    <!-- PENGENALAN -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                PENGENALAN
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/pengenalan.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
-                                    <a href="../materi/aktivitas1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ENKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                ENKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
-                                    <a href="../materi/aktivitas2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Enkripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CAESAR CIPHER -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                CAESAR CIPHER
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 1</a>
-                                    <a href="../materi/caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 2</a>
-                                    <a href="../materi/aktivitas3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Caesar Cipher</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DEKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                DEKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
-                                    <a href="../materi/dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
-                                    <a href="../materi/aktivitas4.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Dekripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KUIS  -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                KUIS
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../kuis/kuis.html?target=kuis4.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Kuis</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- EVALUASI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingSix">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                EVALUASI
-                            </button>
-                        </h2>
-                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../evaluasi/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Konten Utama -->
-        <div class="p-5">
-            <main class="lesson-main">
-                <div class="lesson-titlebar">Enkripsi</div>
-                <hr />
-
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Mengapa Membutuhkan Enkripsi?</h2>
-                        <p class="teks">Setiap orang memiliki rahasia. Seorang anak SMP mungkin punya rahasia tentang
-                            siapa sahabat terdekatnya, siapa orang yang ia sukai, atau cerita lucu bersama keluarga.
-                            Orang tua punya rahasia tentang keuangan keluarga. Guru punya rahasia tentang soal ulangan
-                            yang akan diberikan minggu depan. Pemerintah punya rahasia tentang strategi menjaga keamanan
-                            negara.
-                        </p>
-                        <img src="/assets/en1.png" alt="en1" width="300px" height="300px">
-                        <p class="teks">Sekarang bayangkan jika semua rahasia itu bisa dibaca oleh siapa saja. Tentu
-                            akan sangat berbahaya. Rahasiamu bisa disebarkan oleh teman yang jahil. Soal ulangan bisa
-                            bocor sebelum waktunya. Bahkan strategi negara bisa diketahui oleh musuh.
-                        </p>
-                        <p class="teks">Karena itulah manusia sejak dahulu selalu mencari cara untuk menyimpan rahasia
-                            dengan aman. Salah satu cara yang dipakai adalah enkripsi, yaitu mengubah pesan asli menjadi
-                            pesan yang tidak bisa langsung dimengerti.
-                        </p>
-                        <p class="teks">Enkripsi ibarat menulis sesuatu dengan bahasa rahasia. Bayangkan kamu ingin
-                            menulis:
-                        </p>
-                        <p class="lesson-child lesson-h2">“Besok kita belajar kelompok di rumah Dina.”</p>
-                        <p class="teks">Kalau tulisan ini dibaca oleh semua orang, semua langsung paham. Tetapi kalau
-                            kamu ubah dengan aturan tertentu, misalnya setiap huruf digeser 3 langkah ke depan, maka
-                            hasilnya adalah:</p>
-                        <p class="lesson-child lesson-h2">“Ehvrn nlwd ehmddu nropsrn gl uxpdk Glqd.”</p>
-                        <p class="teks">Sekarang, siapa pun yang membaca akan bingung. Tetapi kamu dan sahabatmu yang
-                            sudah tahu aturan bisa langsung mengembalikannya ke bentuk semula.</p>
-                    </div>
-                </div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Pengertian Enkripsi</h2>
-                        <p class="teks">Enkripsi adalah sebuah seni sekaligus ilmu pengetahuan yang disebut Kriptografi.
-                            Secara harfiah, enkripsi adalah proses mengubah pesan yang dapat dibaca dan dimengerti oleh
-                            siapa pun, yang kita sebut Plaintext, menjadi serangkaian kode atau data acak yang tidak
-                            berarti, yang disebut Ciphertext. Bayangkan sebuah surat yang penting: plaintext adalah isi
-                            surat yang ditulis dengan tinta biasa, sedangkan ciphertext adalah isi surat yang telah
-                            diubah menjadi goresan-goresan asing yang tidak dapat dipahami. Proses transformasi ini
-                            tidak dilakukan secara sembarangan, melainkan dikendalikan oleh dua elemen penting yaitu
-                            Algoritma dan Kunci. Algoritma dapat diibaratkan sebagai mesin pembuat sandi, sementara
-                            Kunci adalah password atau instruksi rahasia yang mengontrol cara kerja mesin tersebut.
-                            Ketika plaintext dan Kunci dimasukkan ke dalam Algoritma, yang keluar adalah ciphertext yang
-                            aman. Enkripsi inilah yang menjadi benteng pertahanan utama bagi seluruh komunikasi dan data
-                            rahasia di internet, mulai dari transaksi bank hingga chat pribadi Anda.
-                        </p>
-                        <img src="/assets/en1.jpeg" alt="en1" >
-                        <p class="teks">Enkripsi bekerja seperti gembok yang kuat. Data yang dikirim melalui internet
-                            bertindak sebagai Kotak (Ciphertext). Pesan yang ada di dalam kotak, seperti nomor PIN atau
-                            password Anda, adalah Plaintext. Sementara itu, kunci adalah satu-satunya alat yang bisa
-                            membuka gembok tersebut, dan hanya dimiliki oleh Anda dan penerima. Jika pihak yang tidak
-                            berwenang mencuri kotak di tengah jalan, mereka hanya mendapatkan ciphertext atau kotak
-                            terkunci yang tidak dapat mereka buka tanpa kunci yang tepat.
-                        </p>
-                    </div>
-                </div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Proses Enkripsi</h2>
-                        <p class="teks">Proses enkripsi dan dekripsi adalah siklus lengkap yang menjamin kerahasiaan
-                            sebuah pesan, memastikan rahasia tetap terjaga sempurna mulai dari pengirim hingga penerima.
-                            Ini seperti mengirimkan barang berharga di dalam kotak besi terkunci melintasi jalan umum
-                            yang ramai. Alur kerja ini terbagi menjadi lima fase utama yang berurutan:</p>
-                        <p class="teks"><b>Fase 1: Data Asli (Plaintext) Disiapkan</b></p>
-                        <p class="teks">Ini adalah langkah paling awal, di mana Plaintext atau data asli masih dalam
-                            bentuk yang dapat dibaca dan dimengerti oleh siapa pun. Pengirim harus memastikan pesan atau
-                            informasi sensitif sudah lengkap dan siap untuk diubah agar tidak bisa diakses oleh pihak
-                            yang tidak berkepentingan. Plaintext ini ibarat isi surat yang ditulis dengan tinta biasa
-                            atau password yang kamu ketikkan sebelum di-login.</p>
-                        <p class="teks"><b>Fase 2: Proses Enkripsi Dilakukan</b></p>
-                        <p class="teks">Di fase inilah "penguncian" data terjadi. Pengirim memasukkan Plaintext ke dalam
-                            Algoritma Enkripsi (rumus rahasia) bersama dengan Kunci Enkripsi yang spesifik. Algoritma
-                            bekerja keras, mencampurkan dan mengubah semua karakter dalam Plaintext berdasarkan
-                            instruksi dari Kunci tersebut. Hasil dari proses ini adalah Ciphertext, serangkaian kode
-                            acak yang tidak lagi memiliki makna. Ini seperti kamu menutup dan mengunci gembok pada kotak
-                            surat rahasiamu menggunakan kunci khusus.</p>
-                        <p class="teks"><b>Fase 3: Teks Ter-enkripsi (Ciphertext) Dikirim</b></p>
-                        <p class="teks">Setelah dienkripsi, pesan kini aman untuk melakukan perjalanan melalui jaringan
-                            yang rentan, seperti internet. Ciphertext (kode yang tidak berarti) dikirimkan dari pengirim
-                            menuju penerima. Jika pihak yang tidak berwenang (peretas) mencegat atau mencuri Ciphertext
-                            di tengah jalan, yang mereka dapatkan hanyalah kode sampah yang tidak dapat mereka pahami.
-                            Mereka tidak memiliki Kunci untuk membuka "kotak" tersebut, sehingga kerahasiaan isinya
-                            tetap terjaga.</p>
-                        <p class="teks"><b>Fase 4: Penerima Menggunakan Kunci Dekripsi</b></p>
-                        <p class="teks">Pesan telah tiba di tempat tujuan, dan kini saatnya membukanya. Penerima yang
-                            sah, dan hanya mereka, memiliki Kunci Dekripsi yang cocok dengan Kunci Enkripsi yang
-                            digunakan pengirim. Penerima memasukkan Ciphertext dan Kunci Dekripsi ini ke dalam Algoritma
-                            Dekripsi. Jika kunci yang digunakan benar, Algoritma akan bekerja membalikkan semua proses
-                            yang dilakukan saat enkripsi, sehingga data mulai kembali ke wujud aslinya.</p>
-                        <p class="teks"><b>Fase 5: Data atau Pesan Asli Dapat Dibaca</b></p>
-                        <p class="teks">Siklus pengamanan data berhasil diselesaikan. Proses dekripsi telah tuntas, dan
-                            Ciphertext telah berhasil dikembalikan menjadi Plaintext. Pesan rahasia kini dapat dibaca
-                            dan dimengerti sepenuhnya oleh penerima yang sah. Kerahasiaan pesan terjaga dari awal hingga
-                            akhir transmisi, memastikan hanya dua pihak yang terlibat yang benar-benar mengetahui isi
-                            sebenarnya.</p>
-                        <img src="/assets/en2.jpeg" alt="en2">
-                    </div>
-                </div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Enkripsi dalam Kehidupan Sehari-hari</h2>
-                        <p class="teks">Kita mungkin berpikir enkripsi hanya untuk urusan militer atau rahasia negara.
-                            Padahal, enkripsi adalah lapisan pelindung tak terlihat yang bekerja tanpa henti di
-                            sekeliling kita. Setiap kali kamu menyalakan ponsel, mengirim pesan, atau bahkan sekadar
-                            mengunjungi sebuah situs web, enkripsi sedang bertugas memastikan kehidupan digitalmu tetap
-                            aman dan privat. Di dunia modern yang serba terhubung ini, mustahil melakukan komunikasi
-                            yang aman tanpa adanya enkripsi. Ia adalah fondasi kepercayaan kita saat berinteraksi di
-                            dunia maya.</p>
-                        <p class="teks">Berikut adalah beberapa contoh paling umum di mana enkripsi melindungi kita:</p>
-                        <ol class="teks m-3 mt-0">
-                            <li><b>Perlindungan Kata Sandi (Password Hashing):</b> Saat kamu login ke media sosial
-                                (Instagram
-                                atau WhatsApp), password kamu tidak disimpan apa adanya. Sistem komputer mengacaknya
-                                dengan teknik Hashing (enkripsi satu arah) menjadi kode acak. Ini mencegah peretas
-                                mengetahui password aslimu jika data perusahaan dicuri.</li>
-                            <li><b>Browsing Internet Aman (HTTPS):</b> Ikon gembok kecil 🔒 di browser kamu menandakan
-                                situs
-                                menggunakan HTTPS. Ini menggunakan enkripsi untuk mengamankan koneksi antara kamu dan
-                                situs web, sangat penting saat memasukkan data sensitif seperti detail kartu bank.</li>
-                            <li><b>ATM dan Kartu Bank:</b> PIN yang dimasukkan saat bertransaksi diubah menjadi
-                                terenkripsi
-                                sebelum dikirim ke sistem bank. Ini adalah langkah vital agar PIN tidak dapat dicuri
-                                oleh pihak ketiga di tengah jalan.</li>
-                            <li><b>Proteksi Dokumen Rahasia:</b> Ketika guru atau kamu sendiri memberi kata sandi
-                                (password)
-                                pada file seperti soal ulangan di komputer, itu adalah bentuk enkripsi. File tersebut
-                                dikunci dan tidak bisa dibuka tanpa kunci yang tepat, menjamin kerahasiaan isinya.</li>
-                            <li><b>Bahasa Rahasia Teman:</b> Bahkan saat kamu dan temanmu membuat bahasa unik, misalnya
-                                mengganti huruf vokal dengan angka (A=1, U=3), kamu sedang menerapkan konsep enkripsi
-                                sederhana. Prinsipnya sama: mengubah pesan yang dimengerti menjadi sandi yang hanya kamu
-                                dan temanmu yang tahu kuncinya.</li>
-                        </ol>
-                    </div>
-                </div>
-                <hr>
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Pentingnya Enkripsi</h2>
-                        <p class="teks">Di dunia digital saat ini, hampir semua informasi berharga kita, mulai dari
-                            identitas, rekening, hingga chatting sehari-hari, bergerak melalui jaringan internet yang
-                            sifatnya terbuka. Tanpa enkripsi, data tersebut rentan diakses atau dicuri oleh pihak ketiga
-                            (dikenal sebagai Man-in-the-Middle Attack).</p>
-                        <p class="teks">Enkripsi hadir untuk menegakkan tiga pilar keamanan data:</p>
-                        <ol class="teks m-3 mt-0">
-                            <li>Kerahasiaan (Confidentiality): Ini adalah tujuan utama enkripsi. Hanya pengirim dan
-                                penerima yang sah, yang memegang Kunci Dekripsi, yang dapat membaca pesan aslinya.
-                                Misalnya, fitur End-to-End Encryption pada aplikasi pesan memastikan bahwa bahkan
-                                perusahaan penyedia aplikasi pun tidak dapat mengintip isi pesan Anda.</li>
-                            <li>Integritas (Integrity): Enkripsi membantu memastikan bahwa data tidak diubah selama
-                                transmisi. Jika peretas mencoba memanipulasi ciphertext di tengah jalan, proses dekripsi
-                                di sisi penerima akan gagal atau menghasilkan data yang rusak, sehingga penerima tahu
-                                bahwa data tersebut tidak asli lagi.</li>
-                            <li>Otentikasi (Authentication): Dalam skema enkripsi yang lebih canggih, enkripsi juga
-                                berperan dalam memverifikasi bahwa pengirim pesan benar-benar orang yang diklaim, bukan
-                                penipu.</li>
-                        </ol>
-                        <p class="teks">Dengan demikian, enkripsi adalah jaminan keamanan dan kepercayaan kita dalam
-                            berinteraksi di dunia digital.</p>
-                    </div>
-                </div>
-            </main>
-            <!-- Tombol Navigasi -->
-            <div class="d-flex justify-content-end gap-3 mt-4">
-                <a href="aktivitas1.html" type="button" class="btn btn-danger px-4 py-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
-                </a>
-                <a href="aktivitas2.html" type="button" class="btn btn-success px-4 py-2">
-                    Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>
-            </div>
+    <!-- Mengapa Membutuhkan Enkripsi? -->
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Mengapa Membutuhkan Enkripsi?</h2>
+            <p class="teks">Setiap orang memiliki rahasia. Seorang anak SMP mungkin punya rahasia tentang siapa sahabat terdekatnya, siapa orang yang ia sukai, atau cerita lucu bersama keluarga. Orang tua punya rahasia tentang keuangan keluarga. Guru punya rahasia tentang soal ulangan yang akan diberikan minggu depan. Pemerintah punya rahasia tentang strategi menjaga keamanan negara.</p>
+            <img src="{% static 'assets/en1.png' %}" alt="en1" width="300px" height="300px">
+            <p class="teks">Sekarang bayangkan jika semua rahasia itu bisa dibaca oleh siapa saja. Tentu akan sangat berbahaya. Rahasiamu bisa disebarkan oleh teman yang jahil. Soal ulangan bisa bocor sebelum waktunya. Bahkan strategi negara bisa diketahui oleh musuh.</p>
+            <p class="teks">Karena itulah manusia sejak dahulu selalu mencari cara untuk menyimpan rahasia dengan aman. Salah satu cara yang dipakai adalah enkripsi, yaitu mengubah pesan asli menjadi pesan yang tidak bisa langsung dimengerti.</p>
+            <p class="teks">Enkripsi ibarat menulis sesuatu dengan bahasa rahasia. Bayangkan kamu ingin menulis:</p>
+            <p class="lesson-child lesson-h2">“Besok kita belajar kelompok di rumah Dina.”</p>
+            <p class="teks">Kalau tulisan ini dibaca oleh semua orang, semua langsung paham. Tetapi kalau kamu ubah dengan aturan tertentu, misalnya setiap huruf digeser 3 langkah ke depan, maka hasilnya adalah:</p>
+            <p class="lesson-child lesson-h2">“Ehvrn nlwd ehmddu nropsrn gl uxpdk Glqd.”</p>
+            <p class="teks">Sekarang, siapa pun yang membaca akan bingung. Tetapi kamu dan sahabatmu yang sudah tahu aturan bisa langsung mengembalikannya ke bentuk semula.</p>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="materi.js"></script>
-    <script src="kuis.js"></script>
-    <script src="/templates/temp.js"></script>
+    <hr />
 
-</body>
+    <!-- Pengertian Enkripsi -->
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Pengertian Enkripsi</h2>
+            <p class="teks">Enkripsi adalah sebuah seni sekaligus ilmu pengetahuan yang disebut Kriptografi. Secara harfiah, enkripsi adalah proses mengubah pesan yang dapat dibaca dan dimengerti oleh siapa pun, yang kita sebut Plaintext, menjadi serangkaian kode atau data acak yang tidak berarti, yang disebut Ciphertext. Bayangkan sebuah surat yang penting: plaintext adalah isi surat yang ditulis dengan tinta biasa, sedangkan ciphertext adalah isi surat yang telah diubah menjadi goresan-goresan asing yang tidak dapat dipahami. Proses transformasi ini tidak dilakukan secara sembarangan, melainkan dikendalikan oleh dua elemen penting yaitu Algoritma dan Kunci. Algoritma dapat diibaratkan sebagai mesin pembuat sandi, sementara Kunci adalah password atau instruksi rahasia yang mengontrol cara kerja mesin tersebut. Ketika plaintext dan Kunci dimasukkan ke dalam Algoritma, yang keluar adalah ciphertext yang aman. Enkripsi inilah yang menjadi benteng pertahanan utama bagi seluruh komunikasi dan data rahasia di internet, mulai dari transaksi bank hingga chat pribadi Anda.</p>
+            <img src="{ static 'assets/en1.jpeg' %}" alt="en1">
+            <p class="teks">Enkripsi bekerja seperti gembok yang kuat. Data yang dikirim melalui internet bertindak sebagai Kotak (Ciphertext). Pesan yang ada di dalam kotak, seperti nomor PIN atau password Anda, adalah Plaintext. Sementara itu, kunci adalah satu-satunya alat yang bisa membuka gembok tersebut, dan hanya dimiliki oleh Anda dan penerima. Jika pihak yang tidak berwenang mencuri kotak di tengah jalan, mereka hanya mendapatkan ciphertext atau kotak terkunci yang tidak dapat mereka buka tanpa kunci yang tepat.</p>
+        </div>
+    </div>
 
-</html>
+    <hr />
+
+    <!-- Proses Enkripsi -->
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Proses Enkripsi</h2>
+            <p class="teks">Proses enkripsi dan dekripsi adalah siklus lengkap yang menjamin kerahasiaan sebuah pesan, memastikan rahasia tetap terjaga sempurna mulai dari pengirim hingga penerima. Ini seperti mengirimkan barang berharga di dalam kotak besi terkunci melintasi jalan umum yang ramai. Alur kerja ini terbagi menjadi lima fase utama yang berurutan:</p>
+            <p class="teks"><b>Fase 1: Data Asli (Plaintext) Disiapkan</b></p>
+            <p class="teks">Ini adalah langkah paling awal, di mana Plaintext atau data asli masih dalam bentuk yang dapat dibaca dan dimengerti oleh siapa pun. Pengirim harus memastikan pesan atau informasi sensitif sudah lengkap dan siap untuk diubah agar tidak bisa diakses oleh pihak yang tidak berkepentingan. Plaintext ini ibarat isi surat yang ditulis dengan tinta biasa atau password yang kamu ketikkan sebelum di-login.</p>
+            <p class="teks"><b>Fase 2: Proses Enkripsi Dilakukan</b></p>
+            <p class="teks">Di fase inilah "penguncian" data terjadi. Pengirim memasukkan Plaintext ke dalam Algoritma Enkripsi (rumus rahasia) bersama dengan Kunci Enkripsi yang spesifik. Algoritma bekerja keras, mencampurkan dan mengubah semua karakter dalam Plaintext berdasarkan instruksi dari Kunci tersebut. Hasil dari proses ini adalah Ciphertext, serangkaian kode acak yang tidak lagi memiliki makna. Ini seperti kamu menutup dan mengunci gembok pada kotak surat rahasiamu menggunakan kunci khusus.</p>
+            <p class="teks"><b>Fase 3: Teks Ter-enkripsi (Ciphertext) Dikirim</b></p>
+            <p class="teks">Setelah dienkripsi, pesan kini aman untuk melakukan perjalanan melalui jaringan yang rentan, seperti internet. Ciphertext (kode yang tidak berarti) dikirimkan dari pengirim menuju penerima. Jika pihak yang tidak berwenang (peretas) mencegat atau mencuri Ciphertext di tengah jalan, yang mereka dapatkan hanyalah kode sampah yang tidak dapat mereka pahami. Mereka tidak memiliki Kunci untuk membuka "kotak" tersebut, sehingga kerahasiaan isinya tetap terjaga.</p>
+            <p class="teks"><b>Fase 4: Penerima Menggunakan Kunci Dekripsi</b></p>
+            <p class="teks">Pesan telah tiba di tempat tujuan, dan kini saatnya membukanya. Penerima yang sah, dan hanya mereka, memiliki Kunci Dekripsi yang cocok dengan Kunci Enkripsi yang digunakan pengirim. Penerima memasukkan Ciphertext dan Kunci Dekripsi ini ke dalam Algoritma Dekripsi. Jika kunci yang digunakan benar, Algoritma akan bekerja membalikkan semua proses yang dilakukan saat enkripsi, sehingga data mulai kembali ke wujud aslinya.</p>
+            <p class="teks"><b>Fase 5: Data atau Pesan Asli Dapat Dibaca</b></p>
+            <p class="teks">Siklus pengamanan data berhasil diselesaikan. Proses dekripsi telah tuntas, dan Ciphertext telah berhasil dikembalikan menjadi Plaintext. Pesan rahasia kini dapat dibaca dan dimengerti sepenuhnya oleh penerima yang sah. Kerahasiaan pesan terjaga dari awal hingga akhir transmisi, memastikan hanya dua pihak yang terlibat yang benar-benar mengetahui isi sebenarnya.</p>
+            <img src="{% static 'assets/en2.jpeg' %}" alt="en2">
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- Enkripsi dalam Kehidupan Sehari-hari -->
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Enkripsi dalam Kehidupan Sehari-hari</h2>
+            <p class="teks">Kita mungkin berpikir enkripsi hanya untuk urusan militer atau rahasia negara. Padahal, enkripsi adalah lapisan pelindung tak terlihat yang bekerja tanpa henti di sekeliling kita. Setiap kali kamu menyalakan ponsel, mengirim pesan, atau bahkan sekadar mengunjungi sebuah situs web, enkripsi sedang bertugas memastikan kehidupan digitalmu tetap aman dan privat. Di dunia modern yang serba terhubung ini, mustahil melakukan komunikasi yang aman tanpa adanya enkripsi. Ia adalah fondasi kepercayaan kita saat berinteraksi di dunia maya.</p>
+            <p class="teks">Berikut adalah beberapa contoh paling umum di mana enkripsi melindungi kita:</p>
+            <ol class="teks m-3 mt-0">
+                <li><b>Perlindungan Kata Sandi (Password Hashing):</b> Saat kamu login ke media sosial (Instagram atau WhatsApp), password kamu tidak disimpan apa adanya. Sistem komputer mengacaknya dengan teknik Hashing (enkripsi satu arah) menjadi kode acak. Ini mencegah peretas mengetahui password aslimu jika data perusahaan dicuri.</li>
+                <li><b>Browsing Internet Aman (HTTPS):</b> Ikon gembok kecil di browser kamu menandakan situs menggunakan HTTPS. Ini menggunakan enkripsi untuk mengamankan koneksi antara kamu dan situs web, sangat penting saat memasukkan data sensitif seperti detail kartu bank.</li>
+                <li><b>ATM dan Kartu Bank:</b> PIN yang dimasukkan saat bertransaksi diubah menjadi terenkripsi sebelum dikirim ke sistem bank. Ini adalah langkah vital agar PIN tidak dapat dicuri oleh pihak ketiga di tengah jalan.</li>
+                <li><b>Proteksi Dokumen Rahasia:</b> Ketika guru atau kamu sendiri memberi kata sandi (password) pada file seperti soal ulangan di komputer, itu adalah bentuk enkripsi. File tersebut dikunci dan tidak bisa dibuka tanpa kunci yang tepat, menjamin kerahasiaan isinya.</li>
+                <li><b>Bahasa Rahasia Teman:</b> Bahkan saat kamu dan temanmu membuat bahasa unik, misalnya mengganti huruf vokal dengan angka (A=1, U=3), kamu sedang menerapkan konsep enkripsi sederhana. Prinsipnya sama: mengubah pesan yang dimengerti menjadi sandi yang hanya kamu dan temanmu yang tahu kuncinya.</li>
+            </ol>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- Pentingnya Enkripsi -->
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Pentingnya Enkripsi</h2>
+            <p class="teks">Di dunia digital saat ini, hampir semua informasi berharga kita, mulai dari identitas, rekening, hingga chatting sehari-hari, bergerak melalui jaringan internet yang sifatnya terbuka. Tanpa enkripsi, data tersebut rentan diakses atau dicuri oleh pihak ketiga (dikenal sebagai Man-in-the-Middle Attack).</p>
+            <p class="teks">Enkripsi hadir untuk menegakkan tiga pilar keamanan data:</p>
+            <ol class="teks m-3 mt-0">
+                <li>Kerahasiaan (Confidentiality): Ini adalah tujuan utama enkripsi. Hanya pengirim dan penerima yang sah, yang memegang Kunci Dekripsi, yang dapat membaca pesan aslinya. Misalnya, fitur End-to-End Encryption pada aplikasi pesan memastikan bahwa bahkan perusahaan penyedia aplikasi pun tidak dapat mengintip isi pesan Anda.</li>
+                <li>Integritas (Integrity): Enkripsi membantu memastikan bahwa data tidak diubah selama transmisi. Jika peretas mencoba memanipulasi ciphertext di tengah jalan, proses dekripsi di sisi penerima akan gagal atau menghasilkan data yang rusak, sehingga penerima tahu bahwa data tersebut tidak asli lagi.</li>
+                <li>Otentikasi (Authentication): Dalam skema enkripsi yang lebih canggih, enkripsi juga berperan dalam memverifikasi bahwa pengirim pesan benar-benar orang yang diklaim, bukan penipu.</li>
+            </ol>
+            <p class="teks">Dengan demikian, enkripsi adalah jaminan keamanan dan kepercayaan kita dalam berinteraksi di dunia digital.</p>
+        </div>
+    </div>
+
+    <!-- Tombol Navigasi -->
+    <div class="d-flex justify-content-end gap-3 mt-4">
+        <a href="{% url 'aktivitas1' %}" class="btn btn-danger px-4 py-2">
+            Kembali
+        </a>
+        <a href="{% url 'aktivitas2' %}" class="btn btn-success px-4 py-2">
+            Selanjutnya
+        </a>
+    </div>
+{% endblock %}
