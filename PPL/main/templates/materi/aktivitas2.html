@@ -20,7 +20,26 @@
         min-height: 150px;
         background-color: #fff;
     }
+    .choices,
+    .dropzone {
+        border: 2px dashed #aaa;
+        border-radius: 10px;
+        padding: 10px;
+        width: 45%;
+        min-height: 150px;
+        background-color: #fff;
+    }
 
+    .choice {
+        background-color: #1B3C53;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin: 5px 0;
+        cursor: grab;
+        color: white;
+        font-weight: 400;
+    }
     .choice {
         background-color: #1B3C53;
         border: 1px solid #ccc;
@@ -36,6 +55,10 @@
         border-color: #007bff;
         background-color: #e6f0ff;
     }
+    .dropzone.dragover {
+        border-color: #007bff;
+        background-color: #e6f0ff;
+    }
 
     button {
         margin-top: 15px;
@@ -45,7 +68,19 @@
         cursor: pointer;
         font-size: medium;
     }
+    button {
+        margin-top: 15px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: medium;
+    }
 
+    #check {
+        background-color: #28a745;
+        color: white;
+    }
     #check {
         background-color: #28a745;
         color: white;
