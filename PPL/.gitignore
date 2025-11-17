@@ -1,4 +1,21 @@
+# Virtual environments
 env/
+venv/
+
+# Python cache
 __pycache__/
 *.pyc
+
+# Database (jika pakai sqlite)
 db.sqlite3
+
+# Django logs
+*.log
+
+# IDE configs
+.vscode/
+.idea/
+
+# Static/media (jika kamu generate manual)
+staticfiles/
+media/
