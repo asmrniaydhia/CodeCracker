@@ -3,8 +3,10 @@ from . import views
 
 urlpatterns = [
     # Evaluasi
-    path('evaluasi/', views.evaluasi, name='evaluasi'),
-    path('evaluasi/nilai/', views.nilai_eval, name='nilai_eval'),
+    path('evaluasi/', views.evaluasi_petunjuk, name='evaluasi_petunjuk'),
+    path('evaluasi/pengerjaan/', views.evaluasi_pengerjaan, name='evaluasi_pengerjaan'),
+    path('evaluasi/nilai/', views.evaluasi_nilai, name='evaluasi_nilai'),
+
 
     # Halaman guru
     path('guru/dashboard/', views.dashboard, name='dashboard'),
@@ -12,12 +14,9 @@ urlpatterns = [
     path('guru/data-siswa/', views.data_siswa, name='data_siswa'),
 
     # Kuis
-    path('kuis/kuis', views.kuis, name='kuis'),
-    path('kuis/kuis1', views.kuis1, name='kuis1'),
-    path('kuis/kuis2', views.kuis2, name='kuis2'),
-    path('kuis/kuis3', views.kuis3, name='kuis3'),
-    # path('kuis/<int:kuis_id>/', views.detail_kuis, name='detail_kuis'),
-    path('kuis/nilai/', views.nilai_kuis, name='nilai_kuis'),
+    path('kuis/', views.kuis_petunjuk, name='kuis_petunjuk'),
+    path('kuis/pengerjaan/', views.kuis_pengerjaan, name='kuis_pengerjaan'),
+    path('kuis/nilai/', views.kuis_nilai, name='kuis_nilai'),
 
     # Materi
     path('materi/aktivitas1/', views.aktivitas1, name='aktivitas1'),

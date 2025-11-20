@@ -1,10 +1,15 @@
 {% extends "base_lesson.html" %}
 {% load static %}
 
-{% block title %}Enkripsi - CodeCracker{% endblock %}
+{% block title %}Kuis - CodeCracker{% endblock %}
+
 {% block content %}
 
-<!-- Konten Utama -->
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const jenisKuis = urlParams.get("jenis");   // enkripsi, caesar, dekripsi, gabungan
+</script>
+
 <div class="p-5">
     <main class="lesson-main">
         <div class="lesson-titlebar">Kuis</div>
@@ -12,49 +17,38 @@
 
         <div class="lesson-wrap">
             <div class="lesson-head">
-                <h2 class="lesson-h2"><i class="fa-solid fa-clipboard-check me-2"></i>Petunjuk Pengerjaan</h2>
+                <h2 class="lesson-h2">
+                    <i class="fa-solid fa-clipboard-check me-2"></i>Petunjuk Pengerjaan
+                </h2>
 
-                <!-- Badge ringkas (opsional) -->
-                <!-- <p class="teks mb-2">
-                            <span class="badge text-bg-warning text-dark me-2">
-                                <i class="fa-solid fa-shield-halved me-1"></i> Closed-book
-                            </span>
-                        </p> -->
-
-                <!-- Meta ringkasan -->
                 <p class="teks"><strong>Ringkasan:</strong> 5 Soal • 20 Menit</p>
 
-                <!-- Daftar petunjuk -->
                 <ol class="teks m-3 mt-0">
                     <li>Baca setiap soal dengan cermat sebelum menjawab.</li>
-                    <li>Waktu total pengerjaan adalah <strong>20 menit</strong>.</li>
+                    <li>Waktu pengerjaan adalah <strong>20 menit</strong>.</li>
                     <li>Tidak ada pengurangan nilai untuk jawaban salah.</li>
                     <li>Jangan menutup/refresh halaman selama kuis.</li>
-                    <li>Pastikan koneksi stabil dan perangkat memiliki daya cukup.</li>
-                    <li>Setelah menekan <em>Mulai</em>, timer akan berjalan.</li>
+                    <li>Pastikan perangkat dan koneksi stabil.</li>
                 </ol>
 
-                <!-- Aksi -->
-                <div class="d-flex justify-content-end gap-3 mt-4 justify-content-between mt-3">
-                    <a href="dekripsi.html" class="btn btn-danger px-4 py-2">
-                        <i class="fa-solid fa-arrow-left me-2"></i>Kembali
-                    </a>
-
+                <div class="d-flex justify-content-end gap-3 mt-4">
                     <div class="d-flex align-items-center gap-3">
                         <div class="form-check m-0">
                             <input class="form-check-input" type="checkbox" id="agreeCheck">
-                            <label class="form-check-label" for="agreeCheck">Saya siap dan memahami
-                                petunjuk</label>
+                            <label class="form-check-label" for="agreeCheck">
+                                Saya siap dan memahami petunjuk
+                            </label>
                         </div>
+
                         <button id="startBtn" class="btn btn-success px-4 py-2">
                             Mulai Kuis <i class="fa-solid fa-arrow-right ms-2"></i>
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </main>
-</div>
 </div>
 
 <!-- Modal Konfirmasi -->
@@ -62,19 +56,44 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0" style="border-radius:16px;">
             <div class="modal-header" style="background:var(--lesson-brand);">
-                <h5 class="modal-title fw-bold"><i class="fa-solid fa-circle-exclamation me-2"></i>Mulai Kuis?
+                <h5 class="modal-title fw-bold">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>Mulai Kuis?
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body">
-                Setelah dimulai, timer berjalan dan halaman evaluasi akan terbuka. Pastikan kamu sudah siap.
+                Setelah dimulai, timer akan berjalan otomatis. Pastikan kamu sudah siap.
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                <a href="#" class="btn btn-success fw-bold">Ya, Mulai!</a>
+                <a id="confirmStartBtn" href="#" class="btn btn-success fw-bold">Ya, Mulai!</a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Script Logic -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Saat klik tombol Mulai
+    document.getElementById("startBtn").addEventListener("click", function (e) {
+        e.preventDefault();
+
+        if (!document.getElementById("agreeCheck").checked) {
+            alert("Centang dulu 'Saya siap dan memahami petunjuk'.");
+            return;
+        }
+
+        const modal = new bootstrap.Modal(document.getElementById("confirmModal"));
+        modal.show();
+    });
+
+    // Tombol "Ya, Mulai!"
+    document.getElementById("confirmStartBtn").href = `/kuis/pengerjaan?jenis=${jenisKuis}`;
+});
+</script>
 
 {% endblock %}

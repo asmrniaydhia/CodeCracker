@@ -1,220 +1,162 @@
 from django.db import models
 
-# --- Tipe ENUM yang digunakan ---
 
-class PeranPengguna(models.TextChoices):
-    ADMIN = 'admin', 'Admin'
-    GURU = 'guru', 'Guru'
-    SISWA = 'siswa', 'Siswa'
-
-class JenisItem(models.TextChoices):
-    PILIHAN_GANDA = 'pilihan_ganda', 'Pilihan Ganda'
-    ESAI = 'esai', 'Esai'
-
-class StatusProgres(models.TextChoices):
-    BELUM_SELESAI = 'belum_selesai', 'Belum Selesai'
-    SELESAI = 'selesai', 'Selesai'
-
-# --- 1. Pengguna (Users) ---
-
+# ============================
+#        TABEL PENGGUNA
+# ============================
 class Pengguna(models.Model):
+    PERAN_CHOICES = (
+        ('guru', 'Guru'),
+        ('siswa', 'Siswa'),
+    )
     id_pengguna = models.AutoField(primary_key=True)
     nama_lengkap = models.CharField(max_length=45)
-    email = models.CharField(max_length=45, unique=True) # Diasumsikan email unik
-    kata_sandi = models.CharField(max_length=45) # Sebaiknya gunakan tipe yang lebih panjang untuk hash kata sandi
-    peran = models.CharField(
-        max_length=10,
-        choices=PeranPengguna.choices,
-        default=PeranPengguna.SISWA,
-    )
-
-    class Meta:
-        db_table = 'pengguna'
-        verbose_name_plural = 'Pengguna'
+    email = models.CharField(max_length=45)
+    kata_sandi = models.CharField(max_length=45)
+    peran = models.CharField(max_length=10, choices=PERAN_CHOICES)
 
     def __str__(self):
         return self.nama_lengkap
 
-# --- 2. Kelas (Classes) ---
 
+# ============================
+#        TABEL KELAS
+# ============================
 class Kelas(models.Model):
     id_kelas = models.AutoField(primary_key=True)
-    id_guru = models.ForeignKey(
-        Pengguna, 
-        on_delete=models.CASCADE, 
-        limit_choices_to={'peran': PeranPengguna.GURU}, # Diasumsikan id_guru merujuk ke Pengguna dengan peran 'guru'
-        related_name='kelas_diajar'
-    )
+    id_guru = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='kelas_guru')
     nama_kelas = models.CharField(max_length=45)
-    token = models.CharField(max_length=45, unique=True) # Diasumsikan token unik
-
-    class Meta:
-        db_table = 'kelas'
-        verbose_name_plural = 'Kelas'
+    token = models.CharField(max_length=45)
 
     def __str__(self):
         return self.nama_kelas
 
-# --- 3. Anggota Kelas (Class Membership - Many-to-Many through explicit table) ---
 
+# ============================
+#     ANGGOTA_KELAS (RELASI)
+# ============================
 class AnggotaKelas(models.Model):
     id_anggota = models.AutoField(primary_key=True)
     id_kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE, related_name='anggota')
-    id_siswa = models.ForeignKey(
-        Pengguna, 
-        on_delete=models.CASCADE, 
-        limit_choices_to={'peran': PeranPengguna.SISWA}, # Diasumsikan id_siswa merujuk ke Pengguna dengan peran 'siswa'
-        related_name='keanggotaan_kelas'
-    )
-
-    class Meta:
-        db_table = 'anggota_kelas'
-        unique_together = ('id_kelas', 'id_siswa') # Agar satu siswa hanya bisa terdaftar sekali di satu kelas
-        verbose_name_plural = 'Anggota Kelas'
+    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='kelas_siswa')
 
     def __str__(self):
-        return f'{self.id_siswa.nama_lengkap} di {self.id_kelas.nama_kelas}'
+        return f"{self.id_siswa} di {self.id_kelas}"
 
-# --- 4. Kuis (Quizzes) ---
 
+# ============================
+#            KUIS
+# ============================
 class Kuis(models.Model):
     id_kuis = models.AutoField(primary_key=True)
-    id_pengguna = models.ForeignKey( # Diasumsikan pembuat kuis adalah Pengguna (Guru/Admin)
-        Pengguna, 
-        on_delete=models.SET_NULL, # Misal: Jika pengguna dihapus, kuis tetap ada, tapi id_pengguna menjadi NULL
-        null=True, 
-        related_name='kuis_dibuat'
-    )
     nama_kuis = models.CharField(max_length=45)
-    durasi = models.IntegerField() # Diasumsikan durasi dalam menit/detik (INT)
-
-    class Meta:
-        db_table = 'kuis'
-        verbose_name_plural = 'Kuis'
+    durasi = models.IntegerField()
 
     def __str__(self):
         return self.nama_kuis
 
-# --- 5. Stage Game (Game Stages) ---
 
-class StageGame(models.Model):
-    id_stage = models.AutoField(primary_key=True)
-    nama_stage = models.CharField(max_length=45)
-
-    class Meta:
-        db_table = 'stage_game'
-        verbose_name_plural = 'Stage Game'
-
-    def __str__(self):
-        return self.nama_stage
-
-# --- 6. Hasil Game (Game Results) ---
-
-class HasilGame(models.Model):
-    id_hasil_game = models.AutoField(primary_key=True)
-    id_stage = models.ForeignKey(StageGame, on_delete=models.CASCADE, related_name='hasil_game')
-    id_siswa = models.ForeignKey(
-        Pengguna, 
-        on_delete=models.CASCADE, 
-        limit_choices_to={'peran': PeranPengguna.SISWA}, 
-        related_name='hasil_game'
-    )
-    skor_game = models.IntegerField()
-    waktu_game = models.TimeField() # Atau DateTimeField, tergantung kebutuhan
-    percobaan_game = models.IntegerField()
-
-    class Meta:
-        db_table = 'hasil_game'
-        verbose_name_plural = 'Hasil Game'
-
-# --- 7. Hasil Kuis (Quiz Results) ---
-
+# ============================
+#         HASIL KUIS
+# ============================
 class HasilKuis(models.Model):
     id_hasil_kuis = models.AutoField(primary_key=True)
-    id_siswa = models.ForeignKey(
-        Pengguna, 
-        on_delete=models.CASCADE, 
-        limit_choices_to={'peran': PeranPengguna.SISWA}, 
-        related_name='hasil_kuis'
-    )
-    id_kuis = models.ForeignKey(Kuis, on_delete=models.CASCADE, related_name='hasil_kuis')
+    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
+    id_kuis = models.ForeignKey(Kuis, on_delete=models.CASCADE)
     skor_kuis = models.IntegerField()
-    waktu_kuis = models.TimeField() # Atau DateTimeField, tergantung kebutuhan
+    waktu_kuis = models.IntegerField()
     percobaan_kuis = models.IntegerField()
 
-    class Meta:
-        db_table = 'hasil_kuis'
-        verbose_name_plural = 'Hasil Kuis'
+    def __str__(self):
+        return f"{self.id_siswa} - {self.id_kuis}"
 
-# --- 8. Hasil Evaluasi (Evaluation Results) ---
 
-class HasilEvaluasi(models.Model):
-    id_hasil_evaluasi = models.AutoField(primary_key=True)
-    id_siswa = models.ForeignKey(
-        Pengguna, 
-        on_delete=models.CASCADE, 
-        limit_choices_to={'peran': PeranPengguna.SISWA}, 
-        related_name='hasil_evaluasi'
-    )
-    id_kuis = models.ForeignKey(Kuis, on_delete=models.CASCADE, related_name='hasil_evaluasi')
-    nilai = models.DecimalField(max_digits=5, decimal_places=2) # Menggunakan DecimalField untuk nilai yang mungkin desimal
-
-    class Meta:
-        db_table = 'hasil_evaluasi'
-        verbose_name_plural = 'Hasil Evaluasi'
-
-# --- 9. Section (Sections within a Quiz) ---
-
+# ============================
+#           SECTION
+# ============================
 class Section(models.Model):
     id_section = models.AutoField(primary_key=True)
-    id_kuis = models.ForeignKey(Kuis, on_delete=models.CASCADE, related_name='sections')
     nama_section = models.CharField(max_length=45)
     urutan = models.IntegerField()
 
-    class Meta:
-        db_table = 'section'
-        ordering = ['urutan'] # Mengatur urutan default
-        unique_together = ('id_kuis', 'urutan') # Urutan harus unik dalam satu kuis
-        verbose_name_plural = 'Sections'
-
     def __str__(self):
-        return f'{self.nama_section} ({self.id_kuis.nama_kuis})'
+        return self.nama_section
 
-# --- 10. Section Item (Quiz Items/Questions) ---
 
+# ============================
+#        SECTION ITEM
+# ============================
 class SectionItem(models.Model):
+    JENIS_ITEM_CHOICES = (
+        ('video', 'Video'),
+        ('teks', 'Teks'),
+        ('kuis', 'Kuis'),
+        ('game', 'Game'),
+    )
+
     id_item = models.AutoField(primary_key=True)
     id_section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='items')
-    nama_item = models.CharField(max_length=45) # Mungkin teks singkat dari soal
-    jenis_item = models.CharField(
-        max_length=20,
-        choices=JenisItem.choices,
-        default=JenisItem.PILIHAN_GANDA,
-    )
+    nama_item = models.CharField(max_length=45)
+    jenis_item = models.CharField(max_length=10, choices=JENIS_ITEM_CHOICES)
     urutan = models.IntegerField()
-
-    class Meta:
-        db_table = 'section_item'
-        ordering = ['urutan']
-        unique_together = ('id_section', 'urutan')
-        verbose_name_plural = 'Section Items'
+    id_kuis = models.ForeignKey(Kuis, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.nama_item
 
-# --- 11. Progres Item (User Progress on Quiz Items) ---
 
+# ============================
+#         PROGRES ITEM
+# ============================
 class ProgresItem(models.Model):
-    id_progres = models.AutoField(primary_key=True)
-    id_pengguna = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='progres_item')
-    id_item = models.ForeignKey(SectionItem, on_delete=models.CASCADE, related_name='progres_item')
-    status = models.CharField(
-        max_length=15,
-        choices=StatusProgres.choices,
-        default=StatusProgres.BELUM_SELESAI,
+    STATUS_CHOICES = (
+        ('belum', 'Belum Selesai'),
+        ('proses', 'Sedang Dikerjakan'),
+        ('selesai', 'Selesai'),
     )
 
-    class Meta:
-        db_table = 'progres_item'
-        unique_together = ('id_pengguna', 'id_item') # Agar progres untuk satu item oleh satu pengguna unik
-        verbose_name_plural = 'Progres Item'
+    id_progres_item = models.AutoField(primary_key=True)
+    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
+    id_item = models.ForeignKey(SectionItem, on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES)
+
+    def __str__(self):
+        return f"{self.id_siswa} - {self.id_item} ({self.status})"
+
+
+# ============================
+#         STAGE GAME
+# ============================
+class StageGame(models.Model):
+    id_stage = models.AutoField(primary_key=True)
+    nama_stage = models.CharField(max_length=45)
+
+    def __str__(self):
+        return self.nama_stage
+
+
+# ============================
+#          HASIL GAME
+# ============================
+class HasilGame(models.Model):
+    id_hasil_game = models.AutoField(primary_key=True)
+    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
+    id_stage = models.ForeignKey(StageGame, on_delete=models.CASCADE)
+    skor_game = models.IntegerField()
+    waktu_game = models.IntegerField()
+    percobaan_game = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.id_siswa} - {self.id_stage}"
+
+
+# ============================
+#        HASIL EVALUASI
+# ============================
+class HasilEvaluasi(models.Model):
+    id_hasil_evaluasi = models.AutoField(primary_key=True)
+    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
+    nilai = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.id_siswa} - Nilai {self.nilai}"
