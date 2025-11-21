@@ -43,10 +43,17 @@ urlpatterns = [
     path('tantangan/stage10/', views.stage10, name='stage10'),
     path('tantangan/tantangan/', views.tantangan, name='tantangan'),
 
+    # Otentikasi & Umum
     path('', views.landing, name='landing'),
-    path('guru-daftar/', views.guru_daftar, name='guru_daftar'),
-    path('siswa-daftar/', views.siswa_daftar, name='siswa_daftar'),
+    path('guru-daftar/', views.guru_daftar, name='guru_daftar'), # Menggunakan fungsi register_user(peran='guru')
+    path('siswa-daftar/', views.siswa_daftar, name='siswa_daftar'), # Menggunakan fungsi register_user(peran='siswa')
     path('pilihan-daftar/', views.pilihan_daftar, name='pilihan_daftar'),
+
+    # --- PATH BARU ---
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    # ------------------
+
     path('leaderboard/', views.leaderboard, name='leaderboard'),
-    path('tes/', views.tes, name='tes'), 
+    path('tes/', views.tes, name='tes'),
 ]

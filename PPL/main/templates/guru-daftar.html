@@ -93,42 +93,47 @@
   </style>
 </head>
 <body>
-  <!-- Panel Kiri (Form Guru) -->
   <div class="left-panel">
     <div class="form-container">
       <h3>Daftar Guru</h3>
-      <form>
-        <div class="mb-3">
-          <label for="fullname" class="form-label">Nama Lengkap</label>
-          <input type="text" class="form-control" id="fullname" placeholder="Masukkan nama lengkap" required>
-        </div>
-        <div class="mb-3">
-          <label for="email" class="form-label">Alamat Email</label>
-          <input type="email" class="form-control" id="email" placeholder="contoh@email.com" required>
-        </div>
 
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Nama Lengkap</label>
+            <input type="text" name="nama_lengkap" class="form-control" placeholder="Masukkan nama lengkap" value="{{ request.POST.nama_lengkap }}" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Alamat Email</label>
+            <input type="email" name="email" class="form-control" placeholder="Masukkan email" value="{{ request.POST.email }}" required>
+        </div>
         <div class="row mb-3">
-          <div class="col-md-6">
-            <label for="password" class="form-label">Kata Sandi</label>
-            <input type="password" class="form-control" id="password" placeholder="Buat kata sandi" required>
-          </div>
-          <div class="col-md-6">
-            <label for="confirmPassword" class="form-label">Konfirmasi Kata Sandi</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Ulangi kata sandi" required>
-          </div>
+            <div class="col-md-6">
+                <label class="form-label">Kata Sandi</label>
+                <input type="password" name="kata_sandi" class="form-control" placeholder="Kata sandi" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Konfirmasi Kata Sandi</label>
+                <input type="password" name="konfirmasi_sandi" class="form-control" placeholder="Ulangi kata sandi" required>
+            </div>
         </div>
-
-        <div class="mb-3">
-          <label for="teacherCode" class="form-label">Kode Guru</label>
-          <input type="text" class="form-control" id="teacherCode" placeholder="Masukkan kode registrasi guru" required>
-        </div>
-
         <button type="submit" class="btn-custom">Daftar</button>
-      </form>
+    </form>
+    <p class="text-center mt-3">
+        Sudah punya akun? <a href="{% url 'login' %}" style="color: #1B3C53; font-weight: bold;">Login di sini</a>
+      </p>
     </div>
   </div>
 
-  <!-- Panel Kanan (Informasi) -->
   <div class="right-panel">
     <img src="logo.png" alt="Logo CodeCracker">
     <h2>CodeCracker</h2>
