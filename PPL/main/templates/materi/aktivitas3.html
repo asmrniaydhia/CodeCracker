@@ -1,834 +1,372 @@
-<!doctype html>
-<html lang="en">
+{% extends "base_lesson.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CodeCracker</title>
+{% block title %}aktivitas 3 - CodeCracker{% endblock %}
+{% block extra_css %}
+<style>
+    .section-title {
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        margin: 15px 0 5px;
+        color: #1B3C53;
+    }
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
+    .alfabet-bar {
+        display: flex;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 5px;
+        margin-bottom: 5px;
+        border: 1px solid var(--lesson-border);
+        border-radius: 8px;
+    }
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    .letter {
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        margin: 1px;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 14px;
+        box-sizing: border-box;
+        color: white;
+        background-color: #1B3C53;
+        border: 1px solid #000;
+    }
 
-    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
+    /* Target Drop */
+    #cipherTargets .letter {
+        position: relative;
+        cursor: crosshair;
+    }
 
-    <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-        }
+    #cipherTargets .letter.drag-over {
+        background-color: #3f6080;
+        border-color: #ffffff;
+    }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    /* Huruf yang didrop */
+    .dropped-cipher {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #28a745;
+        /* Hijau saat benar */
+        color: white;
+        line-height: 30px;
+        border-radius: 4px;
+        z-index: 5;
+        border: none;
+    }
 
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
+    #staticAlphabet{
+        display: none;
+    }
 
-        .navbar:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-            transform: translateY(-1px);
-        }
+    /* Huruf Asli di background (Target) disembunyikan */
+    #cipherTargets .letter.filled {
+        color: transparent;
+    }
 
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: white;
-        }
+    /* Pool Drag */
+    #cipherPool .letter {
+        cursor: grab;
+    }
 
-        .nav-link {
-            font-family: 'Open Sans', sans-serif;
-            color: white;
-            transition: all 0.3s ease;
-        }
+    .key-status {
+        text-align: center;
+        margin: 10px 0 20px;
+        font-weight: bold;
+        color: #1B3C53;
+    }
 
-        .nav-link:hover {
-            color: white;
-            text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
-            transform: translateY(-1px);
-        }
+    .key-status.set {
+        color: #28a745;
+    }
 
-        :root {
-            --lesson-bg: #f6f7f9;
-            --lesson-surface: #ffffff;
-            --lesson-text: #1b1f24;
-            --lesson-muted: #6b7280;
-            --lesson-border: #e5e7eb;
-            --lesson-brand: #F3C623;
-            --lesson-brand-700: #1B3C53;
-            --lesson-brand-100: #17a2b8;
-            --lesson-radius: 14px;
-            --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-        }
+    #check-enkripsi,
+    #reset-enkripsi {
+        margin-top: 15px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: medium;
+    }
 
-        .lesson-app {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 70px);
-            background: var(--lesson-bg);
-            position: relative;
-            transition: grid-template-columns .25s ease;
-        }
+    #check-enkripsi {
+        background-color: #28a745;
+        color: white;
+    }
 
-        .lesson-app.is-collapsed {
-            grid-template-columns: 56px 1fr;
-        }
+    #reset-enkripsi {
+        background-color: #dc3545;
+        color: white;
+        margin-right: 8px;
+    }
+</style>
+{% endblock %}
 
-        .lesson-titlebar {
-            background: var(--lesson-brand);
-            color: #000;
-            padding: 3px 20px;
-            font-size: 35px;
-            font-weight: 1000;
-            letter-spacing: .9px;
-            text-align: center;
-            box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
-        }
+{% block content %}
 
-        .lesson-content {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+<!-- Konten Utama -->
+<div class="p-5">
+    <main class="lesson-main">
+        <div class="lesson-titlebar">Aktivitas</div>
+        <hr />
 
-        .lesson-h2 {
-            font-size: 25px;
-            font-weight: bolder;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .lesson-h2:before {
-            content: "";
-            width: 6px;
-            height: 28px;
-            border-radius: 3px;
-            background: var(--lesson-brand);
-            display: inline-block;
-        }
-
-        .lesson-card {
-            background: var(--lesson-surface);
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            padding: 13px;
-        }
-
-        .lesson-goals {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .lesson-goal {
-            background: #fbfbfc;
-            border: 1px solid var(--lesson-border);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 15px;
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .lesson-goal .lesson-num {
-            min-width: 30px;
-            height: 35px;
-            border-radius: 7px;
-            display: grid;
-            place-items: center;
-            background: var(--lesson-brand-100);
-            color: var(--lesson-brand-700);
-            font-weight: 700;
-            border: 1px solid #cfe7d9;
-        }
-
-        .lesson-wrap {
-            background: #fff;
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            overflow: hidden;
-        }
-
-        .lesson-head {
-            padding: 22px 18px 6px;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .btn-outline-warning {
-            color: #000;
-            border-color: #F3C623;
-        }
-
-        .btn-outline-warning:hover,
-        .btn-outline-warning:focus {
-            background-color: #F3C623;
-            color: #000;
-            border-color: #E0B41E;
-        }
-
-        /* ===== Sidebar ===== */
-        .sidebar {
-            width: 250px;
-            transition: width .25s ease, padding .25s ease, background-color .25s ease;
-            background-color: #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            flex-shrink: 0;
-            overflow: auto;
-            padding-bottom: 80px;
-        }
-
-        .lesson-app.is-collapsed .sidebar {
-            width: 56px;
-            padding-right: 6px;
-        }
-
-        .sidebar-content {
-            padding: .5rem .5rem 1rem .5rem;
-        }
-
-        .lesson-app.is-collapsed .sidebar-content {
-            display: none;
-        }
-
-
-        /* Tombol burger */
-        .sidebar .burger-btn {
-            margin: .5rem;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
-        }
-
-        .burger-icon {
-            width: 20px;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-            position: relative;
-            display: block;
-        }
-
-        .burger-icon::before,
-        .burger-icon::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-        }
-
-        .burger-icon::before {
-            top: -6px;
-        }
-
-        .burger-icon::after {
-            top: 6px;
-        }
-
-        .teks {
-            color: #000;
-            text-align: justify;
-            font-size: 16.5px;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 1.2em;
-            font-weight: bold;
-            margin: 15px 0 5px;
-            color: #1B3C53;
-        }
-
-        .alfabet-bar {
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            padding: 5px;
-            margin-bottom: 5px;
-            border: 1px solid var(--lesson-border);
-            border-radius: 8px;
-        }
-
-        .letter {
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            margin: 1px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 14px;
-            box-sizing: border-box;
-            color: white;
-            background-color: #1B3C53;
-            border: 1px solid #000;
-        }
-
-        /* Target Drop */
-        #cipherTargets .letter {
-            position: relative;
-            cursor: crosshair;
-        }
-
-        #cipherTargets .letter.drag-over {
-            background-color: #3f6080;
-            border-color: #ffffff;
-        }
-
-        /* Huruf yang didrop */
-        .dropped-cipher {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #28a745;
-            /* Hijau saat benar */
-            color: white;
-            line-height: 30px;
-            border-radius: 4px;
-            z-index: 5;
-            border: none;
-        }
-
-        /* Huruf Asli di background (Target) disembunyikan */
-        #cipherTargets .letter.filled {
-            color: transparent;
-        }
-
-        /* Pool Drag */
-        #cipherPool .letter {
-            cursor: grab;
-        }
-
-        .key-status {
-            text-align: center;
-            margin: 10px 0 20px;
-            font-weight: bold;
-            color: #1B3C53;
-        }
-
-        .key-status.set {
-            color: #28a745;
-        }
-
-        #check-enkripsi,
-        #reset-enkripsi {
-            margin-top: 15px;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: medium;
-        }
-
-        #check-enkripsi {
-            background-color: #28a745;
-            color: white;
-        }
-
-        #reset-enkripsi {
-            background-color: #dc3545;
-            color: white;
-            margin-right: 8px;
-        }
-
-        /* responsif dasar layout */
-        @media (max-width: 992px) {
-            .lesson-app {
-                grid-template-columns: 56px 1fr;
-            }
-
-            .sidebar {
-                width: 56px;
-            }
-
-            .sidebar-content {
-                display: none;
-            }
-
-            .lesson-titlebar {
-                font-size: 34px;
-            }
-        }
-
-        @media (max-width: 760px) {
-            .lesson-titlebar {
-                font-size: 28px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
-        <div class="container-fluid ps-5 pe-5">
-            <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i class="fa-solid fa-book-open"></i>
-                            Belajar</a>
+        <div class="lesson-wrap">
+            <div class="lesson-head">
+                <h2 class="lesson-h2">Enkripsi Pesan dengan Caesar Cipher</h2>
+                <p class="teks">Pada latihan ini, Anda akan mengenkripsi pesan menggunakan metode <b>Caesar
+                        Cipher</b>,
+                    yang merupakan salah satu metode pengamanan data paling sederhana. Metode ini bekerja dengan
+                    cara menggeser posisi setiap huruf dalam teks sebanyak sejumlah langkah yang telah
+                    ditentukan menggunakan kunci enkripsi. Kunci yang akan digunakan pada latihan ini adalah
+                    <b>5</b>,
+                    yang berarti setiap huruf dalam pesan akan digeser sebanyak lima posisi ke kanan dalam
+                    urutan alfabet.
+                </p>
+                <p class="teks"><b>Instruksi Pengerjaan:</b> Caesar Cipher bekerja dengan cara menggeser
+                    setiap huruf dalam pesan sebanyak sejumlah langkah yang ditentukan. Jika kunci enkripsi
+                    adalah 5, maka setiap huruf dalam pesan akan digeser 5 posisi ke kanan dalam urutan alfabet.
+                    Pergeseran ini dilakukan dengan memutar kembali ke awal alfabet setelah mencapai huruf "z".
+                </p>
+                <ol class="teks m-3 mt-0">
+                    <li><b>Kunci yang telah ditentukan untuk latihan ini adalah 5.</b> Ini berarti Anda harus
+                        menggeser
+                        setiap huruf dalam pesan sebanyak 5 langkah ke kanan dalam alfabet.</li>
+                    <li>Teks yang akan Anda enkripsi adalah:
+                        "belajar komputer"
+                        Ingat, hanya huruf-huruf dalam teks yang akan digeser, sedangkan spasi tetap tidak
+                        berubah.
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
-                    <button class="btn btn-sm btn-light" type="button">Masuk</button>
+                    <li>Temukan posisi huruf dalam alfabet.</li>
+                    <li>Geser huruf tersebut sebanyak 5 langkah ke kanan.</li>
+                    <li>Ulangi untuk setiap huruf berikutnya dalam teks.</li>
+                    <li>Setelah menggeser semua huruf dalam teks sesuai dengan kunci 5, tuliskan hasil enkripsi
+                        yang Anda peroleh.</li>
+                </ol>
+                <div class="m-3">
+                    <!-- <p class="teks"><b>Plaintext</b></p> -->
+                    <div id="staticAlphabet" class="alfabet-bar"></div>
+
+                    <p class="teks"><b>Ciphertext</b></p>
+                    <div id="cipherTargets" class="alfabet-bar"></div>
+
+                    <div id="cipherPool" class="alfabet-bar"></div>
+
+                    <div class="key-status teks" id="keyStatus">0/26 Pasangan Kunci Selesai.</div>
+                </div>
+                <p class="teks"><b>Teks yang akan dienkripsi:</b> "belajar komputer"</p>
+
+                <div class="mt-3">
+                    <p class="teks"><b>Hasil Enkripsi:</b></p>
+                    <input type="text" id="userAnswer" class="form-control"
+                        placeholder="Tuliskan hasil enkripsi di sini (huruf kecil)">
+
+                    <div id="result-message" class="mt-3"></div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <button id="reset-enkripsi">Reset</button>
+                        <button id="check-enkripsi">Cek Jawaban</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </nav>
-
-    <!-- Konten -->
-    <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Tombol burger (toggle) -->
-            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
-                aria-label="Tutup sidebar">
-                <span class="burger-icon"></span>
-            </button>
-
-            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
-            <div class="sidebar-content">
-                <!-- Accordion Bootstrap -->
-                <div class="accordion mt-0" id="accordionExample">
-                    <!-- PENGENALAN -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                PENGENALAN
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/pengenalan.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
-                                    <a href="../materi/aktivitas1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ENKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                ENKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
-                                    <a href="../materi/aktivitas2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Enkripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CAESAR CIPHER -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                CAESAR CIPHER
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 1</a>
-                                    <a href="../materi/caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 2</a>
-                                    <a href="../materi/aktivitas3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Caesar Cipher</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DEKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                DEKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
-                                    <a href="../materi/dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
-                                    <a href="../materi/aktivitas4.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Dekripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KUIS  -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                KUIS
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../kuis/kuis.html?target=kuis4.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Kuis</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- EVALUASI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingSix">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                EVALUASI
-                            </button>
-                        </h2>
-                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../evaluasi/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Konten Utama -->
-        <div class="p-5">
-            <main class="lesson-main">
-                <div class="lesson-titlebar">Aktivitas</div>
-                <hr />
-
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Enkripsi Pesan dengan Caesar Cipher</h2>
-                        <p class="teks">Pada latihan ini, Anda akan mengenkripsi pesan menggunakan metode <b>Caesar
-                                Cipher</b>,
-                            yang merupakan salah satu metode pengamanan data paling sederhana. Metode ini bekerja dengan
-                            cara menggeser posisi setiap huruf dalam teks sebanyak sejumlah langkah yang telah
-                            ditentukan menggunakan kunci enkripsi. Kunci yang akan digunakan pada latihan ini adalah
-                            <b>5</b>,
-                            yang berarti setiap huruf dalam pesan akan digeser sebanyak lima posisi ke kanan dalam
-                            urutan alfabet.
-                        </p>
-                        <p class="teks"><b>Instruksi Pengerjaan:</b> Caesar Cipher bekerja dengan cara menggeser
-                            setiap huruf dalam pesan sebanyak sejumlah langkah yang ditentukan. Jika kunci enkripsi
-                            adalah 5, maka setiap huruf dalam pesan akan digeser 5 posisi ke kanan dalam urutan alfabet.
-                            Pergeseran ini dilakukan dengan memutar kembali ke awal alfabet setelah mencapai huruf "z".
-                        </p>
-                        <ol class="teks m-3 mt-0">
-                            <li><b>Kunci yang telah ditentukan untuk latihan ini adalah 5.</b> Ini berarti Anda harus
-                                menggeser
-                                setiap huruf dalam pesan sebanyak 5 langkah ke kanan dalam alfabet.</li>
-                            <li>Teks yang akan Anda enkripsi adalah:
-                                "belajar komputer"
-                                Ingat, hanya huruf-huruf dalam teks yang akan digeser, sedangkan spasi tetap tidak
-                                berubah.
-                            </li>
-                            <li>Temukan posisi huruf dalam alfabet.</li>
-                            <li>Geser huruf tersebut sebanyak 5 langkah ke kanan.</li>
-                            <li>Ulangi untuk setiap huruf berikutnya dalam teks.</li>
-                            <li>Setelah menggeser semua huruf dalam teks sesuai dengan kunci 5, tuliskan hasil enkripsi
-                                yang Anda peroleh.</li>
-                        </ol>
-                        <div class="m-3">
-                            <p class="teks"><b>Plaintext</b></p>
-                            <div id="staticAlphabet" class="alfabet-bar"></div>
-
-                            <p class="teks"><b>Ciphertext</b></p>
-                            <div id="cipherTargets" class="alfabet-bar"></div>
-
-                            <div id="cipherPool" class="alfabet-bar"></div>
-
-                            <div class="key-status teks" id="keyStatus">0/26 Pasangan Kunci Selesai.</div>
-                        </div>
-                        <p class="teks"><b>Teks yang akan dienkripsi:</b> "belajar komputer"</p>
-
-                        <div class="mt-3">
-                            <p class="teks"><b>Hasil Enkripsi:</b></p>
-                            <input type="text" id="userAnswer" class="form-control"
-                                placeholder="Tuliskan hasil enkripsi di sini (huruf kecil)">
-
-                            <div id="result-message" class="mt-3"></div>
-
-                            <div class="d-flex justify-content-end gap-2">
-                                <button id="reset-enkripsi">Reset</button>
-                                <button id="check-enkripsi">Cek Jawaban</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-            <!-- Tombol Navigasi -->
-            <div class="d-flex justify-content-end gap-3 mt-4">
-                <a href="caesarcipher.html" type="button" class="btn btn-danger px-4 py-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
-                </a>
-                <a href="dekripsi.html" type="button" class="btn btn-success px-4 py-2">
-                    Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>
-            </div>
-        </div>
+    </main>
+    
+    <!-- Navigasi bawah -->
+    <div class="d-flex justify-content-end gap-3 mt-4">
+        <a href="{% url 'caesar' %}" class="btn btn-danger px-4 py-2 disabled">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Kembali
+        </a>
+        <a href="{% url 'kuis2' %}" class="btn btn-success px-4 py-2">
+            Selanjutnya
+            <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
     </div>
+</div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="materi.js"></script>
-    <script src="/templates/temp.js"></script>
+{% endblock %}
 
-    <!-- Drag and Drop -->
-    <script>
-        const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const KEY_SHIFT = 5;
-        const CORRECT_CIPHER_TEXT = "gipenjw qsvrxyiv";
-        let matches = 0;
+{% block extra_js %}
+<!-- Drag and Drop -->
+<script>
+    const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const KEY_SHIFT = 5;
+    const CORRECT_CIPHER_TEXT = "gipenjw qsvrxyiv";
+    let matches = 0;
 
-        /**
-         * Mengkonversi huruf Asli ke huruf Sandi dengan Kunci 5 (A -> F).
-         */
-        function getCipherChar(plainChar) {
-            const plainIndex = plainChar.charCodeAt(0) - 'A'.charCodeAt(0);
-            const cipherIndex = (plainIndex + KEY_SHIFT) % 26;
-            return String.fromCharCode(cipherIndex + 'A'.charCodeAt(0));
+    /**
+     * Mengkonversi huruf Asli ke huruf Sandi dengan Kunci 5 (A -> F).
+     */
+    function getCipherChar(plainChar) {
+        const plainIndex = plainChar.charCodeAt(0) - 'A'.charCodeAt(0);
+        const cipherIndex = (plainIndex + KEY_SHIFT) % 26;
+        return String.fromCharCode(cipherIndex + 'A'.charCodeAt(0));
+    }
+
+    // --- Inisialisasi Alfabet di DOM ---
+    function initializeAlphabets() {
+        const staticAlphabet = document.getElementById('staticAlphabet');
+        const cipherTargets = document.getElementById('cipherTargets');
+        const cipherPool = document.getElementById('cipherPool');
+
+        cipherTargets.innerHTML = '';
+        cipherPool.innerHTML = '';
+
+        for (let i = 0; i < ALPHABET.length; i++) {
+            const plainChar = ALPHABET[i];
+            const expectedCipherChar = getCipherChar(plainChar); // F, G, H, ... E
+
+            // 1. Alfabet (Statis) - Baris Atas (A B C...)
+            let divStatic = document.createElement('div');
+            divStatic.textContent = plainChar;
+            divStatic.className = 'letter';
+
+            // 2. Alfabet Sandi (Target Drop) - Baris Tengah (A B C... Plaintext)
+            let divTarget = document.createElement('div');
+            divTarget.textContent = plainChar; // Menampilkan A, B, C...
+            divTarget.className = 'letter';
+
+            // DATA: Huruf Sandi yang Diharapkan (F, G, H...)
+            divTarget.dataset.expectedCipher = expectedCipherChar;
+            divTarget.setAttribute('id', 'target-' + plainChar);
+
+            divTarget.addEventListener('dragover', allowDrop);
+            divTarget.addEventListener('dragleave', dragLeave);
+            divTarget.addEventListener('drop', drop);
+            cipherTargets.appendChild(divTarget);
+
+            // 3. Pool Sandi (Drag) - Baris Bawah (A B C... Visual)
+            let divDrag = document.createElement('div');
+            divDrag.textContent = plainChar; // A B C...
+            divDrag.className = 'letter';
+            divDrag.setAttribute('draggable', true);
+            divDrag.setAttribute('id', 'drag-' + plainChar);
+
+            // DATA PENTING: Huruf yang dibawa item ini. A bawa A, F bawa F.
+            divDrag.dataset.draggedValue = plainChar;
+
+            divDrag.addEventListener('dragstart', drag);
+            cipherPool.appendChild(divDrag);
         }
+        updateKeyStatus();
+    }
 
-        // --- Inisialisasi Alfabet di DOM ---
-        function initializeAlphabets() {
-            const staticAlphabet = document.getElementById('staticAlphabet');
-            const cipherTargets = document.getElementById('cipherTargets');
-            const cipherPool = document.getElementById('cipherPool');
-
-            staticAlphabet.innerHTML = '';
-            cipherTargets.innerHTML = '';
-            cipherPool.innerHTML = '';
-
-            for (let i = 0; i < ALPHABET.length; i++) {
-                const plainChar = ALPHABET[i];
-                const expectedCipherChar = getCipherChar(plainChar); // F, G, H, ... E
-
-                // 1. Alfabet (Statis) - Baris Atas (A B C...)
-                let divStatic = document.createElement('div');
-                divStatic.textContent = plainChar;
-                divStatic.className = 'letter';
-                staticAlphabet.appendChild(divStatic);
-
-                // 2. Alfabet Sandi (Target Drop) - Baris Tengah (A B C... Plaintext)
-                let divTarget = document.createElement('div');
-                divTarget.textContent = plainChar; // Menampilkan A, B, C...
-                divTarget.className = 'letter';
-
-                // DATA: Huruf Sandi yang Diharapkan (F, G, H...)
-                divTarget.dataset.expectedCipher = expectedCipherChar;
-                divTarget.setAttribute('id', 'target-' + plainChar);
-
-                divTarget.addEventListener('dragover', allowDrop);
-                divTarget.addEventListener('dragleave', dragLeave);
-                divTarget.addEventListener('drop', drop);
-                cipherTargets.appendChild(divTarget);
-
-                // 3. Pool Sandi (Drag) - Baris Bawah (A B C... Visual)
-                let divDrag = document.createElement('div');
-                divDrag.textContent = plainChar; // A B C...
-                divDrag.className = 'letter';
-                divDrag.setAttribute('draggable', true);
-                divDrag.setAttribute('id', 'drag-' + plainChar);
-
-                // DATA PENTING: Huruf yang dibawa item ini. A bawa A, F bawa F.
-                divDrag.dataset.draggedValue = plainChar;
-
-                divDrag.addEventListener('dragstart', drag);
-                cipherPool.appendChild(divDrag);
-            }
-            updateKeyStatus();
-        }
-
-        // --- Fungsi Drag and Drop ---
-        function allowDrop(ev) {
-            if (ev.currentTarget.children.length === 0) {
-                ev.preventDefault();
-                ev.currentTarget.classList.add('drag-over');
-            }
-        }
-
-        function dragLeave(ev) {
-            ev.currentTarget.classList.remove('drag-over');
-        }
-
-        function drag(ev) {
-            ev.dataTransfer.setData("text", ev.target.id);
-            // MENGIRIM DATA HURUF YANG SAMA DENGAN VISUAL (A kirim A, F kirim F, dst.)
-            const draggedValue = ev.target.dataset.draggedValue;
-            ev.dataTransfer.setData("match", draggedValue);
-        }
-
-        function drop(ev) {
+    // --- Fungsi Drag and Drop ---
+    function allowDrop(ev) {
+        if (ev.currentTarget.children.length === 0) {
             ev.preventDefault();
-            const targetElement = ev.currentTarget;
-            targetElement.classList.remove('drag-over');
+            ev.currentTarget.classList.add('drag-over');
+        }
+    }
 
-            if (targetElement.children.length > 0) return;
+    function dragLeave(ev) {
+        ev.currentTarget.classList.remove('drag-over');
+    }
 
-            const draggedId = ev.dataTransfer.getData("text");
-            const draggedElement = document.getElementById(draggedId);
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+        // MENGIRIM DATA HURUF YANG SAMA DENGAN VISUAL (A kirim A, F kirim F, dst.)
+        const draggedValue = ev.target.dataset.draggedValue;
+        ev.dataTransfer.setData("match", draggedValue);
+    }
 
-            const draggedValue = ev.dataTransfer.getData("match"); // Sandi yang diseret (misal: 'F')
-            const expectedCipherChar = targetElement.dataset.expectedCipher; // Sandi yang diharapkan di slot (misal: 'F')
-            const targetPlainChar = targetElement.textContent; // Huruf Asli di slot (misal: 'A')
+    function drop(ev) {
+        ev.preventDefault();
+        const targetElement = ev.currentTarget;
+        targetElement.classList.remove('drag-over');
 
-            // Verifikasi: Apakah Huruf yang diseret ('F') SAMA dengan Sandi yang diharapkan ('F') di slot 'A'?
-            if (draggedValue === expectedCipherChar) {
-                // Kecocokan BENAR (F dijatuhkan di slot A)
+        if (targetElement.children.length > 0) return;
 
-                // Tampilkan huruf Sandi yang dijatuhkan (F)
-                const droppedDiv = document.createElement('div');
-                droppedDiv.textContent = draggedValue;
-                droppedDiv.className = 'dropped-cipher';
-                targetElement.appendChild(droppedDiv);
+        const draggedId = ev.dataTransfer.getData("text");
+        const draggedElement = document.getElementById(draggedId);
 
-                // Sembunyikan Asli A di background
-                targetElement.classList.add('filled');
+        const draggedValue = ev.dataTransfer.getData("match"); // Sandi yang diseret (misal: 'F')
+        const expectedCipherChar = targetElement.dataset.expectedCipher; // Sandi yang diharapkan di slot (misal: 'F')
+        const targetPlainChar = targetElement.textContent; // Huruf Asli di slot (misal: 'A')
 
-                // Hapus dari sumber
-                draggedElement.remove();
+        // Verifikasi: Apakah Huruf yang diseret ('F') SAMA dengan Sandi yang diharapkan ('F') di slot 'A'?
+        if (draggedValue === expectedCipherChar) {
+            // Kecocokan BENAR (F dijatuhkan di slot A)
 
-                // Update status
-                matches++;
-                updateKeyStatus();
-            } else {
-                // Kecocokan SALAH
-                alert(`Pasangan SALAH!`);
-            }
+            // Tampilkan huruf Sandi yang dijatuhkan (F)
+            const droppedDiv = document.createElement('div');
+            droppedDiv.textContent = draggedValue;
+            droppedDiv.className = 'dropped-cipher';
+            targetElement.appendChild(droppedDiv);
+
+            // Sembunyikan Asli A di background
+            targetElement.classList.add('filled');
+
+            // Hapus dari sumber
+            draggedElement.remove();
+
+            // Update status
+            matches++;
+            updateKeyStatus();
+        } else {
+            // Kecocokan SALAH
+            alert(`Pasangan SALAH!`);
+        }
+    }
+
+    function updateKeyStatus() {
+        const keyStatus = document.getElementById('keyStatus');
+        keyStatus.textContent = `${matches}/26 Pasangan Kunci Selesai.`;
+
+        const checkBtn = document.getElementById('check-enkripsi');
+        if (matches === 26) {
+            keyStatus.textContent = '🎉 Semua Pasangan Kunci Benar! Lanjutkan ke bagian Enkripsi.';
+            checkBtn.disabled = false;
+        } else {
+            checkBtn.disabled = true;
+        }
+    }
+
+    // --- Fungsi Pemeriksaan Jawaban ---
+    function checkAnswer() {
+        const userAnswer = document.getElementById('userAnswer').value.toLowerCase().trim();
+        const resultMessage = document.getElementById('result-message');
+
+        if (matches < 26) {
+            resultMessage.innerHTML = '<div class="alert alert-warning">Harap selesaikan pencocokan 26 pasangan kunci terlebih dahulu!</div>';
+            return;
         }
 
-        function updateKeyStatus() {
-            const keyStatus = document.getElementById('keyStatus');
-            keyStatus.textContent = `${matches}/26 Pasangan Kunci Selesai.`;
-
-            const checkBtn = document.getElementById('check-enkripsi');
-            if (matches === 26) {
-                keyStatus.textContent = '🎉 Semua Pasangan Kunci Benar! Lanjutkan ke bagian Enkripsi.';
-                checkBtn.disabled = false;
-            } else {
-                checkBtn.disabled = true;
-            }
+        if (userAnswer === CORRECT_CIPHER_TEXT) {
+            resultMessage.innerHTML = '<div class="alert alert-success">🎉 Selamat! Jawaban Anda BENAR!</div>';
+            document.getElementById('userAnswer').setAttribute('readonly', true);
+        } else {
+            resultMessage.innerHTML = '<div class="alert alert-danger">❌ Jawaban Anda SALAH. Pastikan Anda mengenkripsi "belajar komputer" dengan KUNCI 5.</div>';
         }
+    }
 
-        // --- Fungsi Pemeriksaan Jawaban ---
-        function checkAnswer() {
-            const userAnswer = document.getElementById('userAnswer').value.toLowerCase().trim();
-            const resultMessage = document.getElementById('result-message');
+    // --- Fungsi Reset ---
+    function resetExercise() {
+        matches = 0;
+        document.getElementById('userAnswer').value = '';
+        document.getElementById('userAnswer').removeAttribute('readonly');
+        document.getElementById('result-message').innerHTML = '';
 
-            if (matches < 26) {
-                resultMessage.innerHTML = '<div class="alert alert-warning">Harap selesaikan pencocokan 26 pasangan kunci terlebih dahulu!</div>';
-                return;
-            }
+        initializeAlphabets();
+    }
 
-            if (userAnswer === CORRECT_CIPHER_TEXT) {
-                resultMessage.innerHTML = '<div class="alert alert-success">🎉 Selamat! Jawaban Anda BENAR!</div>';
-                document.getElementById('userAnswer').setAttribute('readonly', true);
-            } else {
-                resultMessage.innerHTML = '<div class="alert alert-danger">❌ Jawaban Anda SALAH. Pastikan Anda mengenkripsi "belajar komputer" dengan KUNCI 5.</div>';
-            }
-        }
+    // Panggil fungsi saat DOM siap
+    window.onload = initializeAlphabets;
 
-        // --- Fungsi Reset ---
-        function resetExercise() {
-            matches = 0;
-            document.getElementById('userAnswer').value = '';
-            document.getElementById('userAnswer').removeAttribute('readonly');
-            document.getElementById('result-message').innerHTML = '';
-
-            initializeAlphabets();
-        }
-
-        // Panggil fungsi saat DOM siap
-        window.onload = initializeAlphabets;
-
-        // Hubungkan tombol ke fungsi
-        document.getElementById('check-enkripsi').addEventListener('click', checkAnswer);
-        document.getElementById('reset-enkripsi').addEventListener('click', resetExercise);
-    </script>
-</body>
-
-</html>
+    // Hubungkan tombol ke fungsi
+    document.getElementById('check-enkripsi').addEventListener('click', checkAnswer);
+    document.getElementById('reset-enkripsi').addEventListener('click', resetExercise);
+</script>
+{% endblock %}

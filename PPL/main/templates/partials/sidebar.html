@@ -1,0 +1,176 @@
+{# templates/partials/sidebar.html #}
+<aside class="sidebar">
+    <!-- Tombol Burger (toggle sidebar) -->
+    <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true" aria-label="Tutup sidebar">
+        <span class="burger-icon"></span>
+    </button>
+
+    <!-- Isi Sidebar (akan hilang saat collapsed) -->
+    <div class="sidebar-content">
+        <div class="accordion mt-0" id="accordionExample">
+
+            <!-- PENGENALAN -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseOne" aria-expanded="false">
+                        PENGENALAN
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-column">
+                            <a href="{% url 'pengenalan' %}" class="btn text-start mb-2 btn-outline-warning w-100">Pengenalan</a>
+                            <a href="{% url 'aktivitas1' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ENKRIPSI -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo">
+                        ENKRIPSI
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-column">
+                            <a href="{% url 'enkripsi' %}" class="btn text-start mb-2 btn-outline-warning w-100">Enkripsi</a>
+                            <a href="{% url 'aktivitas2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
+                            <a href="{% url 'kuis_petunjuk' %}?jenis=enkripsi" class="btn text-start mb-2 btn-outline-warning w-100">Kuis Enkripsi</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAESAR CIPHER -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree">
+                        CAESAR CIPHER
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-column">
+                            <a href="{% url 'caesar' %}" class="btn text-start mb-2 btn-outline-warning w-100">Caesar Cipher 1</a>
+                            <a href="{% url 'caesar2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Caesar Cipher 2</a>
+                            <a href="{% url 'aktivitas3' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
+                            <a href="{% url 'kuis_petunjuk' %}?jenis=caesar" class="btn text-start mb-2 btn-outline-warning w-100">Kuis Caesar Cipher</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DEKRIPSI -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseFour">
+                        DEKRIPSI
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-column">
+                            <a href="{% url 'dekripsi' %}" class="btn text-start mb-2 btn-outline-warning w-100">Dekripsi 1</a>
+                            <a href="{% url 'dekripsi2' %}" class="btn text-start mb-2 btn-outline-warning w-100">Dekripsi 2</a>
+                            <a href="{% url 'aktivitas4' %}" class="btn text-start mb-2 btn-outline-warning w-100">Aktivitas</a>
+                            <a href="{% url 'kuis_petunjuk' %}?jenis=dekripsi" class="btn text-start mb-2 btn-outline-warning w-100">Kuis Dekripsi</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EVALUASI -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingSix">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseSix">
+                        EVALUASI
+                    </button>
+                </h2>
+                <div id="collapseSix" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-column">
+                            <a href="{% url 'evaluasi_petunjuk' %}" class="btn text-start mb-2 btn-outline-warning w-100">Evaluasi</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</aside>
+
+<style>
+    .sidebar {
+        width: 250px;
+        transition: width .25s ease, padding .25s ease, background-color .25s ease;
+        background-color: #f0f0f0;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        flex-shrink: 0;
+        overflow: auto;
+        padding-bottom: 80px;
+    }
+
+    .lesson-app.is-collapsed .sidebar {
+        width: 56px;
+        padding-right: 6px;
+    }
+
+    .sidebar-content {
+        padding: .5rem .5rem 1rem .5rem;
+    }
+
+    .lesson-app.is-collapsed .sidebar-content {
+        display: none;
+    }
+
+    .sidebar .burger-btn {
+        margin: .5rem;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
+    }
+
+    .burger-icon {
+        width: 20px;
+        height: 2px;
+        background: #1B3C53;
+        border-radius: 2px;
+        position: relative;
+        display: block;
+    }
+
+    .burger-icon::before,
+    .burger-icon::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #1B3C53;
+        border-radius: 2px;
+    }
+
+    .burger-icon::before { top: -6px; }
+    .burger-icon::after  { top: 6px;  }
+
+    @media (max-width: 992px) {
+        .lesson-app { grid-template-columns: 56px 1fr; }
+        .sidebar { width: 56px; }
+        .sidebar-content { display: none; }
+    }
+</style>

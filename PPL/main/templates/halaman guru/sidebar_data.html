@@ -1,0 +1,131 @@
+<aside class="sidebar">
+    <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true" aria-label="Tutup sidebar">
+        <span class="burger-icon"></span>
+    </button>
+
+    <div class="sidebar-content">
+        <div class="accordion mt-0" id="accordionExample">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        MENU UTAMA
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="d-flex flex-column">
+                            
+                            <a href="{% url 'dashboard' %}" 
+                                class="btn text-start mb-2 w-100
+                                    {% if request.path == '/guru/dashboard/' %}
+                                        btn-warning 
+                                    {% else %}
+                                        btn-outline-warning 
+                                    {% endif %}">
+                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                            </a>
+                            
+                            <a href="{% url 'data_siswa' %}" 
+                                class="btn text-start mb-2 w-100
+                                    {% if request.path == '/guru/data-siswa/' %}
+                                        btn-warning 
+                                    {% else %}
+                                        btn-outline-warning 
+                                    {% endif %}">
+                                <i class="fas fa-users me-2"></i>Data Siswa
+                            </a>
+                            
+                            <a href="{% url 'data_nilai' %}" 
+                                class="btn text-start mb-2 w-100
+                                    {% if request.path == '/guru/data-nilai/' %}
+                                        btn-warning 
+                                    {% else %}
+                                        btn-outline-warning 
+                                    {% endif %}">
+                                <i class="fas fa-chart-bar me-2"></i>Data Nilai
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</aside>
+
+<style>
+    /* CSS untuk sidebar yang spesifik pada file target */
+    .sidebar {
+        width: 250px;
+        transition: width .25s ease, padding .25s ease, background-color .25s ease;
+        background-color: #f0f0f0; /* Dipertahankan dari file target */
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        flex-shrink: 0;
+        overflow: auto;
+        padding-bottom: 80px;
+    }
+
+    .lesson-app.is-collapsed .sidebar {
+        width: 56px;
+        padding-right: 6px;
+    }
+
+    .sidebar-content {
+        padding: .5rem .5rem 1rem .5rem;
+    }
+    
+    /* Menyesuaikan posisi sidebar-content agar tidak bertabrakan dengan navbar */
+    /* Karena kode sumber memiliki .sidebar-content { position: fixed; top: 120px; } */
+    /* Saya mengembalikan ke default file target, namun Anda mungkin perlu menyesuaikan CSS ini di file utama: */
+    /* .sidebar-content { position: fixed; width: 250px; top: 120px; } */
+
+    .lesson-app.is-collapsed .sidebar-content {
+        display: none;
+    }
+
+    .sidebar .burger-btn {
+        margin: .5rem;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background: #fff;
+        display: grid;
+        place-items: center;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
+    }
+
+    .burger-icon {
+        width: 20px;
+        height: 2px;
+        background: #1B3C53;
+        border-radius: 2px;
+        position: relative;
+        display: block;
+    }
+
+    .burger-icon::before,
+    .burger-icon::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #1B3C53;
+        border-radius: 2px;
+    }
+
+    .burger-icon::before { top: -6px; }
+    .burger-icon::after  { top: 6px;  }
+
+    @media (max-width: 992px) {
+        .lesson-app { grid-template-columns: 56px 1fr; }
+        .sidebar { width: 56px; }
+        .sidebar-content { display: none; }
+    }
+</style>

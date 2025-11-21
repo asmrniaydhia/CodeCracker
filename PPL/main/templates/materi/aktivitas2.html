@@ -1,640 +1,209 @@
-<!doctype html>
-<html lang="en">
+{% extends "base_lesson.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CodeCracker</title>
+{% block title %}aktivitas 2 - CodeCracker{% endblock %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
+{% block extra_css %}
+<style>
+    .container {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+    .choices,
+    .dropzone {
+        border: 2px dashed #aaa;
+        border-radius: 10px;
+        padding: 10px;
+        width: 45%;
+        min-height: 150px;
+        background-color: #fff;
+    }
+    .choices,
+    .dropzone {
+        border: 2px dashed #aaa;
+        border-radius: 10px;
+        padding: 10px;
+        width: 45%;
+        min-height: 150px;
+        background-color: #fff;
+    }
 
-    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="materi.css">
+    .choice {
+        background-color: #1B3C53;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin: 5px 0;
+        cursor: grab;
+        color: white;
+        font-weight: 400;
+    }
+    .choice {
+        background-color: #1B3C53;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin: 5px 0;
+        cursor: grab;
+        color: white;
+        font-weight: 400;
+    }
 
-    <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-        }
+    .dropzone.dragover {
+        border-color: #007bff;
+        background-color: #e6f0ff;
+    }
+    .dropzone.dragover {
+        border-color: #007bff;
+        background-color: #e6f0ff;
+    }
 
-        html {
-            scroll-behavior: smooth;
-        }
+    button {
+        margin-top: 15px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: medium;
+    }
+    button {
+        margin-top: 15px;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: medium;
+    }
 
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
+    #check {
+        background-color: #28a745;
+        color: white;
+    }
+    #check {
+        background-color: #28a745;
+        color: white;
+    }
 
-        .navbar:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-            transform: translateY(-1px);
-        }
+    #reset {
+        background-color: #dc3545;
+        color: white;
+        margin-right: 8px;
+    }
+</style>
+{% endblock %}
 
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: white;
-        }
-
-        .nav-link {
-            font-family: 'Open Sans', sans-serif;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: white;
-            text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
-            transform: translateY(-1px);
-        }
-
-        :root {
-            --lesson-bg: #f6f7f9;
-            --lesson-surface: #ffffff;
-            --lesson-text: #1b1f24;
-            --lesson-muted: #6b7280;
-            --lesson-border: #e5e7eb;
-            --lesson-brand: #F3C623;
-            --lesson-brand-700: #1B3C53;
-            --lesson-brand-100: #17a2b8;
-            --lesson-radius: 14px;
-            --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-        }
-
-        .lesson-app {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 70px);
-            background: var(--lesson-bg);
-            position: relative;
-            transition: grid-template-columns .25s ease;
-        }
-
-        .lesson-app.is-collapsed {
-            grid-template-columns: 56px 1fr;
-        }
-
-        .lesson-titlebar {
-            background: var(--lesson-brand);
-            color: #000;
-            padding: 3px 20px;
-            font-size: 35px;
-            font-weight: 1000;
-            letter-spacing: .9px;
-            text-align: center;
-            box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
-        }
-
-        .lesson-content {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .lesson-h2 {
-            font-size: 25px;
-            font-weight: bolder;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .lesson-h2:before {
-            content: "";
-            width: 6px;
-            height: 28px;
-            border-radius: 3px;
-            background: var(--lesson-brand);
-            display: inline-block;
-        }
-
-        .lesson-card {
-            background: var(--lesson-surface);
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            padding: 13px;
-        }
-
-        .lesson-goals {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .lesson-goal {
-            background: #fbfbfc;
-            border: 1px solid var(--lesson-border);
-            border-radius: 10px;
-            padding: 10px;
-            font-size: 15px;
-            display: flex;
-            gap: 14px;
-            align-items: flex-start;
-        }
-
-        .lesson-goal .lesson-num {
-            min-width: 30px;
-            height: 35px;
-            border-radius: 7px;
-            display: grid;
-            place-items: center;
-            background: var(--lesson-brand-100);
-            color: var(--lesson-brand-700);
-            font-weight: 700;
-            border: 1px solid #cfe7d9;
-        }
-
-        .lesson-wrap {
-            background: #fff;
-            border: 1px solid var(--lesson-border);
-            border-radius: var(--lesson-radius);
-            box-shadow: var(--lesson-shadow);
-            overflow: hidden;
-        }
-
-        .lesson-head {
-            padding: 22px 18px 6px;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .btn-outline-warning {
-            color: #000;
-            border-color: #F3C623;
-        }
-
-        .btn-outline-warning:hover,
-        .btn-outline-warning:focus {
-            background-color: #F3C623;
-            color: #000;
-            border-color: #E0B41E;
-        }
-
-        /* ===== Sidebar ===== */
-        .sidebar {
-            width: 250px;
-            transition: width .25s ease, padding .25s ease, background-color .25s ease;
-            background-color: #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            flex-shrink: 0;
-            overflow: auto;
-            padding-bottom: 80px;
-        }
-
-        .lesson-app.is-collapsed .sidebar {
-            width: 56px;
-            padding-right: 6px;
-        }
-
-        .sidebar-content {
-            padding: .5rem .5rem 1rem .5rem;
-        }
-
-        .lesson-app.is-collapsed .sidebar-content {
-            display: none;
-        }
+{% block content %}
 
 
-        /* Tombol burger */
-        .sidebar .burger-btn {
-            margin: .5rem;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
-        }
+<!-- Konten Utama -->
+<div class="p-5">
+    <main class="lesson-main">
+        <div class="lesson-titlebar">Aktivitas</div>
+        <hr />
 
-        .burger-icon {
-            width: 20px;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-            position: relative;
-            display: block;
-        }
-
-        .burger-icon::before,
-        .burger-icon::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-        }
-
-        .burger-icon::before {
-            top: -6px;
-        }
-
-        .burger-icon::after {
-            top: 6px;
-        }
-
-        .teks {
-            color: #000;
-            text-align: justify;
-            font-size: 16.5px;
-        }
-
-        .container {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .choices,
-        .dropzone {
-            border: 2px dashed #aaa;
-            border-radius: 10px;
-            padding: 10px;
-            width: 45%;
-            min-height: 150px;
-            background-color: #fff;
-        }
-
-        .choice {
-            background-color: #1B3C53;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 8px 10px;
-            margin: 5px 0;
-            cursor: grab;
-            color: white;
-            font-weight: 400;
-        }
-
-        .dropzone.dragover {
-            border-color: #007bff;
-            background-color: #e6f0ff;
-        }
-
-        button {
-            margin-top: 15px;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: medium;
-        }
-
-        #check {
-            background-color: #28a745;
-            color: white;
-        }
-
-        #reset {
-            background-color: #dc3545;
-            color: white;
-            margin-right: 8px;
-        }
-
-        /* responsif dasar layout */
-        @media (max-width: 992px) {
-            .lesson-app {
-                grid-template-columns: 56px 1fr;
-            }
-
-            .sidebar {
-                width: 56px;
-            }
-
-            .sidebar-content {
-                display: none;
-            }
-
-            .lesson-titlebar {
-                font-size: 34px;
-            }
-        }
-
-        @media (max-width: 760px) {
-            .lesson-titlebar {
-                font-size: 28px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
-        <div class="container-fluid ps-5 pe-5">
-            <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/templates/materi/pengenalan.html"><i
-                                class="fa-solid fa-book-open"></i>
-                            Belajar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/tantangan/tantangan.html"><i
-                                class="fa-solid fa-gamepad"></i> Tantangan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i>
-                            Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
-                    <button class="btn btn-sm btn-light" type="button">Masuk</button>
+        <div class="lesson-wrap">
+            <div class="lesson-head">
+                <h2 class="lesson-h2">Mengurutkan Proses Enkripsi dengan Benar</h2>
+                <p class="teks">Pada bagian ini, Anda diminta untuk mengurutkan langkah-langkah yang benar dalam
+                    proses enkripsi dan dekripsi. Urutkan langkah-langkah yang sesuai dengan alur yang benar
+                    dalam melakukan enkripsi dan dekripsi data.
+                </p>
+                <p class="teks"><b>Instruksi Pengerjaan:</b> Langkah-langkah berikut telah tercampur, dan tugas
+                    Anda
+                    adalah menyeret langkah-langkah ini ke dalam urutan yang benar.</p>
+                <div class="teks container">
+                    <div class="choices" id="choices">
+                        <div class="choice" id="5" draggable="true">Data atau pesan asli dapat dibaca oleh
+                            penerima
+                        </div>
+                        <div class="choice" id="1" draggable="true">Data asli (plaintext) diterima</div>
+                        <div class="choice" id="3" draggable="true">Data terenkripsi (ciphertext) dikirim ke
+                            penerima
+                        </div>
+                        <div class="choice" id="4" draggable="true">Penerima menggunakan kunci dekripsi untuk
+                            mengubah
+                            ciphertext menjadi plaintext</div>
+                        <div class="choice" id="2" draggable="true">Proses enkripsi dilakukan dengan algoritma
+                            dan kunci enkripsi</div>
+                    </div>
+                    <div class="dropzone" id="dropzone"></div>
+                </div>
+                <div>
+                    <button id="reset">Reset</button>
+                    <button id="check">Cek Jawaban</button>
                 </div>
             </div>
         </div>
-    </nav>
+    </main>
 
-    <!-- Konten -->
-    <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Tombol burger (toggle) -->
-            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
-                aria-label="Tutup sidebar">
-                <span class="burger-icon"></span>
-            </button>
-
-            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
-            <div class="sidebar-content">
-                <!-- Accordion Bootstrap -->
-                <div class="accordion mt-0" id="accordionExample">
-                    <!-- PENGENALAN -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                PENGENALAN
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/pengenalan.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
-                                    <a href="../materi/aktivitas1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ENKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                ENKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
-                                    <a href="../materi/aktivitas2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Enkripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CAESAR CIPHER -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                CAESAR CIPHER
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 1</a>
-                                    <a href="../materi/caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 2</a>
-                                    <a href="../materi/aktivitas3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Caesar Cipher</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DEKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                DEKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
-                                    <a href="../materi/dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
-                                    <a href="../materi/aktivitas4.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Dekripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KUIS  -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                KUIS
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../kuis/kuis.html?target=kuis4.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Kuis</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- EVALUASI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingSix">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                EVALUASI
-                            </button>
-                        </h2>
-                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../evaluasi/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Konten Utama -->
-        <div class="p-5">
-            <main class="lesson-main">
-                <div class="lesson-titlebar">Aktivitas</div>
-                <hr />
-
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2">Mengurutkan Proses Enkripsi dengan Benar</h2>
-                        <p class="teks">Pada bagian ini, Anda diminta untuk mengurutkan langkah-langkah yang benar dalam
-                            proses enkripsi dan dekripsi. Urutkan langkah-langkah yang sesuai dengan alur yang benar
-                            dalam melakukan enkripsi dan dekripsi data.
-                        </p>
-                        <p class="teks"><b>Instruksi Pengerjaan:</b> Langkah-langkah berikut telah tercampur, dan tugas
-                            Anda
-                            adalah menyeret langkah-langkah ini ke dalam urutan yang benar.</p>
-                        <div class="teks container">
-                            <div class="choices" id="choices">
-                                <div class="choice" id="5" draggable="true">Data atau pesan asli dapat dibaca oleh
-                                    penerima
-                                </div>
-                                <div class="choice" id="1" draggable="true">Data asli (plaintext) diterima</div>
-                                <div class="choice" id="3" draggable="true">Data terenkripsi (ciphertext) dikirim ke
-                                    penerima
-                                </div>
-                                <div class="choice" id="4" draggable="true">Penerima menggunakan kunci dekripsi untuk
-                                    mengubah
-                                    ciphertext menjadi plaintext</div>
-                                <div class="choice" id="2" draggable="true">Proses enkripsi dilakukan dengan algoritma
-                                    dan kunci enkripsi</div>
-                            </div>
-                            <div class="dropzone" id="dropzone"></div>
-                        </div>
-                        <div>
-                            <button id="reset">Reset</button>
-                            <button id="check">Cek Jawaban</button>
-                        </div>
-                    </div>
-                </div>
-            </main>
-            <!-- Tombol Navigasi -->
-            <div class="d-flex justify-content-end gap-3 mt-4">
-                <a href="enkripsi.html" type="button" class="btn btn-danger px-4 py-2">
-                    <i class="fa-solid fa-arrow-left me-2"></i> Kembali
-                </a>
-                <a href="caesarcipher.html" type="button" class="btn btn-success px-4 py-2">
-                    Selanjutnya <i class="fa-solid fa-arrow-right ms-2"></i>
-                </a>
-            </div>
-        </div>
+    <!-- Navigasi bawah -->
+    <div class="d-flex justify-content-end gap-3 mt-4">
+        <a href="{% url 'enkripsi' %}" class="btn btn-danger px-4 py-2 disabled">
+            <i class="fa-solid fa-arrow-left me-2"></i>
+            Kembali
+        </a>
+        <a href="{% url 'kuis2' %}" class="btn btn-success px-4 py-2">
+            Selanjutnya
+            <i class="fa-solid fa-arrow-right ms-2"></i>
+        </a>
     </div>
+</div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="materi.js"></script>
-    <script src="/templates/temp.js"></script>
+{% endblock %}
 
-    <!-- Drag and Drop -->
-    <script>
-        const dropzone = document.getElementById('dropzone');
-        const choiceBox = document.getElementById('choices');
+{% block extra_js %}
+<!-- Drag and Drop -->
+<script>
+    const dropzone = document.getElementById('dropzone');
+    const choiceBox = document.getElementById('choices');
 
-        // Simpan urutan awal persis seperti di HTML (acak)
-        const originalOrder = Array.from(choiceBox.querySelectorAll('.choice')).map(el => el.id);
+    // Simpan urutan awal persis seperti di HTML (acak)
+    const originalOrder = Array.from(choiceBox.querySelectorAll('.choice')).map(el => el.id);
 
-        // Pasang handler drag & drop (pakai ID, tidak membuat elemen baru)
-        document.querySelectorAll('.choice').forEach(choice => {
-            choice.addEventListener('dragstart', e => {
-                e.dataTransfer.setData('text/plain', choice.id);
-                choice.classList.add('dragging');
-            });
-            choice.addEventListener('dragend', () => {
-                choice.classList.remove('dragging');
-            });
+    // Pasang handler drag & drop (pakai ID, tidak membuat elemen baru)
+    document.querySelectorAll('.choice').forEach(choice => {
+        choice.addEventListener('dragstart', e => {
+            e.dataTransfer.setData('text/plain', choice.id);
+            choice.classList.add('dragging');
         });
-
-        [dropzone, choiceBox].forEach(zone => {
-            zone.addEventListener('dragover', e => {
-                e.preventDefault();
-                zone.classList.add('dragover');
-            });
-            zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
-            zone.addEventListener('drop', e => {
-                e.preventDefault();
-                zone.classList.remove('dragover');
-                const id = e.dataTransfer.getData('text/plain');
-                const el = document.getElementById(id);
-                if (el && zone !== el.parentElement) zone.appendChild(el);
-            });
+        choice.addEventListener('dragend', () => {
+            choice.classList.remove('dragging');
         });
+    });
 
-        // ✅ Reset: kembalikan sesuai urutan awal (TANPA sort)
-        document.getElementById('reset').onclick = () => {
-            originalOrder.forEach(id => {
-                const el = document.getElementById(id);
-                choiceBox.appendChild(el);
-            });
-            dropzone.querySelectorAll('.choice').forEach(() => { }); // no-op; semua sudah dipindah di atas
-        };
+    [dropzone, choiceBox].forEach(zone => {
+        zone.addEventListener('dragover', e => {
+            e.preventDefault();
+            zone.classList.add('dragover');
+        });
+        zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+            const id = e.dataTransfer.getData('text/plain');
+            const el = document.getElementById(id);
+            if (el && zone !== el.parentElement) zone.appendChild(el);
+        });
+    });
 
-        // Cek jawaban
-        document.getElementById('check').onclick = () => {
-            const items = Array.from(dropzone.querySelectorAll('.choice')).map(el => el.id);
-            const correct = ["1", "2", "3", "4", "5"];
-            const ok = items.length === correct.length && items.every((v, i) => v === correct[i]);
-            alert(ok ? "✅ Jawaban benar! Urutannya sudah sesuai." : "❌ Urutan belum benar. Coba lagi!");
-        };
-    </script>
-</body>
+    // ✅ Reset: kembalikan sesuai urutan awal (TANPA sort)
+    document.getElementById('reset').onclick = () => {
+        originalOrder.forEach(id => {
+            const el = document.getElementById(id);
+            choiceBox.appendChild(el);
+        });
+        dropzone.querySelectorAll('.choice').forEach(() => { }); // no-op; semua sudah dipindah di atas
+    };
 
-</html>
+    // Cek jawaban
+    document.getElementById('check').onclick = () => {
+        const items = Array.from(dropzone.querySelectorAll('.choice')).map(el => el.id);
+        const correct = ["1", "2", "3", "4", "5"];
+        const ok = items.length === correct.length && items.every((v, i) => v === correct[i]);
+        alert(ok ? "✅ Jawaban benar! Urutannya sudah sesuai." : "❌ Urutan belum benar. Coba lagi!");
+    };
+</script>
+
+{% endblock %}

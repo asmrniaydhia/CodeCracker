@@ -1,506 +1,69 @@
-<!doctype html>
-<html lang="id">
+{% extends "base_lesson.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CodeCracker — Petunjuk Evaluasi</title>
+{% block title %}Evaluasi - CodeCracker{% endblock %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
+{% block content %}
+<div class="p-5">
+    <main class="lesson-main">
+        <div class="lesson-titlebar">Evaluasi</div>
+        <hr />
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
+        <div class="lesson-wrap">
+            <div class="lesson-head">
+                <h2 class="lesson-h2">
+                    <i class="fa-solid fa-clipboard-check me-2"></i>Petunjuk Pengerjaan
+                </h2>
 
-    <!-- stylesheet global kamu -->
-    <link rel="stylesheet" href="materi.css">
+                <p class="teks"><strong>Ringkasan:</strong> 15 Soal • 60 Menit • 1 Kali Percobaan</p>
 
-    <style>
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-        }
+                <ol class="teks m-3 mt-0">
+                    <li>Baca setiap soal dengan cermat.</li>
+                    <li>Waktu pengerjaan adalah <strong>60 menit</strong>.</li>
+                    <li>Tidak ada pengurangan nilai.</li>
+                    <li>Jangan menutup/refresh halaman.</li>
+                    <li>Pastikan koneksi dan perangkat stabil.</li>
+                </ol>
 
-        html {
-            scroll-behavior: smooth;
-        }
+                <div class="d-flex justify-content-end mt-4 gap-3">
+                    <div class="form-check m-0">
+                        <input class="form-check-input" type="checkbox" id="agreeCheck">
+                        <label class="form-check-label" for="agreeCheck">Saya siap mengerjakan</label>
+                    </div>
 
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .5);
-            transition: box-shadow .3s, transform .3s;
-        }
-
-        .navbar:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, .7);
-            transform: translateY(-1px);
-        }
-
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: #fff;
-        }
-
-        .nav-link {
-            color: #fff;
-            transition: all .3s;
-        }
-
-        .nav-link:hover {
-            color: #fff;
-            text-shadow: 0 0 5px rgba(168, 213, 226, .5);
-            transform: translateY(-1px);
-        }
-
-        :root {
-            --lesson-bg: #f6f7f9;
-            --lesson-surface: #fff;
-            --lesson-text: #1b1f24;
-            --lesson-muted: #6b7280;
-            --lesson-border: #e5e7eb;
-            --lesson-brand: #F3C623;
-            --lesson-brand-700: #1B3C53;
-            --lesson-brand-100: #17a2b8;
-            --lesson-radius: 14px;
-            --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-        }
-
-        .lesson-app {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 70px);
-            background: var(--lesson-bg);
-            position: relative;
-            transition: grid-template-columns .25s;
-        }
-
-        .lesson-app.is-collapsed {
-            grid-template-columns: 56px 1fr;
-        }
-
-        .lesson-titlebar {
-            background: var(--lesson-brand);
-            color: #000;
-            padding: 3px 20px;
-            font-size: 35px;
-            font-weight: 1000;
-            letter-spacing: .9px;
-            text-align: center;
-            box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .06);
-        }
-
-        .sidebar {
-            width: 250px;
-            transition: width .25s, padding .25s, background-color .25s;
-            background: #f0f0f0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            overflow: auto;
-            padding-bottom: 80px;
-        }
-
-        .lesson-app.is-collapsed .sidebar {
-            width: 56px;
-            padding-right: 6px;
-        }
-
-        .sidebar-content {
-            padding: .5rem;
-            position: fixed;
-            width: 250px;
-            top: 120px;
-        }
-
-        .lesson-app.is-collapsed .sidebar-content {
-            display: none;
-        }
-
-        .lesson-h2 {
-            font-size: 25px;
-            font-weight: bolder;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .lesson-h2:before {
-            content: "";
-            width: 6px;
-            height: 28px;
-            border-radius: 3px;
-            background: var(--lesson-brand);
-            display: inline-block;
-        }
-
-        .sidebar .burger-btn {
-            position: fixed;
-            margin: .5rem;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
-        }
-
-        .burger-icon {
-            width: 20px;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-            position: relative;
-            display: block;
-        }
-
-        .burger-icon::before,
-        .burger-icon::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-        }
-
-        .burger-icon::before {
-            top: -6px;
-        }
-
-        .burger-icon::after {
-            top: 6px;
-        }
-
-        .btn-start {
-            background-color: #198754;
-            border: none;
-            font-weight: 700;
-            border-radius: 12px;
-            padding: 12px 18px;
-            box-shadow: 0 8px 22px rgba(25, 135, 84, .25);
-            transition: transform .2s, box-shadow .2s, filter .2s;
-        }
-
-        .btn-start:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 26px rgba(25, 135, 84, .33);
-            filter: brightness(1.02);
-        }
-
-        .btn-back {
-            border-radius: 12px;
-            padding: 12px 18px;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(18px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsif */
-        @media (max-width: 992px) {
-            .lesson-app {
-                grid-template-columns: 56px 1fr;
-            }
-
-            .sidebar {
-                width: 56px;
-            }
-
-            .sidebar-content {
-                display: none;
-            }
-
-            .lesson-titlebar {
-                font-size: 32px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .lesson-titlebar {
-                font-size: 28px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
-        <div class="container-fluid ps-5 pe-5">
-            <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#"><i
-                                class="fa-solid fa-book-open"></i> Belajar</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a class="btn btn-sm btn-outline-light me-2" href="pilihan-daftar.html" role="button">Daftar</a>
-                    <button class="btn btn-sm btn-light" type="button">Masuk</button>
+                    <button id="startBtn" class="btn btn-success px-4 py-2">
+                        Mulai Evaluasi <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </button>
                 </div>
             </div>
         </div>
-    </nav>
+    </main>
+</div>
 
-    <!-- Layout -->
-    <div class="lesson-app" id="lessonApp">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Tombol burger (toggle) -->
-            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
-                aria-label="Tutup sidebar">
-                <span class="burger-icon"></span>
-            </button>
-
-            <!-- Isi sidebar yang disembunyikan ketika collapsed -->
-            <div class="sidebar-content">
-                <!-- Accordion Bootstrap -->
-                <div class="accordion mt-0" id="accordionExample">
-                    <!-- PENGENALAN -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                PENGENALAN
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/pengenalan.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Pengenalan</a>
-                                    <a href="../materi/aktivitas1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ENKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                ENKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/enkripsi.html" class="btn text-start mb-2 btn-outline-warning">Enkripsi</a>
-                                    <a href="../materi/aktivitas2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis1.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Enkripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- CAESAR CIPHER -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                CAESAR CIPHER
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/caesarcipher.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 1</a>
-                                    <a href="../materi/caesarcipher2.html" class="btn text-start mb-2 btn-outline-warning">Caesar
-                                        Cipher 2</a>
-                                    <a href="../materi/aktivitas3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis2.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Caesar Cipher</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DEKRIPSI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                DEKRIPSI
-                            </button>
-                        </h2>
-                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../materi/dekripsi.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 1</a>
-                                    <a href="../materi/dekripsi2.html" class="btn text-start mb-2 btn-outline-warning">Dekripsi 2</a>
-                                    <a href="../materi/aktivitas4.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Aktivitas</span>
-                                    </a>
-                                    <a href="../kuis/kuis.html?target=kuis3.html"
-                                        class="btn text-start mb-2 btn-outline-warning d-flex justify-content-between align-items-center w-100">
-                                        <span>Kuis Dekripsi</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KUIS  -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                KUIS
-                            </button>
-                        </h2>
-                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../kuis/kuis.html?target=kuis4.html"
-                                        class="btn text-start mb-2 btn-outline-warning">Kuis</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- EVALUASI -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingSix">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                EVALUASI
-                            </button>
-                        </h2>
-                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="../evaluasi/evaluasi.html" class="btn text-start mb-2 btn-outline-warning">Evaluasi</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!-- Modal Konfirmasi -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0" style="border-radius:16px;">
+            <div class="modal-header" style="background:var(--lesson-brand);">
+                <h5 class="modal-title fw-bold">
+                    <i class="fa-solid fa-circle-exclamation me-2"></i>Mulai Evaluasi?
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-        </aside>
 
-        <!-- Konten Utama -->
-        <div class="p-5">
-            <main class="lesson-main">
-                <div class="lesson-titlebar">Evaluasi</div>
-                <hr />
+            <div class="modal-body">
+                Setelah dimulai, timer akan berjalan. Pastikan kamu sudah siap.
+            </div>
 
-                <div class="lesson-wrap">
-                    <div class="lesson-head">
-                        <h2 class="lesson-h2"><i class="fa-solid fa-clipboard-check me-2"></i>Petunjuk Pengerjaan</h2>
-
-                        <!-- Badge ringkas (opsional) -->
-                        <!-- <p class="teks mb-2">
-                            <span class="badge text-bg-warning text-dark me-2">
-                                <i class="fa-solid fa-shield-halved me-1"></i> Closed-book
-                            </span>
-                        </p> -->
-
-                        <!-- Meta ringkasan -->
-                        <p class="teks"><strong>Ringkasan:</strong> 10 Soal • 60 Menit • 1 Kali Percobaan</p>
-
-                        <!-- Daftar petunjuk -->
-                        <ol class="teks m-3 mt-0">
-                            <li>Baca setiap soal dengan cermat sebelum menjawab.</li>
-                            <li>Waktu total pengerjaan adalah <strong>60 menit</strong>.</li>
-                            <li>Tidak ada pengurangan nilai untuk jawaban salah.</li>
-                            <li>Jangan menutup/refresh halaman selama evaluasi.</li>
-                            <li>Pastikan koneksi stabil dan perangkat memiliki daya cukup.</li>
-                            <li>Setelah menekan <em>Mulai</em>, timer akan berjalan.</li>
-                        </ol>
-
-                        <!-- Aksi -->
-                        <div class="d-flex justify-content-end gap-3 mt-4 justify-content-between mt-3">
-                            <a href="dekripsi.html" class="btn btn-danger px-4 py-2">
-                                <i class="fa-solid fa-arrow-left me-2"></i>Kembali
-                            </a>
-
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="form-check m-0">
-                                    <input class="form-check-input" type="checkbox" id="agreeCheck">
-                                    <label class="form-check-label" for="agreeCheck">Saya siap dan memahami
-                                        petunjuk</label>
-                                </div>
-                                <button id="startBtn" class="btn btn-success px-4 py-2">
-                                    Mulai Evaluasi <i class="fa-solid fa-arrow-right ms-2"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-
-    <!-- Modal Konfirmasi -->
-    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0" style="border-radius:16px;">
-                <div class="modal-header" style="background:var(--lesson-brand);">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-circle-exclamation me-2"></i>Mulai Evaluasi?
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    Setelah dimulai, timer berjalan dan halaman evaluasi akan terbuka. Pastikan kamu sudah siap.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                    <a href="evaluasi1.html" class="btn btn-success fw-bold">Ya, Mulai!</a>
-                </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                <a href="{% url 'evaluasi_pengerjaan' %}" class="btn btn-success">Ya, Mulai!</a>
             </div>
         </div>
     </div>
+</div>
+{% endblock %}
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="evaluasi.js"></script>
-    <script src="/templates/temp.js"></script>
-</body>
-
-</html>
+{% block extra_js %}
+<script src="{% static 'evaluasi.js' %}"></script>
+{% endblock %}

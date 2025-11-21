@@ -3,8 +3,9 @@ from . import views
 
 urlpatterns = [
     # Evaluasi
-    path('evaluasi/', views.evaluasi, name='evaluasi'),
-    path('evaluasi/nilai/', views.nilai_eval, name='nilai_eval'),
+    path('evaluasi/', views.evaluasi_petunjuk, name='evaluasi_petunjuk'),
+    path('evaluasi/pengerjaan/', views.evaluasi_pengerjaan, name='evaluasi_pengerjaan'),
+    path('evaluasi/nilai/', views.evaluasi_nilai, name='evaluasi_nilai'),
 
     # Halaman guru
     path('guru/dashboard/', views.dashboard, name='dashboard'),
@@ -12,12 +13,9 @@ urlpatterns = [
     path('guru/data-siswa/', views.data_siswa, name='data_siswa'),
 
     # Kuis
-    path('kuis/', views.kuis, name='kuis'),
-    path('kuis/1/', views.kuis1, name='kuis1'),
-    path('kuis/2/', views.kuis2, name='kuis2'),
-    path('kuis/3/', views.kuis3, name='kuis3'),
-    path('kuis/4/', views.kuis4, name='kuis4'),
-    path('kuis/nilai/', views.nilai_kuis, name='nilai_kuis'),
+    path('kuis/', views.kuis_petunjuk, name='kuis_petunjuk'),
+    path('kuis/pengerjaan/', views.kuis_pengerjaan, name='kuis_pengerjaan'),
+    path('kuis/nilai/', views.kuis_nilai, name='kuis_nilai'),
 
     # Materi
     path('materi/aktivitas1/', views.aktivitas1, name='aktivitas1'),
@@ -26,8 +24,8 @@ urlpatterns = [
     path('materi/aktivitas4/', views.aktivitas4, name='aktivitas4'),
     path('materi/caesar/', views.caesar, name='caesar'),
     path('materi/caesar2/', views.caesar2, name='caesar2'),
-    path('materi/deskripsi/', views.deskripsi, name='deskripsi'),
-    path('materi/deskripsi2/', views.deskripsi2, name='deskripsi2'),
+    path('materi/dekripsi/', views.dekripsi, name='dekripsi'),
+    path('materi/dekripsi2/', views.dekripsi2, name='dekripsi2'),
     path('materi/enkripsi/', views.enkripsi, name='enkripsi'),
     path('materi/pengenalan/', views.pengenalan, name='pengenalan'),
 
@@ -44,13 +42,19 @@ urlpatterns = [
     path('tantangan/stage10/', views.stage10, name='stage10'),
     path('tantangan/tantangan/', views.tantangan, name='tantangan'),
 
+    # Otentikasi & Umum
     path('', views.landing, name='landing'),
-    path('guru-daftar/', views.guru_daftar, name='guru_daftar'),
-    path('siswa-daftar/', views.siswa_daftar, name='siswa_daftar'),
+    path('guru-daftar/', views.guru_daftar, name='guru_daftar'), # Menggunakan fungsi register_user(peran='guru')
+    path('siswa-daftar/', views.siswa_daftar, name='siswa_daftar'), # Menggunakan fungsi register_user(peran='siswa')
     path('pilihan-daftar/', views.pilihan_daftar, name='pilihan_daftar'),
+
+    # --- PATH BARU ---
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    # ------------------
+
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('tes/', views.tes, name='tes'),
 
-    # path('leaderboard/', views.leaderboard_view, name='leaderboard'),
     path('api/simpan-skor-final/', views.simpan_skor_final_view, name='simpan_skor_final'),
 ]

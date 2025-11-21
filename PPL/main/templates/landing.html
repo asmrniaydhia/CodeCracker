@@ -257,35 +257,7 @@
   </head>
   <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">       
-      <div class="container-fluid ps-5 pe-5">
-        <a class="navbar-brand fs-2" href="{% url 'landing' %}">CodeCracker</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav me-auto">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/materi/pengenalan"><i class="fa-solid fa-book-open"></i> Belajar</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#"><i class="fa-solid fa-info"></i> Informasi</a>
-            </li>
-          </ul>
-          <div class="d-flex">
-            <a class="btn btn-sm btn-outline-light me-2" href="{% url 'pilihan_daftar' %}" role="button">Daftar</a>
-            <a class="btn btn-sm btn-light" href="{% url 'pengenalan' %}" role="button">Masuk</a>
-          </div>
-        </div>
-      </div>
-    </nav>
-    
+{% include "partials/header.html" %}
     <section class="landing-hero">
       <div class="container-fluid ps-5 pe-5">
         <div class="row align-items-center"> <div class="col-md-7 col-lg-6"> <h1 class="hero-title">CodeCracker</h1>
