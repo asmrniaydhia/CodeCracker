@@ -17,13 +17,34 @@
                     data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <div class="d-flex flex-column">
-                            <a href="/templates/halaman guru/dashboard.html" class="btn text-start mb-2 btn-outline-warning">
+                            
+                            <a href="{% url 'dashboard' %}" 
+                                class="btn text-start mb-2 w-100
+                                    {% if request.path == '/guru/dashboard/' %}
+                                        btn-warning 
+                                    {% else %}
+                                        btn-outline-warning 
+                                    {% endif %}">
                                 <i class="fas fa-tachometer-alt me-2"></i>Dashboard
                             </a>
-                            <a href="data-siswa.html" class="btn text-start mb-2 btn-outline-warning">
+                            
+                            <a href="{% url 'data_siswa' %}" 
+                                class="btn text-start mb-2 w-100
+                                    {% if request.path == '/guru/data-siswa/' %}
+                                        btn-warning 
+                                    {% else %}
+                                        btn-outline-warning 
+                                    {% endif %}">
                                 <i class="fas fa-users me-2"></i>Data Siswa
                             </a>
-                            <a href="data-nilai.html" class="btn text-start mb-2 btn-outline-warning">
+                            
+                            <a href="{% url 'data_nilai' %}" 
+                                class="btn text-start mb-2 w-100
+                                    {% if request.path == '/guru/data-nilai/' %}
+                                        btn-warning 
+                                    {% else %}
+                                        btn-outline-warning 
+                                    {% endif %}">
                                 <i class="fas fa-chart-bar me-2"></i>Data Nilai
                             </a>
                         </div>
@@ -31,7 +52,7 @@
                 </div>
             </div>
 
-            </div>
+        </div>
     </div>
 </aside>
 

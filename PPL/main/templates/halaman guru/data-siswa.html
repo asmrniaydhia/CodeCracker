@@ -1,551 +1,87 @@
-<!doctype html>
-<html lang="en">
+{% extends "halaman guru/base_guru.html" %}
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CodeCracker - Data Siswa</title> <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap"
-        rel="stylesheet">
+{% block title %}CodeCracker - Data Siswa{% endblock %}
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+{% block extra_css %}
+<style>
+    /* == CSS HANYA UNTUK DATA SISWA (Filter & Tabel) == */
+    .dashboard-title {
+        font-family: 'Lato', sans-serif;
+        font-weight: 900;
+        font-size: 2.8rem;
+        color: #1B3C53;
+        margin-bottom: 40px;
+    }
+    
+    .filter-form-label {
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .table thead {
+        background-color: #1B3C53; 
+        color: white;
+    }
+    .table th {
+        font-weight: 600;
+    }
+    .dashboard-card {
+        background-color: white;
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %}
 
-    <script src="https://kit.fontawesome.com/1abfd69dfb.js" crossorigin="anonymous"></script>
-
-    <style>
-        /* == CSS DARI HALAMAN MATERI == */
-        body {
-            padding-top: 70px;
-            font-family: 'Open Sans', sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-            transition: box-shadow 0.3s ease, transform 0.3s ease;
-        }
-
-        .navbar:hover {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
-            transform: translateY(-1px);
-        }
-
-        .navbar-brand {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            color: white;
-        }
-
-        .nav-link {
-            font-family: 'Open Sans', sans-serif;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-            color: white;
-            text-shadow: 0 0 5px rgba(168, 213, 226, 0.5);
-            transform: translateY(-1px);
-        }
-        
-        /* Tambahan untuk dropdown guru */
-        .navbar .dropdown-item {
-            color: #1B3C53;
-        }
-        .navbar .dropdown-item:hover {
-            background-color: #f0f0f0;
-        }
-
-        :root {
-            --lesson-bg: #f6f7f9;
-            --lesson-surface: #ffffff;
-            --lesson-text: #1b1f24;
-            --lesson-muted: #6b7280;
-            --lesson-border: #e5e7eb;
-            --lesson-brand: #F3C623;
-            --lesson-brand-700: #1B3C53;
-            --lesson-brand-100: #17a2b8;
-            --lesson-radius: 14px;
-            --lesson-shadow: 0 8px 20px rgba(0, 0, 0, .06);
-        }
-
-        .lesson-app {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 70px);
-            background: var(--lesson-bg);
-            position: relative;
-            transition: grid-template-columns .25s ease;
-        }
-
-        .lesson-app.is-collapsed {
-            grid-template-columns: 56px 1fr;
-        }
-
-        .lesson-content {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .btn-outline-warning {
-            color: #000;
-            border-color: #F3C623;
-        }
-
-        .btn-outline-warning:hover,
-        .btn-outline-warning:focus,
-        .btn-outline-warning.active { /* Ditambahkan .active */
-            background-color: #F3C623;
-            color: #000;
-            border-color: #E0B41E;
-            font-weight: bold;
-        }
-
-        /* ===== Sidebar (dari materi) ===== */
-        .sidebar {
-            width: 250px;
-            transition: width .25s ease, padding .25s ease, background-color .25s ease;
-            background-color: var(--lesson-bg);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            flex-shrink: 0;
-            overflow: auto;
-            padding-bottom: 80px;
-        }
-
-        .lesson-app.is-collapsed .sidebar {
-            width: 56px;
-            padding-right: 6px;
-        }
-
-        .sidebar-content {
-            padding: .5rem .5rem 1rem .5rem;
-            position: fixed;
-            width: 250px;
-            top: 120px; /* Disesuaikan agar di bawah navbar */
-        }
-
-        .lesson-app.is-collapsed .sidebar-content {
-            display: none;
-        }
-
-        .sidebar .burger-btn {
-            position: fixed;
-            margin: .5rem;
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            border: 1px solid #e5e7eb;
-            background: #fff;
-            display: grid;
-            place-items: center;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, .08);
-        }
-
-        .burger-icon {
-            width: 20px;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-            position: relative;
-            display: block;
-        }
-
-        .burger-icon::before,
-        .burger-icon::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #1B3C53;
-            border-radius: 2px;
-        }
-
-        .burger-icon::before { top: -6px; }
-        .burger-icon::after { top: 6px; }
-        
-        /* Highlight header accordion yg aktif */
-        .accordion-button.active-head {
-            background-color: #e7f1ff;
-            color: #000;
-            font-weight: bold;
-        }
-
-
-        /* ======================================= */
-        /* === CSS KONTEN (Dashboard & Siswa) === */
-        /* ======================================= */
-        .dashboard-title {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            font-size: 2.8rem;
-            color: #1B3C53;
-            margin-bottom: 40px;
-        }
-
-        .dashboard-card {
-            background-color: white;
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        .card-title-custom {
-            font-family: 'Lato', sans-serif;
-            font-weight: 700;
-            color: #1B3C53;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .card-title-custom i {
-            font-size: 1.2rem;
-        }
-
-        .card-text-value {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            font-size: 3.5rem;
-            color: #1B3C53;
-            line-height: 1;
-        }
-
-        .dashboard-card .list-group-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .dashboard-card .list-group-item:last-child {
-            border-bottom: none;
-        }
-
-        .dashboard-card .list-group-item span {
-            font-weight: 700;
-            color: #1B3C53;
-        }
-
-        /* === CSS BARU UNTUK HALAMAN DATA SISWA === */
-        .filter-form-label {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .table thead {
-            background-color: #1B3C53; /* Biru tua, seperti di gambar */
-            color: white;
-        }
-        .table th {
-            font-weight: 600;
-        }
-        .table tbody tr:hover {
-            background-color: #f8f9fa; 
-        }
-        .dashboard-card .table {
-            margin-bottom: 0; /* Hapus margin tabel di dalam card */
-        }
-        /* ======================================= */
-
-
-        @media (max-width: 992px) {
-            .lesson-app {
-                grid-template-columns: 56px 1fr;
-            }
-            .sidebar {
-                width: 56px;
-            }
-            .sidebar-content {
-                display: none;
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark pt-2 pb-2 fixed-top">
-        <div class="container-fluid ps-5 pe-5">
-            <a class="navbar-brand fs-2" href="#Brand">CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    </ul>
-                <div class="d-flex">
-                    <div class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle me-1"></i> Guru
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profil</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
-                        </ul>
+{% block content %}
+<main class="lesson-main">
+    
+    <h1 class="dashboard-title">Data Siswa</h1>
+    
+    <div class="card dashboard-card mb-4">
+        <div class="card-body p-4">
+            <form>
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <label for="cariNama" class="form-label filter-form-label">Cari Siswa Berdasarkan Nama:</label>
+                        <input type="text" class="form-control" id="cariNama" placeholder="Cari nama siswa...">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="kelompokKelas" class="form-label filter-form-label">Kelompokkan Siswa Berdasarkan Kelas:</label>
+                        <select class="form-select" id="kelompokKelas">
+                            <option selected value="">Semua</option>
+                            <option value="VII A">VII A</option>
+                            <option value="VII B">VII B</option>
+                            <option value="VII C">VII C</option>
+                            </select>
+                    </div>
+                    <div class="col-md-3 d-flex">
+                        <button type="submit" class="btn btn-primary me-2 w-100">Terapkan</button>
+                        <button type="reset" class="btn btn-secondary w-100">Reset</button>
                     </div>
                 </div>
-            </div>
-        </div>
-    </nav>
-
-    <div class="lesson-app" id="lessonApp">
-        
-        <aside class="sidebar">
-            <button type="button" class="btn burger-btn" id="sidebarToggle" aria-expanded="true"
-                aria-label="Tutup sidebar">
-                <span class="burger-icon"></span>
-            </button>
-
-            <div class="sidebar-content">
-                <div class="accordion mt-0" id="accordionExample">
-                    
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                MENU UTAMA
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
-                            data-bs-parent="#accordionExample">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <a href="/templates/halaman guru/dashboard.html" class="btn text-start mb-2 btn-outline-warning">
-                                        <i class="fas fa-tachometer-alt me-2"></i>Dashboard
-                                    </a>
-                                    <a href="data-siswa.html" class="btn text-start mb-2 btn-outline-warning">
-                                        <i class="fas fa-users me-2"></i>Data Siswa
-                                    </a>
-                                    <a href="data-nilai.html" class="btn text-start mb-2 btn-outline-warning">
-                                        <i class="fas fa-chart-bar me-2"></i>Data Nilai
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <div class="p-5">
-            <main class="lesson-main">
-                
-                <h1 class="dashboard-title">Data Siswa</h1>
-                
-                <div class="card dashboard-card mb-4">
-                    <div class="card-body p-4">
-                        <form>
-                            <div class="row g-3 align-items-end">
-                                <div class="col-md-5">
-                                    <label for="cariNama" class="form-label filter-form-label">Cari Siswa Berdasarkan Nama:</label>
-                                    <input type="text" class="form-control" id="cariNama" placeholder="Cari nama siswa...">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="kelompokKelas" class="form-label filter-form-label">Kelompokkan Siswa Berdasarkan Kelas:</label>
-                                    <select class="form-select" id="kelompokKelas">
-                                        <option selected value="">Semua</option>
-                                        <option value="VII A">VII A</option>
-                                        <option value="VII B">VII B</option>
-                                        <option value="VII C">VII C</option>
-                                        </select>
-                                </div>
-                                <div class="col-md-3 d-flex">
-                                    <button type="submit" class="btn btn-primary me-2 w-100">Terapkan</button>
-                                    <button type="reset" class="btn btn-secondary w-100">Reset</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card dashboard-card">
-                    <div class="card-body p-0"> <div class="table-responsive">
-                            <table class="table table-hover align-middle m-0">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" style="padding-left: 1.5rem;">No</th>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Kelas</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">1</th>
-                                        <td>Asmarani Ayudhia</td>
-                                        <td>VII A</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">2</th>
-                                        <td>Alfika Nurfadia</td>
-                                        <td>VII B</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">3</th>
-                                        <td>azimi</td>
-                                        <td>VII B</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">4</th>
-                                        <td>Delphia Aryana</td>
-                                        <td>VII A</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">5</th>
-                                        <td>Delphia Aryana</td>
-                                        <td>VII C</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">6</th>
-                                        <td>Difana Nanda</td>
-                                        <td>VII A</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">7</th>
-                                        <td>dump acc</td>
-                                        <td>VII C</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">8</th>
-                                        <td>Fatimah</td>
-                                        <td>VII B</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">9</th>
-                                        <td>fika</td>
-                                        <td>VII B</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">14</th>
-                                        <td>Lola Fatimah</td>
-                                        <td>VII C</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">15</th>
-                                        <td>Maysarah</td>
-                                        <td>VII A</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">16</th>
-                                        <td>Muhammad Hanafi</td>
-                                        <td>VII B</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">17</th>
-                                        <td>Nur</td>
-                                        <td>VII A</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">18</th>
-                                        <td>sab</td>
-                                        <td>VII B</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">19</th>
-                                        <td>Siti Kania Nur Alya Putri</td>
-                                        <td>VII A</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">20</th>
-                                        <td>vita</td>
-                                        <td>VII B</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row" style="padding-left: 1.5rem;">21</th>
-                                        <td>yashinta dwi</td>
-                                        <td>VII C</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </main>
+            </form>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="card dashboard-card">
+        <div class="card-body p-0"> 
+            <div class="table-responsive">
+                <table class="table table-hover align-middle m-0">
+                    <thead>
+                        <tr>
+                            <th scope="col" style="padding-left: 1.5rem;">No</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Kelas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <script>
-        // SIDEBAR
-        const app = document.getElementById('lessonApp');
-        const toggleBtn = document.getElementById('sidebarToggle');
-
-        function toggleSidebar() {
-            const collapsed = app.classList.toggle('is-collapsed');
-            // ARIA untuk aksesibilitas
-            toggleBtn.setAttribute('aria-expanded', String(!collapsed));
-            toggleBtn.setAttribute('aria-label', collapsed ? 'Buka sidebar' : 'Tutup sidebar');
-        }
-        toggleBtn.addEventListener('click', toggleSidebar);
-
-        document.addEventListener('DOMContentLoaded', function () {
-            // ambil nama file dari URL saat ini
-            const currentFile = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-
-            // cari link di sidebar yang cocok
-            const links = document.querySelectorAll('.sidebar a[href]');
-            let activeLink = null;
-
-            links.forEach(a => {
-                const href = a.getAttribute('href');
-                if (!href) return;
-
-                // normalisasi: ambil bagian file di akhir
-                const hrefFile = href.split('/').pop().toLowerCase();
-                if (hrefFile === currentFile) {
-                    activeLink = a;
-                }
-            });
-
-            if (!activeLink) return;
-
-            // tandai link sebagai aktif
-            activeLink.classList.add('active'); // Ini akan mewarnai tombol link
-
-            // buka collapsible section (accordion) yang menaungi link aktif
-            const collapse = activeLink.closest('.accordion-collapse');
-            if (collapse) {
-                // tambahkan kelas 'show' agar tetap terbuka
-                collapse.classList.add('show');
-                collapse.setAttribute('aria-expanded', 'true');
-
-                // ubah state tombol header accordion
-                const headerBtn = collapse.previousElementSibling?.querySelector('.accordion-button');
-                if (headerBtn) {
-                    headerBtn.classList.remove('collapsed');
-                    headerBtn.setAttribute('aria-expanded', 'true');
-                    headerBtn.classList.add('active-head'); // untuk highlight judul section
-                }
-            }
-
-            // Pastikan sidebar default-nya terbuka jika di layar besar
-            if (window.innerWidth > 992) {
-                 toggleBtn.setAttribute('aria-expanded', 'true');
-            } else {
-                 app.classList.add('is-collapsed');
-                 toggleBtn.setAttribute('aria-expanded', 'false');
-                 toggleBtn.setAttribute('aria-label', 'Buka sidebar');
-            }
-        });
-    </script>
-</body>
-</html>
+</main>
+{% endblock %}
