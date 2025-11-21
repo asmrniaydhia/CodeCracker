@@ -12,6 +12,7 @@
   --lesson-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
+/* --- Layout Aplikasi Utama --- */
 .lesson-app {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -24,6 +25,83 @@
 .lesson-app.is-collapsed {
   grid-template-columns: 56px 1fr;
 }
+
+/* --- SIDEBAR --- */
+.sidebar {
+  width: 250px;
+  transition: width 0.25s ease, padding 0.25s ease, background-color 0.25s ease;
+  position: relative;
+  top: 0;
+  z-index: 10;
+  flex-shrink: 0;
+  overflow: auto;
+  padding-bottom: 80px;
+}
+
+.lesson-app.is-collapsed .sidebar {
+  width: 56px;
+  padding-right: 6px;
+}
+
+.sidebar-content {
+  /* padding: 0.5rem 0.5rem 1rem 0.5rem; */
+  padding: 3.5rem 0.5rem 1rem 0.5rem;
+}
+
+.lesson-app.is-collapsed .sidebar-content {
+  display: none;
+}
+
+.accordion-item {
+  margin-bottom: 0 !important;
+}
+
+.sidebar .burger-btn {
+  margin: 0 !important;
+  position: absolute !important;
+  transform: none !important;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.burger-icon {
+  width: 20px;
+  height: 2px;
+  background: #1b3c53;
+  border-radius: 2px;
+  position: relative;
+  display: block;
+}
+
+.burger-icon::before,
+.burger-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #1b3c53;
+  border-radius: 2px;
+}
+
+.burger-icon::before {
+  top: -6px;
+}
+
+.burger-icon::after {
+  top: 6px;
+}
+
+/* --- KONTEN LANJUTAN --- */
 
 .lesson-titlebar {
   background: var(--lesson-brand);
@@ -139,20 +217,23 @@
   font-weight: 200;
 }
 
-/* responsif dasar layout */
+/* --- Media Queries --- */
+
+/* Responsif untuk sidebar dan layout utama */
 @media (max-width: 992px) {
+  /* Diambil dari KONTEN: */
   .lesson-app {
     grid-template-columns: 56px 1fr;
   }
-
+  /* Diambil dari SIDEBAR: */
   .sidebar {
     width: 56px;
   }
-
+  /* Diambil dari SIDEBAR: */
   .sidebar-content {
     display: none;
   }
-
+  /* Diambil dari KONTEN: */
   .lesson-titlebar {
     font-size: 34px;
   }
@@ -164,7 +245,8 @@
   }
 }
 
-/* Langkah pergeseran */
+/* --- Langkah pergeseran (Caesar Cipher / Dekripsi) --- */
+
 .input-section {
   background: #f8f9fa;
   padding: 20px;

@@ -154,11 +154,6 @@ function startEncryption() {
         </div>
     `;
     stepContainer.appendChild(resultDiv);
-
-    // Smooth scroll ke hasil
-    setTimeout(() => {
-        stepContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
 }
 
 // Jalankan contoh saat halaman dimuat
@@ -320,11 +315,6 @@ function startDecryption() {
         </div>
     `;
     stepContainer.appendChild(resultDiv);
-
-    // Smooth scroll ke hasil
-    setTimeout(() => {
-        stepContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
 }
 
 // Jalankan contoh saat halaman dimuat

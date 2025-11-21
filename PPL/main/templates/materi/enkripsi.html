@@ -6,179 +6,200 @@
 {% block content %}
 
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Enkripsi</div>
-        <hr />
+<div class="lesson-titlebar">Enkripsi</div>
+<hr />
 
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Mengapa Membutuhkan Enkripsi?</h2>
-                <p class="teks">Setiap orang memiliki rahasia. Seorang anak SMP mungkin punya rahasia tentang
-                    siapa sahabat terdekatnya, siapa orang yang ia sukai, atau cerita lucu bersama keluarga.
-                    Orang tua punya rahasia tentang keuangan keluarga. Guru punya rahasia tentang soal ulangan
-                    yang akan diberikan minggu depan. Pemerintah punya rahasia tentang strategi menjaga keamanan
-                    negara.
-                </p>
-                <img src="/assets/en1.png" alt="en1" width="300px" height="300px">
-                <p class="teks">Sekarang bayangkan jika semua rahasia itu bisa dibaca oleh siapa saja. Tentu
-                    akan sangat berbahaya. Rahasiamu bisa disebarkan oleh teman yang jahil. Soal ulangan bisa
-                    bocor sebelum waktunya. Bahkan strategi negara bisa diketahui oleh musuh.
-                </p>
-                <p class="teks">Karena itulah manusia sejak dahulu selalu mencari cara untuk menyimpan rahasia
-                    dengan aman. Salah satu cara yang dipakai adalah enkripsi, yaitu mengubah pesan asli menjadi
-                    pesan yang tidak bisa langsung dimengerti.
-                </p>
-                <p class="teks">Enkripsi ibarat menulis sesuatu dengan bahasa rahasia. Bayangkan kamu ingin
-                    menulis:
-                </p>
-                <p class="lesson-child lesson-h2">“Besok kita belajar kelompok di rumah Dina.”</p>
-                <p class="teks">Kalau tulisan ini dibaca oleh semua orang, semua langsung paham. Tetapi kalau
-                    kamu ubah dengan aturan tertentu, misalnya setiap huruf digeser 3 langkah ke depan, maka
-                    hasilnya adalah:</p>
-                <p class="lesson-child lesson-h2">“Ehvrn nlwd ehmddu nropsrn gl uxpdk Glqd.”</p>
-                <p class="teks">Sekarang, siapa pun yang membaca akan bingung. Tetapi kamu dan sahabatmu yang
-                    sudah tahu aturan bisa langsung mengembalikannya ke bentuk semula.</p>
+<div class="lesson-content">
+    <h2 class="lesson-h2">Tujuan Pembelajaran</h2>
+
+    <div class="lesson-card">
+        <div class="lesson-goals">
+            <div>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</div>
+            <div class="lesson-goal">
+                <div class="lesson-num">1</div>
+                <div>Menjelaskan apa yang dimaksud dengan enkripsi serta mengapa enkripsi digunakan untuk
+                    menjaga kerahasiaan informasi.</div>
+            </div>
+            <div class="lesson-goal">
+                <div class="lesson-num">2</div>
+                <div>Mengidentifikasi perbedaan antara pesan asli dan pesan yang sudah dienkripsi.</div>
+            </div>
+            <div class="lesson-goal">
+                <div class="lesson-num">3</div>
+                <div>Menentukan pasangan antara pesan asli dan hasil enkripsinya.</div>
             </div>
         </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Pengertian Enkripsi</h2>
-                <p class="teks">Enkripsi adalah sebuah seni sekaligus ilmu pengetahuan yang disebut Kriptografi.
-                    Secara harfiah, enkripsi adalah proses mengubah pesan yang dapat dibaca dan dimengerti oleh
-                    siapa pun, yang kita sebut Plaintext, menjadi serangkaian kode atau data acak yang tidak
-                    berarti, yang disebut Ciphertext. Bayangkan sebuah surat yang penting: plaintext adalah isi
-                    surat yang ditulis dengan tinta biasa, sedangkan ciphertext adalah isi surat yang telah
-                    diubah menjadi goresan-goresan asing yang tidak dapat dipahami. Proses transformasi ini
-                    tidak dilakukan secara sembarangan, melainkan dikendalikan oleh dua elemen penting yaitu
-                    Algoritma dan Kunci. Algoritma dapat diibaratkan sebagai mesin pembuat sandi, sementara
-                    Kunci adalah password atau instruksi rahasia yang mengontrol cara kerja mesin tersebut.
-                    Ketika plaintext dan Kunci dimasukkan ke dalam Algoritma, yang keluar adalah ciphertext yang
-                    aman. Enkripsi inilah yang menjadi benteng pertahanan utama bagi seluruh komunikasi dan data
-                    rahasia di internet, mulai dari transaksi bank hingga chat pribadi Anda.
-                </p>
-                <img src="/assets/en1.jpeg" alt="en1">
-                <p class="teks">Enkripsi bekerja seperti gembok yang kuat. Data yang dikirim melalui internet
-                    bertindak sebagai Kotak (Ciphertext). Pesan yang ada di dalam kotak, seperti nomor PIN atau
-                    password Anda, adalah Plaintext. Sementara itu, kunci adalah satu-satunya alat yang bisa
-                    membuka gembok tersebut, dan hanya dimiliki oleh Anda dan penerima. Jika pihak yang tidak
-                    berwenang mencuri kotak di tengah jalan, mereka hanya mendapatkan ciphertext atau kotak
-                    terkunci yang tidak dapat mereka buka tanpa kunci yang tepat.
-                </p>
-            </div>
+    </div>
+
+    <hr />
+
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Mengapa Membutuhkan Enkripsi?</h2>
+            <p class="teks">Setiap orang memiliki rahasia. Seorang anak SMP mungkin punya rahasia tentang
+                siapa sahabat terdekatnya, siapa orang yang ia sukai, atau cerita lucu bersama keluarga.
+                Orang tua punya rahasia tentang keuangan keluarga. Guru punya rahasia tentang soal ulangan
+                yang akan diberikan minggu depan. Pemerintah punya rahasia tentang strategi menjaga keamanan
+                negara.
+            </p>
+            <img src="/assets/en1.png" alt="en1" width="300px" height="300px">
+            <p class="teks">Sekarang bayangkan jika semua rahasia itu bisa dibaca oleh siapa saja. Tentu
+                akan sangat berbahaya. Rahasiamu bisa disebarkan oleh teman yang jahil. Soal ulangan bisa
+                bocor sebelum waktunya. Bahkan strategi negara bisa diketahui oleh musuh.
+            </p>
+            <p class="teks">Karena itulah manusia sejak dahulu selalu mencari cara untuk menyimpan rahasia
+                dengan aman. Salah satu cara yang dipakai adalah enkripsi, yaitu mengubah pesan asli menjadi
+                pesan yang tidak bisa langsung dimengerti.
+            </p>
+            <p class="teks">Enkripsi ibarat menulis sesuatu dengan bahasa rahasia. Bayangkan kamu ingin
+                menulis:
+            </p>
+            <p class="lesson-child lesson-h2">“Besok kita belajar kelompok di rumah Dina.”</p>
+            <p class="teks">Kalau tulisan ini dibaca oleh semua orang, semua langsung paham. Tetapi kalau
+                kamu ubah dengan aturan tertentu, misalnya setiap huruf digeser 3 langkah ke depan, maka
+                hasilnya adalah:</p>
+            <p class="lesson-child lesson-h2">“Ehvrn nlwd ehmddu nropsrn gl uxpdk Glqd.”</p>
+            <p class="teks">Sekarang, siapa pun yang membaca akan bingung. Tetapi kamu dan sahabatmu yang
+                sudah tahu aturan bisa langsung mengembalikannya ke bentuk semula.</p>
         </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Proses Enkripsi</h2>
-                <p class="teks">Proses enkripsi dan dekripsi adalah siklus lengkap yang menjamin kerahasiaan
-                    sebuah pesan, memastikan rahasia tetap terjaga sempurna mulai dari pengirim hingga penerima.
-                    Ini seperti mengirimkan barang berharga di dalam kotak besi terkunci melintasi jalan umum
-                    yang ramai. Alur kerja ini terbagi menjadi lima fase utama yang berurutan:</p>
-                <p class="teks"><b>Fase 1: Data Asli (Plaintext) Disiapkan</b></p>
-                <p class="teks">Ini adalah langkah paling awal, di mana Plaintext atau data asli masih dalam
-                    bentuk yang dapat dibaca dan dimengerti oleh siapa pun. Pengirim harus memastikan pesan atau
-                    informasi sensitif sudah lengkap dan siap untuk diubah agar tidak bisa diakses oleh pihak
-                    yang tidak berkepentingan. Plaintext ini ibarat isi surat yang ditulis dengan tinta biasa
-                    atau password yang kamu ketikkan sebelum di-login.</p>
-                <p class="teks"><b>Fase 2: Proses Enkripsi Dilakukan</b></p>
-                <p class="teks">Di fase inilah "penguncian" data terjadi. Pengirim memasukkan Plaintext ke dalam
-                    Algoritma Enkripsi (rumus rahasia) bersama dengan Kunci Enkripsi yang spesifik. Algoritma
-                    bekerja keras, mencampurkan dan mengubah semua karakter dalam Plaintext berdasarkan
-                    instruksi dari Kunci tersebut. Hasil dari proses ini adalah Ciphertext, serangkaian kode
-                    acak yang tidak lagi memiliki makna. Ini seperti kamu menutup dan mengunci gembok pada kotak
-                    surat rahasiamu menggunakan kunci khusus.</p>
-                <p class="teks"><b>Fase 3: Teks Ter-enkripsi (Ciphertext) Dikirim</b></p>
-                <p class="teks">Setelah dienkripsi, pesan kini aman untuk melakukan perjalanan melalui jaringan
-                    yang rentan, seperti internet. Ciphertext (kode yang tidak berarti) dikirimkan dari pengirim
-                    menuju penerima. Jika pihak yang tidak berwenang (peretas) mencegat atau mencuri Ciphertext
-                    di tengah jalan, yang mereka dapatkan hanyalah kode sampah yang tidak dapat mereka pahami.
-                    Mereka tidak memiliki Kunci untuk membuka "kotak" tersebut, sehingga kerahasiaan isinya
-                    tetap terjaga.</p>
-                <p class="teks"><b>Fase 4: Penerima Menggunakan Kunci Dekripsi</b></p>
-                <p class="teks">Pesan telah tiba di tempat tujuan, dan kini saatnya membukanya. Penerima yang
-                    sah, dan hanya mereka, memiliki Kunci Dekripsi yang cocok dengan Kunci Enkripsi yang
-                    digunakan pengirim. Penerima memasukkan Ciphertext dan Kunci Dekripsi ini ke dalam Algoritma
-                    Dekripsi. Jika kunci yang digunakan benar, Algoritma akan bekerja membalikkan semua proses
-                    yang dilakukan saat enkripsi, sehingga data mulai kembali ke wujud aslinya.</p>
-                <p class="teks"><b>Fase 5: Data atau Pesan Asli Dapat Dibaca</b></p>
-                <p class="teks">Siklus pengamanan data berhasil diselesaikan. Proses dekripsi telah tuntas, dan
-                    Ciphertext telah berhasil dikembalikan menjadi Plaintext. Pesan rahasia kini dapat dibaca
-                    dan dimengerti sepenuhnya oleh penerima yang sah. Kerahasiaan pesan terjaga dari awal hingga
-                    akhir transmisi, memastikan hanya dua pihak yang terlibat yang benar-benar mengetahui isi
-                    sebenarnya.</p>
-                <img src="/assets/en2.jpeg" alt="en2">
-            </div>
+    </div>
+    <hr>
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Pengertian Enkripsi</h2>
+            <p class="teks">Enkripsi adalah sebuah seni sekaligus ilmu pengetahuan yang disebut Kriptografi.
+                Secara harfiah, enkripsi adalah proses mengubah pesan yang dapat dibaca dan dimengerti oleh
+                siapa pun, yang kita sebut Plaintext, menjadi serangkaian kode atau data acak yang tidak
+                berarti, yang disebut Ciphertext. Bayangkan sebuah surat yang penting: plaintext adalah isi
+                surat yang ditulis dengan tinta biasa, sedangkan ciphertext adalah isi surat yang telah
+                diubah menjadi goresan-goresan asing yang tidak dapat dipahami. Proses transformasi ini
+                tidak dilakukan secara sembarangan, melainkan dikendalikan oleh dua elemen penting yaitu
+                Algoritma dan Kunci. Algoritma dapat diibaratkan sebagai mesin pembuat sandi, sementara
+                Kunci adalah password atau instruksi rahasia yang mengontrol cara kerja mesin tersebut.
+                Ketika plaintext dan Kunci dimasukkan ke dalam Algoritma, yang keluar adalah ciphertext yang
+                aman. Enkripsi inilah yang menjadi benteng pertahanan utama bagi seluruh komunikasi dan data
+                rahasia di internet, mulai dari transaksi bank hingga chat pribadi Anda.
+            </p>
+            <img src="/assets/en1.jpeg" alt="en1">
+            <p class="teks">Enkripsi bekerja seperti gembok yang kuat. Data yang dikirim melalui internet
+                bertindak sebagai Kotak (Ciphertext). Pesan yang ada di dalam kotak, seperti nomor PIN atau
+                password Anda, adalah Plaintext. Sementara itu, kunci adalah satu-satunya alat yang bisa
+                membuka gembok tersebut, dan hanya dimiliki oleh Anda dan penerima. Jika pihak yang tidak
+                berwenang mencuri kotak di tengah jalan, mereka hanya mendapatkan ciphertext atau kotak
+                terkunci yang tidak dapat mereka buka tanpa kunci yang tepat.
+            </p>
         </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Enkripsi dalam Kehidupan Sehari-hari</h2>
-                <p class="teks">Kita mungkin berpikir enkripsi hanya untuk urusan militer atau rahasia negara.
-                    Padahal, enkripsi adalah lapisan pelindung tak terlihat yang bekerja tanpa henti di
-                    sekeliling kita. Setiap kali kamu menyalakan ponsel, mengirim pesan, atau bahkan sekadar
-                    mengunjungi sebuah situs web, enkripsi sedang bertugas memastikan kehidupan digitalmu tetap
-                    aman dan privat. Di dunia modern yang serba terhubung ini, mustahil melakukan komunikasi
-                    yang aman tanpa adanya enkripsi. Ia adalah fondasi kepercayaan kita saat berinteraksi di
-                    dunia maya.</p>
-                <p class="teks">Berikut adalah beberapa contoh paling umum di mana enkripsi melindungi kita:</p>
-                <ol class="teks m-3 mt-0">
-                    <li><b>Perlindungan Kata Sandi (Password Hashing):</b> Saat kamu login ke media sosial
-                        (Instagram
-                        atau WhatsApp), password kamu tidak disimpan apa adanya. Sistem komputer mengacaknya
-                        dengan teknik Hashing (enkripsi satu arah) menjadi kode acak. Ini mencegah peretas
-                        mengetahui password aslimu jika data perusahaan dicuri.</li>
-                    <li><b>Browsing Internet Aman (HTTPS):</b> Ikon gembok kecil 🔒 di browser kamu menandakan
-                        situs
-                        menggunakan HTTPS. Ini menggunakan enkripsi untuk mengamankan koneksi antara kamu dan
-                        situs web, sangat penting saat memasukkan data sensitif seperti detail kartu bank.</li>
-                    <li><b>ATM dan Kartu Bank:</b> PIN yang dimasukkan saat bertransaksi diubah menjadi
-                        terenkripsi
-                        sebelum dikirim ke sistem bank. Ini adalah langkah vital agar PIN tidak dapat dicuri
-                        oleh pihak ketiga di tengah jalan.</li>
-                    <li><b>Proteksi Dokumen Rahasia:</b> Ketika guru atau kamu sendiri memberi kata sandi
-                        (password)
-                        pada file seperti soal ulangan di komputer, itu adalah bentuk enkripsi. File tersebut
-                        dikunci dan tidak bisa dibuka tanpa kunci yang tepat, menjamin kerahasiaan isinya.</li>
-                    <li><b>Bahasa Rahasia Teman:</b> Bahkan saat kamu dan temanmu membuat bahasa unik, misalnya
-                        mengganti huruf vokal dengan angka (A=1, U=3), kamu sedang menerapkan konsep enkripsi
-                        sederhana. Prinsipnya sama: mengubah pesan yang dimengerti menjadi sandi yang hanya kamu
-                        dan temanmu yang tahu kuncinya.</li>
-                </ol>
-            </div>
+    </div>
+    <hr>
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Proses Enkripsi</h2>
+            <p class="teks">Proses enkripsi dan dekripsi adalah siklus lengkap yang menjamin kerahasiaan
+                sebuah pesan, memastikan rahasia tetap terjaga sempurna mulai dari pengirim hingga penerima.
+                Ini seperti mengirimkan barang berharga di dalam kotak besi terkunci melintasi jalan umum
+                yang ramai. Alur kerja ini terbagi menjadi lima fase utama yang berurutan:</p>
+            <p class="teks"><b>Fase 1: Data Asli (Plaintext) Disiapkan</b></p>
+            <p class="teks">Ini adalah langkah paling awal, di mana Plaintext atau data asli masih dalam
+                bentuk yang dapat dibaca dan dimengerti oleh siapa pun. Pengirim harus memastikan pesan atau
+                informasi sensitif sudah lengkap dan siap untuk diubah agar tidak bisa diakses oleh pihak
+                yang tidak berkepentingan. Plaintext ini ibarat isi surat yang ditulis dengan tinta biasa
+                atau password yang kamu ketikkan sebelum di-login.</p>
+            <p class="teks"><b>Fase 2: Proses Enkripsi Dilakukan</b></p>
+            <p class="teks">Di fase inilah "penguncian" data terjadi. Pengirim memasukkan Plaintext ke dalam
+                Algoritma Enkripsi (rumus rahasia) bersama dengan Kunci Enkripsi yang spesifik. Algoritma
+                bekerja keras, mencampurkan dan mengubah semua karakter dalam Plaintext berdasarkan
+                instruksi dari Kunci tersebut. Hasil dari proses ini adalah Ciphertext, serangkaian kode
+                acak yang tidak lagi memiliki makna. Ini seperti kamu menutup dan mengunci gembok pada kotak
+                surat rahasiamu menggunakan kunci khusus.</p>
+            <p class="teks"><b>Fase 3: Teks Ter-enkripsi (Ciphertext) Dikirim</b></p>
+            <p class="teks">Setelah dienkripsi, pesan kini aman untuk melakukan perjalanan melalui jaringan
+                yang rentan, seperti internet. Ciphertext (kode yang tidak berarti) dikirimkan dari pengirim
+                menuju penerima. Jika pihak yang tidak berwenang (peretas) mencegat atau mencuri Ciphertext
+                di tengah jalan, yang mereka dapatkan hanyalah kode sampah yang tidak dapat mereka pahami.
+                Mereka tidak memiliki Kunci untuk membuka "kotak" tersebut, sehingga kerahasiaan isinya
+                tetap terjaga.</p>
+            <p class="teks"><b>Fase 4: Penerima Menggunakan Kunci Dekripsi</b></p>
+            <p class="teks">Pesan telah tiba di tempat tujuan, dan kini saatnya membukanya. Penerima yang
+                sah, dan hanya mereka, memiliki Kunci Dekripsi yang cocok dengan Kunci Enkripsi yang
+                digunakan pengirim. Penerima memasukkan Ciphertext dan Kunci Dekripsi ini ke dalam Algoritma
+                Dekripsi. Jika kunci yang digunakan benar, Algoritma akan bekerja membalikkan semua proses
+                yang dilakukan saat enkripsi, sehingga data mulai kembali ke wujud aslinya.</p>
+            <p class="teks"><b>Fase 5: Data atau Pesan Asli Dapat Dibaca</b></p>
+            <p class="teks">Siklus pengamanan data berhasil diselesaikan. Proses dekripsi telah tuntas, dan
+                Ciphertext telah berhasil dikembalikan menjadi Plaintext. Pesan rahasia kini dapat dibaca
+                dan dimengerti sepenuhnya oleh penerima yang sah. Kerahasiaan pesan terjaga dari awal hingga
+                akhir transmisi, memastikan hanya dua pihak yang terlibat yang benar-benar mengetahui isi
+                sebenarnya.</p>
+            <img src="/assets/en2.jpeg" alt="en2">
         </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Pentingnya Enkripsi</h2>
-                <p class="teks">Di dunia digital saat ini, hampir semua informasi berharga kita, mulai dari
-                    identitas, rekening, hingga chatting sehari-hari, bergerak melalui jaringan internet yang
-                    sifatnya terbuka. Tanpa enkripsi, data tersebut rentan diakses atau dicuri oleh pihak ketiga
-                    (dikenal sebagai Man-in-the-Middle Attack).</p>
-                <p class="teks">Enkripsi hadir untuk menegakkan tiga pilar keamanan data:</p>
-                <ol class="teks m-3 mt-0">
-                    <li>Kerahasiaan (Confidentiality): Ini adalah tujuan utama enkripsi. Hanya pengirim dan
-                        penerima yang sah, yang memegang Kunci Dekripsi, yang dapat membaca pesan aslinya.
-                        Misalnya, fitur End-to-End Encryption pada aplikasi pesan memastikan bahwa bahkan
-                        perusahaan penyedia aplikasi pun tidak dapat mengintip isi pesan Anda.</li>
-                    <li>Integritas (Integrity): Enkripsi membantu memastikan bahwa data tidak diubah selama
-                        transmisi. Jika peretas mencoba memanipulasi ciphertext di tengah jalan, proses dekripsi
-                        di sisi penerima akan gagal atau menghasilkan data yang rusak, sehingga penerima tahu
-                        bahwa data tersebut tidak asli lagi.</li>
-                    <li>Otentikasi (Authentication): Dalam skema enkripsi yang lebih canggih, enkripsi juga
-                        berperan dalam memverifikasi bahwa pengirim pesan benar-benar orang yang diklaim, bukan
-                        penipu.</li>
-                </ol>
-                <p class="teks">Dengan demikian, enkripsi adalah jaminan keamanan dan kepercayaan kita dalam
-                    berinteraksi di dunia digital.</p>
-            </div>
+    </div>
+    <hr>
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Enkripsi dalam Kehidupan Sehari-hari</h2>
+            <p class="teks">Kita mungkin berpikir enkripsi hanya untuk urusan militer atau rahasia negara.
+                Padahal, enkripsi adalah lapisan pelindung tak terlihat yang bekerja tanpa henti di
+                sekeliling kita. Setiap kali kamu menyalakan ponsel, mengirim pesan, atau bahkan sekadar
+                mengunjungi sebuah situs web, enkripsi sedang bertugas memastikan kehidupan digitalmu tetap
+                aman dan privat. Di dunia modern yang serba terhubung ini, mustahil melakukan komunikasi
+                yang aman tanpa adanya enkripsi. Ia adalah fondasi kepercayaan kita saat berinteraksi di
+                dunia maya.</p>
+            <p class="teks">Berikut adalah beberapa contoh paling umum di mana enkripsi melindungi kita:</p>
+            <ol class="teks m-3 mt-0">
+                <li><b>Perlindungan Kata Sandi (Password Hashing):</b> Saat kamu login ke media sosial
+                    (Instagram
+                    atau WhatsApp), password kamu tidak disimpan apa adanya. Sistem komputer mengacaknya
+                    dengan teknik Hashing (enkripsi satu arah) menjadi kode acak. Ini mencegah peretas
+                    mengetahui password aslimu jika data perusahaan dicuri.</li>
+                <li><b>Browsing Internet Aman (HTTPS):</b> Ikon gembok kecil 🔒 di browser kamu menandakan
+                    situs
+                    menggunakan HTTPS. Ini menggunakan enkripsi untuk mengamankan koneksi antara kamu dan
+                    situs web, sangat penting saat memasukkan data sensitif seperti detail kartu bank.</li>
+                <li><b>ATM dan Kartu Bank:</b> PIN yang dimasukkan saat bertransaksi diubah menjadi
+                    terenkripsi
+                    sebelum dikirim ke sistem bank. Ini adalah langkah vital agar PIN tidak dapat dicuri
+                    oleh pihak ketiga di tengah jalan.</li>
+                <li><b>Proteksi Dokumen Rahasia:</b> Ketika guru atau kamu sendiri memberi kata sandi
+                    (password)
+                    pada file seperti soal ulangan di komputer, itu adalah bentuk enkripsi. File tersebut
+                    dikunci dan tidak bisa dibuka tanpa kunci yang tepat, menjamin kerahasiaan isinya.</li>
+                <li><b>Bahasa Rahasia Teman:</b> Bahkan saat kamu dan temanmu membuat bahasa unik, misalnya
+                    mengganti huruf vokal dengan angka (A=1, U=3), kamu sedang menerapkan konsep enkripsi
+                    sederhana. Prinsipnya sama: mengubah pesan yang dimengerti menjadi sandi yang hanya kamu
+                    dan temanmu yang tahu kuncinya.</li>
+            </ol>
         </div>
-    </main>
-    
+    </div>
+    <hr>
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+            <h2 class="lesson-h2">Pentingnya Enkripsi</h2>
+            <p class="teks">Di dunia digital saat ini, hampir semua informasi berharga kita, mulai dari
+                identitas, rekening, hingga chatting sehari-hari, bergerak melalui jaringan internet yang
+                sifatnya terbuka. Tanpa enkripsi, data tersebut rentan diakses atau dicuri oleh pihak ketiga
+                (dikenal sebagai Man-in-the-Middle Attack).</p>
+            <p class="teks">Enkripsi hadir untuk menegakkan tiga pilar keamanan data:</p>
+            <ol class="teks m-3 mt-0">
+                <li>Kerahasiaan (Confidentiality): Ini adalah tujuan utama enkripsi. Hanya pengirim dan
+                    penerima yang sah, yang memegang Kunci Dekripsi, yang dapat membaca pesan aslinya.
+                    Misalnya, fitur End-to-End Encryption pada aplikasi pesan memastikan bahwa bahkan
+                    perusahaan penyedia aplikasi pun tidak dapat mengintip isi pesan Anda.</li>
+                <li>Integritas (Integrity): Enkripsi membantu memastikan bahwa data tidak diubah selama
+                    transmisi. Jika peretas mencoba memanipulasi ciphertext di tengah jalan, proses dekripsi
+                    di sisi penerima akan gagal atau menghasilkan data yang rusak, sehingga penerima tahu
+                    bahwa data tersebut tidak asli lagi.</li>
+                <li>Otentikasi (Authentication): Dalam skema enkripsi yang lebih canggih, enkripsi juga
+                    berperan dalam memverifikasi bahwa pengirim pesan benar-benar orang yang diklaim, bukan
+                    penipu.</li>
+            </ol>
+            <p class="teks">Dengan demikian, enkripsi adalah jaminan keamanan dan kepercayaan kita dalam
+                berinteraksi di dunia digital.</p>
+        </div>
+    </div>
+
     <!-- Navigasi bawah -->
     <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'pengenalan' %}" class="btn btn-danger px-4 py-2 disabled">
+        <a href="{% url 'pengenalan' %}" class="btn btn-danger px-4 py-2">
             <i class="fa-solid fa-arrow-left me-2"></i>
             Kembali
         </a>

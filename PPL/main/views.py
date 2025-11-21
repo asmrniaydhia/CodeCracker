@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+import time
 
 # ---------- EVALUASI ----------
 def evaluasi_petunjuk(request):
@@ -50,13 +51,21 @@ def kuis_pengerjaan(request):
     Parameter: ?jenis=enkripsi / caesar / dekripsi
     """
     jenis = request.GET.get("jenis")
+    
+    # Ambil timestamp saat ini
+    current_time_stamp = int(time.time()) 
 
     if jenis not in ["enkripsi", "caesar", "dekripsi"]:
         return render(
             request, "kuis/kuis_invalid.html", {"error": "Jenis kuis tidak valid."}
         )
 
-    return render(request, "kuis/kuis_pengerjaan.html", {"jenis": jenis})
+    context = {
+        "jenis": jenis,
+        "time": current_time_stamp, # Teruskan timestamp ke template
+    }
+    
+    return render(request, "kuis/kuis_pengerjaan.html", context)
 
 
 from .models import Pengguna, Kuis, HasilKuis

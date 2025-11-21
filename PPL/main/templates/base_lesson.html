@@ -17,14 +17,6 @@
     <style>
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; }
         html { scroll-behavior: smooth; }
-        /* .lesson-app {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            min-height: calc(100vh - 70px);
-            background: #f6f7f9;
-            transition: grid-template-columns .25s ease;
-        }
-        .lesson-app.is-collapsed { grid-template-columns: 56px 1fr; } */
     </style>
 
     {% block extra_css %}{% endblock %}
@@ -44,9 +36,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-    {% comment %} <script src="{% static 'materi.js' %}"></script> {% endcomment %}
-    {% comment %} <script src="{% static 'kuis.js' %}"></script> {% endcomment %}
-    <script src="{% static 'main.js' %}"></script>
+    {% comment %} <script src="{% static 'materi.js' %}?v={{ time }}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'kuis.js' %}?v={{ time }}"></script> {% endcomment %}
+    <script src="{% static 'main.js' %}?v={{ time }}"></script>
     <script>
         document.getElementById('sidebarToggle').addEventListener('click', function() {
             document.getElementById('lessonApp').classList.toggle('is-collapsed');

@@ -65,7 +65,7 @@
         border: none;
     }
 
-    #staticAlphabet{
+    #staticAlphabet {
         display: none;
     }
 
@@ -116,129 +116,135 @@
 {% block content %}
 
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Aktivitas</div>
-        <hr />
+<div class="lesson-titlebar">Aktivitas</div>
+<hr />
 
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Enkripsi Pesan dengan Caesar Cipher</h2>
-                <p class="teks">Pada latihan ini, Anda akan mengenkripsi pesan menggunakan metode <b>Caesar
-                        Cipher</b>,
-                    yang merupakan salah satu metode pengamanan data paling sederhana. Metode ini bekerja dengan
-                    cara menggeser posisi setiap huruf dalam teks sebanyak sejumlah langkah yang telah
-                    ditentukan menggunakan kunci enkripsi. Kunci yang akan digunakan pada latihan ini adalah
-                    <b>5</b>,
-                    yang berarti setiap huruf dalam pesan akan digeser sebanyak lima posisi ke kanan dalam
-                    urutan alfabet.
-                </p>
-                <p class="teks"><b>Instruksi Pengerjaan:</b> Caesar Cipher bekerja dengan cara menggeser
-                    setiap huruf dalam pesan sebanyak sejumlah langkah yang ditentukan. Jika kunci enkripsi
-                    adalah 5, maka setiap huruf dalam pesan akan digeser 5 posisi ke kanan dalam urutan alfabet.
-                    Pergeseran ini dilakukan dengan memutar kembali ke awal alfabet setelah mencapai huruf "z".
-                </p>
-                <ol class="teks m-3 mt-0">
-                    <li><b>Kunci yang telah ditentukan untuk latihan ini adalah 5.</b> Ini berarti Anda harus
-                        menggeser
-                        setiap huruf dalam pesan sebanyak 5 langkah ke kanan dalam alfabet.</li>
-                    <li>Teks yang akan Anda enkripsi adalah:
-                        "belajar komputer"
-                        Ingat, hanya huruf-huruf dalam teks yang akan digeser, sedangkan spasi tetap tidak
-                        berubah.
-                    </li>
-                    <li>Temukan posisi huruf dalam alfabet.</li>
-                    <li>Geser huruf tersebut sebanyak 5 langkah ke kanan.</li>
-                    <li>Ulangi untuk setiap huruf berikutnya dalam teks.</li>
-                    <li>Setelah menggeser semua huruf dalam teks sesuai dengan kunci 5, tuliskan hasil enkripsi
-                        yang Anda peroleh.</li>
-                </ol>
-                <div class="m-3">
-                    <!-- <p class="teks"><b>Plaintext</b></p> -->
-                    <div id="staticAlphabet" class="alfabet-bar"></div>
+<div class="lesson-wrap">
+    <div class="lesson-head">
+        <h2 class="lesson-h2">Enkripsi Pesan dengan Caesar Cipher</h2>
+        <p class="teks">Pada latihan ini, Anda akan mengenkripsi pesan menggunakan metode <b>Caesar
+                Cipher</b>,
+            yang merupakan salah satu metode pengamanan data paling sederhana. Metode ini bekerja dengan
+            cara menggeser posisi setiap huruf dalam teks sebanyak sejumlah langkah yang telah
+            ditentukan menggunakan kunci enkripsi. Kunci yang akan digunakan pada latihan ini adalah
+            <b>5</b>,
+            yang berarti setiap huruf dalam pesan akan digeser sebanyak lima posisi ke kanan dalam
+            urutan alfabet.
+        </p>
+        <p class="teks"><b>Instruksi Pengerjaan:</b> Caesar Cipher bekerja dengan cara menggeser
+            setiap huruf dalam pesan sebanyak sejumlah langkah yang ditentukan. Jika kunci enkripsi
+            adalah 5, maka setiap huruf dalam pesan akan digeser 5 posisi ke kanan dalam urutan alfabet.
+            Pergeseran ini dilakukan dengan memutar kembali ke awal alfabet setelah mencapai huruf "z".
+        </p>
+        <ol class="teks m-3 mt-0">
+            <li><b>Kunci yang telah ditentukan untuk latihan ini adalah 5.</b> Ini berarti Anda harus
+                menggeser
+                setiap huruf dalam pesan sebanyak 5 langkah ke kanan dalam alfabet.</li>
+            <li>Teks yang akan Anda enkripsi adalah:
+                "belajar komputer"
+                Ingat, hanya huruf-huruf dalam teks yang akan digeser, sedangkan spasi tetap tidak
+                berubah.
+            </li>
+            <li>Temukan posisi huruf dalam alfabet.</li>
+            <li>Geser huruf tersebut sebanyak 5 langkah ke kanan.</li>
+            <li>Ulangi untuk setiap huruf berikutnya dalam teks.</li>
+            <li>Setelah menggeser semua huruf dalam teks sesuai dengan kunci 5, tuliskan hasil enkripsi
+                yang Anda peroleh.</li>
+        </ol>
+        <div class="m-3">
+            <!-- <p class="teks"><b>Plaintext</b></p> -->
+            <div id="staticAlphabet" class="alfabet-bar"></div>
 
-                    <p class="teks"><b>Ciphertext</b></p>
-                    <div id="cipherTargets" class="alfabet-bar"></div>
+            <p class="teks"><b>Ciphertext</b></p>
+            <div id="cipherTargets" class="alfabet-bar"></div>
 
-                    <div id="cipherPool" class="alfabet-bar"></div>
+            <div id="cipherPool" class="alfabet-bar"></div>
 
-                    <div class="key-status teks" id="keyStatus">0/26 Pasangan Kunci Selesai.</div>
-                </div>
-                <p class="teks"><b>Teks yang akan dienkripsi:</b> "belajar komputer"</p>
+            <div class="key-status teks" id="keyStatus">0/26 Pasangan Kunci Selesai.</div>
+        </div>
+        <p class="teks"><b>Teks yang akan dienkripsi:</b> "belajar komputer"</p>
 
-                <div class="mt-3">
-                    <p class="teks"><b>Hasil Enkripsi:</b></p>
-                    <input type="text" id="userAnswer" class="form-control"
-                        placeholder="Tuliskan hasil enkripsi di sini (huruf kecil)">
+        <div class="mt-3">
+            <p class="teks"><b>Hasil Enkripsi:</b></p>
+            <input type="text" id="userAnswer" class="form-control"
+                placeholder="Tuliskan hasil enkripsi di sini (huruf kecil)">
 
-                    <div id="result-message" class="mt-3"></div>
+            <div id="result-message" class="mt-3"></div>
 
-                    <div class="d-flex justify-content-end gap-2">
-                        <button id="reset-enkripsi">Reset</button>
-                        <button id="check-enkripsi">Cek Jawaban</button>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-end gap-2">
+                <button id="reset-enkripsi">Reset</button>
+                <button id="check-enkripsi">Cek Jawaban</button>
             </div>
         </div>
-    </main>
-    
-    <!-- Navigasi bawah -->
-    <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'caesar' %}" class="btn btn-danger px-4 py-2 disabled">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Kembali
-        </a>
-        <a href="{% url 'kuis2' %}" class="btn btn-success px-4 py-2">
-            Selanjutnya
-            <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
     </div>
 </div>
+
+<!-- Navigasi bawah -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'caesar' %}" class="btn btn-danger px-4 py-2">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Kembali
+    </a>
+    <a href="{% url 'kuis_petunjuk' %}?jenis=caesar" class="btn btn-success px-4 py-2 disabled">
+        Selanjutnya
+        <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
-<!-- Drag and Drop -->
 <script>
     const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const KEY_SHIFT = 5;
+    // Jawaban Ciphertext untuk "belajar komputer" dengan Kunci 5 (huruf kecil)
     const CORRECT_CIPHER_TEXT = "gipenjw qsvrxyiv";
     let matches = 0;
 
+    // Ambil elemen DOM yang diperlukan
+    const checkButton = document.getElementById('check-enkripsi');
+    const resetButton = document.getElementById('reset-enkripsi');
+    const resultMessage = document.getElementById('result-message');
+    const userAnswerInput = document.getElementById('userAnswer');
+    const keyStatus = document.getElementById('keyStatus');
+    const nextButton = document.getElementById('nextButton');
+
+
     /**
-     * Mengkonversi huruf Asli ke huruf Sandi dengan Kunci 5 (A -> F).
+     * Menghitung huruf sandi yang diharapkan untuk huruf biasa (plaintext) tertentu.
+     * Misal: getCipherChar('A') -> 'F' (Kunci 5)
      */
     function getCipherChar(plainChar) {
         const plainIndex = plainChar.charCodeAt(0) - 'A'.charCodeAt(0);
+        // Caesar Cipher: (posisi_asli + kunci) mod 26
         const cipherIndex = (plainIndex + KEY_SHIFT) % 26;
         return String.fromCharCode(cipherIndex + 'A'.charCodeAt(0));
     }
 
     // --- Inisialisasi Alfabet di DOM ---
     function initializeAlphabets() {
-        const staticAlphabet = document.getElementById('staticAlphabet');
         const cipherTargets = document.getElementById('cipherTargets');
         const cipherPool = document.getElementById('cipherPool');
 
+        // Reset tampilan dan status
         cipherTargets.innerHTML = '';
         cipherPool.innerHTML = '';
+        matches = 0;
+        updateKeyStatus();
+
+        if (nextButton) nextButton.classList.add('disabled');
+        userAnswerInput.removeAttribute('readonly');
 
         for (let i = 0; i < ALPHABET.length; i++) {
-            const plainChar = ALPHABET[i];
-            const expectedCipherChar = getCipherChar(plainChar); // F, G, H, ... E
+            const plainChar = ALPHABET[i]; // A, B, C...
+            const expectedCipherChar = getCipherChar(plainChar); // F, G, H...
 
-            // 1. Alfabet (Statis) - Baris Atas (A B C...)
-            let divStatic = document.createElement('div');
-            divStatic.textContent = plainChar;
-            divStatic.className = 'letter';
-
-            // 2. Alfabet Sandi (Target Drop) - Baris Tengah (A B C... Plaintext)
+            // 1. Target Drop (Baris Atas)
             let divTarget = document.createElement('div');
-            divTarget.textContent = plainChar; // Menampilkan A, B, C...
+            divTarget.textContent = plainChar; // Visual: A, B, C... (Plaintext yang akan disandi)
             divTarget.className = 'letter';
 
-            // DATA: Huruf Sandi yang Diharapkan (F, G, H...)
+            // DATA: Huruf Sandi yang Diharapkan (F)
             divTarget.dataset.expectedCipher = expectedCipherChar;
             divTarget.setAttribute('id', 'target-' + plainChar);
 
@@ -247,20 +253,23 @@
             divTarget.addEventListener('drop', drop);
             cipherTargets.appendChild(divTarget);
 
-            // 3. Pool Sandi (Drag) - Baris Bawah (A B C... Visual)
+            // 2. Pool Sandi (Drag) - Baris Bawah
             let divDrag = document.createElement('div');
-            divDrag.textContent = plainChar; // A B C...
+            // 🛑 PERUBAHAN VISUAL: Kembali menampilkan A, B, C, ... Z
+            divDrag.textContent = plainChar;
+
             divDrag.className = 'letter';
             divDrag.setAttribute('draggable', true);
-            divDrag.setAttribute('id', 'drag-' + plainChar);
 
-            // DATA PENTING: Huruf yang dibawa item ini. A bawa A, F bawa F.
+            // 🛑 PERUBAHAN LOGIKA: Item A yang diseret harus membawa nilai Plaintext ('A')
+            //    Huruf 'F' yang diseret (index 5) harus membawa nilai 'F'.
+            //    Kita set draggedValue SAMA dengan visualnya.
             divDrag.dataset.draggedValue = plainChar;
+            divDrag.setAttribute('id', 'drag-' + plainChar);
 
             divDrag.addEventListener('dragstart', drag);
             cipherPool.appendChild(divDrag);
         }
-        updateKeyStatus();
     }
 
     // --- Fungsi Drag and Drop ---
@@ -276,10 +285,8 @@
     }
 
     function drag(ev) {
+        // Hanya perlu mengirim ID elemen yang diseret
         ev.dataTransfer.setData("text", ev.target.id);
-        // MENGIRIM DATA HURUF YANG SAMA DENGAN VISUAL (A kirim A, F kirim F, dst.)
-        const draggedValue = ev.target.dataset.draggedValue;
-        ev.dataTransfer.setData("match", draggedValue);
     }
 
     function drop(ev) {
@@ -292,73 +299,77 @@
         const draggedId = ev.dataTransfer.getData("text");
         const draggedElement = document.getElementById(draggedId);
 
-        const draggedValue = ev.dataTransfer.getData("match"); // Sandi yang diseret (misal: 'F')
-        const expectedCipherChar = targetElement.dataset.expectedCipher; // Sandi yang diharapkan di slot (misal: 'F')
-        const targetPlainChar = targetElement.textContent; // Huruf Asli di slot (misal: 'A')
+        // Ambil nilai yang dibawa oleh elemen yang diseret (Misal: 'F')
+        const draggedValue = draggedElement.dataset.draggedValue;
 
-        // Verifikasi: Apakah Huruf yang diseret ('F') SAMA dengan Sandi yang diharapkan ('F') di slot 'A'?
+        // Ambil Sandi yang diharapkan di slot (Misal: 'F' jika slot adalah 'A')
+        const expectedCipherChar = targetElement.dataset.expectedCipher;
+
+        // Verifikasi: Apakah item yang diseret ('F') SAMA dengan sandi yang diharapkan ('F') di slot 'A'?
         if (draggedValue === expectedCipherChar) {
-            // Kecocokan BENAR (F dijatuhkan di slot A)
+            // Kecocokan BENAR
 
-            // Tampilkan huruf Sandi yang dijatuhkan (F)
+            // 1. Tampilkan huruf Sandi yang dijatuhkan (F)
             const droppedDiv = document.createElement('div');
             droppedDiv.textContent = draggedValue;
             droppedDiv.className = 'dropped-cipher';
             targetElement.appendChild(droppedDiv);
 
-            // Sembunyikan Asli A di background
+            // 2. Sembunyikan Huruf Asli (Plaintext) di background
             targetElement.classList.add('filled');
 
-            // Hapus dari sumber
+            // 3. Hapus dari sumber (Pool)
             draggedElement.remove();
 
-            // Update status
+            // 4. Update status
             matches++;
             updateKeyStatus();
+            resultMessage.innerHTML = ''; // Bersihkan pesan error sebelumnya
         } else {
             // Kecocokan SALAH
-            alert(`Pasangan SALAH!`);
+            // Huruf yang diseret (draggedValue) TIDAK sama dengan Ciphertext yang diharapkan.
+            resultMessage.innerHTML = '<div class="alert alert-danger">❌ Pasangan SALAH! Periksa pergeseran sandi.</div>';
+            setTimeout(() => { resultMessage.innerHTML = ''; }, 4000);
         }
     }
 
     function updateKeyStatus() {
-        const keyStatus = document.getElementById('keyStatus');
         keyStatus.textContent = `${matches}/26 Pasangan Kunci Selesai.`;
+        checkButton.disabled = true;
 
-        const checkBtn = document.getElementById('check-enkripsi');
         if (matches === 26) {
-            keyStatus.textContent = '🎉 Semua Pasangan Kunci Benar! Lanjutkan ke bagian Enkripsi.';
-            checkBtn.disabled = false;
-        } else {
-            checkBtn.disabled = true;
+            keyStatus.innerHTML = '🎉 Semua Pasangan Kunci Benar! Silakan masukkan hasil enkripsi di bawah.';
+            checkButton.disabled = false; // Aktifkan tombol Cek Jawaban
         }
     }
 
-    // --- Fungsi Pemeriksaan Jawaban ---
+    // --- Fungsi Pemeriksaan Jawaban Akhir (Teks Input) ---
     function checkAnswer() {
-        const userAnswer = document.getElementById('userAnswer').value.toLowerCase().trim();
-        const resultMessage = document.getElementById('result-message');
+        const userAnswer = userAnswerInput.value.toLowerCase().trim();
 
         if (matches < 26) {
-            resultMessage.innerHTML = '<div class="alert alert-warning">Harap selesaikan pencocokan 26 pasangan kunci terlebih dahulu!</div>';
+            resultMessage.innerHTML = '<div class="alert alert-warning">⚠️ Harap selesaikan pencocokan 26 pasangan kunci terlebih dahulu!</div>';
             return;
         }
 
         if (userAnswer === CORRECT_CIPHER_TEXT) {
-            resultMessage.innerHTML = '<div class="alert alert-success">🎉 Selamat! Jawaban Anda BENAR!</div>';
-            document.getElementById('userAnswer').setAttribute('readonly', true);
+            resultMessage.innerHTML = '<div class="alert alert-success">🎉 Selamat! Jawaban Anda BENAR! Anda dapat melanjutkan.</div>';
+            userAnswerInput.setAttribute('readonly', true);
+
+            // Aktifkan tombol Selanjutnya
+            if (nextButton) nextButton.classList.remove('disabled');
         } else {
-            resultMessage.innerHTML = '<div class="alert alert-danger">❌ Jawaban Anda SALAH. Pastikan Anda mengenkripsi "belajar komputer" dengan KUNCI 5.</div>';
+            resultMessage.innerHTML = '<div class="alert alert-danger">❌ Jawaban Anda SALAH!. Pastikan Anda mengenkripsi "belajar komputer" dengan KUNCI 5.</div>';
+
+            // Pastikan tombol Selanjutnya non-aktif
+            if (nextButton) nextButton.classList.add('disabled');
         }
     }
 
     // --- Fungsi Reset ---
     function resetExercise() {
-        matches = 0;
-        document.getElementById('userAnswer').value = '';
-        document.getElementById('userAnswer').removeAttribute('readonly');
-        document.getElementById('result-message').innerHTML = '';
-
+        userAnswerInput.value = '';
+        resultMessage.innerHTML = '';
         initializeAlphabets();
     }
 
@@ -366,7 +377,7 @@
     window.onload = initializeAlphabets;
 
     // Hubungkan tombol ke fungsi
-    document.getElementById('check-enkripsi').addEventListener('click', checkAnswer);
-    document.getElementById('reset-enkripsi').addEventListener('click', resetExercise);
+    checkButton.addEventListener('click', checkAnswer);
+    resetButton.addEventListener('click', resetExercise);
 </script>
 {% endblock %}

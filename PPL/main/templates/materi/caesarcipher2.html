@@ -6,82 +6,70 @@
 {% block content %}
 
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Caesar Cipher</div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Proses Enkripsi dengan Caesar Cipher</h2>
-                <p class="teks">
-                    Masukkan plaintext (pesan asli) dan kunci geser untuk melihat proses
-                    enkripsi secara bertahap dengan tabel alfabet berwarna.
-                </p>
+<div class="lesson-titlebar">Caesar Cipher</div>
+<hr>
+<div class="lesson-wrap">
+    <div class="lesson-head">
+        <h2 class="lesson-h2">Proses Enkripsi dengan Caesar Cipher</h2>
+        <p class="teks">
+            Masukkan plaintext (pesan asli) dan kunci geser untuk melihat proses
+            enkripsi secara bertahap dengan tabel alfabet berwarna.
+        </p>
 
-                <div class="input-section">
-                    <div class="mb-3">
-                        <label for="plaintext" class="form-label">Plaintext (Pesan Asli):</label>
-                        <input type="text" class="form-control" id="plaintext" placeholder="Contoh: HELLO"
-                            value="HELLO">
-                        <small class="text-muted">Hanya huruf A-Z yang akan diproses</small>
-                    </div>
+        <div class="input-section">
+            <div class="mb-3">
+                <label for="plaintext" class="form-label">Plaintext (Pesan Asli):</label>
+                <input type="text" class="form-control" id="plaintext" placeholder="Contoh: HELLO" value="HELLO">
+                <small class="text-muted">Hanya huruf A-Z yang akan diproses</small>
+            </div>
 
-                    <div class="mb-3">
-                        <label for="key" class="form-label">Kunci Geser (1-25):</label>
-                        <input type="number" class="form-control" id="key" min="1" max="25" value="3">
-                    </div>
+            <div class="mb-3">
+                <label for="key" class="form-label">Kunci Geser (1-25):</label>
+                <input type="number" class="form-control" id="key" min="1" max="25" value="3">
+            </div>
 
-                    <button class="btn btn-custom w-100" onclick="startEncryption()">
-                        Mulai Proses Enkripsi
-                    </button>
-                </div>
+            <button class="btn btn-custom w-100" onclick="startEncryption()">
+                Mulai Proses Enkripsi
+            </button>
+        </div>
 
-                <div class="legend-box">
-                    <div class="legend-item">
-                        <div class="legend-color source"></div>
-                        <span><strong>Huruf Plaintext</strong></span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color target"></div>
-                        <span><strong>Hasil Enkripsi</strong></span>
-                    </div>
-                </div>
+        <div class="legend-box">
+            <div class="legend-item">
+                <div class="legend-color source"></div>
+                <span><strong>Huruf Plaintext</strong></span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color target"></div>
+                <span><strong>Hasil Enkripsi</strong></span>
             </div>
         </div>
-        <hr>
-        <div id="stepContainer" class="step-container"></div>
-    </main>
-
-    <!-- Pagination -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-3">
-            <!-- <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                    </li> -->
-            <li class="page-item"><a class="page-link" href="caesarcipher.html">1</a></li>
-            <li class="page-item active"><a class="page-link" href="caesarcipher2.html">2</a></li>
-            <!-- <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li> -->
-        </ul>
-    </nav>
-
-    <!-- Navigasi bawah -->
-    <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'caesar' %}" class="btn btn-danger px-4 py-2 disabled">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Kembali
-        </a>
-        <a href="{% url 'aktivitas3' %}" class="btn btn-success px-4 py-2">
-            Selanjutnya
-            <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
     </div>
 </div>
+<hr>
+<div id="stepContainer" class="step-container"></div>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-3">
+        <li class="page-item"><a class="page-link" href="caesarcipher.html">1</a></li>
+        <li class="page-item active"><a class="page-link" href="caesarcipher2.html">2</a></li>
+    </ul>
+</nav>
+
+<!-- Navigasi bawah -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'caesar' %}" class="btn btn-danger px-4 py-2">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Kembali
+    </a>
+    <a href="{% url 'aktivitas3' %}" class="btn btn-success px-4 py-2">
+        Selanjutnya
+        <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'materi.js' %}"></script>
+<script src="{% static 'materi.js' %}?v={{ time }}"></script>
 {% endblock %}

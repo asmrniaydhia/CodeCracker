@@ -20,26 +20,7 @@
         min-height: 150px;
         background-color: #fff;
     }
-    .choices,
-    .dropzone {
-        border: 2px dashed #aaa;
-        border-radius: 10px;
-        padding: 10px;
-        width: 45%;
-        min-height: 150px;
-        background-color: #fff;
-    }
 
-    .choice {
-        background-color: #1B3C53;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 8px 10px;
-        margin: 5px 0;
-        cursor: grab;
-        color: white;
-        font-weight: 400;
-    }
     .choice {
         background-color: #1B3C53;
         border: 1px solid #ccc;
@@ -55,10 +36,6 @@
         border-color: #007bff;
         background-color: #e6f0ff;
     }
-    .dropzone.dragover {
-        border-color: #007bff;
-        background-color: #e6f0ff;
-    }
 
     button {
         margin-top: 15px;
@@ -68,19 +45,7 @@
         cursor: pointer;
         font-size: medium;
     }
-    button {
-        margin-top: 15px;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: medium;
-    }
 
-    #check {
-        background-color: #28a745;
-        color: white;
-    }
     #check {
         background-color: #28a745;
         color: white;
@@ -98,66 +63,69 @@
 
 
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Aktivitas</div>
-        <hr />
+<div class="lesson-titlebar">Aktivitas</div>
+<hr />
 
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Mengurutkan Proses Enkripsi dengan Benar</h2>
-                <p class="teks">Pada bagian ini, Anda diminta untuk mengurutkan langkah-langkah yang benar dalam
-                    proses enkripsi dan dekripsi. Urutkan langkah-langkah yang sesuai dengan alur yang benar
-                    dalam melakukan enkripsi dan dekripsi data.
-                </p>
-                <p class="teks"><b>Instruksi Pengerjaan:</b> Langkah-langkah berikut telah tercampur, dan tugas
-                    Anda
-                    adalah menyeret langkah-langkah ini ke dalam urutan yang benar.</p>
-                <div class="teks container">
-                    <div class="choices" id="choices">
-                        <div class="choice" id="5" draggable="true">Data atau pesan asli dapat dibaca oleh
-                            penerima
-                        </div>
-                        <div class="choice" id="1" draggable="true">Data asli (plaintext) diterima</div>
-                        <div class="choice" id="3" draggable="true">Data terenkripsi (ciphertext) dikirim ke
-                            penerima
-                        </div>
-                        <div class="choice" id="4" draggable="true">Penerima menggunakan kunci dekripsi untuk
-                            mengubah
-                            ciphertext menjadi plaintext</div>
-                        <div class="choice" id="2" draggable="true">Proses enkripsi dilakukan dengan algoritma
-                            dan kunci enkripsi</div>
-                    </div>
-                    <div class="dropzone" id="dropzone"></div>
+<div class="lesson-wrap">
+    <div class="lesson-head">
+        <h2 class="lesson-h2">Mengurutkan Proses Enkripsi dengan Benar</h2>
+        <p class="teks">Pada bagian ini, Anda diminta untuk mengurutkan langkah-langkah yang benar dalam
+            proses enkripsi dan dekripsi. Urutkan langkah-langkah yang sesuai dengan alur yang benar
+            dalam melakukan enkripsi dan dekripsi data.
+        </p>
+        <p class="teks"><b>Instruksi Pengerjaan:</b> Langkah-langkah berikut telah tercampur, dan tugas
+            Anda
+            adalah menyeret langkah-langkah ini ke dalam urutan yang benar.</p>
+        <div class="teks container">
+            <div class="choices" id="choices">
+                <div class="choice" id="5" draggable="true">Data atau pesan asli dapat dibaca oleh
+                    penerima
                 </div>
-                <div>
-                    <button id="reset">Reset</button>
-                    <button id="check">Cek Jawaban</button>
+                <div class="choice" id="1" draggable="true">Data asli (plaintext) diterima</div>
+                <div class="choice" id="3" draggable="true">Data terenkripsi (ciphertext) dikirim ke
+                    penerima
                 </div>
+                <div class="choice" id="4" draggable="true">Penerima menggunakan kunci dekripsi untuk
+                    mengubah
+                    ciphertext menjadi plaintext</div>
+                <div class="choice" id="2" draggable="true">Proses enkripsi dilakukan dengan algoritma
+                    dan kunci enkripsi</div>
             </div>
+            <div class="dropzone" id="dropzone"></div>
         </div>
-    </main>
-
-    <!-- Navigasi bawah -->
-    <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'enkripsi' %}" class="btn btn-danger px-4 py-2 disabled">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Kembali
-        </a>
-        <a href="{% url 'kuis2' %}" class="btn btn-success px-4 py-2">
-            Selanjutnya
-            <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
+        <div>
+            <button id="reset">Reset</button>
+            <button id="check">Cek Jawaban</button>
+        </div>
+        <div id="hasil-pemeriksaan" class="mt-3"></div>
     </div>
+</div>
+
+<!-- Navigasi bawah -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'enkripsi' %}" class="btn btn-danger px-4 py-2">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Kembali
+    </a>
+    <a href="{% url 'kuis_petunjuk' %}?jenis=enkripsi" class="btn btn-success px-4 py-2 disabled" id="nextButton">
+        Selanjutnya
+        <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
-<!-- Drag and Drop -->
 <script>
     const dropzone = document.getElementById('dropzone');
     const choiceBox = document.getElementById('choices');
+    const checkButton = document.getElementById('check');
+    const resetButton = document.getElementById('reset');
+    const resultDiv = document.getElementById('hasil-pemeriksaan');
+    const nextButton = document.getElementById('nextButton');
+
+    // Tentukan urutan ID yang benar
+    const CORRECT_ORDER = ["1", "2", "3", "4", "5"];
 
     // Simpan urutan awal persis seperti di HTML (acak)
     const originalOrder = Array.from(choiceBox.querySelectorAll('.choice')).map(el => el.id);
@@ -185,25 +153,62 @@
             const id = e.dataTransfer.getData('text/plain');
             const el = document.getElementById(id);
             if (el && zone !== el.parentElement) zone.appendChild(el);
+
+            // Bersihkan hasil pemeriksaan setelah ada perubahan
+            resultDiv.innerHTML = '';
+            // Pastikan tombol selanjutnya non-aktif setiap ada perubahan urutan
+            if (nextButton) nextButton.classList.add('disabled');
         });
     });
 
-    // ✅ Reset: kembalikan sesuai urutan awal (TANPA sort)
-    document.getElementById('reset').onclick = () => {
+    // --- LOGIKA RESET ---
+    resetButton.onclick = () => {
         originalOrder.forEach(id => {
             const el = document.getElementById(id);
             choiceBox.appendChild(el);
         });
-        dropzone.querySelectorAll('.choice').forEach(() => { }); // no-op; semua sudah dipindah di atas
+        // Bersihkan hasil pemeriksaan
+        resultDiv.innerHTML = '';
+        if (nextButton) nextButton.classList.add('disabled'); // Nonaktifkan tombol selanjutnya
     };
 
-    // Cek jawaban
-    document.getElementById('check').onclick = () => {
-        const items = Array.from(dropzone.querySelectorAll('.choice')).map(el => el.id);
-        const correct = ["1", "2", "3", "4", "5"];
-        const ok = items.length === correct.length && items.every((v, i) => v === correct[i]);
-        alert(ok ? "✅ Jawaban benar! Urutannya sudah sesuai." : "❌ Urutan belum benar. Coba lagi!");
+    // --- LOGIKA CEK JAWABAN (DIMODIFIKASI) ---
+    checkButton.onclick = () => {
+        // 1. Ambil urutan ID dari dropzone
+        const currentItems = Array.from(dropzone.querySelectorAll('.choice')).map(el => el.id);
+
+        // 2. Periksa apakah jumlah item benar (semua item harus dipindahkan)
+        if (currentItems.length !== CORRECT_ORDER.length) {
+            resultDiv.innerHTML = `<div class="alert alert-warning">
+                      ⚠️ Peringatan! Anda harus memindahkan semua ${CORRECT_ORDER.length} langkah ke kotak urutan.
+                            </div>`;
+            if (nextButton) nextButton.classList.add('disabled'); // Nonaktifkan
+            return;
+        }
+
+        // 3. Periksa apakah urutan sudah benar
+        const isCorrect = currentItems.every((v, i) => v === CORRECT_ORDER[i]);
+
+        if (isCorrect) {
+            // Jawaban Benar
+            resultDiv.innerHTML = `<div class="alert alert-success">
+                             ✅ Jawaban Benar! Urutan proses enkripsi dan dekripsi sudah tepat. Anda dapat melanjutkan.
+                           </div>`;
+            // Aktifkan tombol "Selanjutnya"
+            if (nextButton) nextButton.classList.remove('disabled');
+
+            // Nonaktifkan drag and drop setelah benar
+            document.querySelectorAll('.choice').forEach(choice => choice.setAttribute('draggable', false));
+            dropzone.removeEventListener('dragover', e => e.preventDefault());
+            choiceBox.removeEventListener('dragover', e => e.preventDefault());
+        } else {
+            // Jawaban Salah
+            resultDiv.innerHTML = `<div class="alert alert-danger">
+                           ❌ Jawaban Salah! Periksa kembali urutan langkah-langkah dalam proses enkripsi dan dekripsi.
+                 </div>`;
+            //  Pastikan tombol "Selanjutnya" non-aktif
+            if (nextButton) nextButton.classList.add('disabled');
+        }
     };
 </script>
-
 {% endblock %}
