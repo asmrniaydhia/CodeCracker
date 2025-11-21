@@ -5,18 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stage 2: Pesan Darurat - Agen 7</title>
     
-    <script>
-        // Cek apakah stage 1 sudah selesai
-        if (localStorage.getItem('stage1Completed') !== 'true') {
-            alert("Anda harus menyelesaikan Stage 1 terlebih dahulu!");
-            window.location.href = 'tantangan.html';
-        }
-    </script>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        // Cek apakah stage 1 sudah selesai
+        // Menggunakan URL Django untuk redirect jika belum selesai
+        if (localStorage.getItem('stage1Completed') !== 'true') {
+            alert("Anda harus menyelesaikan Stage 1 terlebih dahulu!");
+            window.location.href = "{% url 'tantangan' %}";
+        }
+    </script>
+
     <style>
+        /* CSS TETAP SAMA SEPERTI SEBELUMNYA */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
         .navbar { background-color: #1B3C53; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); height: 70px; }
         .navbar-brand { font-family: 'Lato', sans-serif; font-weight: 900; color: white; font-size: 1.6rem; }
@@ -65,33 +68,17 @@
         .letter-input { text-transform: uppercase; }
 
         .key-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            max-width: 400px;
-            margin: 1.5rem auto;
+            display: flex; flex-direction: column; gap: 0.75rem;
+            max-width: 400px; margin: 1.5rem auto;
         }
         .key-options label {
-            display: block;
-            background: #f1f1f1;
-            padding: 1rem;
-            border-radius: 8px;
-            border: 2px solid #dee2e6;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: clamp(1rem, 2vw, 1.1rem);
+            display: block; background: #f1f1f1; padding: 1rem;
+            border-radius: 8px; border: 2px solid #dee2e6;
+            cursor: pointer; transition: all 0.2s ease; font-size: clamp(1rem, 2vw, 1.1rem);
         }
-        .key-options label:hover {
-            background: #e7e7e7;
-        }
-        .key-options input[type="radio"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
-        .key-options label.selected {
-            background-color: #e0e9ff;
-            border-color: #0d6efd;
-        }
+        .key-options label:hover { background: #e7e7e7; }
+        .key-options input[type="radio"] { margin-right: 10px; transform: scale(1.2); }
+        .key-options label.selected { background-color: #e0e9ff; border-color: #0d6efd; }
 
         .btn-periksa { padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; width: 100%; max-width: 300px; margin: 1rem auto; display: block; font-size: clamp(0.9rem, 2vw, 1rem); }
         .navigation-buttons { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 3rem; border-top: 1px solid #eee; padding-top: 2rem; }
@@ -108,7 +95,7 @@
 <body>
     <nav class="navbar navbar-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="tantangan.html"><i class="fas fa-user-secret"></i> CodeCracker</a>
+            <a class="navbar-brand" href="{% url 'tantangan' %}"><i class="fas fa-user-secret"></i> CodeCracker</a>
         </div>
     </nav>
 
@@ -138,6 +125,8 @@
                 <p class="story-text">Begitu resmi menjadi agen, pesan darurat pertama langsung datang: "Agen kita terjebak, cepat pecahkan pesan kunci 2." Ini adalah ujian pertamamu di lapangan. Kegagalan berarti nyawa rekanmu dalam bahaya. Waktu terus berjalan, dan kamu harus bertindak cepat namun akurat!</p>
             </div>
 
+            
+
             <div class="petunjuk-content">
                 <h5><i class="fas fa-lightbulb"></i> Petunjuk Dekripsi:</h5>
                 <p><strong>Dekripsi</strong> adalah kebalikan dari enkripsi. Untuk mendekripsi:</p>
@@ -152,7 +141,7 @@
                 
                 <div class="question-container active" id="question-1">
                     <p class="question-text"><strong>Soal 1/3:</strong> Lengkapi Pesan Terdekripsi</p>
-                    <p>Pesan terenkripsi: <strong>UCOG</strong>, Kunci: <strong>2</strong>. Dekripsi dan isi huruf yang hilang untuk mengetahui kondisi agen.</p>
+                    <p>Pesan terenkripsi: <strong>UCHG</strong>, Kunci: <strong>2</strong>. Dekripsi dan isi huruf yang hilang untuk mengetahui kondisi agen.</p>
                     
                     <div class="word-container">
                         <input type="text" class="letter-input" id="q1-input1" maxlength="1" placeholder="_">
@@ -188,8 +177,8 @@
             </div>
 
             <div class="navigation-buttons">
-                <a href="stage1.html" class="btn-nav btn-sebelumnya"><i class="fas fa-arrow-left"></i> Stage Sebelumnya</a>
-                <a href="tantangan.html" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
+                <a href="{% url 'stage1' %}" class="btn-nav btn-sebelumnya"><i class="fas fa-arrow-left"></i> Stage Sebelumnya</a>
+                <a href="{% url 'tantangan' %}" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
             </div>
         </div>
     </div>
@@ -217,15 +206,19 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         const STAGE_ID = 2;
-        const PREVIOUS_STAGE_ID = 1; // ID stage sebelumnya
-        const NEXT_STAGE_URL = "stage3.html";
+        const PREVIOUS_STAGE_ID = 1; 
+        
+        // PERBAIKAN URL NEXT STAGE: Menggunakan Template Tag Django
+        const NEXT_STAGE_URL = "{% url 'stage3' %}"; 
+
         const STAGE_CONFIG = {
-            // Waktu 10 menit (600 detik)
             timeLimit: 600,
             questions: [
-                // MODIFIKASI: Poin diubah. Soal 2 (analisis) = 40.
+                // Soal 1: Input S dan F (SAFE) cocok dengan soal 'UCHG' (dekripsi -2)
                 { id: 1, type: 'fill-blanks', answer: 'S_F', points: 40 },
                 { id: 2, type: 'radio', answer: '3', points: 30 },
                 { id: 3, type: 'input', answer: 'JGNR', points: 30 }
@@ -264,28 +257,18 @@
             let progress = gameSession.stageProgress[`stage${STAGE_ID}`];
             stageState.attempts = progress?.attempts || 0;
 
-            // --- MODIFIKASI: LOGIKA SKOR CHECKPOINT ---
-            // 1. Dapatkan skor dari stage sebelumnya (Stage 1) sebagai 'checkpoint'
+            // --- LOGIKA SKOR CHECKPOINT ---
             let previousStageProgress = gameSession.stageProgress[`stage${PREVIOUS_STAGE_ID}`];
             let checkpointScore = previousStageProgress?.score || 0;
             
-            // 2. Jika ada skor lama dari stage INI (Stage 2), kita perlu menghapusnya dari total global
-            //    untuk mencegah skor ganda saat menyelesaikan stage ini lagi.
-            const oldScoreThisStage = progress?.score || 0;
-            
-            // 3. Set total skor global HANYA ke skor checkpoint (skor dari semua stage *sebelum* ini)
-            //    Ini adalah perubahan utama.
+            // Set skor global ke checkpoint (reset skor stage ini)
             gameSession.totalScore = checkpointScore;
-
-            // 4. Skor untuk percobaan *saat ini* di stage ini dimulai dari 0
             stageState.stageScore = 0; 
-            // --- AKHIR MODIFIKASI ---
 
             if (!progress) {
                 gameSession.stageProgress[`stage${STAGE_ID}`] = { attempts: 0, score: 0, time: 0 };
             }
             
-            // Tampilkan total skor (yang sekarang = skor checkpoint)
             scoreEl.textContent = gameSession.totalScore;
             updateTimerDisplay();
             attemptsEl.textContent = stageState.attempts;
@@ -309,22 +292,17 @@
 
         function startStage() {
             stageState.startTime = Date.now();
-            stageState.questionStartTime = Date.now(); // Set waktu mulai soal pertama
+            stageState.questionStartTime = Date.now();
             if (stageState.timerInterval) clearInterval(stageState.timerInterval);
             stageState.timerInterval = setInterval(updateTimer, 1000);
         }
         
         function restartStage() {
             timeoutModal.style.display = 'none';
-            stageState.attempts++; // Tambah percobaan
+            stageState.attempts++;
             gameSession.stageProgress[`stage${STAGE_ID}`].attempts = stageState.attempts;
-            
-            // --- MODIFIKASI: Logika Restart ---
-            // Saat me-restart, kita HANYA menyimpan progres percobaan.
-            // Skor stage (stageState.stageScore) tidak disimpan ke global.
-            // Kita panggil initStage() yang akan me-reset skor ke checkpoint.
             saveSession(); 
-            initStage(); // initStage() akan me-reset skor ke checkpoint Stage 1
+            initStage();
         }
 
         function updateTimer() {
@@ -362,7 +340,7 @@
             if (nextQ) nextQ.classList.add('active');
             
             stageState.currentQuestion = qNum;
-            stageState.questionStartTime = Date.now(); // Setel ulang waktu mulai untuk soal baru
+            stageState.questionStartTime = Date.now();
         }
 
         function checkAnswer(qNum) {
@@ -389,30 +367,24 @@
                 }
 
                 if (isCorrect) {
-                    // --- LOGIKA SKOR BERBASIS WAKTU ---
+                    // --- LOGIKA SKOR ---
                     const questionTime = Math.floor((Date.now() - stageState.questionStartTime) / 1000);
-                    
-                    const maxPoints = config.points; // Poin maks dari config (30, 40, 30)
-                    const minPoints = 10; // Poin minimal
-                    const timeForMaxPoints = 60; // Waktu ideal 60 detik
+                    const maxPoints = config.points;
+                    const minPoints = 10;
+                    const timeForMaxPoints = 60; 
 
                     let questionScore;
                     if (questionTime <= timeForMaxPoints) {
-                        questionScore = maxPoints; // Poin penuh
+                        questionScore = maxPoints;
                     } else {
-                        // Poin berkurang setelah 60 detik
-                        let penalty = (questionTime - timeForMaxPoints) * 0.5; // Kurangi 0.5 poin per detik
+                        let penalty = (questionTime - timeForMaxPoints) * 0.5;
                         questionScore = Math.floor(maxPoints - penalty);
                     }
                     
                     questionScore = Math.max(minPoints, questionScore); 
-                    // --- AKHIR LOGIKA SKOR ---
-
-                    stageState.stageScore += questionScore; // Tambah ke skor stage ini
+                    stageState.stageScore += questionScore;
                     stageState.wrongAnswerCount = 0;
                     
-                    // --- UPDATE SKOR DI LAYAR ---
-                    // Tampilkan total skor (Checkpoint) DITAMBAH skor stage saat ini
                     scoreEl.textContent = gameSession.totalScore + stageState.stageScore;
                     
                     feedbackEl.textContent = `✓ Benar! (+${questionScore} Poin) Lanjut ke soal berikutnya...`;
@@ -427,7 +399,6 @@
                     setTimeout(() => showQuestion(qNum + 1), 1500);
 
                 } else {
-                    // --- PENALTI JAWABAN SALAH ---
                     stageState.wrongAnswerCount++;
                     feedbackEl.textContent = "✗ Jawaban salah. Periksa kembali analisismu!";
                     feedbackEl.className = "feedback feedback-wrong";
@@ -440,33 +411,31 @@
                 }
             } catch (error) {
                 console.error("Error:", error);
-                feedbackEl.textContent = "Terjadi error. Coba lagi.";
-                feedbackEl.className = "feedback feedback-wrong";
             }
         }
 
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
-            
             const finalStageScore = Math.max(10, stageState.stageScore);
             
-            // --- MODIFIKASI: PENYIMPANAN SKOR ---
-            // 1. Ambil skor checkpoint (skor dari stage 1)
+            // Simpan skor
             let previousStageProgress = gameSession.stageProgress[`stage${PREVIOUS_STAGE_ID}`];
             let checkpointScore = previousStageProgress?.score || 0;
 
-            // 2. Set skor global = skor checkpoint + skor stage ini
             gameSession.totalScore = checkpointScore + finalStageScore;
             
-            // 3. Simpan skor *hanya stage ini* ke progresnya
-            gameSession.stageProgress[`stage${STAGE_ID}`].score = finalStageScore;
-            gameSession.stageProgress[`stage${STAGE_ID}`].time = timeTaken;
+            gameSession.stageProgress[`stage${STAGE_ID}`] = {
+                score: finalStageScore,
+                time: timeTaken,
+                attempts: stageState.attempts
+            };
             saveSession();
             
             localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
             successModal.style.display = 'flex';
             
+            // Redirect ke Next Stage
             setTimeout(() => window.location.href = NEXT_STAGE_URL, 3000);
         }
 

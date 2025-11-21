@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stage 3: Analisis Kunci - Agen 7</title>
     
-    <script>
-        if (localStorage.getItem('stage2Completed') !== 'true') {
-            alert("Anda harus menyelesaikan Stage 2 terlebih dahulu!");
-            window.location.href = 'tantangan.html';
-        }
-    </script>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script>
+        // Redirect jika Stage 2 belum selesai
+        if (localStorage.getItem('stage2Completed') !== 'true') {
+            alert("Anda harus menyelesaikan Stage 2 terlebih dahulu!");
+            window.location.href = "{% url 'tantangan' %}";
+        }
+    </script>
+
     <style>
+        /* CSS Style Tetap Sama */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
         .navbar { background-color: #1B3C53; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); height: 70px; }
         .navbar-brand { font-family: 'Lato', sans-serif; font-weight: 900; color: white; font-size: 1.6rem; }
@@ -80,7 +83,7 @@
 <body>
     <nav class="navbar navbar-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="tantangan.html"><i class="fas fa-user-secret"></i> CodeCracker</a>
+            <a class="navbar-brand" href="{% url 'tantangan' %}"><i class="fas fa-user-secret"></i> CodeCracker</a>
         </div>
     </nav>
 
@@ -107,14 +110,15 @@
 
         <div class="stage-content">
             <div class="story-section">
-                <p class="story-text">"Kerja bagus, Agen 7. CipherX menyadari kita bisa memecahkan sandi mereka, jadi mereka mulai bertindak ceroboh. Mereka mengirim banyak pesan dengan kunci yang berbeda-beda, mencoba membuat kita bingung. Tugasmu sekarang adalah menganalisis pesan-pesan acak ini dan menemukan kunci yang benar. Jangan terkecoh!"</p>
+                <p class="story-text">"Kerja bagus, Agen 7. CipherX menyadari kita bisa memecahkan sandi mereka, jadi mereka mulai bertindak ceroboh. Mereka mengirim banyak pesan dengan kunci yang berbeda-beda. Tugasmu sekarang adalah menganalisis pesan-pesan acak ini dan menemukan kunci yang benar. Jangan terkecoh!"</p>
             </div>
 
             <div class="petunjuk-content">
                 <h5><i class="fas fa-lightbulb"></i> Petunjuk Misi:</h5>
-                <p>Kamu harus menjadi detektif kunci. Terkadang kamu tahu hasilnya, terkadang kamu tahu sebagian kuncinya. Gunakan logikamu!</p>
+                <p>Kamu harus menjadi detektif kunci. Terkadang kamu tahu hasilnya, terkadang kamu tahu sebagian kuncinya.</p>
+                
                 <ul>
-                    <li><strong>Mencari Kunci:</strong> Jika kamu tahu Plaintext (misal 'A') dan Ciphertext (misal 'D'), kamu bisa hitung kuncinya (D - A = 3).</li>
+                    <li><strong>Mencari Kunci:</strong> Jika kamu tahu Plaintext (misal 'A') dan Ciphertext (misal 'D'), hitung jaraknya (D - A = 3).</li>
                     <li><strong>Brute Force:</strong> Coba dekripsi pesan dengan beberapa kunci. Kunci yang benar akan menghasilkan kata yang bermakna.</li>
                 </ul>
             </div>
@@ -123,16 +127,16 @@
                 
                 <div class="question-container active" id="question-1">
                     <p class="question-text"><strong>Soal 1/3:</strong> Uji Kunci</p>
-                    <p>CipherX mengecohmu. Sebuah pesan terenkripsi masuk: <strong>WKLQN</strong>. Analis kami menduga ini adalah kata 5 huruf yang bermakna. Kunci mana yang benar?</p>
+                    <p>CipherX mengecohmu. Sebuah pesan terenkripsi masuk: <strong>WKLQN</strong>. Analis kami menduga ini adalah kata 5 huruf yang bermakna (Bahasa Inggris). Kunci mana yang benar?</p>
                     <div class="radio-options" id="q1-options">
                         <label>
-                            <input type="radio" name="key-q1" value="5"> Kunci 5 (Hasil Dekripsi: RFEDG)
+                            <input type="radio" name="key-q1" value="5"> Kunci 5 (Hasil: RFEDG)
                         </label>
                         <label>
-                            <input type="radio" name="key-q1" value="3"> Kunci 3 (Hasil Dekripsi: THINK)
+                            <input type="radio" name="key-q1" value="3"> Kunci 3 (Hasil: THINK)
                         </label>
                         <label>
-                            <input type="radio" name="key-q1" value="2"> Kunci 2 (Hasil Dekripsi: UJIMP)
+                            <input type="radio" name="key-q1" value="2"> Kunci 2 (Hasil: UJIMP)
                         </label>
                     </div>
                     <button class="btn btn-primary btn-periksa" onclick="checkAnswer(1)">Periksa Jawaban</button>
@@ -149,7 +153,7 @@
 
                 <div class="question-container" id="question-3">
                     <p class="question-text"><strong>Soal 3/3:</strong> Analisis Parsial</p>
-                    <p>Sebuah pesan penting terpotong! Kamu hanya tahu ciphertext-nya adalah <strong>XQDEK</strong> dan hasil dekripsinya adalah kata 5 huruf yang dimulai dengan '<strong>S</strong>' dan huruf ketiga adalah '<strong>R</strong>' (pola: S _ R _ _). Dekripsi pesan itu!</p>
+                    <p>Sebuah pesan penting terpotong! Kamu hanya tahu ciphertext-nya adalah <strong>XJWGZ</strong> dan hasil dekripsinya adalah kata 5 huruf yang dimulai dengan '<strong>S</strong>' dan huruf ketiga adalah '<strong>R</strong>' (pola: S _ R _ _). Dekripsi pesan itu!</p>
                     <input type="text" class="form-control answer-input" id="q3-answer" placeholder="Ketik hasil dekripsi (5 huruf)">
                     <button class="btn btn-primary btn-periksa" onclick="checkAnswer(3)">Periksa Jawaban</button>
                     <p class="feedback" id="q3-feedback"></p>
@@ -158,8 +162,8 @@
             </div>
 
             <div class="navigation-buttons">
-                <a href="stage2.html" class="btn-nav btn-sebelumnya"><i class="fas fa-arrow-left"></i> Stage Sebelumnya</a>
-                <a href="tantangan.html" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
+                <a href="{% url 'stage2' %}" class="btn-nav btn-sebelumnya"><i class="fas fa-arrow-left"></i> Stage Sebelumnya</a>
+                <a href="{% url 'tantangan' %}" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
             </div>
         </div>
     </div>
@@ -188,17 +192,19 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const STAGE_ID = 3;
-        const PREVIOUS_STAGE_IDS = [1, 2]; // <-- ID stage sebelumnya
-        const NEXT_STAGE_URL = "stage4.html";
+        const PREVIOUS_STAGE_IDS = [1, 2]; 
+        const NEXT_STAGE_URL = "{% url 'stage4' %}"; // URL Django
+        
         const STAGE_CONFIG = {
-            timeLimit: 600, // 10 Menit
+            timeLimit: 600, 
             questions: [
-                // MODIFIKASI: Poin diubah. Soal 3 (analisis parsial) = 40.
                 { id: 1, type: 'radio', answer: '3', points: 30 },
                 { id: 2, type: 'input', answer: '5', points: 30 },
-                { id: 3, type: 'input', answer: 'SERANG', points: 40 }
+                // KOREKSI: Jawaban diubah jadi SERBU agar sesuai dengan 5 huruf
+                { id: 3, type: 'input', answer: 'SERBU', points: 40 }
             ]
         };
 
@@ -213,7 +219,7 @@
         const attemptsEl = document.getElementById('attempts');
         const successModal = document.getElementById('successModal');
         const timeoutModal = document.getElementById('timeoutModal');
-        const penaltyModal = document.getElementById('penaltyModal'); // <-- Variabel modal penalti
+        const penaltyModal = document.getElementById('penaltyModal');
 
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.radio-options label').forEach(label => {
@@ -233,25 +239,18 @@
             let progress = gameSession.stageProgress[`stage${STAGE_ID}`];
             stageState.attempts = progress?.attempts || 0;
 
-            // --- MODIFIKASI: LOGIKA SKOR CHECKPOINT ---
-            // 1. Hitung total skor dari SEMUA stage sebelumnya (Stage 1 dan 2)
             let checkpointScore = 0;
             PREVIOUS_STAGE_IDS.forEach(id => {
                 checkpointScore += gameSession.stageProgress[`stage${id}`]?.score || 0;
             });
             
-            // 2. Set total skor global HANYA ke skor checkpoint
             gameSession.totalScore = checkpointScore;
-
-            // 3. Skor untuk percobaan *saat ini* di stage ini dimulai dari 0
             stageState.stageScore = 0; 
-            // --- AKHIR MODIFIKASI ---
 
             if (!progress) {
                 gameSession.stageProgress[`stage${STAGE_ID}`] = { attempts: 0, score: 0, time: 0 };
             }
             
-            // Tampilkan total skor (yang sekarang = skor checkpoint)
             totalScoreEl.textContent = gameSession.totalScore;
             updateTimerDisplay();
             attemptsEl.textContent = stageState.attempts;
@@ -275,19 +274,15 @@
 
         function startStage() {
             stageState.startTime = Date.now();
-            stageState.questionStartTime = Date.now(); // Set waktu mulai soal pertama
+            stageState.questionStartTime = Date.now(); 
             if (stageState.timerInterval) clearInterval(stageState.timerInterval);
             stageState.timerInterval = setInterval(updateTimer, 1000);
         }
 
         function restartStage() {
             timeoutModal.style.display = 'none';
-            stageState.attempts++; // Tambah percobaan
+            stageState.attempts++;
             gameSession.stageProgress[`stage${STAGE_ID}`].attempts = stageState.attempts;
-            
-            // --- MODIFIKASI: Logika Restart ---
-            // Simpan progres percobaan, lalu panggil initStage()
-            // initStage() akan otomatis me-reset skor ke checkpoint (skor Stage 1 + 2)
             saveSession(); 
             initStage(); 
         }
@@ -310,7 +305,6 @@
             timeoutModal.style.display = 'flex';
         }
         
-        // <-- Fungsi untuk menutup modal penalti -->
         function closePenaltyModal() {
             penaltyModal.style.display = 'none';
         }
@@ -328,7 +322,7 @@
             if (nextQ) nextQ.classList.add('active');
             
             stageState.currentQuestion = qNum;
-            stageState.questionStartTime = Date.now(); // Setel ulang waktu mulai untuk soal baru
+            stageState.questionStartTime = Date.now(); 
         }
 
         function checkAnswer(qNum) {
@@ -359,30 +353,23 @@
                 }
 
                 if (isCorrect) {
-                    // --- LOGIKA SKOR BERBASIS WAKTU ---
                     const questionTime = Math.floor((Date.now() - stageState.questionStartTime) / 1000);
-                    
-                    const maxPoints = config.points; // Poin maks dari config (30, 30, atau 40)
-                    const minPoints = 10; // Poin minimal
-                    const timeForMaxPoints = 60; // Waktu ideal 60 detik
+                    const maxPoints = config.points; 
+                    const minPoints = 10; 
+                    const timeForMaxPoints = 60; 
 
                     let questionScore;
                     if (questionTime <= timeForMaxPoints) {
-                        questionScore = maxPoints; // Poin penuh
+                        questionScore = maxPoints; 
                     } else {
-                        // Poin berkurang setelah 60 detik
-                        let penalty = (questionTime - timeForMaxPoints) * 0.5; // Kurangi 0.5 poin per detik
+                        let penalty = (questionTime - timeForMaxPoints) * 0.5; 
                         questionScore = Math.floor(maxPoints - penalty);
                     }
                     
                     questionScore = Math.max(minPoints, questionScore); 
-                    // --- AKHIR LOGIKA SKOR ---
-
-                    stageState.stageScore += questionScore; // Tambah ke skor stage ini
+                    stageState.stageScore += questionScore; 
                     stageState.wrongAnswerCount = 0;
                     
-                    // --- UPDATE SKOR DI LAYAR ---
-                    // Tampilkan total skor (Checkpoint) DITAMBAH skor stage saat ini
                     totalScoreEl.textContent = gameSession.totalScore + stageState.stageScore;
                     
                     feedbackEl.textContent = `✓ Benar! (+${questionScore} Poin) Lanjut ke soal berikutnya...`;
@@ -397,18 +384,14 @@
                     setTimeout(() => showQuestion(qNum + 1), 1500);
 
                 } else {
-                    // --- PENALTI JAWABAN SALAH ---
                     stageState.wrongAnswerCount++;
                     feedbackEl.textContent = "✗ Jawaban salah. Analisis kembali dengan teliti!";
                     feedbackEl.className = "feedback feedback-wrong";
 
-                    // Kurangi waktu 5 detik
                     stageState.timeLeft = Math.max(0, stageState.timeLeft - 5);
-                    updateTimerDisplay(); // Update timer di UI
+                    updateTimerDisplay(); 
                     
-                    // Tampilkan modal penalti
                     penaltyModal.style.display = 'flex';
-                    // Tutup modal otomatis setelah 2 detik
                     setTimeout(closePenaltyModal, 2000); 
                 }
             } catch (error) {
@@ -424,13 +407,8 @@
             
             const finalStageScore = Math.max(10, stageState.stageScore);
             
-            // --- MODIFIKASI: PENYIMPANAN SKOR ---
-            // (gameSession.totalScore sudah di-set ke checkpoint di initStage())
-            
-            // 1. Tambahkan skor stage ini ke total global
             gameSession.totalScore += finalStageScore;
             
-            // 2. Simpan skor *hanya stage ini* ke progresnya
             gameSession.stageProgress[`stage${STAGE_ID}`].score = finalStageScore;
             gameSession.stageProgress[`stage${STAGE_ID}`].time = timeTaken;
             saveSession();

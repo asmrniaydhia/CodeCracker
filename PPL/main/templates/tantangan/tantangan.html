@@ -266,7 +266,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid px-lg-5 px-3">
-            <a class="navbar-brand" href="#"><i class="fas fa-user-secret"></i> CodeCracker</a>
+            <a class="navbar-brand" href="{% url 'landing' %}"><i class="fas fa-user-secret"></i> CodeCracker</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -274,14 +274,14 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/templates/materi/pengenalan.html"><i class="fa-solid fa-book-open"></i> Belajar</a>
+                        <a class="nav-link" href="{% url 'pengenalan' %}"><i class="fa-solid fa-book-open"></i> Belajar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/templates/tantangan/tantangan.html"><i class="fa-solid fa-gamepad"></i>
+                        <a class="nav-link active" href="{% url 'tantangan' %}"><i class="fa-solid fa-gamepad"></i>
                             Tantangan</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/templates/leaderboard.html"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                        <a class="nav-link" href="{% url 'leaderboard' %}"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><i class="fa-solid fa-info-circle"></i> Informasi</a>
@@ -354,18 +354,17 @@
                 scrollIndicator.style.display = 'block';
             }
         }
+        
         btnNext.addEventListener('click', () => {
             prologModal.classList.remove('active');
-            window.location.href = 'stage1.html'; // Ini sudah benar karena stage1.html ada di folder yang sama
+            // PERBAIKAN 6: Gunakan URL Django untuk Stage 1
+            window.location.href = "{% url 'stage1' %}"; 
         });
 
-        // --- CHALLENGE CARD GENERATION LOGIC ---
         document.addEventListener('DOMContentLoaded', function() {
             const challengesGrid = document.getElementById('challenges-grid');
             const totalStages = 10;
             
-            // localStorage.clear(); // Uncomment to reset progress
-
             let lastCompletedStage = 0;
             for (let i = 1; i <= totalStages; i++) {
                 if (localStorage.getItem(`stage${i}Completed`) === 'true') {
@@ -388,7 +387,7 @@
 
                 const cardWrapper = document.createElement('a');
                 cardWrapper.className = 'challenge-card';
-                cardWrapper.href = isLocked ? '#' : `stage${i}.html`; // Ini sudah benar
+                cardWrapper.href = '#'; 
                 cardWrapper.dataset.stage = i;
                 
                 let statusText = 'Belum Selesai';
@@ -403,11 +402,14 @@
                     statusClass = 'selesai';
                 }
                 
-                // ==================== PERBAIKAN DI SINI ====================
-                // Menggunakan "../../assets/" untuk 'naik' dua folder
+                // PERBAIKAN 7: Path gambar diperbaiki untuk folder static (asumsi)
+                // Jika gambar ada di folder static/assets/, ubah path di bawah ini:
+                // Jika menggunakan static file django, idealnya menggunakan tag static, tapi sulit di dalam loop JS.
+                // Solusinya gunakan path absolut root jika folder static dikonfigurasi benar.
+                // Contoh: /static/assets/challenge_1.png
                 cardWrapper.innerHTML = `
                     <div class="challenge-thumbnail">
-                        <img src="../../assets/challenge_${i}.png" alt="Tantangan ${i}">
+                        <img src="/static/assets/challenge_${i}.png" alt="Tantangan ${i}" onerror="this.src='https://via.placeholder.com/85?text=Stage+${i}'"> 
                     </div>
                     <div class="challenge-info">
                         <div class="challenge-number">Episode</div>
@@ -417,7 +419,6 @@
                         <span class="status-badge ${statusClass}">${statusText}</span>
                     </div>
                 `;
-                // =========================================================
                 
                 if (!isLocked) {
                     cardWrapper.addEventListener('click', (e) => {
@@ -429,7 +430,9 @@
                             prologModal.classList.add('active');
                             setTimeout(checkInitialScroll, 100);
                         } else {
-                            window.location.href = `stage${stage}.html`; // Ini sudah benar
+                            // PERBAIKAN 8: Mengarahkan ke URL Django yang benar
+                            // Format di urls.py adalah 'tantangan/stageX/'
+                            window.location.href = `/tantangan/stage${stage}/`; 
                         }
                     });
                 }

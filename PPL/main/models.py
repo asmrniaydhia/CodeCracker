@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 # ============================
@@ -39,7 +40,6 @@ class Kelas(models.Model):
     def __str__(self):
         return self.nama_kelas
 
-
 # ============================
 #     ANGGOTA_KELAS (RELASI)
 # ============================
@@ -49,7 +49,6 @@ class AnggotaKelas(models.Model):
     id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='kelas_siswa', null=True)
     def __str__(self):
         return f"{self.id_siswa} di {self.id_kelas}"
-
 
 # ============================
 #            KUIS
@@ -61,7 +60,6 @@ class Kuis(models.Model):
 
     def __str__(self):
         return self.nama_kuis
-
 
 # ============================
 #         HASIL KUIS
@@ -77,7 +75,6 @@ class HasilKuis(models.Model):
     def __str__(self):
         return f"{self.id_siswa} - {self.id_kuis}"
 
-
 # ============================
 #           SECTION
 # ============================
@@ -88,7 +85,6 @@ class Section(models.Model):
 
     def __str__(self):
         return self.nama_section
-
 
 # ============================
 #        SECTION ITEM
@@ -111,7 +107,6 @@ class SectionItem(models.Model):
     def __str__(self):
         return self.nama_item
 
-
 # ============================
 #         PROGRES ITEM
 # ============================
@@ -130,32 +125,29 @@ class ProgresItem(models.Model):
     def __str__(self):
         return f"{self.id_siswa} - {self.id_item} ({self.status})"
 
+# # ============================
+# #         STAGE GAME
+# # ============================
+# class StageGame(models.Model):
+#     id_stage = models.AutoField(primary_key=True)
+#     nama_stage = models.CharField(max_length=45)
 
-# ============================
-#         STAGE GAME
-# ============================
-class StageGame(models.Model):
-    id_stage = models.AutoField(primary_key=True)
-    nama_stage = models.CharField(max_length=45)
+#     def __str__(self):
+#         return self.nama_stage
 
-    def __str__(self):
-        return self.nama_stage
+# # ============================
+# #          HASIL GAME
+# # ============================
+# class HasilGame(models.Model):
+#     id_hasil_game = models.AutoField(primary_key=True)
+#     id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
+#     id_stage = models.ForeignKey(StageGame, on_delete=models.CASCADE)
+#     skor_game = models.IntegerField()
+#     waktu_game = models.IntegerField()
+#     percobaan_game = models.IntegerField()
 
-
-# ============================
-#          HASIL GAME
-# ============================
-class HasilGame(models.Model):
-    id_hasil_game = models.AutoField(primary_key=True)
-    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
-    id_stage = models.ForeignKey(StageGame, on_delete=models.CASCADE)
-    skor_game = models.IntegerField()
-    waktu_game = models.IntegerField()
-    percobaan_game = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.id_siswa} - {self.id_stage}"
-
+#     def __str__(self):
+#         return f"{self.id_siswa} - {self.id_stage}"
 
 # ============================
 #        HASIL EVALUASI
@@ -167,3 +159,25 @@ class HasilEvaluasi(models.Model):
 
     def __str__(self):
         return f"{self.id_siswa} - Nilai {self.nilai}"
+    
+# ============================
+#   SISTEM PERINGKAT (BARU)
+#   Digunakan untuk Leaderboard
+# ============================
+class PeringkatFinal(models.Model):
+    # Menggunakan User bawaan Django agar sinkron dengan login/logout sistem
+    siswa = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='peringkat_final')
+    
+    # Default 0 untuk menghindari error
+    total_skor = models.IntegerField(default=0)
+    total_waktu_detik = models.IntegerField(default=0)
+    
+    # Mencatat kapan siswa menyelesaikan tantangan
+    waktu_selesai = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Otomatis mengurutkan berdasarkan Skor Tertinggi, lalu Waktu Tercepat
+        ordering = ['-total_skor', 'total_waktu_detik']
+
+    def __str__(self):
+        return f"{self.siswa.username} - {self.total_skor} Poin ({self.total_waktu_detik}s)"

@@ -7,7 +7,6 @@ urlpatterns = [
     path('evaluasi/pengerjaan/', views.evaluasi_pengerjaan, name='evaluasi_pengerjaan'),
     path('evaluasi/nilai/', views.evaluasi_nilai, name='evaluasi_nilai'),
 
-
     # Halaman guru
     path('guru/dashboard/', views.dashboard, name='dashboard'),
     path('guru/data-nilai/', views.data_nilai, name='data_nilai'),
@@ -56,4 +55,6 @@ urlpatterns = [
 
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('tes/', views.tes, name='tes'),
+
+    path('api/simpan-skor-final/', views.simpan_skor_final_view, name='simpan_skor_final'),
 ]
