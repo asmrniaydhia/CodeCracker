@@ -1,4 +1,10 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from .models import PeringkatFinal
+import json
 
 # ---------- EVALUASI ----------
 def evaluasi(request):
@@ -73,36 +79,47 @@ def pengenalan(request):
 
 
 # ---------- TANTANGAN ----------
+@login_required
 def stage1(request):
     return render(request, 'tantangan/stage1.html')
 
+@login_required
 def stage2(request):
     return render(request, 'tantangan/stage2.html')
 
+@login_required
 def stage3(request):
     return render(request, 'tantangan/stage3.html')
 
+@login_required
 def stage4(request):
     return render(request, 'tantangan/stage4.html')
 
+@login_required
 def stage5(request):
     return render(request, 'tantangan/stage5.html')
 
+@login_required
 def stage6(request):
     return render(request, 'tantangan/stage6.html')
 
+@login_required
 def stage7(request):
     return render(request, 'tantangan/stage7.html')
 
+@login_required
 def stage8(request):
     return render(request, 'tantangan/stage8.html')
 
+@login_required
 def stage9(request):
     return render(request, 'tantangan/stage9.html')
 
+@login_required
 def stage10(request):
     return render(request, 'tantangan/stage10.html')
 
+@login_required
 def tantangan(request):
     return render(request, 'tantangan/tantangan.html')
 
@@ -125,3 +142,35 @@ def leaderboard(request):
 
 def tes(request):
     return render(request, 'tes.html')
+
+@login_required
+@require_POST
+def simpan_skor_final_view(request):
+    if PeringkatFinal.objects.filter(siswa=request.user).exists():
+        return JsonResponse({
+            'status': 'sudah_ada', 
+            'message': 'Skor PERTAMA kali Anda sudah tercatat di Leaderboard. Percobaan ini tidak akan mengubah peringkat.'
+        }, status=200)
+
+    try:
+        data = json.loads(request.body)
+        skor = int(data.get('total_skor'))
+        waktu = int(data.get('total_waktu'))
+
+        PeringkatFinal.objects.create(
+            siswa=request.user,
+            total_skor=skor,
+            total_waktu_detik=waktu
+        )
+        return JsonResponse({'status': 'sukses', 'message': 'Selamat! Skor pertama Anda berhasil dicatat ke Leaderboard!'}, status=201)
+    
+    except Exception as e:
+        return JsonResponse({'status': 'gagal', 'message': str(e)}, status=500)
+
+@login_required 
+def leaderboard_view(request):
+    peringkat_list = PeringkatFinal.objects.all().order_by('-total_skor', 'total_waktu_detik')
+    context = {
+        'peringkat_list': peringkat_list
+    }
+    return render(request, 'leaderboard.html', context)

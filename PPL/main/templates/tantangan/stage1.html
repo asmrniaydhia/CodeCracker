@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        /* ... (Semua kode CSS Anda tidak diubah) ... */
         body { 
             padding-top: 70px; 
             font-family: 'Open Sans', sans-serif; 
@@ -24,8 +25,6 @@
             color: white; 
             font-size: 1.6rem; 
         }
-        
-        /* Stats Display */
         .game-stats {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -60,8 +59,6 @@
             0%, 100% { color: #fff; } 
             50% { color: #ff6b6b; } 
         }
-
-        /* Stage Layout */
         .stage-container { 
             max-width: 900px; 
             margin: 2rem auto; 
@@ -91,7 +88,6 @@
             border-radius: 0 0 10px 10px; 
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
         }
-        
         .story-section { 
             margin-bottom: 2rem; 
             padding: 1.5rem; 
@@ -105,7 +101,6 @@
             text-align: justify; 
             font-size: clamp(0.9rem, 2vw, 1rem);
         }
-        
         .petunjuk-content { 
             background-color: #d1ecf1; 
             padding: 1.5rem; 
@@ -113,8 +108,6 @@
             margin-bottom: 1.5rem; 
             border-left: 4px solid #17a2b8; 
         }
-        
-        /* Challenge Area */
         .challenge-area { 
             margin-top: 2rem; 
             border-top: 2px solid #eee; 
@@ -131,7 +124,6 @@
             from { opacity: 0; transform: translateY(10px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
-        
         .question-text { 
             font-size: clamp(1.1rem, 2.5vw, 1.3rem); 
             font-weight: 600; 
@@ -152,8 +144,6 @@
         }
         .feedback-correct { color: #198754; }
         .feedback-wrong { color: #dc3545; }
-        
-        /* Matching Game */
         .matching-game-large {
             display: flex;
             justify-content: center;
@@ -191,8 +181,6 @@
             cursor: not-allowed; 
             opacity: 0.6; 
         }
-
-        /* Drag & Drop */
         .draggable-container-large {
             display: flex;
             justify-content: center;
@@ -240,7 +228,6 @@
         .draggable-large.dragging { 
             opacity: 0.5; 
         }
-
         .btn-periksa { 
             padding: 0.75rem 1.5rem; 
             border-radius: 8px; 
@@ -253,7 +240,6 @@
             display: block;
             font-size: clamp(0.9rem, 2vw, 1rem);
         }
-
         .navigation-buttons { 
             display: flex; 
             flex-direction: column; 
@@ -279,8 +265,6 @@
             background-color: #6c757d; 
             color: white; 
         }
-
-        /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -313,8 +297,6 @@
             60% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); }
         }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .matching-game-large {
                 gap: 1rem;
@@ -325,7 +307,7 @@
 <body>
     <nav class="navbar navbar-dark fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="tantangan.html"><i class="fas fa-user-secret"></i> CodeCracker</a>
+            <a class="navbar-brand" href="{% url 'tantangan' %}"><i class="fas fa-user-secret"></i> CodeCracker</a>
         </div>
     </nav>
 
@@ -346,8 +328,8 @@
         </div>
 
         <div class="stage-header">
-            <h1 class="stage-number">STAGE 1</h1>
-            <p class="stage-title">Pelatihan Dasar: Mengenal Kunci</p>
+             <h1 class="stage-number">STAGE 1</h1>
+             <p class="stage-title">Pelatihan Dasar: Mengenal Kunci</p>
         </div>
 
         <div class="stage-content">
@@ -422,7 +404,7 @@
             </div>
 
             <div class="navigation-buttons">
-                <a href="tantangan.html" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
+                <a href="{% url 'tantangan' %}" class="btn-nav btn-kembali"><i class="fas fa-list"></i> Kembali ke Daftar Tantangan</a>
             </div>
         </div>
     </div>
@@ -453,7 +435,10 @@
 
     <script>
         const STAGE_ID = 1;
-        const NEXT_STAGE_URL = "stage2.html";
+        
+        // DIPERBAIKI (3/3): Menggunakan tag URL Django untuk variabel JavaScript
+        const NEXT_STAGE_URL = "{% url 'stage2' %}"; 
+        
         const STAGE_CONFIG = {
             // Waktu 12 menit (720 detik)
             timeLimit: 720, 
@@ -493,23 +478,18 @@
             stageState.currentQuestion = 1;
             stageState.timeLeft = STAGE_CONFIG.timeLimit;
             
-            // Ambil progres sebelumnya
             let progress = gameSession.stageProgress[`stage${STAGE_ID}`];
             stageState.attempts = progress?.attempts || 0;
             
-            // Saat inisialisasi, kurangi total skor global dengan skor stage ini dari *percobaan sebelumnya*
-            // Ini agar saat user me-restart, skor globalnya tidak terhitung ganda
             const oldScore = progress?.score || 0;
             gameSession.totalScore = gameSession.totalScore - oldScore;
             
-            // Skor untuk percobaan ini dimulai dari 0
             stageState.stageScore = 0; 
 
             if (!progress) {
                 gameSession.stageProgress[`stage${STAGE_ID}`] = { attempts: 0, score: 0, time: 0 };
             }
             
-            // Tampilkan total skor global (yang sudah dikurangi skor lama stage ini)
             totalScoreEl.textContent = gameSession.totalScore;
             updateTimerDisplay();
             attemptsEl.textContent = stageState.attempts;
@@ -533,18 +513,15 @@
 
         function startStage() {
             stageState.startTime = Date.now();
-            stageState.questionStartTime = Date.now(); // Set waktu mulai untuk soal pertama
+            stageState.questionStartTime = Date.now();
             if (stageState.timerInterval) clearInterval(stageState.timerInterval);
             stageState.timerInterval = setInterval(updateTimer, 1000);
         }
         
         function restartStage() {
             timeoutModal.style.display = 'none';
-            stageState.attempts++; // Tambah jumlah percobaan
+            stageState.attempts++;
             gameSession.stageProgress[`stage${STAGE_ID}`].attempts = stageState.attempts;
-            
-            // Skor dari percobaan yang gagal (waktu habis) tidak disimpan ke global.
-            // initStage() akan menangani reset skor.
             saveSession(); 
             initStage(); 
         }
@@ -588,7 +565,6 @@
             if (nextQ) nextQ.classList.add('active');
             
             stageState.currentQuestion = qNum;
-            // Setel ulang waktu mulai untuk soal baru
             stageState.questionStartTime = Date.now(); 
         }
 
@@ -604,11 +580,9 @@
                         const userAnswer = inputEl.value.toUpperCase().trim();
                         isCorrect = (userAnswer === config.answer);
                         break;
-                    
                     case 'matching':
                         isCorrect = (q2MatcherState.matches === q2MatcherState.totalPairs);
                         break;
-
                     case 'drag-drop':
                         const dropZone = document.getElementById('drop-zone');
                         const boxes = dropZone.querySelectorAll('.letter-box-large');
@@ -624,34 +598,23 @@
                 }
 
                 if (isCorrect) {
-                    // --- LOGIKA SKOR BERBASIS WAKTU ---
-                    // Hitung waktu yang diperlukan untuk menjawab soal ini (dalam detik)
                     const questionTime = Math.floor((Date.now() - stageState.questionStartTime) / 1000);
-                    
-                    const maxPoints = 25; // Poin maks per soal
-                    const minPoints = 10; // Poin min per soal
-                    const timeForMaxPoints = 60; // Waktu ideal (detik) untuk dapat poin maks
+                    const maxPoints = 25; 
+                    const minPoints = 10;
+                    const timeForMaxPoints = 60; 
 
                     let questionScore;
                     if (questionTime <= timeForMaxPoints) {
-                        // Jika lebih cepat atau sama dengan waktu ideal, dapat poin maks
                         questionScore = maxPoints;
                     } else {
-                        // Jika lebih lambat, poin berkurang.
-                        // Poin minimal adalah 10.
-                        let penalty = (questionTime - timeForMaxPoints) * 0.5; // Kurangi 0.5 poin tiap detik keterlambatan
+                        let penalty = (questionTime - timeForMaxPoints) * 0.5;
                         questionScore = Math.floor(maxPoints - penalty);
                     }
                     
-                    // Pastikan skor tidak kurang dari poin minimal
                     questionScore = Math.max(minPoints, questionScore); 
-                    // --- AKHIR LOGIKA SKOR ---
-
-                    stageState.stageScore += questionScore; // Tambah skor untuk *stage ini*
+                    stageState.stageScore += questionScore;
                     stageState.wrongAnswerCount = 0;
                     
-                    // --- PERBAIKAN: UPDATE SKOR DI LAYAR ---
-                    // Tampilkan total skor global DITAMBAH skor stage saat ini
                     totalScoreEl.textContent = gameSession.totalScore + stageState.stageScore;
                     
                     feedbackEl.textContent = `✓ Benar! (+${questionScore} Poin) Lanjut ke soal berikutnya...`;
@@ -670,18 +633,14 @@
                     }, 1500);
 
                 } else {
-                    // --- PENALTI JAWABAN SALAH ---
                     stageState.wrongAnswerCount++;
                     feedbackEl.textContent = "✗ Jawaban salah. Analisis kembali dengan teliti!";
                     feedbackEl.className = "feedback feedback-wrong";
 
-                    // Kurangi waktu 5 detik
                     stageState.timeLeft = Math.max(0, stageState.timeLeft - 5);
-                    updateTimerDisplay(); // Update timer di UI
+                    updateTimerDisplay();
                     
-                    // Tampilkan modal penalti
                     penaltyModal.style.display = 'flex';
-                    // Tutup modal otomatis setelah 2 detik
                     setTimeout(closePenaltyModal, 2000); 
                 }
             } catch (error) {
@@ -694,23 +653,18 @@
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             
-            // Skor akhir adalah total skor stage, pastikan minimal 10
             const finalStageScore = Math.max(10, stageState.stageScore);
             const timeTaken = STAGE_CONFIG.timeLimit - stageState.timeLeft;
 
-            // Simpan skor ke sesi global
-            // Kita sudah mengurangi skor lama di initStage(), jadi sekarang kita tambahkan skor baru
             gameSession.totalScore += finalStageScore; 
             
             gameSession.stageProgress[`stage${STAGE_ID}`].score = finalStageScore;
             gameSession.stageProgress[`stage${STAGE_ID}`].time = timeTaken;
             saveSession();
             
-            // Tampilkan modal sukses
             localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
             successModal.style.display = 'flex';
             
-            // Pindah ke stage berikutnya
             setTimeout(() => {
                 window.location.href = NEXT_STAGE_URL;
             }, 3000);
@@ -721,6 +675,7 @@
         }
         
         function initQuestion2() {
+            /* ... (Fungsi initQuestion2 tidak berubah) ... */
             const col1 = document.getElementById('q2-col1');
             const col2 = document.getElementById('q2-col2');
             
@@ -754,6 +709,7 @@
         }
         
         function onMatchItemClick(item, colNum) {
+            /* ... (Fungsi onMatchItemClick tidak berubah) ... */
             if (item.classList.contains('matched')) return;
 
             const state = q2MatcherState;
@@ -787,6 +743,7 @@
         }
 
         function initQuestion3() {
+            /* ... (Fungsi initQuestion3 tidak berubah) ... */
             const letterBoxes = document.querySelectorAll('#drop-zone .letter-box-large');
             const dragSource = document.getElementById('drag-source');
 
@@ -814,6 +771,7 @@
             });
         }
 
+        /* ... (Semua fungsi drag/drop/touch tidak berubah) ... */
         let draggedElement = null;
         let touchTarget = null;
         let touchSourceElement = null;

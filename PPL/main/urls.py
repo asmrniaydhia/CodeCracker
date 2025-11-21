@@ -50,4 +50,7 @@ urlpatterns = [
     path('pilihan-daftar/', views.pilihan_daftar, name='pilihan_daftar'),
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('tes/', views.tes, name='tes'),
+
+    # path('leaderboard/', views.leaderboard_view, name='leaderboard'),
+    path('api/simpan-skor-final/', views.simpan_skor_final_view, name='simpan_skor_final'),
 ]
