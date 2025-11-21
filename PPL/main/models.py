@@ -12,9 +12,17 @@ class Pengguna(models.Model):
     id_pengguna = models.AutoField(primary_key=True)
     nama_lengkap = models.CharField(max_length=45)
     email = models.CharField(max_length=45)
-    kata_sandi = models.CharField(max_length=45)
+    kata_sandi = models.CharField(max_length=255)
     peran = models.CharField(max_length=10, choices=PERAN_CHOICES)
 
+    @property
+    def is_guru(self):
+        return self.peran == 'guru'
+    
+    @property
+    def is_siswa(self):
+        return self.peran == 'siswa'
+    
     def __str__(self):
         return self.nama_lengkap
 
@@ -38,8 +46,7 @@ class Kelas(models.Model):
 class AnggotaKelas(models.Model):
     id_anggota = models.AutoField(primary_key=True)
     id_kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE, related_name='anggota')
-    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='kelas_siswa')
-
+    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='kelas_siswa', null=True)
     def __str__(self):
         return f"{self.id_siswa} di {self.id_kelas}"
 

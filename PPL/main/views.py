@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.hashers import make_password, check_password
 import time
 
 # ---------- EVALUASI ----------
@@ -207,34 +209,131 @@ def landing(request):
     return render(request, "landing.html")
 
 
+def register_user(request, peran):
+    """
+    Fungsi helper untuk menangani logic pendaftaran Guru atau Siswa.
+    """
+    if request.method == 'POST':
+        nama_lengkap = request.POST.get('nama_lengkap')
+        email = request.POST.get('email')
+        kata_sandi = request.POST.get('kata_sandi')
+        konfirmasi_sandi = request.POST.get('konfirmasi_sandi')
+
+        # 1. Validasi input
+        if kata_sandi != konfirmasi_sandi:
+            messages.error(request, 'Kata sandi dan konfirmasi kata sandi tidak cocok.')
+            # Kembali ke halaman formulir yang sesuai
+            template = "guru-daftar.html" if peran == 'guru' else "siswa-daftar.html"
+            return render(request, template, request.POST)
+
+        # 2. Cek apakah email sudah terdaftar
+        if Pengguna.objects.filter(email=email).exists():
+            messages.error(request, f'Email "{email}" sudah terdaftar. Silakan login.')
+            template = "guru-daftar.html" if peran == 'guru' else "siswa-daftar.html"
+            return render(request, template, request.POST)
+
+        # 3. Proses Hashing Kata Sandi dan Simpan
+        try:
+            # Hashing kata sandi sebelum disimpan
+            hashed_password = make_password(kata_sandi)
+
+            Pengguna.objects.create(
+                nama_lengkap=nama_lengkap,
+                email=email,
+                # Simpan kata sandi yang sudah di-hash
+                kata_sandi=hashed_password,
+                peran=peran
+            )
+            messages.success(request, 'Pendaftaran berhasil! Silakan login.')
+            return redirect('login') # Arahkan ke halaman login
+
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan saat menyimpan data: {e}')
+            template = "guru-daftar.html" if peran == 'guru' else "siswa-daftar.html"
+            return render(request, template, request.POST)
+
+    # Untuk permintaan GET, tampilkan formulir
+    template = "guru-daftar.html" if peran == 'guru' else "siswa-daftar.html"
+    return render(request, template)
+
+
 def guru_daftar(request):
-    return render(request, "guru-daftar.html")
+    # Panggil fungsi register_user dengan peran 'guru'
+    return register_user(request, peran='guru')
 
 
 def siswa_daftar(request):
-    return render(request, "siswa-daftar.html")
+    # Panggil fungsi register_user dengan peran 'siswa'
+    return register_user(request, peran='siswa')
 
 
 def pilihan_daftar(request):
     return render(request, "pilihan-daftar.html")
 
 
+def login_user(request):
+    """
+    Menangani proses login pengguna.
+    """
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        kata_sandi = request.POST.get('kata_sandi')
+
+        try:
+            user = Pengguna.objects.get(email=email)
+
+            # Verifikasi Kata Sandi dengan Hashing
+            # Menggunakan check_password untuk membandingkan kata sandi yang dimasukkan
+            # dengan kata sandi yang di-hash di database.
+            if check_password(kata_sandi, user.kata_sandi):
+                # Login Berhasil
+                request.session['user_id'] = user.id_pengguna
+                request.session['user_role'] = user.peran
+                messages.success(request, f'Selamat datang, {user.nama_lengkap}!')
+
+                # Arahkan (Redirect) sesuai peran
+                if user.peran == 'guru':
+                    # Guru diarahkan ke dashboard guru
+                    return redirect('dashboard')
+                else:
+                    # Siswa diarahkan ke landing page
+                    return redirect('landing')
+
+            else:
+                # Kata Sandi Salah
+                messages.error(request, 'Kata sandi salah.')
+                return render(request, 'login.html', {'email': email})
+
+        except Pengguna.DoesNotExist:
+            # Email Tidak Ditemukan
+            messages.error(request, 'Email tidak terdaftar.')
+            return render(request, 'login.html', {'email': email})
+
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan saat login: {e}')
+            return render(request, 'login.html')
+
+    # Untuk permintaan GET, tampilkan formulir login
+    return render(request, 'login.html')
+
+
+def logout_user(request):
+    """
+    Menghapus data session dan melakukan logout.
+    """
+    if 'user_id' in request.session:
+        del request.session['user_id']
+    if 'user_role' in request.session:
+        del request.session['user_role']
+    messages.info(request, 'Anda telah berhasil logout.')
+    return redirect('landing')
+
+
 def leaderboard(request):
+    # ... (tidak berubah)
     return render(request, "leaderboard.html")
 
 
 def tes(request):
+    # ... (tidak berubah)
     return render(request, "tes.html")
-
-
-# ---------- HELPER ----------
-from .models import Pengguna
-
-def get_logged_in_user(request):
-    user_id = request.session.get("user_id")  # ambil dari session
-    if user_id is None:
-        return None
-    try:
-        return Pengguna.objects.get(id_pengguna=user_id)
-    except Pengguna.DoesNotExist:
-        return None
