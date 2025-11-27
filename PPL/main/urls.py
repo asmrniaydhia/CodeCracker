@@ -5,7 +5,8 @@ urlpatterns = [
     # Evaluasi
     path('evaluasi/', views.evaluasi_petunjuk, name='evaluasi_petunjuk'),
     path('evaluasi/pengerjaan/', views.evaluasi_pengerjaan, name='evaluasi_pengerjaan'),
-    path('evaluasi/nilai/', views.evaluasi_nilai, name='evaluasi_nilai'),
+    path('evaluasi/simpan/', views.simpan_evaluasi_nilai, name='simpan_evaluasi_nilai'),
+    path('evaluasi/nilai/<int:hasil_id>/', views.evaluasi_nilai_detail, name='evaluasi_nilai_detail'),
 
     # Halaman guru
     path('guru/dashboard/', views.dashboard, name='dashboard'),
@@ -15,7 +16,8 @@ urlpatterns = [
     # Kuis
     path('kuis/', views.kuis_petunjuk, name='kuis_petunjuk'),
     path('kuis/pengerjaan/', views.kuis_pengerjaan, name='kuis_pengerjaan'),
-    path('kuis/nilai/', views.kuis_nilai, name='kuis_nilai'),
+    path('kuis/simpan/', views.simpan_kuis_nilai, name='simpan_kuis_nilai'),
+    path('kuis/nilai/<int:hasil_id>/', views.kuis_nilai_detail, name='kuis_nilai_detail'),
 
     # Materi
     path('materi/aktivitas1/', views.aktivitas1, name='aktivitas1'),

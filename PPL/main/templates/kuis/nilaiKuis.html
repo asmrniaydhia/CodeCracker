@@ -1,7 +1,7 @@
 {% extends "base_lesson.html" %}
 {% load static %}
 
-{% block title %}aktivitas 2 - CodeCracker{% endblock %}
+{% block title %}Hasil Kuis {{ hasil_kuis.id_kuis.nama_kuis }}{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -45,93 +45,189 @@
 </style>
 {% endblock %}
 
-{% block contet %}
-<!-- Navbar -->
-<nav class="navbar navbar-dark fixed-top">
-  <div class="container-fluid ps-4 pe-4">
-    <a class="navbar-brand fs-4" href="#">CodeCracker</a>
-  </div>
-</nav>
+{% block header %}{% endblock %}
+{% block sidebar %}{% endblock %}
 
-<div class="container py-5" style="max-width:1000px;">
-  <div class="mb-4">
-    <h1 class="headline">Hasil Kuis Kamu</h1>
-    <p class="subtitle">Ringkasan nilai & progres setiap Kuis</p>
-  </div>
+{% block main_layout %}
+<div style="padding-top: 70px;">
+  <div class="row justify-content-center m-0">
+    <div class="col-12 col-lg-10 p-0">
+      <div class="lesson-titlebar">HASIL KUIS</div>
+      <div class="container py-5">
+        <div class="mb-4 text-center">
+          <p class="subtitle">Ringkasan nilai & progres untuk Kuis {{ hasil_kuis.id_kuis.nama_kuis }}</p>
+        </div>
 
-  <!-- Ringkasan skor -->
-  <div class="score-card p-4 mb-4">
-    <div class="row g-4 align-items-center">
-      <div class="col-12 col-md-4 text-center">
-        <div id="scoreRing" class="ring" style="--p:0">
-          <div class="ring-inner">
-            <div>
-              <div id="scoreNum" class="display-5 fw-bold">0</div>
-              <div class="subtitle small">skor</div>
+        <div class="score-card p-4 mb-4">
+          <div class="row g-4 align-items-center">
+
+            <div class="col-12 col-md-4 text-center">
+              <div id="scoreRing" class="ring" style="--p:0">
+                <div class="ring-inner">
+                  <div>
+                    <div id="scoreNum" class="display-5 fw-bold">{{ hasil_kuis.skor_kuis }}</div>
+                    <div class="subtitle small">skor</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <span id="grade" class="badge bg-primary text-white">Percobaan Ke-{{ hasil_kuis.percobaan_kuis }}</span>
+              </div>
+            </div>
+
+            <div class="col-12 col-md-8">
+              <div class="row g-3 justify-content-center">
+
+                <div class="col-6 col-lg-3 text-center">
+                  <div class="border rounded p-3">
+                    <div class="subtitle small">Benar</div>
+                    <div id="correctCount" class="h4 fw-bold text-success">{{ correct_count }}</div>
+                  </div>
+                </div>
+
+                <div class="col-6 col-lg-3 text-center">
+                  <div class="border rounded p-3">
+                    <div class="subtitle small">Total Pertanyaan</div>
+                    <div id="totalCount" class="h4 fw-bold">{{ rincian_jawaban|length }}</div>
+                  </div>
+                </div>
+
+                <div class="col-6 col-lg-3 text-center">
+                    <div class="border rounded p-3">
+                        <div class="subtitle small">Waktu Pengerjaan</div>
+                        <div id="waktuPengerjaan" class="h5 m-0"></div> 
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3 text-center">
+                  <div class="border rounded p-3">
+                    <div class="subtitle small">Status</div>
+                    <div id="passFail" class="h5 m-0">-</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 text-center">
+                <a href="{% url 'kuis_pengerjaan' %}?jenis={{ hasil_kuis.id_kuis.nama_kuis|lower }}"
+                  class="btn btn-dark">Ulangi Kuis</a>
+                <a href="{% url next_url_name %}" id="nextMateriBtn" class="btn btn-outline-secondary">Selanjutnya</a>
+              </div>
             </div>
           </div>
         </div>
-        <div class="mt-3">
-          <span id="grade" class="badge bg-light text-dark">Menunggu perhitungan…</span>
-        </div>
-      </div>
 
-      <div class="col-12 col-md-8">
-        <div class="row g-3">
-          <div class="col-6 col-lg-4 text-center">
-            <div class="border rounded p-3">
-              <div class="subtitle small">Benar</div>
-              <div id="correctCount" class="h4 fw-bold">0</div>
-            </div>
-          </div>
-          <div class="col-6 col-lg-4 text-center">
-            <div class="border rounded p-3">
-              <div class="subtitle small">Total</div>
-              <div id="totalCount" class="h4 fw-bold">0</div>
-            </div>
-          </div>
-          <div class="col-12 col-lg-4 text-center">
-            <div class="border rounded p-3">
-              <div class="subtitle small">Status</div>
-              <div id="passFail" class="h5 m-0">-</div>
-            </div>
-          </div>
+        <div class="score-card p-4 mt-4">
+          <h5 class="mb-3">Rincian Jawaban</h5>
+          <table class="table table-bordered table-hover align-middle">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Pertanyaan</th>
+                <th>Jawaban Kamu</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="answerTable">
+              {% for rincian in rincian_jawaban %}
+              <tr class="{% if rincian.is_benar %}table-success{% else %}table-danger{% endif %}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ rincian.teks_pertanyaan }}</td>
+                <td><strong class="text-dark">{{ rincian.jawaban_siswa }}</strong></td>
+                <td>
+                  {% if rincian.is_benar %}
+                  <span class="badge bg-success text-white">BENAR</span>
+                  {% else %}
+                  <span class="badge bg-danger text-white">SALAH</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="4" class="text-center text-muted">Tidak ada rincian jawaban yang tersimpan.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-        <div class="mt-4 text-center">
-          <a href="#" class="btn btn-dark">Ulangi Kuis</a>
-          <a href="#" class="btn btn-outline-secondary">Materi Selanjutnya</a>
+
+        <div class="text-center text-muted small mt-4">
+          CodeCracker • Kuis
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Tabel Rincian Jawaban -->
-  <div class="score-card p-4">
-    <h5 class="mb-3">Rincian Jawaban</h5>
-    <table class="table table-bordered table-hover align-middle">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Pertanyaan</th>
-          <th>Jawaban Kamu</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="answerTable">
-        <tr>
-          <td colspan="4" class="text-center text-muted">Menunggu data…</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="text-center text-muted small mt-4">
-    CodeCracker • Kuis
-  </div>
 </div>
+{% endblock main_layout %}
 
-{% endblock %}
+
+{% block content %}
+{% endblock content %}
 
 {% block extra_js %}
+<script>
+  function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  (function () { 
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // 1. DATA KONTEN
+      const score = {{ hasil_kuis.skor_kuis }};
+      const correctCount = {{ correct_count }};
+      const totalCount = {{ rincian_jawaban| length }};
+      const totalSeconds = {{ hasil_kuis.waktu_kuis }};
+
+      // ⚠️ KOREKSI: Ambil tombol selanjutnya
+      const nextMateriBtn = document.getElementById('nextMateriBtn');
+
+      // 2. LOGIKA PERHITUNGAN
+      // Asumsi: Max score adalah Total Soal * 20 (berdasarkan kode Anda)
+      const maxScore = totalCount * 20;
+      let percentage = 0;
+      if (maxScore > 0) {
+        percentage = (score / maxScore) * 100;
+      }
+
+      // Kriteria Kelulusan Kuis (Diasumsikan 70% dari maxScore)
+      const passGrade = (maxScore * 0.7);
+      const isPassed = score >= passGrade;
+
+      document.getElementById('waktuPengerjaan').innerText = formatTime(totalSeconds);
+
+      // 3. LOGIKA ANIMASI & STATUS
+
+      // Animasi Ring Score
+      const scoreRing = document.getElementById('scoreRing');
+      if (scoreRing) {
+        setTimeout(() => {
+          scoreRing.style.setProperty('--p', percentage);
+        }, 10);
+      }
+
+      // Status Kelulusan & Kontrol Tombol Selanjutnya
+      const passFailElement = document.getElementById('passFail');
+
+      if (passFailElement) {
+        if (isPassed) {
+          // LULUS
+          passFailElement.innerHTML = `<span class="badge bg-success">LULUS</span>`;
+          // Tombol Selanjutnya akan muncul (default)
+        } else {
+          // GAGAL
+          passFailElement.innerHTML = `<span class="badge bg-danger">GAGAL</span>`;
+
+          // ⚠️ KOREKSI: Sembunyikan tombol 'Selanjutnya' jika GAGAL
+          if (nextMateriBtn) {
+            nextMateriBtn.style.display = 'none';
+          }
+        }
+      }
+    });
+  }) ();
+</script>
 <script src="{% static 'kuis.js' %}"></script>
 {% endblock %}

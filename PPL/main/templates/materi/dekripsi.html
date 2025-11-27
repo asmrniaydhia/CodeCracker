@@ -9,21 +9,24 @@
 <hr />
 
 <div class="lesson-content">
+
+    <!-- Tujuan Pembelajaran -->
     <h2 class="lesson-h2">Tujuan Pembelajaran</h2>
 
     <div class="lesson-card">
         <div class="lesson-goals">
             <div>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</div>
+
             <div class="lesson-goal">
                 <div class="lesson-num">1</div>
-                <div>Menjelaskan konsep dasar dekripsi sebagai proses mengembalikan pesan terenkripsi menjadi
-                    pesan asli.</div>
+                <div>Menjelaskan konsep dasar dekripsi sebagai proses mengembalikan pesan terenkripsi menjadi pesan asli.</div>
             </div>
+
             <div class="lesson-goal">
                 <div class="lesson-num">2</div>
-                <div>Menentukan pesan asli dari sebuah pesan yang telah dienkripsi menggunakan Caesar Cipher
-                    dengan kunci tertentu.</div>
+                <div>Menentukan pesan asli dari sebuah pesan yang telah dienkripsi menggunakan Caesar Cipher dengan kunci tertentu.</div>
             </div>
+
             <div class="lesson-goal">
                 <div class="lesson-num">3</div>
                 <div>Menemukan besar pergeseran atau kunci yang digunakan dalam sebuah pesan terenkripsi.</div>
@@ -33,78 +36,167 @@
 
     <hr />
 
+    <!-- Bagian 1: Pengertian Dekripsi -->
     <div class="lesson-wrap">
         <div class="lesson-head">
-            <h2 class="lesson-h2">Pengertian Dekripsi</h2>
-            <p class="teks">Setelah kita belajar tentang enkripsi yaitu proses menyembunyikan atau mengunci
-                pesan dengan mengubahnya dari Plaintext menjadi Ciphertext, sekarang kita akan mempelajari
-                proses kebalikannya, yaitu dekripsi. Secara sederhana, dekripsi adalah proses yang bertugas
-                untuk mengembalikan pesan yang sudah disamarkan atau diacak (Ciphertext) ke bentuk aslinya
-                (Plaintext) sehingga pesan tersebut dapat dibaca dan dipahami kembali oleh penerima yang
-                berhak.</p>
-            <p class="teks">Dekripsi adalah langkah terakhir yang sangat penting dalam komunikasi aman. Jika
-                enkripsi diibaratkan sebagai proses mengunci sebuah kotak harta karun sebelum dikirim, maka
-                dekripsi adalah proses membuka kunci kotak tersebut di tempat tujuan. Tanpa dekripsi,
-                Ciphertext hanya akan selamanya menjadi tumpukan kode acak yang tidak berarti, seperti
-                lembaran kertas yang penuh dengan coretan asing. Bayangkan pesan penting apa pun, mulai dari
-                transaksi bank hingga pesan cinta rahasia, akan sia-sia jika tidak bisa didekripsi.</p>
-            <p class="teks">Contoh Sederhana Dekripsi: Mari kita lihat kembali contoh Caesar Cipher. Kamu
-                mendapat pesan terenkripsi: <b><i>"KHOOR"</i></b>. Kamu tahu bahwa pesan ini dienkripsi
-                dengan geser 3
-                huruf ke depan. Agar pesan terbaca, kamu harus melakukan dekripsi dengan aturan sebaliknya:
-                geser 3 huruf mundur.</p>
 
-            <p class="teks">Hasil dekripsinya adalah: <b><i>HELLO</i></b>. Proses mental yang kamu lakukan
-                untuk
-                membalikkan sandi inilah yang disebut dekripsi.</p>
-            <!-- Pentingnya dari sudut sejarah -->
+            <h2 class="lesson-h2">Pengertian Dekripsi</h2>
+
+            <p class="teks">
+                Pada materi sebelumnya, kita telah mempelajari enkripsi sebagai proses menyamarkan pesan agar tidak mudah dibaca oleh orang lain.
+                Sekarang, kita akan mempelajari proses kebalikannya, yaitu <b>dekripsi</b>. 
+            </p>
+
+            <p class="teks">
+                <b>Dekripsi adalah proses mengembalikan Ciphertext (pesan yang sudah diacak) menjadi Plaintext (pesan asli) menggunakan aturan atau kunci tertentu.</b>
+            </p>
+
+            <p class="teks">
+                Jika enkripsi diibaratkan sebagai mengunci sebuah kotak harta karun, maka dekripsi adalah membuka kunci kotak tersebut agar isinya bisa diambil kembali oleh orang yang berhak.
+            </p>
+
+            <img src="/assets/des1.png" width="300px">
+
+            <p class="teks">
+                Tanpa dekripsi, pesan terenkripsi hanya akan terlihat seperti kumpulan huruf acak yang tidak mempunyai makna.
+                Proses ini sangat penting untuk memastikan bahwa komunikasi rahasia dapat dibaca kembali oleh penerima.
+            </p>
+
+            <p class="teks"><b>Contoh Dekripsi Caesar Cipher:</b></p>
+            <p class="lesson-child lesson-h2">Ciphertext: <i>"KHOOR"</i> (hasil enkripsi dengan geser +3)</p>
+
+            <p class="teks">
+                Untuk mendekripsi, kita melakukan proses kebalikannya: huruf-huruf digeser <b>mundur 3 langkah</b>.
+            </p>
+
+            <p class="lesson-child lesson-h2">Hasil: <b><i>HELLO</i></b></p>
+
+            <p class="teks">
+                Proses mengembalikan huruf ke posisi aslinya ini adalah inti dari dekripsi.
+            </p>
+
         </div>
     </div>
-    <hr>
+
+    <hr />
+
+    <!-- Bagian 2: Proses Dekripsi -->
     <div class="lesson-wrap">
         <div class="lesson-head">
-            <h2 class="lesson-h2">Dekripsi dalam Kehidupan Sehari-hari</h2>
-            <p class="teks">Dekripsi tidak hanya ada dalam cerita sandi kuno, tetapi merupakan bagian
-                integral dari rutinitas digital kita. Setiap proses "membuka kunci" informasi rahasia di
-                dunia digital adalah dekripsi.</p>
+
+            <h2 class="lesson-h2">Bagaimana Dekripsi Bekerja?</h2>
+
+            <p class="teks">
+                Proses dekripsi biasanya bergantung pada dua hal penting:
+            </p>
+
+            <ol class="teks m-3 mt-0">
+                <li>
+                    <b>Algoritma yang digunakan</b>  
+                    Aturan yang menjelaskan bagaimana pesan diacak dan bagaimana membalikkan proses itu.
+                </li>
+                <li>
+                    <b>Kunci yang tepat</b>  
+                    Nilai tertentu yang menentukan bagaimana pesan kembali ke bentuk aslinya.
+                </li>
+            </ol>
+
+            <p class="teks">
+                Jika salah satu dari dua hal ini tidak diketahui, pesan tidak dapat didekripsi dengan benar.
+            </p>
+
+            <p class="teks"><b>Pada Caesar Cipher:</b></p>
             <ul class="teks m-3 mt-0">
-                <li><b>Pesan WhatsApp (End-to-End Encryption):</b> Ketika temanmu mengirim pesan, pesan itu
-                    dienkripsi. Saat pesan sampai ke HP-mu, ponselmu otomatis melakukan dekripsi agar kamu
-                    bisa membaca isinya dengan jelas. Proses ini terjadi sangat cepat sehingga tidak kamu
-                    sadari.</li>
-                <li><b>Membuka File yang Diproteksi:</b> Jika kamu membuka file yang diberi password
-                    (misalnya
-                    dokumen Word atau PDF), proses memasukkan password yang benar untuk melihat isinya
-                    adalah bentuk dekripsi. Password yang kamu masukkan berfungsi sebagai kunci.</li>
-                <li><b>Akses Data Game:</b> Beberapa game menyimpan data pemain dalam bentuk kode
-                    terenkripsi. Saat
-                    kamu masuk, game melakukan dekripsi agar data kamu (skor, level, item) bisa ditampilkan
-                    kembali di layar.</li>
-                <li><b>Membaca Soal yang Dilindungi:</b> Guru bisa menyimpan soal ulangan dalam bentuk
-                    terenkripsi.
-                    Saat waktunya tiba, guru menggunakan kunci dekripsi (bisa berupa password) agar soal
-                    bisa dibaca siswa dan dicetak.</li>
+                <li>Enkripsi: huruf digeser ke depan</li>
+                <li>Dekripsi: huruf digeser ke belakang</li>
             </ul>
+
+            <img src="/assets/des3.png" width="400px">
+
+            <p class="teks">
+                Contoh lainnya: Jika Ciphertext adalah <b>"QEB NRFZH"</b> dan kita tidak tahu kuncinya,
+                maka siswa dapat mencoba satu per satu pergeseran untuk menemukan kunci yang sesuai.
+            </p>
+
         </div>
     </div>
-    <hr>
+
+    <hr />
+
+    <!-- Bagian 3: Dekripsi dalam Kehidupan Sehari-hari -->
     <div class="lesson-wrap">
         <div class="lesson-head">
-            <h2 class="lesson-h2">Pentingnya Dekripsi</h2>
-            <p class="teks">Dekripsi adalah langkah penting dalam rantai komunikasi yang aman. Walaupun
-                enkripsi bertugas melindungi kerahasiaan data selama pengiriman, dekripsi memastikan bahwa
-                data tersebut akhirnya bisa dimanfaatkan. Tanpa kemampuan mendekripsi, pesan yang sudah
-                terenkripsi hanya akan menjadi huruf-huruf aneh yang tidak berguna.</p>
-            <img src="/assets/des2.png" alt="" width="400px" height="">
-            <p class="teks">Bayangkan kamu menerima pesan dari gurumu berisi instruksi penting untuk
-                kegiatan esok hari. Karena pesannya dienkripsi, kamu tidak bisa langsung mengerti. Jika kamu
-                tidak tahu cara mendekripsinya, kamu akan kebingungan dan gagal menjalankan instruksi
-                penting tersebut. Dengan kata lain, dekripsi adalah jaminan bahwa tujuan akhir dari
-                komunikasi, yaitu menyampaikan informasi rahasia kepada pihak yang berhak, terpenuhi. Hal
-                ini berkaitan langsung dengan pilar keamanan Kerahasiaan dan Integritas, karena pesan yang
-                berhasil didekripsi menunjukkan bahwa data tersebut asli dan bisa dipercaya.</p>
+
+            <h2 class="lesson-h2">Dekripsi dalam Kehidupan Sehari-hari</h2>
+
+            <p class="teks">
+                Dekripsi ternyata bukan hanya milik hacker, agen rahasia, atau dunia mata-mata.
+                Di kehidupan sehari-hari, kita berhadapan dengan proses dekripsi hampir setiap hari tanpa menyadarinya.
+            </p>
+
+            <ul class="teks m-3 mt-0">
+                <li>
+                    <b>Pesan WhatsApp:</b>  
+                    Saat pesan masuk, aplikasi otomatis mendekripsi agar kamu bisa membacanya.
+                </li>
+                <li>
+                    <b>Membuka file berpassword:</b>  
+                    Saat memasukkan password, komputer melakukan dekripsi untuk menampilkan isi file.
+                </li>
+                <li>
+                    <b>Data game yang tersimpan:</b>  
+                    Game mendekripsi data level dan progress sebelum menampilkannya.
+                </li>
+                <li>
+                    <b>Soal ujian digital:</b>  
+                    Guru bisa menyimpan soal dalam bentuk terenkripsi, lalu mendekripsinya saat ujian dimulai.
+                </li>
+            </ul>
+
         </div>
     </div>
+
+    <hr />
+
+    <!-- Bagian 4: Pentingnya Dekripsi -->
+    <div class="lesson-wrap">
+        <div class="lesson-head">
+
+            <h2 class="lesson-h2">Mengapa Dekripsi Penting?</h2>
+
+            <p class="teks">
+                Enkripsi dan dekripsi adalah dua proses yang tidak bisa dipisahkan.
+                Jika enkripsi menjaga agar pesan tidak dibaca orang lain, dekripsi memastikan bahwa orang yang berhak dapat membaca pesan itu dengan benar.
+            </p>
+
+            <img src="/assets/des2.png" width="400px">
+
+            <p class="teks">
+                Tanpa dekripsi:
+            </p>
+
+            <ul class="teks m-3 mt-0">
+                <li>Penerima tidak akan tahu isi pesan asli</li>
+                <li>Instruksi penting dapat disalahpahami</li>
+                <li>Komunikasi menjadi tidak efektif</li>
+            </ul>
+
+            <p class="teks">
+                Dekripsi juga berhubungan erat dengan aspek keamanan:
+            </p>
+
+            <ol class="teks m-3 mt-0">
+                <li><b>Kerahasiaan:</b> hanya penerima dengan kunci yang bisa mengakses pesan asli.</li>
+                <li><b>Integritas:</b> pesan yang berhasil didekripsi menunjukkan bahwa isinya tidak berubah.</li>
+            </ol>
+
+            <p class="teks">
+                Dengan kata lain, dekripsi membantu memastikan bahwa proses komunikasi aman berjalan hingga selesai.
+            </p>
+
+        </div>
+    </div>
+
 </div>
 
 <!-- Pagination -->

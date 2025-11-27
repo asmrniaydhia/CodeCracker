@@ -28,62 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const quizKey = "evaluasi";
   let flagged = {};
 
-  // ===============================
-  // HALAMAN NILAI (Django: /evaluasi/nilai/)
-  // ===============================
-  if (window.location.pathname.includes("/evaluasi/nilai")) {
-    const score = parseInt(localStorage.getItem(`${quizKey}_nilai`) || "0");
-    const detail = JSON.parse(
-      localStorage.getItem(`${quizKey}_detail`) || "{}"
-    );
-    const benar = detail.correct || 0;
-    const total = detail.total || 0;
-
-    const scoreNum = document.getElementById("scoreNum");
-    const correctCount = document.getElementById("correctCount");
-    const totalCount = document.getElementById("totalCount");
-    const passFail = document.getElementById("passFail");
-    const grade = document.getElementById("grade");
-    const ring = document.getElementById("scoreRing");
-    const answerTable = document.getElementById("answerTable");
-
-    scoreNum.textContent = score;
-    correctCount.textContent = benar;
-    totalCount.textContent = total;
-    ring.style.setProperty("--p", score);
-
-    if (score >= KKM) {
-      passFail.textContent = "Lulus ✅";
-      passFail.classList.add("text-success");
-      grade.textContent = "Baik";
-      grade.classList.replace("bg-light", "bg-success");
-      grade.classList.add("text-white");
-    } else {
-      passFail.textContent = "Tidak Lulus ❌";
-      passFail.classList.add("text-danger");
-      grade.textContent = "Perlu Mengulang";
-      grade.classList.replace("bg-light", "bg-danger");
-      grade.classList.add("text-white");
-    }
-
-    // Tabel rincian jawaban
-    if (detail.answers && Array.isArray(detail.answers)) {
-      answerTable.innerHTML = "";
-      detail.answers.forEach((item, index) => {
-        const row = document.createElement("tr");
-        const benarSalah = item.isCorrect
-          ? '<span class="text-success fw-bold">Benar</span>'
-          : '<span class="text-danger fw-bold">Salah</span>';
-        row.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${item.question}</td>
-          <td>${item.userAnswerText}</td>
-          <td>${benarSalah}</td>
-        `;
-        answerTable.appendChild(row);
-      });
-    }
-    return;
+  if (!window.location.pathname.includes("/evaluasi/pengerjaan")) {
+      return; 
   }
 
   // ===============================
@@ -221,6 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentQuestion = 1;
   const totalQuestions = questions.length;
   let answers = JSON.parse(localStorage.getItem(`${quizKey}_answers`) || "{}");
+  let timer;
 
   const soalContainer = document.getElementById("quiz-question");
   const optionContainer = document.getElementById("quiz-options");
@@ -353,13 +300,13 @@ document.addEventListener("DOMContentLoaded", function () {
     timerDisplay.textContent = `${m}:${s < 10 ? "0" + s : s}`;
   }
 
-  setInterval(() => {
+  timer = setInterval(() => {
     if (totalSeconds > 0) {
       totalSeconds--;
       updateTimer();
     } else {
-      alert("Waktu habis!");
-      window.location.href = "/evaluasi/nilai/";
+      alert("Waktu habis! Evaluasi akan disubmit.");
+      submitEvaluation(); 
     }
   }, 1000);
 
@@ -378,47 +325,67 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // SUBMIT
-  submitBtn.addEventListener("click", () => {
-    let benar = 0;
-    const detailAnswers = [];
+  function submitEvaluation() {
+    clearInterval(timer);
 
-    questions.forEach((q, i) => {
-      let userAnswer = answers[i + 1];
-      let isCorrect = false;
+    // 1. BUAT FORM POST
+    const form = document.createElement("form");
+    form.method = "POST";
+    // Targetkan view Django simpan_evaluasi_nilai
+    form.action = "/evaluasi/simpan/";
+
+    // Ambil token CSRF dari DOM (dari evaluasi_pengerjaan.html)
+    const csrfInput = document.querySelector(
+      'input[name="csrfmiddlewaretoken"]'
+    );
+    if (csrfInput) {
+      form.appendChild(csrfInput.cloneNode(true));
+    } else {
+      console.error("CSRF token tidak ditemukan!");
+      return;
+    }
+
+    // Helper untuk menambah input
+    function addInput(name, value) {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    }
+
+    // Tambahkan Waktu Pengerjaan
+    let waktuPengerjaan = 60 * 60 - totalSeconds;
+    addInput("waktu_pengerjaan", waktuPengerjaan);
+
+    // 2. Tambahkan Rincian Jawaban
+    questions.forEach((q, idx) => {
+      const userAnsIndex = answers[idx + 1];
+      let userAnswerText;
 
       if (q.type === "mcq") {
-        isCorrect = userAnswer === q.correct;
+        // Ambil teks opsi yang dipilih
+        userAnswerText =
+          userAnsIndex !== undefined ? q.options[userAnsIndex] : "(kosong)";
       } else {
-        isCorrect =
-          userAnswer &&
-          userAnswer.toString().trim().toUpperCase() === q.answer.toUpperCase();
+        // Ambil teks isian langsung
+        userAnswerText = userAnsIndex || "(kosong)";
       }
 
-      if (isCorrect) benar++;
-
-      detailAnswers.push({
-        question: q.question,
-        userAnswerText: userAnswer || "(kosong)",
-        correctAnswerText: q.type === "mcq" ? q.options[q.correct] : q.answer,
-        isCorrect,
-      });
+      // Format pengiriman: jawaban_IDPERTANYAAN = JAWABAN_SISWA
+      addInput(`jawaban_${idx + 1}`, userAnswerText);
     });
 
-    const score = Math.round((benar / totalQuestions) * 100);
+    // Bersihkan local storage sebelum submit (Opsional)
+    localStorage.removeItem(`${quizKey}_answers`);
+    localStorage.removeItem(`${quizKey}_flagged`);
 
-    localStorage.setItem(`${quizKey}_nilai`, score);
-    localStorage.setItem(
-      `${quizKey}_detail`,
-      JSON.stringify({
-        correct: benar,
-        total: totalQuestions,
-        answers: detailAnswers,
-      })
-    );
+    // 3. Submit Form (Server akan menangani redirect)
+    document.body.appendChild(form);
+    form.submit();
+  }
 
-    window.location.href = "/evaluasi/nilai/";
-  });
+  submitBtn.addEventListener("click", submitEvaluation);
 
   renderQuestion(currentQuestion);
 });
