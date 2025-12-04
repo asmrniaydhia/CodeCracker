@@ -10,40 +10,112 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* [ ... CSS Anda tidak berubah ... ] */
+        :root {
+            --primary-dark: #1B3C53;
+            --accent-gold: #F3C623;
+            --bg-page: #f8f9fa;
+        }
+
         body {
-            padding-top: 70px;
+            padding-top: 90px;
             font-family: 'Open Sans', sans-serif;
-            background-color: #f8f9fa;
+            background-color: var(--bg-page);
         }
+
+        /* --- NAVBAR STYLE --- */
         .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            background-color: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             height: 70px;
+            z-index: 9999; 
         }
+        
         .navbar-brand {
             font-family: 'Lato', sans-serif;
             font-weight: 900;
-            color: white;
-            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: white !important;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
         }
+
+        /* Link Navigasi */
         .nav-link {
-            color: white;
-            transition: all 0.3s ease;
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 600;
+            margin: 0 10px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
         }
-        .nav-link:hover {
-            color: #F3C623;
-            transform: translateY(-1px);
+        .nav-link i { margin-right: 6px; }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-gold) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Tombol Logout */
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: white;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        /* Responsive Navbar Collapse */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background-color: var(--primary-dark);
+                padding: 1rem;
+                border-radius: 0 0 10px 10px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            }
+            .btn-logout { width: 100%; justify-content: center; margin-top: 10px; }
+            /* Pada mobile, menu tetap center/stretch */
+            .navbar-nav { margin-left: 0 !important; }
         }
         
-        /* Challenge Grid Styles */
+        /* --- KONTEN TANTANGAN --- */
+
+        /* Header Style */
+        .challenges-header {
+            text-align: center;
+            padding: 2rem 0 1.5rem;
+        }
+        
+        /* Style Ikon Besar */
+        .header-agent-icon {
+            font-size: 3.5rem; /* Ukuran Besar */
+            color: #2c5364;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
         .challenges-header h1 {
             font-family: 'Lato', sans-serif;
             font-weight: 700;
             font-size: clamp(1.75rem, 5vw, 2.5rem);
             color: #2c5364;
-            padding: 2rem 0 1.5rem;
+            margin-top: 0.5rem;
         }
+
+        /* Grid & Card Styles */
         .challenges-container {
             padding: 1.5rem 0 3rem;
             max-width: 1400px;
@@ -65,7 +137,6 @@
             justify-content: center;
         }
 
-        /* Challenge Card Styles */
         .challenge-card {
             background-color: white;
             border-radius: 10px;
@@ -82,9 +153,7 @@
             color: inherit;
             text-decoration: none;
         }
-        .challenge-card:not(.locked) {
-            cursor: pointer;
-        }
+        .challenge-card:not(.locked) { cursor: pointer; }
         .challenge-card:not(.locked):hover {
             transform: translateY(-5px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -103,15 +172,8 @@
             overflow: hidden;
             flex-shrink: 0;
         }
-        .challenge-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .challenge-info {
-            flex: 1 1 auto;
-            text-align: center;
-        }
+        .challenge-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .challenge-info { flex: 1 1 auto; text-align: center; }
         .challenge-number {
             font-family: 'Lato', sans-serif;
             font-weight: 900;
@@ -137,16 +199,10 @@
             border: none;
             display: inline-block;
         }
-        .status-badge.selesai {
-            background-color: #28a745;
-            color: white;
-        }
-        .status-badge.terkunci {
-            background-color: #6c757d;
-            color: white;
-        }
+        .status-badge.selesai { background-color: #28a745; color: white; }
+        .status-badge.terkunci { background-color: #6c757d; color: white; }
         
-        /* Pop-up Modal Styles (From Second File) */
+        /* Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -157,9 +213,7 @@
             justify-content: center;
             align-items: center;
         }
-        .modal-overlay.active {
-            display: flex;
-        }
+        .modal-overlay.active { display: flex; }
         .prolog-modal {
             background: linear-gradient(135deg, #1B3C53 0%, #2c5364 100%);
             border-radius: 15px;
@@ -266,25 +320,36 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid px-lg-5 px-3">
-            <a class="navbar-brand" href="{% url 'landing' %}"><i class="fas fa-user-secret"></i> CodeCracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="{% url 'landing' %}">
+                CodeCracker
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-4 me-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pengenalan' %}"><i class="fa-solid fa-book-open"></i> Belajar</a>
+                        <a class="nav-link" href="{% url 'pengenalan' %}">
+                            <i class="fa-solid fa-book-open"></i> Belajar
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'tantangan' %}"><i class="fa-solid fa-gamepad"></i>
-                            Tantangan</a>
+                        <a class="nav-link active" href="{% url 'tantangan' %}">
+                            <i class="fa-solid fa-gamepad"></i> Tantangan
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'leaderboard' %}"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                        <a class="nav-link" href="{% url 'leaderboard' %}">
+                            <i class="fa-solid fa-trophy"></i> Leaderboard
+                        </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-info-circle"></i> Informasi</a>
+                    
+                    <li class="nav-item ms-lg-3">
+                        <a href="{% url 'logout' %}" class="btn-logout">
+                            <i class="fas fa-sign-out-alt me-1"></i> Keluar
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -313,6 +378,7 @@
 
     <div class="challenges-header">
         <div class="container-fluid text-center">
+            <i class="fas fa-user-secret header-agent-icon"></i>
             <h1>Tantangan</h1>
         </div>
     </div>
@@ -325,7 +391,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // --- POP-UP MODAL LOGIC ---
-        // [ ... Logika Modal Anda tidak berubah ... ]
         const prologModal = document.getElementById('prologModal');
         const prologContent = document.getElementById('prologContent');
         const btnNext = document.getElementById('btnNext');
@@ -357,7 +422,6 @@
         
         btnNext.addEventListener('click', () => {
             prologModal.classList.remove('active');
-            // PERBAIKAN 6: Gunakan URL Django untuk Stage 1
             window.location.href = "{% url 'stage1' %}"; 
         });
 
@@ -402,11 +466,6 @@
                     statusClass = 'selesai';
                 }
                 
-                // PERBAIKAN 7: Path gambar diperbaiki untuk folder static (asumsi)
-                // Jika gambar ada di folder static/assets/, ubah path di bawah ini:
-                // Jika menggunakan static file django, idealnya menggunakan tag static, tapi sulit di dalam loop JS.
-                // Solusinya gunakan path absolut root jika folder static dikonfigurasi benar.
-                // Contoh: /static/assets/challenge_1.png
                 cardWrapper.innerHTML = `
                     <div class="challenge-thumbnail">
                         <img src="/static/assets/challenge_${i}.png" alt="Tantangan ${i}" onerror="this.src='https://via.placeholder.com/85?text=Stage+${i}'"> 
@@ -430,8 +489,6 @@
                             prologModal.classList.add('active');
                             setTimeout(checkInitialScroll, 100);
                         } else {
-                            // PERBAIKAN 8: Mengarahkan ke URL Django yang benar
-                            // Format di urls.py adalah 'tantangan/stageX/'
                             window.location.href = `/tantangan/stage${stage}/`; 
                         }
                     });

@@ -6,7 +6,18 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from .models import PeringkatFinal
+from functools import wraps
 import json
+
+# --- DECORATOR KHUSUS TANTANGAN ---
+def butuh_login_siswa(function):
+    @wraps(function)
+    def wrap(request, *args, **kwargs):
+        # Cek apakah siswa punya session 'user_id'
+        if 'user_id' not in request.session:
+            return redirect('login') # Tendang ke login jika tidak ada session
+        return function(request, *args, **kwargs)
+    return wrap
 
 # ---------- EVALUASI ----------
 def evaluasi_petunjuk(request):
@@ -133,47 +144,47 @@ def pengenalan(request):
 
 
 # ---------- TANTANGAN ----------
-@login_required
+@butuh_login_siswa
 def stage1(request):
     return render(request, "tantangan/stage1.html")
 
-@login_required
+@butuh_login_siswa
 def stage2(request):
     return render(request, "tantangan/stage2.html")
 
-@login_required
+@butuh_login_siswa
 def stage3(request):
     return render(request, "tantangan/stage3.html")
 
-@login_required
+@butuh_login_siswa
 def stage4(request):
     return render(request, "tantangan/stage4.html")
 
-@login_required
+@butuh_login_siswa
 def stage5(request):
     return render(request, "tantangan/stage5.html")
 
-@login_required
+@butuh_login_siswa
 def stage6(request):
     return render(request, "tantangan/stage6.html")
 
-@login_required
+@butuh_login_siswa
 def stage7(request):
     return render(request, "tantangan/stage7.html")
 
-@login_required
+@butuh_login_siswa
 def stage8(request):
     return render(request, "tantangan/stage8.html")
 
-@login_required
+@butuh_login_siswa
 def stage9(request):
     return render(request, "tantangan/stage9.html")
 
-@login_required
+@butuh_login_siswa
 def stage10(request):
     return render(request, "tantangan/stage10.html")
 
-@login_required
+@butuh_login_siswa
 def tantangan(request):
     return render(request, "tantangan/tantangan.html")
 
@@ -303,34 +314,73 @@ def tes(request):
     # ... (tidak berubah)
     return render(request, "tes.html")
 
-@login_required
+@butuh_login_siswa
 @require_POST
 def simpan_skor_final_view(request):
-    if PeringkatFinal.objects.filter(siswa=request.user).exists():
-        return JsonResponse({
-            'status': 'sudah_ada', 
-            'message': 'Skor PERTAMA kali Anda sudah tercatat di Leaderboard. Percobaan ini tidak akan mengubah peringkat.'
-        }, status=200)
+    """
+    Menerima data JSON dari Stage 10 dan menyimpannya ke database.
+    Memperbarui skor jika pemain mendapatkan skor lebih tinggi dari sebelumnya.
+    """
+    # 1. Pastikan user valid dari session
+    user_id = request.session.get('user_id')
+    try:
+        # Gunakan model Pengguna
+        siswa_sekarang = Pengguna.objects.get(id_pengguna=user_id)
+    except Pengguna.DoesNotExist:
+        return JsonResponse({'status': 'gagal', 'message': 'User session expired atau tidak valid.'}, status=401)
 
     try:
+        # 2. Baca data JSON (perbaikan utama di sini)
         data = json.loads(request.body)
-        skor = int(data.get('total_skor'))
-        waktu = int(data.get('total_waktu'))
+        skor_baru = int(data.get('total_skor', 0))
+        waktu_baru = int(data.get('total_waktu', 0))
 
-        PeringkatFinal.objects.create(
-            siswa=request.user,
-            total_skor=skor,
-            total_waktu_detik=waktu
-        )
-        return JsonResponse({'status': 'sukses', 'message': 'Selamat! Skor pertama Anda berhasil dicatat ke Leaderboard!'}, status=201)
-    
+        # 3. Logika Simpan / Update High Score
+        # Cek apakah data user ini sudah ada di PeringkatFinal?
+        obj, created = PeringkatFinal.objects.get_or_create(siswa=siswa_sekarang)
+
+        if created:
+            # Jika baru pertama kali main, simpan langsung
+            obj.total_skor = skor_baru
+            obj.total_waktu_detik = waktu_baru
+            obj.save()
+            return JsonResponse({'status': 'sukses', 'message': 'Skor berhasil disimpan ke Leaderboard!'})
+        
+        else:
+            # Jika sudah pernah main, kita cek apakah ini rekor baru?
+            updated = False
+            
+            if skor_baru > obj.total_skor:
+                # Skor lebih tinggi = Update
+                updated = True
+            elif skor_baru == obj.total_skor and waktu_baru < obj.total_waktu_detik:
+                # Skor sama tapi waktu lebih cepat = Update
+                updated = True
+            
+            if updated:
+                obj.total_skor = skor_baru
+                obj.total_waktu_detik = waktu_baru
+                obj.save()
+                return JsonResponse({'status': 'sukses', 'message': 'Rekor baru! Skor leaderboard diperbarui.'})
+            else:
+                return JsonResponse({
+                    'status': 'sudah_ada', 
+                    'message': f'Skor tersimpan ({skor_baru}), tapi tidak melampaui rekor terbaik ({obj.total_skor}).'
+                })
+
     except Exception as e:
         return JsonResponse({'status': 'gagal', 'message': str(e)}, status=500)
 
-@login_required 
-def leaderboard_view(request):
-    peringkat_list = PeringkatFinal.objects.all().order_by('-total_skor', 'total_waktu_detik')
+@butuh_login_siswa
+def leaderboard(request):
+    # 1. Ambil semua data peringkat
+    # select_related('siswa') digunakan agar query lebih cepat saat mengambil nama
+    peringkat_list = PeringkatFinal.objects.select_related('siswa').all().order_by('-total_skor', 'total_waktu_detik')
+    
+    # 2. Masukkan ke dalam context dictionary
     context = {
         'peringkat_list': peringkat_list
     }
-    return render(request, 'leaderboard.html', context)
+    
+    # 3. Kirim context ke template HTML
+    return render(request, "leaderboard.html", context)

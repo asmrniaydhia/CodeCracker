@@ -1,333 +1,311 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeCracker - Papan Peringkat Agen</title>
+    <title>Papan Peringkat Agen - CodeCracker</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --primary-dark: #1B3C53;
             --accent-gold: #F3C623;
-            --bg-light: #f0f4f8;
-            --rank-1: #FFD700;
-            --rank-2: #C0C0C0;
-            --rank-3: #CD7F32;
+            --bg-page: #f0f4f8;
         }
 
         body {
-            padding-top: 70px;
+            /* PENTING: Padding ini agar konten tidak ketutup Navbar Fixed */
+            padding-top: 90px; 
             font-family: 'Open Sans', sans-serif;
-            background-color: var(--bg-light);
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-color: var(--bg-page);
+            background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
             background-size: 24px 24px;
             min-height: 100vh;
         }
 
-        /* Navbar Styling (Updated to match tantangan.html) */
+        /* --- NAVBAR STYLE (Sama Persis dengan Tantangan.html) --- */
         .navbar {
-            background-color: #1B3C53;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            background-color: var(--primary-dark);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             height: 70px;
+            /* Pastikan Navbar selalu paling depan */
+            z-index: 9999; 
         }
+        
         .navbar-brand {
             font-family: 'Lato', sans-serif;
             font-weight: 900;
-            color: white;
-            font-size: clamp(1.5rem, 4vw, 2rem);
+            color: white !important;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
         }
+
+        /* Link Navigasi */
         .nav-link {
-            color: white;
-            transition: all 0.3s ease;
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 600;
+            margin: 0 8px; /* Jarak disamakan */
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
         }
-        .nav-link:hover {
-            color: #F3C623;
-            transform: translateY(-1px);
-        }
+        .nav-link i { margin-right: 6px; }
         
-        /* Header Section */
-        .leaderboard-header {
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-bottom: 1rem;
+        .nav-link:hover, .nav-link.active {
+            color: var(--accent-gold) !important;
+            transform: translateY(-2px);
         }
-        .leaderboard-header h1 {
+
+        /* Styling untuk Teks Sapaan User */
+        .navbar-text {
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+        .badge-role {
+            background-color: #0dcaf0;
+            color: #212529;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        /* Tombol Logout */
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+        }
+        .btn-logout:hover {
+            background-color: #c82333;
+            color: white;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+        }
+
+        /* Responsive Navbar Collapse */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background-color: var(--primary-dark);
+                padding: 1.5rem;
+                border-radius: 0 0 15px 15px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+            .navbar-nav {
+                margin-bottom: 1.5rem;
+            }
+            .navbar-right-container {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 15px !important;
+                width: 100%;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+            .btn-logout { width: 100%; justify-content: center; }
+        }
+
+        /* --- CSS KONTEN LEADERBOARD --- */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            z-index: 1; /* Di bawah navbar */
+        }
+        .page-title {
             font-family: 'Lato', sans-serif;
             font-weight: 900;
-            font-size: clamp(2rem, 5vw, 3rem);
+            font-size: 2.8rem;
             color: var(--primary-dark);
             text-transform: uppercase;
             letter-spacing: 2px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            margin-bottom: 0.5rem;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.05);
         }
-        .leaderboard-header p {
-            color: #64748b;
-            font-size: 1.1rem;
-        }
+        .page-subtitle { color: #64748b; font-size: 1.1rem; }
 
-        /* Card & Table Styling */
-        .leaderboard-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-            border: none;
-            margin-bottom: 4rem;
-        }
+        .rank-container { max-width: 900px; margin: 0 auto 5rem auto; padding: 0 15px; }
 
-        .table-custom {
-            margin-bottom: 0;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-        .table-custom thead {
-            background-color: var(--primary-dark);
-            color: white;
-        }
-        .table-custom th {
-            padding: 1.2rem 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            border: none;
-        }
-        .table-custom td {
-            padding: 1.2rem 1.5rem;
-            vertical-align: middle;
-            border-bottom: 1px solid #f1f5f9;
-            font-weight: 600;
-            color: #334155;
-        }
-        .table-custom tr:last-child td {
-            border-bottom: none;
-        }
-        .table-custom tbody tr {
-            transition: all 0.2s ease;
-        }
-        .table-custom tbody tr:hover {
-            background-color: #f8fafc;
-            transform: scale(1.005);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            z-index: 1;
-            position: relative;
-        }
+        /* Tabel Style Kartu */
+        .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        .custom-table thead th { border: none; color: #64748b; text-transform: uppercase; font-size: 0.8rem; padding: 0 20px; }
 
-        /* Rank Styles */
-        .rank-cell {
-            font-family: 'Lato', sans-serif;
-            font-weight: 900;
-            font-size: 1.2rem;
-            width: 80px;
-            text-align: center;
-        }
-        .rank-icon {
-            width: 40px;
-            height: 40px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            color: white;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .rank-1 .rank-icon { background: linear-gradient(135deg, #FFD700, #FDB931); font-size: 1.2rem; }
-        .rank-2 .rank-icon { background: linear-gradient(135deg, #E0E0E0, #BDBDBD); font-size: 1.1rem; }
-        .rank-3 .rank-icon { background: linear-gradient(135deg, #CD7F32, #A0522D); font-size: 1.1rem; }
-        .rank-other { 
-            color: #94a3b8; 
-            background: #f1f5f9; 
-            width: 35px; 
-            height: 35px; 
-            border-radius: 50%; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center;
-        }
+        .rank-row { background: white; transition: transform 0.2s; }
+        .rank-row:hover { transform: scale(1.01); box-shadow: 0 10px 25px rgba(0,0,0,0.08); z-index: 5; position: relative; }
+        
+        /* Sudut Tumpul Baris */
+        .rank-row td:first-child { border-top-left-radius: 15px; border-bottom-left-radius: 15px; }
+        .rank-row td:last-child { border-top-right-radius: 15px; border-bottom-right-radius: 15px; }
+        .rank-row td { padding: 18px 20px; border: none; vertical-align: middle; }
 
-        /* User Styles */
-        .user-cell {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .avatar-placeholder {
-            width: 40px;
-            height: 40px;
-            background-color: #e2e8f0;
-            color: var(--primary-dark);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 1.1rem;
-        }
-        .username-text {
-            font-size: 1.05rem;
-        }
-        .badge-you {
-            background-color: var(--primary-dark);
-            color: var(--accent-gold);
-            font-size: 0.7rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 8px;
-            text-transform: uppercase;
-        }
+        /* Warna Peringkat */
+        .row-rank-1 td { background: linear-gradient(90deg, #fffbeb, #ffffff); border: 2px solid #F3C623; }
+        .row-rank-2 td { border: 2px solid #cbd5e1; }
+        .row-rank-3 td { border: 2px solid #e2bc9d; }
+        
+        /* Highlight Sendiri */
+        .row-me td { background-color: #eff6ff !important; }
+        .row-me td:first-child { border-left: 5px solid var(--primary-dark); }
 
-        /* Highlight Current User Row */
-        tr.current-user-row {
-            background-color: #fffbeb !important; /* Light Yellow */
-            border-left: 4px solid var(--accent-gold);
-        }
-        tr.current-user-row td {
-            color: var(--primary-dark);
-        }
+        /* Elemen Kecil */
+        .rank-num { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; background: #f1f5f9; color: #64748b; }
+        .row-rank-1 .rank-num { background: #F3C623; color: #1B3C53; }
+        .row-rank-2 .rank-num { background: #cbd5e1; color: white; }
+        .row-rank-3 .rank-num { background: #dba67d; color: white; }
 
-        /* Score & Time */
-        .score-text {
-            color: #059669; /* Green */
-            font-weight: 800;
-            font-size: 1.1rem;
-        }
-        .time-text {
-            color: #64748b;
-            font-size: 0.95rem;
-        }
-        .time-text i { margin-right: 5px; }
-
-        /* Empty State */
-        .empty-state {
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-        .empty-icon {
-            font-size: 4rem;
-            color: #cbd5e1;
-            margin-bottom: 1.5rem;
-        }
-        .empty-text {
-            color: #64748b;
-            font-size: 1.2rem;
-        }
+        .agent-profile { display: flex; align-items: center; gap: 15px; }
+        .agent-avatar { width: 45px; height: 45px; border-radius: 50%; background: #e2e8f0; color: var(--primary-dark); display: flex; align-items: center; justify-content: center; font-weight: 900; }
+        .agent-name { font-weight: 700; color: #334155; }
+        .badge-you { background: var(--primary-dark); color: var(--accent-gold); font-size: 0.7rem; padding: 3px 8px; border-radius: 6px; margin-left: 8px; font-weight: bold; }
+        
+        .score-box { background: #ecfdf5; color: #059669; padding: 5px 15px; border-radius: 20px; font-weight: 800; }
+        .time-box { color: #64748b; font-weight: 600; }
     </style>
 </head>
-
 <body>
+
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container-fluid px-lg-5 px-3">
             <a class="navbar-brand" href="{% url 'landing' %}">
-                <i class="fas fa-user-secret me-2"></i>CodeCracker
+                CodeCracker
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto align-items-center mb-2 mb-lg-0 ms-4">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pengenalan' %}"><i class="fa-solid fa-book-open"></i> Belajar</a>
+                        <a class="nav-link" href="{% url 'pengenalan' %}">
+                            <i class="fa-solid fa-book-open"></i> Belajar
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tantangan' %}"><i class="fa-solid fa-gamepad"></i> Tantangan</a>
+                        <a class="nav-link" href="{% url 'tantangan' %}">
+                            <i class="fa-solid fa-gamepad"></i> Tantangan
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'leaderboard' %}"><i class="fa-solid fa-trophy"></i> Leaderboard</a>
+                        <a class="nav-link active" href="{% url 'leaderboard' %}">
+                            <i class="fa-solid fa-trophy"></i> Leaderboard
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa-solid fa-info-circle"></i> Informasi</a>
+                        <a class="nav-link" href="#">
+                            <i class="fa-solid fa-info-circle"></i> Informasi
+                        </a>
                     </li>
                 </ul>
+
+                <div class="d-flex align-items-center gap-3 navbar-right-container">
+                    <span class="navbar-text">
+                        <i class="fas fa-user me-2"></i>
+                        Halo, {{ request.session.nama_lengkap|default:"Agen" }} 
+                        <span class="badge-role ms-2">Siswa</span>
+                    </span>
+
+                    <a href="{% url 'logout' %}" class="btn-logout">
+                        <i class="fas fa-sign-out-alt me-1"></i> Keluar
+                    </a>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="container" style="max-width: 1000px;">
-        <div class="leaderboard-header">
-            <h1>Leaderboard</h1>
-            <p>Agen elit dengan kecepatan dekripsi tertinggi.</p>
+    <div class="container rank-container">
+        
+        <div class="page-header">
+            <h1 class="page-title">Leaderboard</h1>
+            <p class="page-subtitle">Hanya agen terbaik yang namanya terpampang di sini. Apakah kamu salah satunya?</p>
         </div>
 
-        <div class="leaderboard-card">
-            <div class="table-responsive">
-                <table class="table table-custom">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-center">Peringkat</th>
-                            <th scope="col">Agen (Siswa)</th>
-                            <th scope="col" class="text-center">Total Skor</th>
-                            <th scope="col" class="text-center">Waktu Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for peringkat in peringkat_list %}
-                        <tr class="
-                            {% if forloop.counter == 1 %}rank-1{% endif %}
-                            {% if forloop.counter == 2 %}rank-2{% endif %}
-                            {% if forloop.counter == 3 %}rank-3{% endif %}
-                            {% if peringkat.siswa == user %}current-user-row{% endif %}
-                        ">
-                            <td class="rank-cell">
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="10%">#</th>
+                        <th width="40%">Identitas Agen</th>
+                        <th class="text-center" width="25%">Total Skor</th>
+                        <th class="text-center" width="25%">Waktu Misi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for peringkat in peringkat_list %}
+                    <tr class="rank-row 
+                        {% if forloop.counter == 1 %}row-rank-1{% endif %}
+                        {% if forloop.counter == 2 %}row-rank-2{% endif %}
+                        {% if forloop.counter == 3 %}row-rank-3{% endif %}
+                        {% if peringkat.siswa.id_pengguna == request.session.user_id %}row-me{% endif %}
+                    ">
+                        <td class="text-center">
+                            <div class="rank-num">
                                 {% if forloop.counter == 1 %}
-                                    <div class="rank-icon"><i class="fas fa-trophy"></i></div>
+                                    <i class="fas fa-crown"></i>
                                 {% elif forloop.counter == 2 %}
-                                    <div class="rank-icon"><i class="fas fa-medal"></i></div>
+                                    <i class="fas fa-medal"></i>
                                 {% elif forloop.counter == 3 %}
-                                    <div class="rank-icon"><i class="fas fa-medal"></i></div>
+                                    <i class="fas fa-medal"></i>
                                 {% else %}
-                                    <div class="rank-other">{{ forloop.counter }}</div>
+                                    {{ forloop.counter }}
                                 {% endif %}
-                            </td>
+                            </div>
+                        </td>
 
-                            <td>
-                                <div class="user-cell">
-                                    <div class="avatar-placeholder">
-                                        {{ peringkat.siswa.username|slice:":1"|upper }}
-                                    </div>
-                                    <div class="username-text">
-                                        {{ peringkat.siswa.username }}
-                                        {% if peringkat.siswa == user %}
-                                            <span class="badge-you">ANDA</span>
-                                        {% endif %}
-                                    </div>
+                        <td>
+                            <div class="agent-profile">
+                                <div class="agent-avatar">
+                                    {{ peringkat.siswa.nama_lengkap|slice:":1"|upper }}
                                 </div>
-                            </td>
-
-                            <td class="text-center">
-                                <span class="score-text">{{ peringkat.total_skor }}</span> Poin
-                            </td>
-
-                            <td class="text-center">
-                                <span class="time-text">
-                                    <i class="far fa-clock"></i> {{ peringkat.total_waktu_detik }} Detik
-                                </span>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4">
-                                <div class="empty-state">
-                                    <div class="empty-icon">
-                                        <i class="fas fa-user-secret"></i>
-                                    </div>
-                                    <p class="empty-text">Belum ada agen yang berhasil menyelesaikan misi.</p>
-                                    <a href="{% url 'tantangan' %}" class="btn btn-warning fw-bold mt-2">
-                                        Jadilah yang Pertama!
-                                    </a>
+                                <div>
+                                    <div class="agent-name">{{ peringkat.siswa.nama_lengkap }}</div>
+                                    {% if peringkat.siswa.id_pengguna == request.session.user_id %}
+                                        <div class="badge-you">ANDA</div>
+                                    {% endif %}
                                 </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                            </div>
+                        </td>
+
+                        <td class="text-center">
+                            <div class="score-box">{{ peringkat.total_skor }} XP</div>
+                        </td>
+
+                        <td class="text-center">
+                            <div class="time-box">
+                                <i class="far fa-clock me-1"></i> {{ peringkat.total_waktu_detik }}s
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5">
+                            <i class="fas fa-ghost fa-3x text-muted mb-3"></i>
+                            <h4 class="text-muted">Belum ada data</h4>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

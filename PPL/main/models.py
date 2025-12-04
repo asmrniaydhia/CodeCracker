@@ -165,19 +165,15 @@ class HasilEvaluasi(models.Model):
 #   Digunakan untuk Leaderboard
 # ============================
 class PeringkatFinal(models.Model):
-    # Menggunakan User bawaan Django agar sinkron dengan login/logout sistem
-    siswa = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name='peringkat_final')
+    # PERBAIKAN: Menggunakan Pengguna (model kamu), BUKAN User (bawaan Django)
+    siswa = models.OneToOneField(Pengguna, on_delete=models.CASCADE, primary_key=True, related_name='peringkat_final')
     
-    # Default 0 untuk menghindari error
     total_skor = models.IntegerField(default=0)
     total_waktu_detik = models.IntegerField(default=0)
-    
-    # Mencatat kapan siswa menyelesaikan tantangan
     waktu_selesai = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # Otomatis mengurutkan berdasarkan Skor Tertinggi, lalu Waktu Tercepat
         ordering = ['-total_skor', 'total_waktu_detik']
 
     def __str__(self):
-        return f"{self.siswa.username} - {self.total_skor} Poin ({self.total_waktu_detik}s)"
+        return f"{self.siswa.nama_lengkap} - {self.total_skor} Poin"
