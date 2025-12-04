@@ -71,6 +71,24 @@
 
     </div>
 </div>
+<div class="modal fade" id="exitConfirmModal" tabindex="-1" aria-labelledby="exitConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="exitConfirmModalLabel">⚠️ Perhatian: Tinggalkan Kuis?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Anda yakin ingin meninggalkan halaman kuis ini?</p>
+                <p class="fw-bold text-danger">Jika Anda keluar sekarang, seluruh jawaban Anda akan hilang dan waktu akan terulang dari awal saat Anda kembali.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lanjutkan Mengerjakan</button>
+                <button type="button" id="confirmExitBtn" class="btn btn-danger">Ya, Tinggalkan Kuis</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 

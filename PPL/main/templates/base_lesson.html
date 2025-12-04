@@ -58,12 +58,16 @@
     <script src="{% static 'main.js' %}?v={{ time }}"></script> 
 
     <script>
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', function () {
             document.getElementById('lessonApp').classList.toggle('is-collapsed');
             const isCollapsed = document.getElementById('lessonApp').classList.contains('is-collapsed');
             this.setAttribute('aria-expanded', !isCollapsed);
         });
-    </script>
+    }
+</script>
 
     {% block extra_js %}{% endblock %}
 </body>

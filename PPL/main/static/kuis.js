@@ -25,16 +25,31 @@ document.getElementById("startBtn")?.addEventListener("click", (e) => {
   startLink.href = `/kuis/pengerjaan/?jenis=${jenis}`;
 });
 
-// ===============================
+// // Modal Keluar Kuis
+// // 1. PENCEGAHAN KELUAR DARI BROWSER (Reload, Tutup Tab, Back Button)
+// // Menggunakan event beforeunload untuk memunculkan peringatan default browser.
+// window.addEventListener("beforeunload", function (e) {
+//   // Pesan default yang akan ditampilkan oleh browser (teks ini mungkin diabaikan oleh beberapa browser modern)
+//   const confirmationMessage =
+//     "Jawaban Anda akan hilang jika Anda meninggalkan halaman ini sekarang.";
+
+//   (e || window.event).returnValue = confirmationMessage; // Standard
+//   return confirmationMessage; // Untuk browser lama
+// });
+
 // LOGIKA KUIS
-// ===============================
 document.addEventListener("DOMContentLoaded", function () {
   const KKM = 70;
   let questions = [];
 
-  // ===============================
+  function handleBeforeUnload(e) {
+    const confirmationMessage =
+      "Jawaban Anda akan hilang jika Anda meninggalkan halaman ini sekarang.";
+    (e || window.event).returnValue = confirmationMessage;
+    return confirmationMessage;
+  }
+
   // HALAMAN PENGERJAAN
-  // ===============================
   // Kumpulan soal berdasarkan jenis
   if (jenis === "enkripsi") {
     questions = [
@@ -223,29 +238,64 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  //   if (!localStorage.getItem(`${quizKey}_order`)) {
-  //     shuffle(questions);
-  //     localStorage.setItem(`${quizKey}_order`, JSON.stringify(questions));
-  //   } else {
-  //     questions = JSON.parse(localStorage.getItem(`${quizKey}_order`));
-  //   }
   if (window.location.pathname.includes("/kuis/pengerjaan")) {
     let currentQuestion = 1;
     const totalQuestions = questions.length;
 
-    let answers = JSON.parse(
-      localStorage.getItem(`${quizKey}_answers`) || "{}"
-    );
-    let flagged = JSON.parse(
-      localStorage.getItem(`${quizKey}_flagged`) || "{}"
-    );
+    let answers = {};
+    let flagged = {};
+
+    // Asumsikan Anda ingin memuat flagged dari LS (fitur ragu-ragu)
+    if (localStorage.getItem(`${quizKey}_flagged`)) {
+      flagged = JSON.parse(localStorage.getItem(`${quizKey}_flagged`));
+    }
 
     const soalContainer = document.querySelector("div.teks");
     const quizTitle = document.querySelector(".quiz-title");
-    const nextBtn = document.querySelector(".btn-success");
-    const prevBtn = document.querySelector(".btn-danger");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
     const submitBtn = document.getElementById("submitQuiz");
     const bubbleContainer = document.querySelector(".bubbles");
+
+    // Ambil elemen Modal dan tombol konfirmasi keluar
+    const exitModalElement = document.getElementById("exitConfirmModal");
+    const confirmExitBtn = document.getElementById("confirmExitBtn");
+    const exitConfirmModal = exitModalElement
+      ? new bootstrap.Modal(exitModalElement)
+      : null;
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // 2. MENGGANTI BEHAVIOR LINK INTERNAL PADA HALAMAN KUIS
+    // Ini memastikan link navigasi internal (seperti logo/home) memunculkan modal custom.
+    document.querySelectorAll("a").forEach((link) => {
+      // Abaikan link yang menuju halaman nilai, tombol navigasi soal, atau tautan submit/modal lain
+      if (link.href.includes("nilai/?jenis=")) {
+        return;
+      }
+
+      // Ganti behavior link agar memunculkan modal
+      link.addEventListener("click", function (e) {
+        // Cek apakah link ini menuju halaman lain
+        if (link.href !== window.location.href + "#") {
+          e.preventDefault();
+
+          // Set tujuan link pada tombol konfirmasi keluar
+          if (confirmExitBtn) {
+            confirmExitBtn.onclick = function () {
+              // Hapus event beforeunload agar bisa keluar tanpa peringatan
+              window.removeEventListener("beforeunload", handleBeforeUnload);
+              window.location.href = link.href;
+            };
+          }
+
+          // Tampilkan modal
+          if (exitConfirmModal) {
+            exitConfirmModal.show();
+          }
+        }
+      });
+    });
 
     // Generate bubbles
     bubbleContainer.innerHTML = "";
@@ -298,7 +348,6 @@ document.addEventListener("DOMContentLoaded", function () {
       soalContainer.querySelectorAll(`input[name="q${num}"]`).forEach((i) => {
         i.addEventListener("change", (e) => {
           answers[num] = parseInt(e.target.value);
-          localStorage.setItem(`${quizKey}_answers`, JSON.stringify(answers));
           updateBubbles(num);
         });
       });
@@ -306,7 +355,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const flagBtn = document.getElementById("flagBtn");
       flagBtn.addEventListener("click", () => {
         flagged[num] = !flagged[num];
-        localStorage.setItem(`${quizKey}_flagged`, JSON.stringify(flagged));
         flagBtn.textContent = flagged[num]
           ? "Batalkan Ragu-ragu"
           : "Tandai Ragu-ragu";
@@ -340,7 +388,7 @@ document.addEventListener("DOMContentLoaded", function () {
     prevBtn.addEventListener("click", () => {
       if (currentQuestion > 1) {
         currentQuestion--;
-        renderQuestion(currentQuestion);
+        renderQuestion(currentQuestion); // Memuat soal sebelumnya
       }
     });
 
@@ -351,10 +399,9 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
 
-    // Submit
-    submitBtn.addEventListener("click", finishQuiz);
-
     function finishQuiz() {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+
       clearInterval(timer); // Hentikan timer saat kuis selesai
 
       let score = 0;
@@ -418,15 +465,13 @@ document.addEventListener("DOMContentLoaded", function () {
         // Anda juga perlu mengirim jawaban benar dari JSON, atau biarkan view.py yang hitung
       });
 
-      // Bersihkan local storage sebelum submit
-      localStorage.removeItem(`${quizKey}_answers`);
-      localStorage.removeItem(`${quizKey}_order`);
-      localStorage.removeItem(`${quizKey}_flagged`);
-
       // Submit Form
       document.body.appendChild(form);
       form.submit();
     }
+
+    // Submit
+    submitBtn.addEventListener("click", finishQuiz);
 
     renderQuestion(currentQuestion);
   }

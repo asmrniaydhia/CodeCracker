@@ -23,9 +23,7 @@ def evaluasi_petunjuk(request):
 def evaluasi_pengerjaan(request):
     return render(request, "evaluasi/evaluasi_pengerjaan.html")
 
-# ----------------------------------------------------------------------
 # ⚠️ DATA SOAL EVALUASI UNTUK VALIDASI SERVER
-# ----------------------------------------------------------------------
 EVALUASI_QUESTIONS_SERVER = [
     # 🔹 PILIHAN GANDA (MCQ)
     {
@@ -209,7 +207,8 @@ def evaluasi_nilai_detail(request, hasil_id):
         
         context = {
             "hasil_evaluasi": hasil_evaluasi,
-            "total_soal": len(questions), # ⚠️ KIRIM TOTAL SOAL
+            "total_soal": len(questions),
+             "nama_user": siswa.nama_lengkap,
         }
         return render(request, "evaluasi/nilaiEval.html", context)
 
@@ -285,9 +284,7 @@ def get_logged_in_user(request):
     return None
 
 
-# ----------------------------------------------------------------------
 # ⚠️ DATA SOAL KUIS UNTUK VALIDASI SERVER
-# ----------------------------------------------------------------------
 QUIZ_QUESTIONS_SERVER = {
     "enkripsi": [
         {
