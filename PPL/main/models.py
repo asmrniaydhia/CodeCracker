@@ -7,8 +7,8 @@ from django.contrib.auth.models import User
 # ============================
 class Pengguna(models.Model):
     PERAN_CHOICES = (
-        ('guru', 'Guru'),
-        ('siswa', 'Siswa'),
+        ("guru", "Guru"),
+        ("siswa", "Siswa"),
     )
     id_pengguna = models.AutoField(primary_key=True)
     nama_lengkap = models.CharField(max_length=45)
@@ -18,12 +18,12 @@ class Pengguna(models.Model):
 
     @property
     def is_guru(self):
-        return self.peran == 'guru'
-    
+        return self.peran == "guru"
+
     @property
     def is_siswa(self):
-        return self.peran == 'siswa'
-    
+        return self.peran == "siswa"
+
     def __str__(self):
         return self.nama_lengkap
 
@@ -33,22 +33,31 @@ class Pengguna(models.Model):
 # ============================
 class Kelas(models.Model):
     id_kelas = models.AutoField(primary_key=True)
-    id_guru = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='kelas_guru')
+    id_guru = models.ForeignKey(
+        Pengguna, on_delete=models.CASCADE, related_name="kelas_guru"
+    )
     nama_kelas = models.CharField(max_length=45)
     token = models.CharField(max_length=45)
 
     def __str__(self):
         return self.nama_kelas
 
+
 # ============================
 #     ANGGOTA_KELAS (RELASI)
 # ============================
 class AnggotaKelas(models.Model):
     id_anggota = models.AutoField(primary_key=True)
-    id_kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE, related_name='anggota')
-    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE, related_name='kelas_siswa', null=True)
+    id_kelas = models.ForeignKey(
+        Kelas, on_delete=models.CASCADE, related_name="anggota"
+    )
+    id_siswa = models.ForeignKey(
+        Pengguna, on_delete=models.CASCADE, related_name="kelas_siswa", null=True
+    )
+
     def __str__(self):
         return f"{self.id_siswa} di {self.id_kelas}"
+
 
 # ============================
 #            KUIS
@@ -60,6 +69,7 @@ class Kuis(models.Model):
 
     def __str__(self):
         return self.nama_kuis
+
 
 # ============================
 #         HASIL KUIS
@@ -75,6 +85,44 @@ class HasilKuis(models.Model):
     def __str__(self):
         return f"{self.id_siswa} - {self.id_kuis}"
 
+
+# ============================
+#      RINCIAN JAWABAN SISWA
+# ============================
+class RincianJawaban(models.Model):
+    id_rincian = models.AutoField(primary_key=True)
+    # Ubah related_name menjadi 'rincian_jawaban'
+    id_hasil_kuis = models.ForeignKey(
+        HasilKuis, on_delete=models.CASCADE, related_name="rincian_jawaban" 
+    ) 
+
+    # Field untuk menyimpan ID/kunci dari JSON
+    id_pertanyaan_json = models.CharField(max_length=50) 
+    teks_pertanyaan = models.TextField(default="")
+    jawaban_benar = models.CharField(max_length=255)
+    jawaban_siswa = models.CharField(max_length=255)
+    is_benar = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"Hasil Kuis {self.id_hasil_kuis.id_hasil_kuis} - ID JSON {self.id_pertanyaan_json}"
+
+
+# ============================
+#        TABEL PERTANYAAN
+# ============================
+# Model ini diasumsikan ada di proyek Anda
+# Jika belum ada, Anda harus membuatnya. Contoh:
+class Pertanyaan(models.Model):
+    id_pertanyaan = models.AutoField(primary_key=True)
+    id_kuis = models.ForeignKey(Kuis, on_delete=models.CASCADE)
+    teks_pertanyaan = models.TextField()
+    jawaban_benar = models.CharField(max_length=255)  # Jawaban yang benar
+    # Anda bisa tambahkan field lain seperti jenis, pilihan_a, pilihan_b, dll.
+
+    def __str__(self):
+        return self.teks_pertanyaan
+
+
 # ============================
 #           SECTION
 # ============================
@@ -86,19 +134,22 @@ class Section(models.Model):
     def __str__(self):
         return self.nama_section
 
+
 # ============================
 #        SECTION ITEM
 # ============================
 class SectionItem(models.Model):
     JENIS_ITEM_CHOICES = (
-        ('video', 'Video'),
-        ('teks', 'Teks'),
-        ('kuis', 'Kuis'),
-        ('game', 'Game'),
+        ("video", "Video"),
+        ("teks", "Teks"),
+        ("kuis", "Kuis"),
+        ("game", "Game"),
     )
 
     id_item = models.AutoField(primary_key=True)
-    id_section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='items')
+    id_section = models.ForeignKey(
+        Section, on_delete=models.CASCADE, related_name="items"
+    )
     nama_item = models.CharField(max_length=45)
     jenis_item = models.CharField(max_length=10, choices=JENIS_ITEM_CHOICES)
     urutan = models.IntegerField()
@@ -107,14 +158,15 @@ class SectionItem(models.Model):
     def __str__(self):
         return self.nama_item
 
+
 # ============================
 #         PROGRES ITEM
 # ============================
 class ProgresItem(models.Model):
     STATUS_CHOICES = (
-        ('belum', 'Belum Selesai'),
-        ('proses', 'Sedang Dikerjakan'),
-        ('selesai', 'Selesai'),
+        ("belum", "Belum Selesai"),
+        ("proses", "Sedang Dikerjakan"),
+        ("selesai", "Selesai"),
     )
 
     id_progres_item = models.AutoField(primary_key=True)
@@ -125,29 +177,32 @@ class ProgresItem(models.Model):
     def __str__(self):
         return f"{self.id_siswa} - {self.id_item} ({self.status})"
 
-# # ============================
-# #         STAGE GAME
-# # ============================
-# class StageGame(models.Model):
-#     id_stage = models.AutoField(primary_key=True)
-#     nama_stage = models.CharField(max_length=45)
 
-#     def __str__(self):
-#         return self.nama_stage
+# ============================
+#         STAGE GAME
+# ============================
+class StageGame(models.Model):
+    id_stage = models.AutoField(primary_key=True)
+    nama_stage = models.CharField(max_length=45)
 
-# # ============================
-# #          HASIL GAME
-# # ============================
-# class HasilGame(models.Model):
-#     id_hasil_game = models.AutoField(primary_key=True)
-#     id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
-#     id_stage = models.ForeignKey(StageGame, on_delete=models.CASCADE)
-#     skor_game = models.IntegerField()
-#     waktu_game = models.IntegerField()
-#     percobaan_game = models.IntegerField()
+    def __str__(self):
+        return self.nama_stage
 
-#     def __str__(self):
-#         return f"{self.id_siswa} - {self.id_stage}"
+
+# ============================
+#          HASIL GAME
+# ============================
+class HasilGame(models.Model):
+    id_hasil_game = models.AutoField(primary_key=True)
+    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
+    id_stage = models.ForeignKey(StageGame, on_delete=models.CASCADE)
+    skor_game = models.IntegerField()
+    waktu_game = models.IntegerField()
+    percobaan_game = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.id_siswa} - {self.id_stage}"
+
 
 # ============================
 #        HASIL EVALUASI
@@ -156,10 +211,13 @@ class HasilEvaluasi(models.Model):
     id_hasil_evaluasi = models.AutoField(primary_key=True)
     id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
     nilai = models.IntegerField()
+    total_benar = models.IntegerField(default=0) 
+    waktu_evaluasi_detik = models.IntegerField(default=0) 
 
     def __str__(self):
         return f"{self.id_siswa} - Nilai {self.nilai}"
-    
+
+
 # ============================
 #   SISTEM PERINGKAT (BARU)
 #   Digunakan untuk Leaderboard

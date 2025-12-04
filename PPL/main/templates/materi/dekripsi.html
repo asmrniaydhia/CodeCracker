@@ -3,112 +3,765 @@
 
 {% block title %}Dekripsi - CodeCracker{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Animasi */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    @keyframes unlockAnimation {
+        0% { transform: rotate(0deg); }
+        25% { transform: rotate(-10deg); }
+        75% { transform: rotate(10deg); }
+        100% { transform: rotate(0deg); }
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, var(--lesson-brand-700) 0%, var(--lesson-brand-100) 100%);
+        border-radius: var(--lesson-radius);
+        padding: 35px;
+        color: white;
+        margin-bottom: 30px;
+        animation: fadeInUp 0.6s ease-out;
+        box-shadow: var(--lesson-shadow);
+    }
+
+    .hero-section h1 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .hero-section p {
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+
+    .hero-icon {
+        animation: unlockAnimation 2s ease-in-out infinite;
+        font-size: 1.5rem;
+    }
+
+    /* Section Header */
+    .section-header {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin: 35px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 3px solid var(--lesson-brand);
+    }
+
+    .section-intro {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+
+    /* Analogy Box */
+    .analogy-box {
+        background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+        border: 2px solid var(--lesson-brand);
+        border-radius: var(--lesson-radius);
+        padding: 30px;
+        margin: 25px 0;
+        animation: fadeInUp 0.6s ease-out 0.2s backwards;
+        box-shadow: var(--lesson-shadow);
+    }
+
+    .analogy-content {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        flex-wrap: wrap;
+    }
+
+    .analogy-icon {
+        font-size: 4rem;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .analogy-text {
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .analogy-text p {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* Process Comparison */
+    .process-comparison {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 35px;
+        margin: 25px 0;
+        box-shadow: var(--lesson-shadow);
+        animation: fadeInUp 0.6s ease-out 0.3s backwards;
+    }
+
+    .comparison-title {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 1.3rem;
+    }
+
+    .comparison-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .process-card {
+        border-radius: var(--lesson-radius);
+        padding: 25px;
+        transition: all 0.3s ease;
+        border: 3px solid;
+    }
+
+    .process-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .encryption-card {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        border-color: #4caf50;
+    }
+
+    .decryption-card {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border-color: var(--lesson-brand-100);
+    }
+
+    .process-card h4 {
+        font-weight: bold;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.2rem;
+    }
+
+    .encryption-card h4 {
+        color: #2e7d32;
+    }
+
+    .decryption-card h4 {
+        color: var(--lesson-brand-100);
+    }
+
+    .process-card p {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .process-arrow {
+        text-align: center;
+        font-size: 3rem;
+        color: var(--lesson-brand);
+        margin: 20px 0;
+        animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    /* Example Demo */
+    .example-demo {
+        background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        border: 2px solid #9c27b0;
+        border-radius: var(--lesson-radius);
+        padding: 30px;
+        margin: 25px 0;
+        animation: fadeInUp 0.6s ease-out 0.4s backwards;
+    }
+
+    .example-demo h3 {
+        color: #6a1b9a;
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .demo-flow {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .demo-step {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .demo-label {
+        font-weight: bold;
+        color: #6a1b9a;
+        margin-bottom: 8px;
+        font-size: 1.05rem;
+    }
+
+    .demo-content {
+        font-family: 'Courier New', monospace;
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: var(--lesson-brand-700);
+        text-align: center;
+        padding: 15px;
+        background: #fafafa;
+        border-radius: 8px;
+    }
+
+    .demo-arrow {
+        text-align: center;
+        font-size: 2rem;
+        color: #9c27b0;
+    }
+
+    .demo-explanation {
+        margin-top: 10px;
+        color: var(--lesson-text);
+        line-height: 1.7;
+    }
+
+    /* Requirements Box */
+    .requirements-box {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 30px;
+        margin: 25px 0;
+        box-shadow: var(--lesson-shadow);
+        border-left: 5px solid var(--lesson-brand);
+    }
+
+    .requirements-box h3 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .requirement-item {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        align-items: flex-start;
+        transition: all 0.3s ease;
+    }
+
+    .requirement-item:hover {
+        transform: translateX(10px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .requirement-number {
+        background: var(--lesson-brand);
+        color: var(--lesson-text);
+        font-weight: bold;
+        font-size: 1.3rem;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .requirement-content h4 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .requirement-content p {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* Real Life Examples */
+    .reallife-container {
+        background: linear-gradient(135deg, #e8f5f9 0%, #b3e5fc 100%);
+        border: 2px solid var(--lesson-brand-100);
+        border-radius: var(--lesson-radius);
+        padding: 35px;
+        margin: 25px 0;
+        animation: slideInLeft 0.8s ease-out;
+    }
+
+    .reallife-container h3 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .reallife-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .reallife-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+    }
+
+    .reallife-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+    }
+
+    .reallife-icon {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+        display: block;
+        text-align: center;
+    }
+
+    .reallife-card h4 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center;
+        font-size: 1.05rem;
+    }
+
+    .reallife-card p {
+        color: var(--lesson-text);
+        line-height: 1.6;
+        margin: 0;
+        text-align: center;
+    }
+
+    /* Importance Section */
+    .importance-section {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 35px;
+        margin: 25px 0;
+        box-shadow: var(--lesson-shadow);
+    }
+
+    .importance-visual {
+        text-align: center;
+        margin: 25px 0;
+    }
+
+    .importance-visual img {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--lesson-radius);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .points-list {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 25px;
+        margin: 20px 0;
+    }
+
+    .points-list h4 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .points-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .points-list li {
+        padding: 10px 0;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: var(--lesson-text);
+        line-height: 1.7;
+    }
+
+    .points-list li::before {
+        content: '✗';
+        color: #f44336;
+        font-weight: bold;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+    }
+
+    .security-aspects {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+
+    .security-card {
+        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+        border: 2px solid #4caf50;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .security-card h5 {
+        color: #2e7d32;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .security-card p {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* Info Alert */
+    .info-alert {
+        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+        border-left: 6px solid #e65100;
+        padding: 20px;
+        border-radius: var(--lesson-radius);
+        margin: 20px 0;
+    }
+
+    .info-alert strong {
+        color: #e65100;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .info-alert p {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-section h1 {
+            font-size: 1.5rem;
+        }
+
+        .analogy-content {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .comparison-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .reallife-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .security-aspects {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Dekripsi</div>
-        <hr />
+<div class="lesson-titlebar">Dekripsi</div>
+<hr />
 
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Pengertian Dekripsi</h2>
-                <p class="teks">Setelah kita belajar tentang enkripsi yaitu proses menyembunyikan atau mengunci
-                    pesan dengan mengubahnya dari Plaintext menjadi Ciphertext, sekarang kita akan mempelajari
-                    proses kebalikannya, yaitu dekripsi. Secara sederhana, dekripsi adalah proses yang bertugas
-                    untuk mengembalikan pesan yang sudah disamarkan atau diacak (Ciphertext) ke bentuk aslinya
-                    (Plaintext) sehingga pesan tersebut dapat dibaca dan dipahami kembali oleh penerima yang
-                    berhak.</p>
-                <p class="teks">Dekripsi adalah langkah terakhir yang sangat penting dalam komunikasi aman. Jika
-                    enkripsi diibaratkan sebagai proses mengunci sebuah kotak harta karun sebelum dikirim, maka
-                    dekripsi adalah proses membuka kunci kotak tersebut di tempat tujuan. Tanpa dekripsi,
-                    Ciphertext hanya akan selamanya menjadi tumpukan kode acak yang tidak berarti, seperti
-                    lembaran kertas yang penuh dengan coretan asing. Bayangkan pesan penting apa pun, mulai dari
-                    transaksi bank hingga pesan cinta rahasia, akan sia-sia jika tidak bisa didekripsi.</p>
-                <p class="teks">Contoh Sederhana Dekripsi: Mari kita lihat kembali contoh Caesar Cipher. Kamu
-                    mendapat pesan terenkripsi: <b><i>"KHOOR"</i></b>. Kamu tahu bahwa pesan ini dienkripsi
-                    dengan geser 3
-                    huruf ke depan. Agar pesan terbaca, kamu harus melakukan dekripsi dengan aturan sebaliknya:
-                    geser 3 huruf mundur.</p>
+<div class="lesson-content">
 
-                <p class="teks">Hasil dekripsinya adalah: <b><i>HELLO</i></b>. Proses mental yang kamu lakukan
-                    untuk
-                    membalikkan sandi inilah yang disebut dekripsi.</p>
-                <!-- Pentingnya dari sudut sejarah -->
+    <!-- Tujuan Pembelajaran -->
+    <h2 class="lesson-h2">Tujuan Pembelajaran</h2>
+
+    <div class="lesson-card">
+        <div class="lesson-goals">
+            <div>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</div>
+
+            <div class="lesson-goal">
+                <div class="lesson-num">1</div>
+                <div>Menjelaskan konsep dasar dekripsi sebagai proses mengembalikan pesan terenkripsi menjadi pesan asli.</div>
+            </div>
+
+            <div class="lesson-goal">
+                <div class="lesson-num">2</div>
+                <div>Menentukan pesan asli dari sebuah pesan yang telah dienkripsi menggunakan Caesar Cipher dengan kunci tertentu.</div>
+            </div>
+
+            <div class="lesson-goal">
+                <div class="lesson-num">3</div>
+                <div>Menemukan besar pergeseran atau kunci yang digunakan dalam sebuah pesan terenkripsi.</div>
             </div>
         </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Dekripsi dalam Kehidupan Sehari-hari</h2>
-                <p class="teks">Dekripsi tidak hanya ada dalam cerita sandi kuno, tetapi merupakan bagian
-                    integral dari rutinitas digital kita. Setiap proses "membuka kunci" informasi rahasia di
-                    dunia digital adalah dekripsi.</p>
-                <ul class="teks m-3 mt-0">
-                    <li><b>Pesan WhatsApp (End-to-End Encryption):</b> Ketika temanmu mengirim pesan, pesan itu
-                        dienkripsi. Saat pesan sampai ke HP-mu, ponselmu otomatis melakukan dekripsi agar kamu
-                        bisa membaca isinya dengan jelas. Proses ini terjadi sangat cepat sehingga tidak kamu
-                        sadari.</li>
-                    <li><b>Membuka File yang Diproteksi:</b> Jika kamu membuka file yang diberi password
-                        (misalnya
-                        dokumen Word atau PDF), proses memasukkan password yang benar untuk melihat isinya
-                        adalah bentuk dekripsi. Password yang kamu masukkan berfungsi sebagai kunci.</li>
-                    <li><b>Akses Data Game:</b> Beberapa game menyimpan data pemain dalam bentuk kode
-                        terenkripsi. Saat
-                        kamu masuk, game melakukan dekripsi agar data kamu (skor, level, item) bisa ditampilkan
-                        kembali di layar.</li>
-                    <li><b>Membaca Soal yang Dilindungi:</b> Guru bisa menyimpan soal ulangan dalam bentuk
-                        terenkripsi.
-                        Saat waktunya tiba, guru menggunakan kunci dekripsi (bisa berupa password) agar soal
-                        bisa dibaca siswa dan dicetak.</li>
-                </ul>
-            </div>
-        </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Pentingnya Dekripsi</h2>
-                <p class="teks">Dekripsi adalah langkah penting dalam rantai komunikasi yang aman. Walaupun
-                    enkripsi bertugas melindungi kerahasiaan data selama pengiriman, dekripsi memastikan bahwa
-                    data tersebut akhirnya bisa dimanfaatkan. Tanpa kemampuan mendekripsi, pesan yang sudah
-                    terenkripsi hanya akan menjadi huruf-huruf aneh yang tidak berguna.</p>
-                <img src="/assets/des2.png" alt="" width="400px" height="">
-                <p class="teks">Bayangkan kamu menerima pesan dari gurumu berisi instruksi penting untuk
-                    kegiatan esok hari. Karena pesannya dienkripsi, kamu tidak bisa langsung mengerti. Jika kamu
-                    tidak tahu cara mendekripsinya, kamu akan kebingungan dan gagal menjalankan instruksi
-                    penting tersebut. Dengan kata lain, dekripsi adalah jaminan bahwa tujuan akhir dari
-                    komunikasi, yaitu menyampaikan informasi rahasia kepada pihak yang berhak, terpenuhi. Hal
-                    ini berkaitan langsung dengan pilar keamanan Kerahasiaan dan Integritas, karena pesan yang
-                    berhasil didekripsi menunjukkan bahwa data tersebut asli dan bisa dipercaya.</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- Pagination -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-3">
-            <!-- <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                    </li> -->
-            <li class="page-item active"><a class="page-link" href="{% url 'dekripsi' %}">1</a></li>
-            <li class="page-item"><a class="page-link" href="{% url 'dekripsi2' %}">2</a></li>
-            <!-- <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li> -->
-        </ul>
-    </nav>
-
-    <!-- Navigasi bawah -->
-    <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'caesar' %}" class="btn btn-danger px-4 py-2 disabled">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Kembali
-        </a>
-        <a href="{% url 'dekripsi2' %}" class="btn btn-success px-4 py-2">
-            Selanjutnya
-            <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
     </div>
+
+    <hr />
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <h1><span class="hero-icon">🔓</span> Pengertian Dekripsi</h1>
+        <p>Pada materi sebelumnya, kita telah mempelajari enkripsi sebagai proses menyamarkan pesan agar tidak mudah dibaca oleh orang lain. Sekarang, kita akan mempelajari proses kebalikannya, yaitu <strong>dekripsi</strong>.</p>
+        
+        <p><strong>Dekripsi adalah proses mengembalikan Ciphertext (pesan yang sudah diacak) menjadi Plaintext (pesan asli) menggunakan aturan atau kunci tertentu.</strong></p>
+    </div>
+
+    <!-- Analogy Box -->
+    <div class="analogy-box">
+        <div class="analogy-content">
+            <div class="analogy-icon">🔐</div>
+            <div class="analogy-text">
+                <h3 style="color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 10px;">Analogi Kotak Harta Karun</h3>
+                <p><strong>Jika enkripsi diibaratkan sebagai mengunci sebuah kotak harta karun, maka dekripsi adalah membuka kunci kotak tersebut agar isinya bisa diambil kembali oleh orang yang berhak.</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="importance-visual">
+        <img src="{% static 'assets/des1.png' %}" alt="dekripsi illustration" style="max-width: 300px;" />
+    </div>
+
+    <div class="info-alert">
+        <strong>⚠️ Ingat!</strong>
+        <p>Tanpa dekripsi, pesan terenkripsi hanya akan terlihat seperti kumpulan huruf acak yang tidak mempunyai makna. Proses ini sangat penting untuk memastikan bahwa komunikasi rahasia dapat dibaca kembali oleh penerima.</p>
+    </div>
+
+    <!-- Example Demo -->
+    <div class="example-demo">
+        <h3>💡 Contoh Dekripsi Caesar Cipher</h3>
+        
+        <div class="demo-flow">
+            <div class="demo-step">
+                <div class="demo-label">Ciphertext (Hasil Enkripsi dengan Geser +3):</div>
+                <div class="demo-content">KHOOR</div>
+            </div>
+
+            <div class="demo-arrow">⬇️</div>
+
+            <div class="demo-step">
+                <div class="demo-explanation">
+                    <strong>Proses Dekripsi:</strong> Untuk mendekripsi, kita melakukan proses kebalikannya: huruf-huruf digeser <strong>mundur 3 langkah</strong>.
+                </div>
+            </div>
+
+            <div class="demo-arrow">⬇️</div>
+
+            <div class="demo-step">
+                <div class="demo-label">Hasil (Plaintext):</div>
+                <div class="demo-content" style="color: #2e7d32;">HELLO</div>
+            </div>
+        </div>
+    </div>
+
+    <p class="section-intro" style="margin-top: 20px;">Proses mengembalikan huruf ke posisi aslinya ini adalah inti dari dekripsi.</p>
+
+    <hr />
+
+    <!-- Bagaimana Dekripsi Bekerja -->
+    <h2 class="section-header">⚙️ Bagaimana Dekripsi Bekerja?</h2>
+
+    <p class="section-intro">Proses dekripsi biasanya bergantung pada dua hal penting:</p>
+
+    <div class="requirements-box">
+        <h3>Dua Komponen Penting Dekripsi</h3>
+
+        <div class="requirement-item">
+            <div class="requirement-number">1</div>
+            <div class="requirement-content">
+                <h4>Algoritma yang Digunakan</h4>
+                <p>Aturan yang menjelaskan bagaimana pesan diacak dan bagaimana membalikkan proses itu.</p>
+            </div>
+        </div>
+
+        <div class="requirement-item">
+            <div class="requirement-number">2</div>
+            <div class="requirement-content">
+                <h4>Kunci yang Tepat</h4>
+                <p>Nilai tertentu yang menentukan bagaimana pesan kembali ke bentuk aslinya.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="info-alert">
+        <strong>🔑 Poin Krusial!</strong>
+        <p>Jika salah satu dari dua hal ini tidak diketahui, pesan tidak dapat didekripsi dengan benar.</p>
+    </div>
+
+    <!-- Process Comparison -->
+    <div class="process-comparison">
+        <h3 class="comparison-title">🔄 Perbandingan Enkripsi vs Dekripsi pada Caesar Cipher</h3>
+
+        <div class="comparison-grid">
+            <div class="process-card encryption-card">
+                <h4>🔒 Enkripsi</h4>
+                <p>Huruf digeser <strong>ke depan</strong> (maju)</p>
+                <div style="text-align: center; margin-top: 15px;">
+                    <div style="font-family: 'Courier New'; font-size: 1.5rem; font-weight: bold; color: #2e7d32;">A → D</div>
+                    <div style="color: var(--lesson-text); margin-top: 5px;">Geser +3</div>
+                </div>
+            </div>
+
+            <div class="process-card decryption-card">
+                <h4>🔓 Dekripsi</h4>
+                <p>Huruf digeser <strong>ke belakang</strong> (mundur)</p>
+                <div style="text-align: center; margin-top: 15px;">
+                    <div style="font-family: 'Courier New'; font-size: 1.5rem; font-weight: bold; color: var(--lesson-brand-100);">D → A</div>
+                    <div style="color: var(--lesson-text); margin-top: 5px;">Geser -3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="importance-visual">
+        <img src="{% static 'assets/des3.png' %}" alt="proses dekripsi" style="max-width: 400px;" />
+    </div>
+
+    <div class="info-alert" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-left-color: #9c27b0;">
+        <strong style="color: #6a1b9a;">💡 Tips Praktis!</strong>
+        <p>Contoh lainnya: Jika Ciphertext adalah <strong>"QEB NRFZH"</strong> dan kita tidak tahu kuncinya, maka siswa dapat mencoba satu per satu pergeseran untuk menemukan kunci yang sesuai.</p>
+    </div>
+
+    <hr />
+
+    <!-- Dekripsi dalam Kehidupan Sehari-hari -->
+    <h2 class="section-header">🌍 Dekripsi dalam Kehidupan Sehari-hari</h2>
+
+    <p class="section-intro">Dekripsi ternyata bukan hanya milik hacker, agen rahasia, atau dunia mata-mata. Di kehidupan sehari-hari, kita berhadapan dengan proses dekripsi hampir setiap hari tanpa menyadarinya.</p>
+
+    <div class="reallife-container">
+        <h3>Contoh Penggunaan Dekripsi di Sekitar Kita</h3>
+
+        <div class="reallife-grid">
+            <div class="reallife-card">
+                <span class="reallife-icon">💬</span>
+                <h4>Pesan WhatsApp</h4>
+                <p>Saat pesan masuk, aplikasi otomatis mendekripsi agar kamu bisa membacanya.</p>
+            </div>
+
+            <div class="reallife-card">
+                <span class="reallife-icon">📁</span>
+                <h4>File Berpassword</h4>
+                <p>Saat memasukkan password, komputer melakukan dekripsi untuk menampilkan isi file.</p>
+            </div>
+
+            <div class="reallife-card">
+                <span class="reallife-icon">🎮</span>
+                <h4>Data Game</h4>
+                <p>Game mendekripsi data level dan progress sebelum menampilkannya.</p>
+            </div>
+
+            <div class="reallife-card">
+                <span class="reallife-icon">📝</span>
+                <h4>Soal Ujian Digital</h4>
+                <p>Guru bisa menyimpan soal dalam bentuk terenkripsi, lalu mendekripsinya saat ujian dimulai.</p>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <!-- Pentingnya Dekripsi -->
+    <h2 class="section-header">⭐ Mengapa Dekripsi Penting?</h2>
+
+    <div class="importance-section">
+        <p class="section-intro"><strong>Enkripsi dan dekripsi adalah dua proses yang tidak bisa dipisahkan.</strong> Jika enkripsi menjaga agar pesan tidak dibaca orang lain, dekripsi memastikan bahwa orang yang berhak dapat membaca pesan itu dengan benar.</p>
+
+        <div class="importance-visual">
+            <img src="{% static 'assets/des2.png' %}" alt="importance" style="max-width: 400px;" />
+        </div>
+
+        <div class="points-list">
+            <h4>Tanpa Dekripsi:</h4>
+            <ul>
+                <li>Penerima tidak akan tahu isi pesan asli</li>
+                <li>Instruksi penting dapat disalahpahami</li>
+                <li>Komunikasi menjadi tidak efektif</li>
+            </ul>
+        </div>
+
+        <h3 style="color: var(--lesson-brand-700); font-weight: bold; margin: 30px 0 20px 0; text-align: center;">Dekripsi dan Aspek Keamanan</h3>
+
+        <div class="security-aspects">
+            <div class="security-card">
+                <h5>1. Kerahasiaan</h5>
+                <p>Hanya penerima dengan kunci yang bisa mengakses pesan asli.</p>
+            </div>
+
+            <div class="security-card">
+                <h5>2. Integritas</h5>
+                <p>Pesan yang berhasil didekripsi menunjukkan bahwa isinya tidak berubah.</p>
+            </div>
+        </div>
+
+        <div class="info-alert" style="margin-top: 25px;">
+            <strong>✅ Kesimpulan:</strong>
+            <p>Dengan kata lain, dekripsi membantu memastikan bahwa proses komunikasi aman berjalan hingga selesai.</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-3">
+        <li class="page-item active"><a class="page-link" href="{% url 'dekripsi' %}">1</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'dekripsi2' %}">2</a></li>
+    </ul>
+</nav>
+
+<!-- Navigasi bawah -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'caesar' %}" class="btn btn-danger px-4 py-2">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Kembali
+    </a>
+    <a href="{% url 'dekripsi2' %}" class="btn btn-success px-4 py-2">
+        Selanjutnya
+        <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
 </div>
 
 {% endblock %}

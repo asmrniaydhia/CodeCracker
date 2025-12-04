@@ -1,135 +1,91 @@
-// SIDEBAR 
-const app = document.getElementById('lessonApp');
-const toggleBtn = document.getElementById('sidebarToggle');
-
-function toggleSidebar() {
-  if (!app || !toggleBtn) return;
-  const collapsed = app.classList.toggle('is-collapsed');
-  toggleBtn.setAttribute('aria-expanded', String(!collapsed));
-  toggleBtn.setAttribute('aria-label', collapsed ? 'Buka sidebar' : 'Tutup sidebar');
-}
-if (toggleBtn) toggleBtn.addEventListener('click', toggleSidebar);
-
-document.addEventListener('DOMContentLoaded', function () {
-  function norm(s) {
-    if (!s) return '';
-    try { s = decodeURI(s); } catch (e) {}
-    s = s.toString().toLowerCase();
-    if (s.endsWith('/')) s = s.slice(0, -1);
-    return s;
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.location.pathname.startsWith("/evaluasi/nilai/")) {
+    console.log("[MAIN.JS] Script dihentikan di halaman hasil evaluasi.");
+    return;
   }
 
-  const currentPath = norm(location.pathname + (location.hash || ''));
-  const currentFile = currentPath.split('/').pop() || 'index.html';
-  const urlParams = new URLSearchParams(location.search);
-  const targetQuiz = urlParams.get('target')?.toLowerCase();
-
-  const sidebar = document.querySelector('.sidebar') || document.querySelector('#sidebar') || document.querySelector('.nav');
-  const links = sidebar ? Array.from(sidebar.querySelectorAll('a[href]')) : Array.from(document.querySelectorAll('.sidebar a[href], a.sidebar-link[href], .nav a[href]'));
-  console.log('[SIDEBAR DEBUG] currentPath=', currentPath, 'currentFile=', currentFile, 'targetQuiz=', targetQuiz);
-  console.log('[SIDEBAR DEBUG] found', links.length, 'links');
-
+  const links = Array.from(document.querySelectorAll(".sidebar a"));
   let activeLink = null;
 
-  // detect /templates/kuis/kuisX.html -> kuisX
-  const kuisMatch = (function () {
-    const m = currentPath.match(/(kuis\d+)\.html$/);
-    return m ? m[1] : null;
-  })();
+  const currentPath = location.pathname.replace(/\/$/, "");
+  const params = new URLSearchParams(location.search);
+  const jenis = params.get("jenis");
 
-  // helper: mark a link active
-  function setActive(a) {
-    if (!a) return;
-    links.forEach(x => x.classList.remove('active'));
-    a.classList.add('active');
-    activeLink = a;
-    // open containing accordion if any
-    const collapse = a.closest('.accordion-collapse');
+  console.log("[SIDEBAR DEBUG] currentPath=", currentPath, "jenis=", jenis);
+  console.log("[SIDEBAR DEBUG] found", links.length, "links");
+
+//   if (currentPath.startsWith("/evaluasi/nilai/")) {
+//     // ⚠️ PENTING: Jika di halaman hasil evaluasi, aktifkan menu evaluasi statis.
+//     const evaluasiLink = document.querySelector(
+//       ".sidebar a[href='{% url 'evaluasi_petunjuk' %}']"
+//     );
+
+//     if (evaluasiLink) {
+//       links.forEach((a) => a.classList.remove("active"));
+//       evaluasiLink.classList.add("active");
+//       openAccordionFromLink(evaluasiLink);
+
+//       console.log("✔ ACTIVE (BY EVALUASI DETAIL)");
+//       return; // HENTIKAN EKSEKUSI. Ini menyelesaikan konflik 404 yang berasal dari script.
+//     }
+//   }
+
+  // =======================================================
+  // 1. MODE KUIS (PRIORITAS UTAMA)
+  // Jika URL memakai ?jenis=xxx maka sidebar harus memilih
+  // menu kuis sesuai jenis, baik halaman petunjuk atau pengerjaan.
+  // =======================================================
+  if (jenis) {
+    const selector = `.sidebar a[href*="jenis=${jenis}"]:not(.d-none)`;
+    const link = document.querySelector(selector);
+
+    if (link) {
+      links.forEach((a) => a.classList.remove("active"));
+      link.classList.add("active");
+      activeLink = link;
+      openAccordionFromLink(link);
+
+      console.log("✔ ACTIVE (BY JENIS) =", jenis);
+      return;
+    }
+
+    console.log("⚠ Tidak menemukan link untuk jenis:", jenis);
+  }
+
+  // =======================================================
+  // 2. MODE DEFAULT (TANPA PARAMETER JENIS)
+  // =======================================================
+  links.forEach((link) => {
+    let linkPath = link.getAttribute("href").split("?")[0];
+    linkPath = linkPath.replace(/\/$/, "");
+
+    if (linkPath === currentPath) {
+      activeLink = link;
+    }
+  });
+
+  if (activeLink) {
+    links.forEach((a) => a.classList.remove("active"));
+    activeLink.classList.add("active");
+    openAccordionFromLink(activeLink);
+
+    console.log("✔ ACTIVE (DEFAULT) =", activeLink.href);
+  }
+
+  // =======================================================
+  // Function — membuka accordion yang berisi link aktif
+  // =======================================================
+  function openAccordionFromLink(link) {
+    const collapse = link.closest(".accordion-collapse");
     if (collapse) {
-      collapse.classList.add('show');
-      collapse.setAttribute('aria-expanded', 'true');
-      const headerBtn = collapse.previousElementSibling?.querySelector('.accordion-button');
-      if (headerBtn) {
-        headerBtn.classList.remove('collapsed');
-        headerBtn.setAttribute('aria-expanded', 'true');
-        headerBtn.classList.add('active-head');
-      }
-    }
-    // ensure sidebar expanded
-    if (app && app.classList.contains('is-collapsed')) {
-      app.classList.remove('is-collapsed');
-      const sbToggle = document.getElementById('sidebarToggle');
-      if (sbToggle) sbToggle.setAttribute('aria-expanded', 'true');
-    }
-  }
+      collapse.classList.add("show");
 
-  // 1) coba kecocokan paling ketat: href file === currentFile (plus optional target param)
-  for (const a of links) {
-    const href = a.getAttribute('href');
-    if (!href) continue;
-    let parsed;
-    try { parsed = new URL(href, location.origin); } catch (e) { parsed = { pathname: href, search: (href.split('?')[1] || '') }; }
-    const hrefFile = norm(parsed.pathname).split('/').pop();
-    const hrefParams = new URLSearchParams(parsed.search || '');
-    const hrefTarget = hrefParams.get('target')?.toLowerCase();
-
-    // direct filename match
-    if (hrefFile && hrefFile === currentFile) {
-      if (!hrefTarget) { setActive(a); break; }
-      if (targetQuiz && hrefTarget === targetQuiz) { setActive(a); break; }
-    }
-  }
-
-  // 2) kalau belum ketemu, lihat target param match (mis. sidebar: ?target=kuis1)
-  if (!activeLink && targetQuiz) {
-    for (const a of links) {
-      const href = a.getAttribute('href');
-      if (!href) continue;
-      let parsed;
-      try { parsed = new URL(href, location.origin); } catch (e) { parsed = { search: (href.split('?')[1] || '') }; }
-      const hrefParams = new URLSearchParams(parsed.search || '');
-      const hrefTarget = hrefParams.get('target')?.toLowerCase();
-      if (hrefTarget && hrefTarget === targetQuiz) { setActive(a); break; }
-    }
-  }
-
-  // 3) support: jika page ada di /templates/kuis/kuisX.html, cari link yang mengandung kuisX
-  if (!activeLink && kuisMatch) {
-    for (const a of links) {
-      const href = (a.getAttribute('href') || '').toLowerCase();
-      if (href.includes(kuisMatch) || href.endsWith(kuisMatch + '.html')) {
-        setActive(a); break;
+      const btn =
+        collapse.previousElementSibling.querySelector(".accordion-button");
+      if (btn) {
+        btn.classList.remove("collapsed");
+        btn.setAttribute("aria-expanded", "true");
       }
     }
   }
-
-  // 4) fallback evaluasi mapping (evaluasi.html dan evaluasi1.html -> link evaluasi.html aktif)
-  if (!activeLink && (currentFile === 'evaluasi.html' || currentFile === 'evaluasi1.html')) {
-    for (const a of links) {
-      const hrefFile = (a.getAttribute('href') || '').split('?')[0].split('/').pop()?.toLowerCase();
-      if (hrefFile === 'evaluasi.html') { setActive(a); break; }
-    }
-  }
-
-  // 5) jika masih belum ada yang aktif: coba buka section 'KUIS' agar user melihat daftar kuis
-  if (!activeLink && sidebar) {
-    // cari header/accordion yang teksnya mengandung 'kuis'
-    const headers = Array.from(sidebar.querySelectorAll('button, .accordion-button, .nav-header, h6, .sidebar-section'));
-    for (const h of headers) {
-      const txt = (h.textContent || '').trim().toLowerCase();
-      if (txt.includes('kuis')) {
-        // open its sibling collapse if present
-        const collapse = h.closest('.accordion-item')?.querySelector('.accordion-collapse') || h.nextElementSibling;
-        if (collapse) collapse.classList.add('show');
-        if (h.classList.contains('collapsed')) h.classList.remove('collapsed');
-        if (h.setAttribute) h.setAttribute('aria-expanded', 'true');
-        // remove overall collapsed class so sidebar visible
-        if (app && app.classList.contains('is-collapsed')) app.classList.remove('is-collapsed');
-        console.log('[SIDEBAR DEBUG] opened KUIS section fallback');
-        break;
-      }
-    }
-  }
-
-  console.log('[SIDEBAR DEBUG] activeLink=', activeLink);
 });

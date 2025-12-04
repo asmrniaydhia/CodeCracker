@@ -1,7 +1,7 @@
 {% extends "base_lesson.html" %}
 {% load static %}
 
-{% block title %}aktivitas 2 - CodeCracker{% endblock %}
+{% block title %}Hasil Evaluasi{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -19,6 +19,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
 
+  /* Ring Score */
   .ring {
     background: conic-gradient(#1B3C53 calc(var(--p, 0)*1%), #e9ecef 0);
     width: 160px;
@@ -38,100 +39,130 @@
     display: grid;
     place-items: center;
   }
-
-  table th {
-    background-color: #f8f9fa;
-  }
 </style>
 {% endblock %}
 
-{% block contet %}
-<!-- Navbar -->
-<nav class="navbar navbar-dark fixed-top">
-  <div class="container-fluid ps-4 pe-4">
-    <a class="navbar-brand fs-4" href="#">CodeCracker</a>
-  </div>
-</nav>
+{% block header %}{% endblock %}
+{% block sidebar %}{% endblock %}
 
-<div class="container py-5" style="max-width:1000px;">
-  <div class="mb-4">
-    <h1 class="headline">Hasil Evaluasi Kamu</h1>
-    <p class="subtitle">Ringkasan nilai & progres setiap Evaluasi</p>
-  </div>
+{% block main_layout %}
+<div style="padding-top: 70px;">
+  <div class="row justify-content-center m-0">
+    <div class="col-12 col-lg-10 p-0">
+      <div class="lesson-titlebar">HASIL EVALUASI</div>
+      <hr />
 
-  <!-- Ringkasan skor -->
-  <div class="score-card p-4 mb-4">
-    <div class="row g-4 align-items-center">
-      <div class="col-12 col-md-4 text-center">
-        <div id="scoreRing" class="ring" style="--p:0">
-          <div class="ring-inner">
-            <div>
-              <div id="scoreNum" class="display-5 fw-bold">0</div>
-              <div class="subtitle small">skor</div>
-            </div>
-          </div>
-        </div>
-        <div class="mt-3">
-          <span id="grade" class="badge bg-light text-dark">Menunggu perhitungan…</span>
-        </div>
-      </div>
+      <!-- <div class="lesson-wrap p-3"> -->
+      <div class="row justify-content-center">
+        <div class="col-12">
+          <div class="score-card p-4 text-center">
 
-      <div class="col-12 col-md-8">
-        <div class="row g-3">
-          <div class="col-6 col-lg-4 text-center">
-            <div class="border rounded p-3">
-              <div class="subtitle small">Benar</div>
-              <div id="correctCount" class="h4 fw-bold">0</div>
+            <div class="headline h3">Selamat, <span class="text-primary">{{ nama_user|default:"Siswa" }}</span>!</div>
+            <div class="subtitle mb-4">Berikut adalah ringkasan nilai evaluasi Anda:</div>
+
+            <div class="ring" id="scoreRing">
+              <div class="ring-inner">
+                <div id="scoreText" class="headline h1 m-0 text-primary">{{ hasil_evaluasi.nilai }}</div>
+              </div>
+            </div>
+
+            <div class="row g-2 mt-4 justify-content-center">
+
+              <div class="col-6 col-lg-3 text-center">
+                <div class="border rounded p-3">
+                  <div class="subtitle small">Benar</div>
+                  <div id="correctCount" class="h4 fw-bold text-success">{{ hasil_evaluasi.total_benar }}</div>
+                </div>
+              </div>
+
+              <div class="col-6 col-lg-3 text-center">
+                <div class="border rounded p-3">
+                  <div class="subtitle small">Total</div>
+                  <div id="totalCount" class="h4 fw-bold">{{ total_soal }}</div>
+                </div>
+              </div>
+
+              <div class="col-6 col-lg-3 text-center">
+                <div class="border rounded p-3">
+                  <div class="subtitle small">Waktu Pengerjaan</div>
+                  <div id="waktuPengerjaan" class="h4 fw-bold"></div>
+                </div>
+              </div>
+
+              <div class="col-6 col-lg-3 text-center">
+                <div class="border rounded p-3">
+                  <div class="subtitle small">Status</div>
+                  <div id="passFail" class="h5 m-0">-</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 text-center">
+              <a href="{% url 'evaluasi_pengerjaan' %}" class="btn btn-dark">Ulangi Evaluasi</a>
+              <a href="{% url 'landing' %}" id="kembaliBerandaBtn" class="btn btn-outline-secondary">Kembali ke
+                Beranda</a>
             </div>
           </div>
-          <div class="col-6 col-lg-4 text-center">
-            <div class="border rounded p-3">
-              <div class="subtitle small">Total</div>
-              <div id="totalCount" class="h4 fw-bold">0</div>
-            </div>
-          </div>
-          <div class="col-12 col-lg-4 text-center">
-            <div class="border rounded p-3">
-              <div class="subtitle small">Status</div>
-              <div id="passFail" class="h5 m-0">-</div>
-            </div>
-          </div>
-        </div>
-        <div class="mt-4 text-center">
-          <a href="#" class="btn btn-dark">Ulangi Evaluasi</a>
-          <a href="#" class="btn btn-outline-secondary">Materi Selanjutnya</a>
         </div>
       </div>
     </div>
   </div>
-
-  <!-- Tabel Rincian Jawaban -->
-  <div class="score-card p-4">
-    <h5 class="mb-3">Rincian Jawaban</h5>
-    <table class="table table-bordered table-hover align-middle">
-      <thead>
-        <tr>
-          <th>No</th>
-          <th>Pertanyaan</th>
-          <th>Jawaban Kamu</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="answerTable">
-        <tr>
-          <td colspan="4" class="text-center text-muted">Menunggu data…</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="text-center text-muted small mt-4">
-    CodeCracker • Evaluasi
-  </div>
 </div>
+</div>
+{% endblock main_layout %}
 
-{% endblock %}
+{% block content %}
+{% endblock content %}
 
 {% block extra_js %}
-<script src="{% static 'evaluasi.js' %}"></script>
+<script>
+  // Fungsi utilitas untuk mengubah detik menjadi format MM:SS
+  function formatTime(totalSeconds) {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // 1. Ambil Nilai dari Context Django
+    const score = {{ hasil_evaluasi.nilai| safe }};
+    const totalSeconds = {{ hasil_evaluasi.waktu_evaluasi_detik| safe }};
+    const totalCount = {{ total_soal| safe }};
+    const KKM = 70;
+
+    // Karena skor sudah dalam skala 0-100, persentase adalah skor itu sendiri
+    const percentage = score;
+
+    // 2. Tampilkan Waktu Pengerjaan
+    document.getElementById('waktuPengerjaan').innerText = formatTime(totalSeconds);
+
+    // 3. LOGIKA ANIMASI & STATUS
+
+    // Animasi Ring Score
+    const scoreRing = document.getElementById('scoreRing');
+    if (scoreRing) {
+      setTimeout(() => {
+        scoreRing.style.setProperty('--p', percentage);
+      }, 10);
+    }
+
+    // Status Kelulusan
+    const passFailElement = document.getElementById('passFail');
+    const kembaliBerandaBtn = document.getElementById('kembaliBerandaBtn');
+
+    if (passFailElement) {
+      if (score >= KKM) {
+        // LULUS
+        passFailElement.innerHTML = `<span class="badge text-bg-success">LULUS</span>`;
+      } else {
+        // ❌ TIDAK LULUS
+        passFailElement.innerHTML = `<span class="badge text-bg-danger">TIDAK LULUS</span>`;
+
+        if (kembaliBerandaBtn) {
+          kembaliBerandaBtn.style.display = 'none';
+        }
+      }
+    }
+  });
+</script>
 {% endblock %}

@@ -3,154 +3,865 @@
 
 {% block title %}Caesar Cipher - CodeCracker{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Global P font size adjustment */
+    p {
+        font-size: 1.1rem; /* Perubahan yang diminta */
+    }
+
+    /* Animasi */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    /* Main Content Container (base for most sections) */
+    .main-content-container {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 35px;
+        margin: 25px 0;
+        box-shadow: var(--lesson-shadow);
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, var(--lesson-brand-700) 0%, var(--lesson-brand-100) 100%);
+        border-radius: var(--lesson-radius);
+        padding: 35px;
+        color: white;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .hero-section h1 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .hero-section p {
+        line-height: 1.7;
+        margin-bottom: 15px;
+    }
+
+    .hero-icon {
+        animation: pulse 2s ease-in-out infinite;
+        font-size: 1.5rem;
+    }
+
+    /* Section styling */
+    .section-header {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        font-size: 1.5rem;
+        margin: 40px 0 20px 0;
+        padding-bottom: 10px;
+        border-bottom: 3px solid var(--lesson-brand);
+    }
+
+    .section-intro {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        font-size: 1.2rem;
+        margin-bottom: 25px;
+    }
+
+    /* Timeline history */
+    .history-timeline {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 30px;
+        margin: 25px 0;
+        box-shadow: var(--lesson-shadow);
+        border-left: 5px solid var(--lesson-brand);
+    }
+
+    .timeline-item {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+        align-items: flex-start;
+    }
+
+    .timeline-icon {
+        font-size: 2.5rem;
+        min-width: 60px;
+        text-align: center;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .timeline-content h4 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .timeline-content p {
+        color: var(--lesson-text);
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    /* Key Elements Box */
+    .key-elements {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin: 25px 0;
+    }
+
+    .key-box {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 25px;
+        box-shadow: var(--lesson-shadow);
+        border-top: 4px solid var(--lesson-brand-100);
+        transition: all 0.3s ease;
+    }
+
+    .key-box:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .key-box-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        display: block;
+    }
+
+    .key-box h4 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 12px;
+        font-size: 1.2rem;
+    }
+
+    .key-box p {
+        color: var(--lesson-text);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Shift Table - MULTI ROWS */
+    .shift-table-container {
+        border: 2px solid var(--lesson-brand);
+        border-radius: var(--lesson-radius);
+        padding: 30px;
+        margin: 25px 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .shift-table-container h3 {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .shift-table-controls {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .shift-table {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        overflow-x: auto;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        margin-top: 20px;
+    }
+
+    .shift-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .shift-table th {
+        background: var(--lesson-brand-700);
+        color: white;
+        padding: 12px 8px;
+        font-weight: bold;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+
+    .shift-table td {
+        padding: 12px 8px;
+        text-align: center;
+        border: 1px solid var(--lesson-border);
+        font-weight: bold;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    /* Custom Row Background Colors (for buttons and rows) */
+    .bg-kunci-1 { background-color: #ffebee; color: #d32f2f; border: 1px solid #d32f2f; } /* Reddish */
+    .bg-kunci-2 { background-color: #e8f5e9; color: #388e3c; border: 1px solid #388e3c; } /* Greenish */
+    .bg-kunci-3 { background-color: #fffde7; color: #ff8f00; border: 1px solid #ff8f00; } /* Orange/Yellow */
+    .bg-kunci-4 { background-color: #e1f5fe; color: #0277bd; border: 1px solid #0277bd; } /* Blueish */
+    .bg-kunci-5 { background-color: #f3e5f5; color: #8e24aa; border: 1px solid #8e24aa; } /* Purplish */
+    
+    .text-kunci-1 { color: #d32f2f; }
+    .text-kunci-2 { color: #388e3c; }
+    .text-kunci-3 { color: #ff8f00; }
+    .text-kunci-4 { color: #0277bd; }
+    .text-kunci-5 { color: #8e24aa; }
+
+
+    /* Styling for Ciphertext rows */
+    .shift-table-row-0 td { background: #e3f2fd; color: var(--lesson-brand-100); }
+    .shift-table-row-1 td { background: #ffebee; color: #d32f2f; }
+    .shift-table-row-2 td { background: #e8f5e9; color: #388e3c; }
+    .shift-table-row-3 td { background: #fffde7; color: #ff8f00; }
+    .shift-table-row-4 td { background: #e1f5fe; color: #0277bd; }
+    .shift-table-row-5 td { background: #f3e5f5; color: #8e24aa; }
+
+    .shift-table td:hover {
+        background: var(--lesson-brand);
+        color: white;
+        transform: scale(1.1);
+        cursor: pointer;
+        z-index: 10;
+    }
+
+    /* Table Control Buttons - Modified to use row colors */
+    .table-control-btn {
+        padding: 8px 15px;
+        border-radius: 8px;
+        font-weight: bold;
+        margin: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .btn-kunci-1 { background-color: #d32f2f; color: white; border: none; }
+    .btn-kunci-2 { background-color: #388e3c; color: white; border: none; }
+    .btn-kunci-3 { background-color: #ff8f00; color: white; border: none; }
+    .btn-kunci-4 { background-color: #0277bd; color: white; border: none; }
+    .btn-kunci-5 { background-color: #8e24aa; color: white; border: none; }
+
+
+    /* Encrypt/Identify Container (COMBINED) */
+    .combined-process {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 30px;
+        margin: 25px 0;
+        box-shadow: var(--lesson-shadow);
+    }
+
+    /* Identification Box (MODIFIED TO BE A FLOATING CONTAINER) */
+    .identification-box {
+        background: var(--lesson-surface);
+        border-radius: var(--lesson-radius);
+        padding: 30px;
+        margin: 25px 0;
+        box-shadow: var(--lesson-shadow);
+    }
+
+    /* Existing styles for the rest of content */
+    .process-header {
+        color: var(--lesson-brand-700);
+        font-weight: bold;
+        margin-bottom: 25px;
+        font-size: 1.4rem;
+    }
+    
+    .example-box {
+        background: #e8f5f9;
+        border-left: 6px solid var(--lesson-brand-100);
+        padding: 25px;
+        border-radius: var(--lesson-radius);
+        margin-bottom: 20px;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 25px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        border-left: 5px solid var(--lesson-brand-100);
+        transition: all 0.3s ease;
+    }
+    
+    .id-step {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        border-left: 5px solid var(--lesson-brand);
+        animation: fadeInUp 0.5s ease-out;
+    }
+
+    /* Step Navigation Buttons (FIXED CSS) */
+    .step-navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid var(--lesson-border);
+    }
+
+    .step-btn {
+        background: linear-gradient(135deg, var(--lesson-brand) 0%, #e0b11d 100%);
+        border: none;
+        color: var(--lesson-text);
+        padding: 12px 25px;
+        border-radius: 25px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(243, 198, 35, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .step-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(243, 198, 35, 0.4);
+    }
+
+    .step-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .step-btn-next {
+        background: linear-gradient(135deg, var(--lesson-brand-100) 0%, #1290a8 100%);
+        color: white;
+        box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+    }
+
+    .step-btn-next:hover {
+        box-shadow: 0 6px 16px rgba(23, 162, 184, 0.4);
+    }
+
+    .step-indicator {
+        background: var(--lesson-surface);
+        padding: 10px 20px;
+        border-radius: 20px;
+        border: 2px solid var(--lesson-brand);
+        font-weight: bold;
+        color: var(--lesson-brand-700);
+    }
+    
+    /* Responsive styles (unchanged) */
+    @media (max-width: 768px) {
+        .hero-section h1 {
+            font-size: 1.5rem;
+        }
+
+        .key-elements {
+            grid-template-columns: 1fr;
+        }
+
+        .shift-table {
+            overflow-x: auto;
+        }
+
+        .shift-table th,
+        .shift-table td {
+            padding: 8px 4px;
+            font-size: 0.75rem;
+        }
+
+        .example-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .step-navigation {
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .step-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 
-<!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Caesar Cipher</div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Mengenal Caesar Cipher</h2>
-                <p class="teks">Ketika kita mendengar kata Caesar, kita mungkin teringat pada seorang tokoh
-                    besar dalam sejarah dunia, yaitu Julius Caesar. Ia adalah seorang jenderal dan pemimpin
-                    terkenal dari Romawi kuno. Selain ahli strategi perang, Caesar juga dikenal karena
-                    menggunakan sandi rahasia untuk berkomunikasi dengan para prajurit dan pejabatnya.</p>
-                <p class="teks">Pada masa itu, peperangan sering bergantung pada komunikasi. Jika pesan rahasia
-                    tentang rencana perang jatuh ke tangan musuh, akibatnya bisa fatal. Karena itulah Caesar
-                    menemukan cara agar pesannya tetap aman: ia menggeser huruf-huruf dalam pesan dengan aturan
-                    tertentu. Dengan demikian, hanya orang-orang yang mengetahui aturan pergeseran itu yang bisa
-                    memahami isi pesannya.</p>
-                <img src="/assets/cs1.png" alt="cs1" width="400px" height="">
-                <p class="teks">Misalnya, kalau Caesar ingin mengirim pesan <b>“SERANG”</b> dan menggunakan
-                    aturan
-                    geser 3 huruf, maka pesannya menjadi <b>“VHUDQJ”</b>. Prajurit yang menerima pesan itu tahu
-                    cara
-                    membacanya, tetapi musuh yang tidak tahu aturan hanya melihat kumpulan huruf aneh.</p>
-                <p class="teks">Dari cerita inilah sandi ini diberi nama Caesar’s Cipher atau Sandi Caesar.
-                    Walaupun sederhana, sandi ini sangat bersejarah. Ia menjadi salah satu bentuk enkripsi
-                    pertama yang tercatat dan masih diajarkan hingga kini sebagai contoh paling mudah dipahami.
+<div class="lesson-titlebar">Caesar Cipher</div>
+<hr>
+
+<div class="lesson-content">
+
+    <h2 class="lesson-h2">Tujuan Pembelajaran</h2>
+    <div class="lesson-card">
+        <div class="lesson-goals">
+            <div><p>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</p></div>
+
+            <div class="lesson-goal">
+                <div class="lesson-num">1</div>
+                <div><p>Menjelaskan cara kerja Caesar Cipher sebagai teknik enkripsi dengan metode penggeseran huruf.</p></div>
+            </div>
+
+            <div class="lesson-goal">
+                <div class="lesson-num">2</div>
+                <div><p>Menentukan hasil enkripsi suatu kata atau kalimat menggunakan Caesar Cipher dengan kunci tertentu.</p></div>
+            </div>
+
+            <div class="lesson-goal">
+                <div class="lesson-num">3</div>
+                <div><p>Mengidentifikasi arah dan besar pergeseran yang digunakan dalam sebuah contoh pesan Caesar Cipher.</p></div>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="hero-section">
+        <h1>Caesar's Cipher: Teknik Sandi Geser</h1>
+        <p><strong>Caesar's Cipher</strong> adalah salah satu <strong>Algoritma Enkripsi klasik</strong> yang paling tua, diperkirakan berasal dari tahun **100 SM**. Algoritma ini dinamakan sesuai nama Kaisar Romawi, **Julius Caesar**, yang menggunakannya untuk mengirimkan pesan-pesan penting militer kepada jenderalnya. Tujuannya sederhana: agar musuh yang berhasil menyadap pesan tidak dapat mengerti isinya.</p>
+        
+        <p><strong>Prinsip Kerja Inti:</strong> Caesar's Cipher termasuk dalam kategori **Substitution Cipher (Sandi Substitusi)**, yang berarti setiap huruf dalam pesan asli digantikan (disubstitusi) oleh huruf lain yang berada pada posisi yang tetap dalam urutan alfabet. Mekanisme inilah yang disebut **Penggeseran Alfabet**.</p>
+    </div>
+
+    <h2 class="section-header">Pengenalan pada Caesar's Cipher</h2>
+    
+    <div class="history-timeline">
+        <div class="timeline-item">
+            <div class="timeline-icon">⚔️</div>
+            <div class="timeline-content">
+                <h4>Era Julius Caesar (100 SM)</h4>
+                <p>Kaisar Romawi menggunakan teknik ini untuk mengamankan komunikasi militer strategis dengan para jenderalnya di medan perang. Metode sederhana namun efektif untuk zaman itu.</p>
+            </div>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-icon">🔐</div>
+            <div class="timeline-content">
+                <h4>Substitution Cipher</h4>
+                <p>Caesar Cipher merupakan contoh paling awal dari **Substitution Cipher**, di mana setiap huruf dalam pesan asli digantikan dengan huruf lain berdasarkan aturan penggeseran yang telah ditentukan.</p>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <h2 class="section-header">Mekanisme Pergeseran dan Kunci Enkripsi (Shift Key)</h2>
+    
+    <p class="section-intro">Kunci Enkripsi dalam Caesar's Cipher adalah <strong>satu-satunya elemen rahasia</strong>. Kunci ini harus disepakati oleh pengirim dan penerima sebelum komunikasi dimulai. Kunci ini terdiri dari dua elemen wajib:</p>
+
+    <div class="key-elements">
+        <div class="key-box">
+            <h4>1. Arah Pergeseran</h4>
+            <p><strong>Maju (Kanan)</strong> atau <strong>Mundur (Kiri)</strong>. Arah ini menentukan ke mana setiap huruf akan bergeser dalam urutan alfabet.</p>
+        </div>
+        
+        <div class="key-box">
+            <h4>2. Besar Pergeseran (Shift Value)</h4>
+            <p>Jumlah langkah huruf harus digeser. Nilai ini bisa antara <strong>1 hingga 25</strong>. Jika geser 26, pesan akan kembali ke posisi aslinya.</p>
+        </div>
+    </div>
+
+    <div class="shift-table-container">
+        <h3>Tabel Pergeseran Alfabet (Maju/Kanan)</h3>
+        <p style="text-align: center; color: var(--lesson-text); margin-bottom: 20px;">Klik tombol di bawah untuk melihat <b>Kunci</b> pergeseran yang berbeda.</p>
+        
+        <div class="shift-table-controls">
+            <button class="table-control-btn btn-kunci-1" onclick="showShiftRow(1)">Kunci 1</button>
+            <button class="table-control-btn btn-kunci-2" onclick="showShiftRow(2)">Kunci 2</button>
+            <button class="table-control-btn btn-kunci-3" onclick="showShiftRow(3)">Kunci 3</button>
+            <button class="table-control-btn btn-kunci-4" onclick="showShiftRow(4)">Kunci 4</button>
+            <button class="table-control-btn btn-kunci-5" onclick="showShiftRow(5)">Kunci 5</button>
+        </div>
+
+        <div class="shift-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th><th>Q</th><th>R</th><th>S</th><th>T</th><th>U</th><th>V</th><th>W</th><th>X</th><th>Y</th><th>Z</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="shift-table-row-1" id="cipherRow1" style="display: none;">
+                        <td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td>
+                    </tr>
+                    <tr class="shift-table-row-2" id="cipherRow2" style="display: none;">
+                        <td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td>
+                    </tr>
+                    <tr class="shift-table-row-3" id="cipherRow3" style="display: none;">
+                        <td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td><td>C</td>
+                    </tr>
+                    <tr class="shift-table-row-4" id="cipherRow4" style="display: none;">
+                        <td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td><td>C</td><td>D</td>
+                    </tr>
+                    <tr class="shift-table-row-5" id="cipherRow5" style="display: none;">
+                        <td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <hr />
+
+    <h2 class="section-header">Proses Enkripsi dan Contoh</h2>
+    
+    <div class="combined-process">
+        
+        <h3 class="process-header">💡 Contoh: "RUMAH"</h3>
+        <p style="color: var(--lesson-text); margin-bottom: 15px;">Menggunakan Kunci: <strong>Geser 3 ke Kanan</strong></p>
+
+        <h3 class="process-header" style="margin-top: 40px;">Proses Enkripsi Step-by-Step:</h3>
+
+        <div class="step-item" id="stepEncrypt1" style="display: none;">
+            <div class="step-number">R</div>
+            <div class="step-content">
+                <strong>Huruf R (Asli)</strong>
+                <p>Geser 3 langkah ke kanan → S (1), T (2), U (3)</p>
+                <div class="step-formula">R + 3 = U</div>
+            </div>
+        </div>
+
+        <div class="step-item" id="stepEncrypt2" style="display: none;">
+            <div class="step-number">U</div>
+            <div class="step-content">
+                <strong>Huruf U (Asli)</strong>
+                <p>Geser 3 langkah ke kanan → V (1), W (2), X (3)</p>
+                <div class="step-formula">U + 3 = X</div>
+            </div>
+        </div>
+
+        <div class="step-item" id="stepEncrypt3" style="display: none;">
+            <div class="step-number">M</div>
+            <div class="step-content">
+                <strong>Huruf M (Asli)</strong>
+                <p>Geser 3 langkah ke kanan → N (1), O (2), P (3)</p>
+                <div class="step-formula">M + 3 = P</div>
+            </div>
+        </div>
+
+        <div class="step-item" id="stepEncrypt4" style="display: none;">
+            <div class="step-number">A</div>
+            <div class="step-content">
+                <strong>Huruf A (Asli)</strong>
+                <p>Geser 3 langkah ke kanan → B (1), C (2), D (3)</p>
+                <div class="step-formula">A + 3 = D</div>
+            </div>
+        </div>
+
+        <div class="step-item" id="stepEncrypt5" style="display: none;">
+            <div class="step-number">H</div>
+            <div class="step-content">
+                <strong>Huruf H (Asli)</strong>
+                <p>Geser 3 langkah ke kanan → I (1), J (2), K (3)</p>
+                <div class="step-formula">H + 3 = K</div>
+            </div>
+        </div>
+        
+        <div class="step-item" id="stepEncrypt6" style="display: none;">
+            <div class="step-number">✅</div>
+            <div class="step-content">
+                <strong>Selesai!</strong>
+                <p>Setelah semua huruf digeser 3 langkah ke kanan, Plain Text <b>RUMAH</b> menjadi Ciphertext <b>UXPDK</b>.</p>
+            </div>
+        </div>
+        
+        <div class="step-navigation" id="navEncrypt">
+            <button class="step-btn" id="prevBtnEncrypt" onclick="changeEncryptStep(-1)" style="display: none;">
+                <i class="fas fa-arrow-left"></i> Sebelumnya
+            </button>
+            <div class="step-indicator">
+                <span id="currentStepTextEncrypt">Langkah 0 dari 5</span>
+            </div>
+            <button class="step-btn step-btn-next" id="nextBtnEncrypt" onclick="changeEncryptStep(1)">
+                Lanjutkan Proses <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+    
+    <hr />
+
+    <h2 class="section-header">🔍 Cara Mengidentifikasi Kunci yang Digunakan</h2>
+    
+    <p class="section-intro">Dalam skenario ini, kamu adalah seorang <b>analis</b> yang diberikan dua versi pesan (asli dan terenkripsi) dan diminta mencari kuncinya. Proses ini memerlukan perbandingan dan perhitungan jarak.</p>
+
+    <div class="identification-box">
+        <h3>Contoh Kasus: Plain Text "BELAJAR" → Ciphertext "DGNCNCT"</h3>
+        
+        <div class="id-step" id="idStep1">
+            <div class="id-step-title">Langkah 1: Ambil Pasangan Huruf Pertama</div>
+            <p><strong>B (Asli) → D (Kode)</strong>. Ini adalah titik awal perbandingan kita.</p>
+        </div>
+
+        <div class="id-step" id="idStep2" style="display: none;">
+            <div class="id-step-title">Langkah 2: Tentukan Arah Pergeseran</div>
+            <p>Kita lihat posisi huruf D relatif terhadap B di alfabet. Karena D berada <b>setelah B</b>, ini jelas berarti terjadi pergeseran ke <b>KANAN (maju)</b>.</p>
+        </div>
+
+        <div class="id-step" id="idStep3" style="display: none;">
+            <div class="id-step-title">Langkah 3: Tentukan Besar Pergeseran</div>
+            <p>Hitung jumlah langkah (loncatan) yang diperlukan dari B untuk mencapai D:</p>
+            <div class="step-formula">
+                B → C (Langkah ke-1)<br>
+                C → D (Langkah ke-2)
+            </div>
+            <p style="margin-top: 10px;"><b>Besar pergeseran adalah 2 langkah.</b></p>
+        </div>
+
+        <div class="id-step" id="idStep4" style="display: none;">
+            <div class="id-step-title">Langkah 4: Verifikasi Kunci pada Huruf Lain</div>
+            <p>Untuk memastikan kunci ini benar, uji pada huruf lain, misalnya huruf kedua:</p>
+            <p><strong>Plain Text E → Ciphertext G</strong></p>
+            <div class="step-formula">
+                E → F (1), F → G (2)
+            </div>
+            <span class="verification-badge">✓ Cocok!</span>
+            <p style="margin-top: 10px;">Ini membuktikan bahwa kunci <b>Geser 2 Langkah ke KANAN</b> diterapkan secara konsisten.</p>
+        </div>
+
+        <div class="example-box" id="idConclusion" style="margin-top: 20px; display: none;">
+            <h4>Kesimpulan Kunci Enkripsi:</h4>
+            <div class="example-content">
+                <p style="font-size: 1.2rem; font-weight: bold; color: var(--lesson-brand-700); text-align: center; margin: 0;">
+                    Kunci yang digunakan adalah <span style="color: #c62828;">Geser 2 Langkah ke KANAN</span>
                 </p>
             </div>
         </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Pengertian Sandi Caesar</h2>
-                <p class="teks">Sandi Caesar adalah salah satu metode penyandian pesan paling sederhana dan
-                    paling terkenal sepanjang sejarah. Cara kerjanya adalah dengan mengganti setiap huruf dalam
-                    pesan asli (plaintext) menjadi huruf lain yang berada beberapa langkah setelahnya dalam
-                    urutan alfabet. Jumlah langkah pergeseran inilah yang disebut kunci. Jadi, plaintext adalah
-                    teks asli yang dapat dibaca dengan mudah oleh siapa pun, sedangkan ciphertext adalah teks
-                    rahasia hasil enkripsi yang tidak dapat langsung dimengerti tanpa mengetahui kuncinya.</p>
-                <p class="teks">Untuk memahami pengertiannya, mari kita bayangkan situasi sehari-hari. Misalnya
-                    kamu ingin menulis pesan kepada sahabatmu: <b>“JANGAN LUPA BELAJAR.”</b> Kalau kamu
-                    menuliskannya
-                    begitu saja, siapa pun yang melihat akan langsung tahu maksudnya. Tetapi jika kamu
-                    menggunakan sandi Caesar dengan kunci 3, maka pesan itu akan berubah menjadi: <b>“MDQJHQ
-                        OXSD
-                        EHO DMDU.”</b> Nah, orang lain yang tidak tahu aturan pergeseran huruf pasti akan
-                    bingung dan
-                    menganggap itu hanya kumpulan huruf acak. Namun sahabatmu yang tahu kuncinya bisa langsung
-                    menggeser huruf-huruf mundur 3 langkah untuk menemukan isi pesan yang sebenarnya.</p>
-                <p class="teks">Hal menarik dari sandi Caesar adalah aturan utamanya hanya satu: geser huruf
-                    sejauh kunci tertentu. Tidak ada aturan tambahan yang rumit. Itulah sebabnya sandi ini mudah
-                    dipelajari, bahkan oleh anak sekolah dasar sekalipun. Walaupun sederhana, sandi ini bisa
-                    menunjukkan gambaran nyata bagaimana sebuah pesan dapat diubah menjadi sesuatu yang tidak
-                    dimengerti, dan bagaimana pesan itu hanya bisa dipahami kembali oleh orang yang tahu
-                    kuncinya.</p>
-                <p class="teks">Contoh lain:</p>
-                <p class="teks">Plaintext: <b><i>SEKOLAH</i></b> <br> Kunci: <b><i>2</i></b></p>
-                <p class="teks">Dari contoh ini kita bisa melihat bagaimana setiap huruf bergeser dua langkah ke
-                    depan:</p>
-                <img src="/assets/sekolah.gif" alt="sekolah-gif" class="mt-0" width="1000px" height="450px">
-                <p class="mt-0">Ciphertext: <b><i>UGMQNCJ</i></b></p>
-                <p class="teks">Hasil akhirnya terlihat asing, tetapi sebenarnya itu hanyalah bentuk tersamar
-                    dari kata <b><i>“SEKOLAH.”</i></b></p>
-            </div>
-        </div>
-        <hr>
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Cara Kerja Caesar Cipher</h2>
-                <p class="teks">Proses kerja sandi Caesar bisa dijelaskan dengan langkah-langkah sederhana,
-                    namun setiap langkah memiliki makna yang penting.</p>
-                <ol class="teks m-3 mt-0">
-                    <li>Pilih pesan asli (plaintext). Pertama-tama, kita harus menentukan pesan apa yang
-                        ingin
-                        kita rahasiakan. Pesan ini bisa berupa kata singkat, kalimat, bahkan paragraf.
-                        Misalnya
-                        kita pilih kata: “BELAJAR.” Pesan ini jelas terbaca oleh siapa pun.</li>
-                    <li>Tentukan kunci pergeseran. Setelah itu, tentukan kunci. Kunci adalah angka yang
-                        menunjukkan berapa langkah huruf akan digeser. Misalnya kita menggunakan kunci 3.
-                        Artinya, setiap huruf dalam plaintext akan digeser 3 langkah ke depan dalam alfabet.
-                    </li>
-                    <li>Geser setiap huruf sejauh kunci. Inilah inti dari proses enkripsi. Kita ambil setiap
-                        huruf dalam plaintext, lalu geser ke depan sebanyak kunci yang telah ditentukan.
-                    </li>
-                    <img src="/assets/belajar.gif" alt="belajar-gif" class="mt-0" width="1000px" height="450px">
-                    <li>Setelah semua huruf digeser, hasilnya adalah: <b><i>EHODMDU</i></b>.</li>
-                    <li>Hasil akhir adalah ciphertext. Ciphertext adalah bentuk rahasia dari pesan kita.
-                        Kata
-                        “BELAJAR” yang tadinya mudah dibaca, kini berubah menjadi “EHODMDU” yang tampak aneh
-                        dan
-                        membingungkan. Ciphertext inilah yang nantinya bisa kita berikan kepada orang lain.
-                    </li>
-                    <li>Untuk membaca kembali (dekripsi), lakukan kebalikannya. Orang yang menerima
-                        ciphertext
-                        tidak bisa langsung mengerti pesannya. Ia harus tahu kuncinya, yaitu angka
-                        pergeseran
-                        yang digunakan. Jika ia tahu kuncinya adalah 3, maka ia tinggal menggeser
-                        huruf-huruf
-                        mundur 3 langkah untuk menemukan plaintext kembali. Dari “EHODMDU” akan kembali
-                        terbaca
-                        sebagai “BELAJAR.”</li>
-                </ol>
-                <p class="teks">Dari langkah-langkah di atas, kita bisa melihat bahwa sandi Caesar bekerja
-                    dengan cara yang sangat logis. Ia tidak mengubah arti huruf, hanya mengubah posisi huruf
-                    dalam alfabet. Itulah mengapa metode ini disebut sandi geser (shift cipher).</p>
-                <p class="teks">Bayangkan alfabet sebagai lingkaran besar berisi huruf-huruf A sampai Z.
-                    Jika
-                    kita berdiri di huruf B, lalu melangkah 3 kali ke depan, kita akan sampai di huruf E.
-                    Begitu
-                    pula dengan huruf lain. Jadi, sandi Caesar sebenarnya hanyalah permainan “jalan-jalan”
-                    di
-                    sekitar alfabet dengan aturan jumlah langkah tertentu.</p>
-                <p class="teks">Karena prosesnya berulang dan konsisten, siapa pun yang mengetahui kuncinya
-                    bisa
-                    melakukan enkripsi maupun dekripsi dengan mudah. Namun, bagi orang yang tidak tahu
-                    kunci,
-                    ciphertext hanya akan tampak seperti rangkaian huruf yang tidak masuk akal.</p>
-            </div>
-        </div>
-    </main>
 
-    <!-- Pagination -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-3">
-            <!-- <li class="page-item disabled">
-                        <a class="page-link">Previous</a>
-                    </li> -->
-            <li class="page-item active"><a class="page-link" href="caesarcipher.html">1</a></li>
-            <li class="page-item"><a class="page-link" href="caesarcipher2.html">2</a></li>
-            <!-- <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li> -->
-        </ul>
-    </nav>
-
-    <!-- Navigasi bawah -->
-    <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'enkripsi' %}" class="btn btn-danger px-4 py-2 disabled">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Kembali
-        </a>
-        <a href="{% url 'caesar2' %}" class="btn btn-success px-4 py-2">
-            Selanjutnya
-            <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
+        <div class="step-navigation">
+            <button class="step-btn" id="prevBtn" onclick="changeStep(-1)" style="display: none;">
+                <i class="fas fa-arrow-left"></i> Sebelumnya
+            </button>
+            <div class="step-indicator">
+                <span id="currentStepText">Langkah 1 dari 4</span>
+            </div>
+            <button class="step-btn step-btn-next" id="nextBtn" onclick="changeStep(1)">
+                Selanjutnya <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
     </div>
+
 </div>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-3">
+        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'caesar2' %}">2</a></li>
+    </ul>
+</nav>
+
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'enkripsi' %}" class="btn btn-danger px-4 py-2">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Kembali
+    </a>
+
+    <a href="{% url 'caesar2' %}" class="btn btn-success px-4 py-2">
+        Selanjutnya
+        <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
+</div>
+
+<script>
+    function showShiftRow(kunci) {
+        // IDs for the table rows
+        const rowCipherId = 'cipherRow' + kunci;
+
+        const rowCipher = document.getElementById(rowCipherId);
+
+        if (rowCipher) {
+            // Hanya tampilkan, tidak menghilangkan yang sudah ada (cumulative)
+            rowCipher.style.display = 'table-row';
+
+            // Smooth scroll to the table for focus
+            document.querySelector('.shift-table-container').scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+    }
+
+
+    // --- JS LOGIC for Key Identification Process (Existing Logic) ---
+    let currentStep = 1;
+    const totalSteps = 4;
+
+    function changeStep(direction) {
+        // List of all step elements in the Identification section
+        const steps = [
+            document.getElementById('idStep1'),
+            document.getElementById('idStep2'),
+            document.getElementById('idStep3'),
+            document.getElementById('idStep4')
+        ];
+        const conclusion = document.getElementById('idConclusion');
+
+        // Hide previous visibility of the elements
+        for (let i = 0; i < steps.length; i++) {
+            steps[i].style.display = 'none';
+        }
+        conclusion.style.display = 'none';
+
+        // Update current step
+        currentStep += direction;
+        
+        // Ensure step is within bounds
+        if (currentStep < 1) currentStep = 1;
+        if (currentStep > totalSteps + 1) currentStep = totalSteps + 1;
+        
+        // Show steps cumulatively
+        for (let i = 0; i < currentStep && i < totalSteps; i++) {
+            steps[i].style.display = 'block';
+        }
+
+        if (currentStep > totalSteps) {
+             conclusion.style.display = 'block';
+        }
+        
+        // Update button visibility
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const stepText = document.getElementById('currentStepText');
+        
+        // Previous button
+        if (currentStep === 1) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'inline-flex';
+        }
+        
+        // Next button
+        if (currentStep > totalSteps) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = 'inline-flex';
+            if (currentStep === totalSteps) {
+                nextBtn.innerHTML = 'Lihat Kesimpulan <i class="fas fa-check"></i>';
+            } else {
+                nextBtn.innerHTML = 'Selanjutnya <i class="fas fa-arrow-right"></i>';
+            }
+        }
+        
+        // Update step indicator
+        if (currentStep <= totalSteps) {
+            stepText.textContent = `Langkah ${currentStep} dari ${totalSteps}`;
+        } else {
+            stepText.textContent = 'Kesimpulan';
+        }
+        
+        // Smooth scroll to the latest visible step
+        const targetElement = currentStep <= totalSteps 
+            ? document.getElementById('idStep' + currentStep)
+            : document.getElementById('idConclusion');
+        
+        if (targetElement) {
+            targetElement.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+    }
+    
+    // --- JS LOGIC for Combined Encryption Steps (MODIFIED FOR "RUMAH") ---
+    let currentEncryptStep = 0; // 0 is the initial example, 1-5 are the steps, 6 is conclusion
+    const totalEncryptSteps = 5; // Total R, U, M, A, H
+
+    function changeEncryptStep(direction) {
+        // List of all step elements for the ENCRYPTION process
+        const encryptSteps = [
+            document.getElementById('stepEncrypt1'),
+            document.getElementById('stepEncrypt2'),
+            document.getElementById('stepEncrypt3'),
+            document.getElementById('stepEncrypt4'),
+            document.getElementById('stepEncrypt5'),
+            document.getElementById('stepEncrypt6') // Conclusion step
+        ];
+        
+        // Update current step
+        currentEncryptStep += direction;
+        
+        // Ensure step is within bounds
+        if (currentEncryptStep < 0) currentEncryptStep = 0;
+        if (currentEncryptStep > totalEncryptSteps + 1) currentEncryptStep = totalEncryptSteps + 1;
+        
+        // Logic to show/hide steps cumulatively
+        for (let i = 0; i < encryptSteps.length; i++) {
+            if (i + 1 <= currentEncryptStep) {
+                encryptSteps[i].style.display = 'flex'; 
+            } else {
+                encryptSteps[i].style.display = 'none'; 
+            }
+        }
+
+        // Update button visibility and text
+        const prevBtn = document.getElementById('prevBtnEncrypt');
+        const nextBtn = document.getElementById('nextBtnEncrypt');
+        const stepText = document.getElementById('currentStepTextEncrypt');
+        
+        // Previous button
+        if (currentEncryptStep === 0) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'inline-flex';
+        }
+        
+        // Next button
+        if (currentEncryptStep > totalEncryptSteps) {
+            nextBtn.style.display = 'none'; // Hide next button after conclusion
+        } else {
+            nextBtn.style.display = 'inline-flex';
+            if (currentEncryptStep === totalEncryptSteps) {
+                nextBtn.innerHTML = 'Lihat Hasil Akhir <i class="fas fa-check"></i>';
+            } else {
+                nextBtn.innerHTML = 'Lanjutkan Proses <i class="fas fa-arrow-right"></i>';
+            }
+        }
+        
+        // Update step indicator
+        if (currentEncryptStep <= totalEncryptSteps) {
+            stepText.textContent = `Langkah ${currentEncryptStep} dari ${totalEncryptSteps}`;
+        } else {
+            stepText.textContent = 'Hasil Akhir';
+        }
+        
+        // Smooth scroll to the latest visible step
+        let targetElement = null;
+        if (currentEncryptStep > 0) {
+            targetElement = document.getElementById('stepEncrypt' + currentEncryptStep);
+        } else {
+            // Scroll to the main example box at step 0
+            targetElement = document.getElementById('stepEncrypt0'); 
+        }
+
+        if (targetElement) {
+            targetElement.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+    }
+</script>
 
 {% endblock %}

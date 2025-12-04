@@ -5,75 +5,92 @@
 
 {% block content %}
 
+{% csrf_token %}
+
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">EVALUASI</div>
-        <hr />
+<div class="lesson-titlebar">EVALUASI</div>
+<hr />
 
-        <div class="lesson-wrap p-3">
-            <div class="row g-4">
+<div class="lesson-wrap p-3">
+    <div class="row g-4">
 
-                <!-- Kiri: Soal -->
-                <div class="col-12 col-lg-8">
-                    <div class="quiz-card">
-                        <div id="quiz-title" class="quiz-title lesson-h2">Soal 1</div>
+        <!-- Kiri: Soal -->
+        <div class="col-12 col-lg-8">
+            <div class="quiz-card">
+                <div id="quiz-title" class="quiz-title lesson-h2">Soal 1</div>
 
-                        <!-- Tempat teks soal -->
-                        <div id="quiz-question" class="teks"></div>
+                <!-- Tempat teks soal -->
+                <div id="quiz-question" class="teks"></div>
 
-                        <!-- Tempat pilihan jawaban -->
-                        <div id="quiz-options" class="mt-3"></div>
+                <!-- Tempat pilihan jawaban -->
+                <div id="quiz-options" class="mt-3"></div>
 
-                        <!-- Tombol navigasi akan di-generate oleh JS -->
-                        <div class="quiz-actions d-flex gap-2 mt-4">
-                            <button id="prevBtn" class="btn btn-danger px-4 py-2">&laquo; Sebelumnya</button>
-                            <button id="submitQuiz" class="btn btn-primary">Submit</button>
-                            <button id="nextBtn" class="btn btn-success px-4 py-2">Selanjutnya &raquo;</button>
-                        </div>
-                    </div>
+                <!-- Tombol navigasi akan di-generate oleh JS -->
+                <div class="quiz-actions d-flex gap-2 mt-4">
+                    <button id="prevBtn" class="btn btn-danger px-4 py-2">&laquo; Sebelumnya</button>
+                    <button id="submitQuiz" class="btn btn-primary" type="button">Submit</button>
+                    <button id="nextBtn" class="btn btn-success px-4 py-2">Selanjutnya &raquo;</button>
                 </div>
-
-                <!-- Kanan: Panel -->
-                <div class="col-12 col-lg-4">
-
-                    <!-- TIMER -->
-                    <div class="side-card mb-3 text-center">
-                        <h5 class="text-danger fw-bold">
-                            Waktu Tersisa: <span id="timer">60:00</span>
-                        </h5>
-                    </div>
-
-                    <!-- BUBBLE SOAL -->
-                    <div class="side-card mb-3">
-                        <h5 class="mb-3">Daftar Soal</h5>
-                        <div id="bubbleContainer" class="bubbles"></div>
-                    </div>
-
-                    <!-- LEGEND -->
-                    <div class="side-card">
-                        <h5 class="mb-3">Keterangan</h5>
-                        <div class="legend">
-                            <div class="legend-item">
-                                <span class="legend-dot dot-current"></span> Nomor soal saat ini
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-dot dot-answered"></span> Soal sudah terjawab
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-dot dot-flagged"></span> Ragu-ragu
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-dot dot-empty"></span> Belum terjawab
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
         </div>
-    </main>
+
+        <!-- Kanan: Panel -->
+        <div class="col-12 col-lg-4">
+
+            <!-- TIMER -->
+            <div class="side-card mb-3 text-center">
+                <h5 class="text-danger fw-bold">
+                    Waktu Tersisa: <span id="timer">60:00</span>
+                </h5>
+            </div>
+
+            <!-- BUBBLE SOAL -->
+            <div class="side-card mb-3">
+                <h5 class="mb-3">Daftar Soal</h5>
+                <div id="bubbleContainer" class="bubbles"></div>
+            </div>
+
+            <!-- LEGEND -->
+            <div class="side-card">
+                <h5 class="mb-3">Keterangan</h5>
+                <div class="legend">
+                    <div class="legend-item">
+                        <span class="legend-dot dot-current"></span> Nomor soal saat ini
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot dot-answered"></span> Soal sudah terjawab
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot dot-flagged"></span> Ragu-ragu
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot dot-empty"></span> Belum terjawab
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="exitConfirmModal" tabindex="-1" aria-labelledby="exitConfirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="exitConfirmModalLabel">⚠️ Perhatian: Tinggalkan Evaluasi?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Anda yakin ingin meninggalkan halaman evaluasi ini?</p>
+                <p class="fw-bold text-danger">Jika Anda keluar sekarang, seluruh jawaban Anda akan hilang dan waktu
+                    akan terulang dari awal saat Anda kembali.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lanjutkan Mengerjakan</button>
+                <button type="button" id="confirmExitBtn" class="btn btn-danger">Ya, Tinggalkan Evaluasi</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

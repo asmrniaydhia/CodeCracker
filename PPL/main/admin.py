@@ -77,6 +77,15 @@ class ProgresItemAdmin(admin.ModelAdmin):
     list_filter = ('status', 'id_siswa')
     search_fields = ('id_siswa__nama_lengkap', 'id_item__nama_item')
 
+
+# # ============================
+# #     ADMIN STAGE GAME
+# # ============================
+# @admin.register(StageGame)
+# class StageGameAdmin(admin.ModelAdmin):
+#     list_display = ('id_stage', 'nama_stage')
+#     search_fields = ('nama_stage',)
+
 # ============================
 #     ADMIN STAGE GAME (NON-AKTIF)
 # ============================
@@ -84,6 +93,15 @@ class ProgresItemAdmin(admin.ModelAdmin):
 # class StageGameAdmin(admin.ModelAdmin):
 #     list_display = ('id_stage', 'nama_stage')
 #     search_fields = ('nama_stage',)
+
+# # ============================
+# #     ADMIN HASIL GAME
+# # ============================
+# @admin.register(HasilGame)
+# class HasilGameAdmin(admin.ModelAdmin):
+#     list_display = ('id_hasil_game', 'id_siswa', 'id_stage', 'skor_game', 'waktu_game', 'percobaan_game')
+#     list_filter = ('id_stage', 'id_siswa')
+#     search_fields = ('id_siswa__nama_lengkap',)
 
 # ============================
 #     ADMIN HASIL GAME (NON-AKTIF)

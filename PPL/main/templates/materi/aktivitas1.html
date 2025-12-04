@@ -6,42 +6,103 @@
 {% block content %}
 
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Aktivitas</div>
-        <hr />
+<div class="lesson-titlebar">Aktivitas</div>
+<hr />
 
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Enkripsi Pesan</h2>
-                <p class="teks">Seorang teman ingin merahasiakan pesan <b><i>“SEKOLAH”</i></b>. Ia menggunakan
-                    Caesar Cipher
-                    dengan aturan kunci <b><i>2</i></b>.
-                </p>
-                <p class="teks">Menurutmu, ciphertext (pesan terenkripsi) yang benar adalah…</p>
-                <div class="teks multi-choice">
-                    <input type="radio"> UGMQNCJ <br>
-                    <input type="radio"> UFMQMBJ <br>
-                    <input type="radio"> TGMQNBJ <br>
-                    <input type="radio"> UFMQNCJ
-                </div>
-                <button type="submit" class="btn btn-success px-4 py-2">
-                    <b>Cek Jawaban</b>
-                </button>
-            </div>
+<div class="lesson-wrap">
+    <div class="lesson-head">
+        <h2 class="lesson-h2">Enkripsi Pesan</h2>
+        <p class="teks">Seorang teman ingin merahasiakan pesan <b><i>“SEKOLAH”</i></b>. Ia menggunakan
+            Caesar Cipher
+            dengan aturan kunci <b><i>2</i></b>.
+        </p>
+        <p class="teks">Menurutmu, ciphertext (pesan terenkripsi) yang benar adalah…</p>
+        <div class="teks multi-choice" id="pilihan-jawaban">
+            <label><input type="radio" name="jawaban" value="UGMQNCJ"> UGMQNCJ</label><br>
+            <label><input type="radio" name="jawaban" value="UFMQMBJ"> UFMQMBJ</label><br>
+            <label><input type="radio" name="jawaban" value="TGMQNBJ"> TGMQNBJ</label><br>
+            <label><input type="radio" name="jawaban" value="UFMQNCJ"> UFMQNCJ</label>
         </div>
-    </main>
 
-    <!-- Navigasi bawah -->
-    <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'pengenalan' %}" class="btn btn-danger px-4 py-2 disabled">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Kembali
-        </a>
-        <a href="{% url 'enkripsi' %}" class="btn btn-success px-4 py-2">
-            Selanjutnya
-            <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
+        <button type="button" id="cek-button" class="btn btn-success px-4 py-2">
+            <b>Cek Jawaban</b>
+        </button>
+
+        <div id="hasil-pemeriksaan" class="mt-3"></div>
     </div>
 </div>
+
+<!-- Navigasi bawah -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'pengenalan' %}" class="btn btn-danger px-4 py-2">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Kembali
+    </a>
+    <a href="{% url 'enkripsi' %}" class="btn btn-success px-4 py-2 disabled" id="nextButton">
+        Selanjutnya
+        <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Tentukan jawaban yang benar
+    const JAWABAN_BENAR = "UFMQMBJ";
+
+    // Tunggu hingga dokumen HTML selesai dimuat
+    document.addEventListener('DOMContentLoaded', function () {
+        // Dapatkan elemen-elemen yang diperlukan dari DOM
+        const checkButton = document.getElementById('cek-button');
+        const resultDiv = document.getElementById('hasil-pemeriksaan');
+        const radioButtons = document.querySelectorAll('input[name="jawaban"]');
+        const nextButton = document.getElementById('nextButton');
+
+        // Fungsi untuk memeriksa jawaban
+        function periksaJawaban() {
+            let jawabanDipilih = null;
+
+            // Cari radio button yang dipilih
+            for (const radio of radioButtons) {
+                if (radio.checked) {
+                    jawabanDipilih = radio.value;
+                    break;
+                }
+            }
+
+            // Cek apakah ada jawaban yang dipilih
+            if (!jawabanDipilih) {
+                resultDiv.innerHTML = '<div class="alert alert-warning">⚠️ Silakan pilih salah satu jawaban.</div>';
+                // Nonaktifkan tombol jika peringatan muncul
+                if (nextButton) nextButton.classList.add('disabled');
+                return;
+            }
+
+            // Bandingkan jawaban yang dipilih dengan jawaban yang benar
+            if (jawabanDipilih === JAWABAN_BENAR) {
+                // Jawaban Benar
+                resultDiv.innerHTML = '<div class="alert alert-success">✅ Jawaban Benar! "SEKOLAH" dengan kunci 2 terenkripsi menjadi "UFMQMBJ". Anda dapat melanjutkan.</div>';
+
+                // Aktifkan tombol Selanjutnya
+                if (nextButton) nextButton.classList.remove('disabled');
+
+                // Nonaktifkan semua radio button setelah jawaban benar
+                radioButtons.forEach(radio => radio.disabled = true);
+                checkButton.disabled = true;
+
+            } else {
+                // Jawaban Salah
+                resultDiv.innerHTML = '<div class="alert alert-danger">❌ Jawaban Salah! Coba hitung ulang pergeseran (shift) setiap huruf.</div>';
+
+                // Nonaktifkan tombol Selanjutnya
+                if (nextButton) nextButton.classList.add('disabled');
+            }
+        }
+
+        // Tambahkan event listener ke tombol "Cek Jawaban"
+        if (checkButton) {
+            checkButton.addEventListener('click', periksaJawaban);
+        }
+    });
+</script>
 {% endblock %}

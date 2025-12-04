@@ -5,140 +5,80 @@
 
 {% block content %}
 <!-- Konten Utama -->
-<div class="p-5">
-    <main class="lesson-main">
-        <div class="lesson-titlebar">Dekripsi</div>
-        <hr />
+<div class="lesson-titlebar">Dekripsi</div>
+<hr />
 
-        <div class="lesson-wrap">
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Proses Dekripsi</h2>
-                <p class="teks">Proses dekripsi bukanlah sekadar tebak-tebakan atau keberuntungan, melainkan
-                    proses yang sangat terstruktur. Keberhasilan dekripsi sepenuhnya bergantung pada penggunaan
-                    elemen-elemen yang sama persis dengan yang digunakan saat enkripsi. Artinya, dekripsi harus
-                    mengikuti aturan main yang sudah ditetapkan.</p>
-                <p class="teks">Untuk berhasil membuka pesan, kita memerlukan tiga unsur utama yang harus cocok:
-                </p>
-                <ol class="teks m-3 mt-0">
-                    <li><b>Ciphertext:</b> Ini adalah bahan baku yang diolah, yaitu pesan yang sudah diacak dan
-                        sulit
-                        dimengerti, yang tiba di sisi penerima. Ciphertext ibarat kotak yang disegel dan siap
-                        dibuka.</li>
-                    <li><b>Aturan Dekripsi (Algoritma):</b> Ini adalah rumus khusus atau serangkaian langkah
-                        yang
-                        digunakan untuk membalikkan Ciphertext menjadi Plaintext. Aturan dekripsi harus
-                        merupakan kebalikan sempurna dari aturan enkripsi.
-                        <p class="lesson-child lesson-h2">Jika enkripsi menggunakan Algoritma "memutar
-                            ke kanan",
-                            maka dekripsi harus menggunakan Algoritma "memutar ke kiri".</p>
-                    </li>
-                    <li><b>Kunci (Key):</b> Ini adalah informasi rahasia terpenting. Kunci bisa berupa angka,
-                        kata
-                        sandi, atau data rahasia lainnya yang menentukan hasil akhir. Tanpa Kunci yang benar,
-                        Algoritma hanya akan menghasilkan kode acak lain, bukan Plaintext aslinya. Kunci ibarat
-                        kata sandi yang hanya kamu dan penerima yang tahu.</li>
-                </ol>
-                <p class="teks">Dekripsi adalah proses terbalik yang mengubah kode acak menjadi pesan bermakna.
-                    Berikut adalah alur lengkapnya:</p>
-                <ol class="teks m-3 mt-0">
-                    <li><b>Ciphertext Diterima dan Diidentifikasi:</b> Penerima menerima pesan teracak.
-                        Misalnya,
-                        mereka menerima kode <b>ZRUOG</b>. Tugas pertama adalah mengetahui Algoritma apa yang
-                        digunakan
-                        untuk mengenkripsi pesan ini.</li>
-                    <li><b>Aplikasi Kunci dan Algoritma:</b> Penerima yang sah, yang telah memiliki Kunci
-                        Dekripsi yang
-                        cocok, memasukkan Ciphertext bersamaan dengan Kunci tersebut ke dalam Algoritma
-                        Dekripsi. Inilah momen ketika Algoritma mulai bekerja keras memecahkan sandi.</li>
-                    <li><b>Algoritma Membalikkan Proses:</b> Menerapkan Kunci secara mundur. Misalnya, jika
-                        Kunci
-                        adalah geser maju 3, maka dekripsi adalah geser mundur 3.</li>
-                    <li><b>Validasi dan Penyelesaian:</b> Jika Kunci yang digunakan benar dan Algoritma
-                        diterapkan
-                        dengan tepat, sistem akan berhasil mengubah seluruh Ciphertext.</li>
-                    <li><b>Plaintext Diperoleh:</b> Hasil akhirnya adalah WORLD. Pesan rahasia kini terbaca.
-                    </li>
-                </ol>
-                <p class="teks">Proses yang efisien dan akurat inilah yang memungkinkan miliaran pesan
-                    terenkripsi di seluruh dunia dapat dibaca dan dipercaya setiap harinya. Tanpa kunci yang
-                    tepat, Ciphertext akan selamanya menjadi misteri.</p>
+<div class="lesson-wrap">
+
+    <div class="lesson-head">
+        <h2 class="lesson-h2">Proses Dekripsi</h2>
+        <p class="teks">
+            Masukkan ciphertext (pesan terenkripsi) dan kunci geser untuk melihat proses
+            dekripsi
+            secara bertahap dengan tabel alfabet berwarna.
+        </p>
+
+        <div class="input-section">
+            <div class="mb-3">
+                <label for="ciphertext" class="form-label">Ciphertext (Pesan
+                    Terenkripsi):</label>
+                <input type="text" class="form-control" id="ciphertext" placeholder="Contoh: ZRUOG" value="ZRUOG">
+                <small class="text-muted">Hanya huruf A-Z yang akan diproses</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="key" class="form-label">Kunci Geser (1-25):</label>
+                <input type="number" class="form-control" id="key" min="1" max="25" value="3">
+            </div>
+
+            <button class="btn btn-custom w-100" onclick="startDecryption()">
+                Mulai Proses Dekripsi
+            </button>
+        </div>
+
+        <div class="legend-box">
+            <div class="legend-item">
+                <div class="legend-color source"></div>
+                <span><strong>Huruf Ciphertext</strong></span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color target"></div>
+                <span><strong>Hasil Dekripsi</strong></span>
             </div>
         </div>
-        <hr>
-        <div class="lesson-wrap">
+    </div>
+</div>
+<hr>
+<div id="stepContainer" class="step-container"></div>
 
-            <div class="lesson-head">
-                <h2 class="lesson-h2">Proses Dekripsi</h2>
-                <p class="teks">
-                    Masukkan ciphertext (pesan terenkripsi) dan kunci geser untuk melihat proses
-                    dekripsi
-                    secara bertahap dengan tabel alfabet berwarna.
-                </p>
-
-                <div class="input-section">
-                    <div class="mb-3">
-                        <label for="ciphertext" class="form-label">Ciphertext (Pesan
-                            Terenkripsi):</label>
-                        <input type="text" class="form-control" id="ciphertext" placeholder="Contoh: ZRUOG"
-                            value="ZRUOG">
-                        <small class="text-muted">Hanya huruf A-Z yang akan diproses</small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="key" class="form-label">Kunci Geser (1-25):</label>
-                        <input type="number" class="form-control" id="key" min="1" max="25" value="3">
-                    </div>
-
-                    <button class="btn btn-custom w-100" onclick="startDecryption()">
-                        Mulai Proses Dekripsi
-                    </button>
-                </div>
-
-                <div class="legend-box">
-                    <div class="legend-item">
-                        <div class="legend-color source"></div>
-                        <span><strong>Huruf Ciphertext</strong></span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color target"></div>
-                        <span><strong>Hasil Dekripsi</strong></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <hr>
-        <div id="stepContainer" class="step-container"></div>
-    </main>
-
-    <!-- Pagination -->
-    <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center mt-3">
-            <!-- <li class="page-item disabled">
+<!-- Pagination -->
+<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center mt-3">
+        <!-- <li class="page-item disabled">
                         <a class="page-link">Previous</a>
                     </li> -->
-            <li class="page-item"><a class="page-link" href="{% url 'dekripsi' %}">1</a></li>
-            <li class="page-item active"><a class="page-link" href="{% url 'dekripsi2' %}">2</a></li>
-            <!-- <li class="page-item">
+        <li class="page-item"><a class="page-link" href="{% url 'dekripsi' %}">1</a></li>
+        <li class="page-item active"><a class="page-link" href="{% url 'dekripsi2' %}">2</a></li>
+        <!-- <li class="page-item">
                         <a class="page-link" href="#">Next</a>
                     </li> -->
-        </ul>
-    </nav>
+    </ul>
+</nav>
 
-    <!-- Navigasi bawah -->
-    <div class="d-flex justify-content-end gap-3 mt-4">
-        <a href="{% url 'dekripsi' %}" class="btn btn-danger px-4 py-2 disabled">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            Kembali
-        </a>
-        <a href="{% url 'aktivitas4' %}" class="btn btn-success px-4 py-2">
-            Selanjutnya
-            <i class="fa-solid fa-arrow-right ms-2"></i>
-        </a>
-    </div>
+<!-- Navigasi bawah -->
+<div class="d-flex justify-content-end gap-3 mt-4">
+    <a href="{% url 'dekripsi' %}" class="btn btn-danger px-4 py-2">
+        <i class="fa-solid fa-arrow-left me-2"></i>
+        Kembali
+    </a>
+    <a href="{% url 'aktivitas4' %}" class="btn btn-success px-4 py-2">
+        Selanjutnya
+        <i class="fa-solid fa-arrow-right ms-2"></i>
+    </a>
 </div>
 
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'materi.js' %}"></script>
+<script src="{% static 'materi.js' %}?v={{ time }}"></script>
 {% endblock %}

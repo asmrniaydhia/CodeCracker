@@ -19,3 +19,6 @@ db.sqlite3
 # Static/media (jika kamu generate manual)
 staticfiles/
 media/
+
+# local settings
+local_settings.py
