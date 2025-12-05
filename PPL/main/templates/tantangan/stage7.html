@@ -5,17 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stage 7: Huruf Hilang - Agen 7</title>
     
-    <script>
-        // Validasi Stage 6
-        if (localStorage.getItem('stage6Completed') !== 'true') {
-            alert("Anda harus menyelesaikan Stage 6 terlebih dahulu!");
-            window.location.href = "{% url 'tantangan' %}";
-        }
-    </script>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
         /* CSS Style Tetap Sama */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
@@ -151,7 +144,12 @@
         <div class="modal-content">
             <div class="success-animation">🎉 Hebat!</div>
             <p class="lead mt-3">Stage 7 Selesai! Pesan dipulihkan.</p>
-            <p>Mempersiapkan Stage 8...</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'unlock_next_stage' 7 %}" class="btn btn-success btn-lg">
+                    Lanjut ke Misi Berikutnya <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -175,7 +173,7 @@
     <script>
         const STAGE_ID = 7;
         const PREVIOUS_STAGE_IDS = [1, 2, 3, 4, 5, 6];
-        // PERBAIKAN URL NEXT STAGE
+        // URL NEXT STAGE HANYA UNTUK REFERENSI
         const NEXT_STAGE_URL = "{% url 'stage8' %}"; 
         
         const STAGE_CONFIG = {
@@ -360,12 +358,12 @@
             }
         }
 
+        // --- FUNGSI UTAMA YANG DIPERBAIKI ---
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
             
             const finalStageScore = Math.max(10, stageState.stageScore);
-            
             gameSession.totalScore += finalStageScore;
             
             gameSession.stageProgress[`stage${STAGE_ID}`] = {
@@ -374,11 +372,10 @@
                 attempts: stageState.attempts
             };
             saveSession();
-            
-            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+                        
+            // Tampilkan Modal
             successModal.style.display = 'flex';
             
-            setTimeout(() => window.location.href = NEXT_STAGE_URL, 3000);
         }
 
         function saveSession() {

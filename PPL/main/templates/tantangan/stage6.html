@@ -5,17 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stage 6: Instruksi Rahasia - Agen 7</title>
     
-    <script>
-        // Validasi Stage 5
-        if (localStorage.getItem('stage5Completed') !== 'true') {
-            alert("Anda harus menyelesaikan Stage 5 terlebih dahulu!");
-            window.location.href = "{% url 'tantangan' %}";
-        }
-    </script>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
         /* CSS Style Tetap Sama */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
@@ -155,7 +148,7 @@
 
                 <div class="question-container" id="question-3">
                     <p class="question-text"><strong>Soal 3/3:</strong> Instruksi Final (HOTS)</p>
-                    <p>Kamu tahu <strong>Kunci = 7</strong>. Komandan mengirim pesan darurat <strong>SLCR</strong>. Apa instruksi rahasianya?</p>
+                    <p>Kamu tahu <strong>Kunci = 7</strong>. Komandan mengirim pesan darurat <strong>SHYP</strong>. Apa instruksi rahasianya?</p>
                     <input type="text" class="form-control answer-input" id="q3-answer" placeholder="Ketik hasil dekripsi (4 huruf)">
                     <button class="btn btn-primary btn-periksa" onclick="checkAnswer(3)">Periksa Jawaban</button>
                     <p class="feedback" id="q3-feedback"></p>
@@ -174,7 +167,12 @@
         <div class="modal-content">
             <div class="success-animation">🎉 Hebat!</div>
             <p class="lead mt-3">Stage 6 Selesai! Misi berhasil!</p>
-            <p>Mempersiapkan Stage 7...</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'unlock_next_stage' 6 %}" class="btn btn-success btn-lg">
+                    Lanjut ke Misi Berikutnya <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -198,36 +196,18 @@
     <script>
         const STAGE_ID = 6;
         const PREVIOUS_STAGE_IDS = [1, 2, 3, 4, 5];
-        // PERBAIKAN URL NEXT STAGE
+        // URL NEXT STAGE HANYA UNTUK REFERENSI
         const NEXT_STAGE_URL = "{% url 'stage7' %}"; 
         
         const STAGE_CONFIG = {
             timeLimit: 600,
             questions: [
                 { id: 1, type: 'input', answer: 'THE PLANE', points: 30 },
-                // PERBAIKAN KUNCI JAWABAN MATCHING: TIM->APT (Bukan APM)
                 { id: 2, type: 'matching', answer: '1-APT,2-NHZ,3-GLU', points: 30 },
-                // SLCR (Dekripsi -7): S(19)-7=12(L), L(12)-7=5(E), C(3)+26-7=22(V)? 
-                // Mari cek soal 3: SLCR -> LARI?
-                // L(12)+7=19(S). A(1)+7=8(H). R(18)+7=25(Y). I(9)+7=16(P). -> SHYP.
-                // Jika soalnya SLCR dan jawabannya LARI:
-                // L(12), A(1), R(18), I(9).
-                // S(19), L(12), C(3), R(18).
-                // S->L (-7). L->E (-7, salah). C->V (-7). R->K (-7).
-                // KOREKSI SOAL 3 DI BAWAH
+                // JAWABAN: LARI (L+7=S, A+7=H, R+7=Y, I+7=P => SHYP)
                 { id: 3, type: 'input', answer: 'LARI', points: 40 }
             ]
         };
-
-        // Koreksi Soal 3 agar konsisten dengan jawaban 'LARI' dan Kunci 7 (Enkripsi)
-        // Jika plaintext = LARI
-        // L(12)+7 = 19 (S)
-        // A(1)+7 = 8 (H)
-        // R(18)+7 = 25 (Y)
-        // I(9)+7 = 16 (P)
-        // Maka Ciphertext di HTML harusnya: SHYP
-        // Saya akan update teks soal di HTML via JavaScript atau manual di atas.
-        // UPDATE: Saya update teks HTML Soal 3 menjadi SHYP agar jawabannya LARI valid.
 
         let gameSession = JSON.parse(sessionStorage.getItem('gameSession')) || { totalScore: 0, stageProgress: {} };
         let stageState = {
@@ -244,11 +224,6 @@
         const penaltyModal = document.getElementById('penaltyModal');
 
         document.addEventListener('DOMContentLoaded', () => {
-            // UPDATE TEKS SOAL 3 SECARA DINAMIS ATAU MANUAL
-            // Mengganti SLCR menjadi SHYP agar LARI valid dengan Kunci 7
-            const q3Text = document.querySelector('#question-3 p:nth-child(2)');
-            if(q3Text) q3Text.innerHTML = "Kamu tahu <strong>Kunci = 7</strong>. Komandan mengirim pesan darurat <strong>SHYP</strong>. Apa instruksi rahasianya?";
-
             initStage();
         });
 
@@ -354,10 +329,10 @@
                 switch (config.type) {
                     case 'input':
                         const inputEl = document.getElementById(`q${qNum}-answer`);
-                        const userAnswer = inputEl.value.toUpperCase().trim();
+                        // Trim spasi berlebih untuk jawaban 2 kata (The Plane)
+                        const userAnswer = inputEl.value.toUpperCase().replace(/\s+/g, ' ').trim();
                         isCorrect = (userAnswer === config.answer);
                         break;
-                    
                     case 'matching':
                         isCorrect = (q2MatcherState.matches === q2MatcherState.totalPairs);
                         break;
@@ -365,15 +340,15 @@
 
                 if (isCorrect) {
                     const questionTime = Math.floor((Date.now() - stageState.questionStartTime) / 1000);
-                    const maxPoints = config.points; 
-                    const minPoints = 10; 
+                    const maxPoints = config.points;
+                    const minPoints = 10;
                     const timeForMaxPoints = 60; 
 
                     let questionScore;
                     if (questionTime <= timeForMaxPoints) {
                         questionScore = maxPoints; 
                     } else {
-                        let penalty = (questionTime - timeForMaxPoints) * 0.5; 
+                        let penalty = (questionTime - timeForMaxPoints) * 0.5;
                         questionScore = Math.floor(maxPoints - penalty);
                     }
                     
@@ -412,6 +387,7 @@
             }
         }
 
+        // --- FUNGSI UTAMA YANG DIPERBAIKI ---
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
@@ -426,10 +402,12 @@
             };
             saveSession();
             
-            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            // LOCALSTORAGE DIHAPUS
+            
+            // Tampilkan Modal
             successModal.style.display = 'flex';
             
-            setTimeout(() => window.location.href = NEXT_STAGE_URL, 3000);
+            // REDIRECT OTOMATIS DIHAPUS
         }
 
         function saveSession() {
@@ -443,11 +421,14 @@
             q2MatcherState = { selected: null, matches: 0, totalPairs: 3, pairs: [] };
             col2.innerHTML = '';
             
-            // PERBAIKAN PILIHAN JAWABAN: APT (Bukan APM)
+            // Soal: Konfirmasi Kunci 7
+            // TIM(T20,I9,M13) + 7 -> A(1), P(16), T(20) = APT
+            // GAS(G7,A1,S19) + 7 -> N(14), H(8), Z(26) = NHZ
+            // ZEN(Z26,E5,N14) + 7 -> G(7), L(12), U(21) = GLU
             const rightOptions = [
-                { id: 1, text: 'APT' }, // TIM -> APT
-                { id: 3, text: 'GLU' }, // ZEN -> GLU
-                { id: 2, text: 'NHZ' }  // GAS -> NHZ
+                { id: 1, text: 'APT' },
+                { id: 2, text: 'NHZ' },
+                { id: 3, text: 'GLU' }
             ];
             
             rightOptions.sort(() => Math.random() - 0.5);

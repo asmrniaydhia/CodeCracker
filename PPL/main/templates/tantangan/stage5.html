@@ -5,17 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stage 5: Menemukan Pola - Agen 7</title>
     
-    <script>
-        // Validasi Stage Sebelumnya
-        if (localStorage.getItem('stage4Completed') !== 'true') {
-            alert("Anda harus menyelesaikan Stage 4 terlebih dahulu!");
-            window.location.href = "{% url 'tantangan' %}";
-        }
-    </script>
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
     <style>
         /* CSS Style Tetap Sama */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
@@ -118,9 +111,6 @@
 
             <div class="petunjuk-content">
                 <h5><i class="fas fa-lightbulb"></i> Petunjuk Misi:</h5>
-                
-                
-
                 <p class="mt-3">Pola pergeseran adalah jarak yang konsisten antara huruf asli dan huruf terenkripsi.</p>
                 <ul>
                     <li>Jika kamu melihat 'A' menjadi 'E', hitung jaraknya (A→B→C→D→E). Jaraknya adalah 4.</li>
@@ -143,8 +133,6 @@
                     <p class="question-text"><strong>Soal 2/3:</strong> Konfirmasi Pola</p>
                     <p>Bagus, kuncinya adalah <strong>4</strong>. Sekarang, konfirmasikan polanya! Cocokkan huruf asli (kiri) dengan hasil enkripsi <strong>Kunci 4</strong> (kanan).</p>
                     
-                    
-
                     <div class="matching-game-large">
                         <div class="match-column" id="q2-col1">
                             <div class="match-item" data-id="1">A</div>
@@ -179,7 +167,12 @@
         <div class="modal-content">
             <div class="success-animation">🎉 Hebat!</div>
             <p class="lead mt-3">Stage 5 Selesai! Pola ditemukan.</p>
-            <p>Mempersiapkan Stage 6...</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'unlock_next_stage' 5 %}" class="btn btn-success btn-lg">
+                    Lanjut ke Misi Berikutnya <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -203,7 +196,7 @@
     <script>
         const STAGE_ID = 5;
         const PREVIOUS_STAGE_IDS = [1, 2, 3, 4]; 
-        // PERBAIKAN URL NEXT STAGE
+        // URL NEXT STAGE HANYA UNTUK REFERENSI
         const NEXT_STAGE_URL = "{% url 'stage6' %}"; 
         
         const STAGE_CONFIG = {
@@ -339,7 +332,6 @@
                         const userAnswer = inputEl.value.toUpperCase().trim();
                         isCorrect = (userAnswer === config.answer);
                         break;
-                    
                     case 'matching':
                         isCorrect = (q2MatcherState.matches === q2MatcherState.totalPairs);
                         break;
@@ -394,12 +386,12 @@
             }
         }
 
+        // --- FUNGSI UTAMA YANG DIPERBAIKI ---
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
             
             const finalStageScore = Math.max(10, stageState.stageScore);
-            
             gameSession.totalScore += finalStageScore;
             
             gameSession.stageProgress[`stage${STAGE_ID}`] = {
@@ -409,10 +401,12 @@
             };
             saveSession();
             
-            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            // LOCALSTORAGE DIHAPUS
+            
+            // Tampilkan Modal
             successModal.style.display = 'flex';
             
-            setTimeout(() => window.location.href = NEXT_STAGE_URL, 3000);
+            // REDIRECT OTOMATIS DIHAPUS
         }
 
         function saveSession() {
@@ -426,10 +420,12 @@
             q2MatcherState = { selected: null, matches: 0, totalPairs: 3, pairs: [] };
             col2.innerHTML = '';
             
+            // Soal: Konfirmasi Pola +4
+            // A(1)->E(5), C(3)->G(7), H(8)->L(12)
             const rightOptions = [
                 { id: 1, text: 'E' },
-                { id: 3, text: 'L' },
-                { id: 2, text: 'G' }
+                { id: 2, text: 'G' },
+                { id: 3, text: 'L' }
             ];
             
             rightOptions.sort(() => Math.random() - 0.5);

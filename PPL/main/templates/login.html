@@ -64,5 +64,21 @@
     <h2>CodeCracker</h2>
     <p>Belajar & Pecahkan Kode Bersama!</p>
   </div>
+
+<script>
+    // MENGHAPUS SEMUA DATA GAME LAMA SAAT MEMBUKA HALAMAN LOGIN
+    window.onload = function() {
+        // Hapus LocalStorage (penyimpanan permanen browser)
+        localStorage.clear();
+        
+        // Hapus SessionStorage (penyimpanan sementara tab)
+        sessionStorage.clear();
+        
+        // Hapus spesifik data game jika ada key lain
+        sessionStorage.removeItem('gameSession');
+        
+        console.log("Memori browser telah dibersihkan untuk pengguna baru.");
+    };
+</script>
 </body>
 </html>

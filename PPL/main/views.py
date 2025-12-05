@@ -23,6 +23,36 @@ def butuh_login_siswa(function):
         return function(request, *args, **kwargs)
     return wrap
 
+# ==========================================
+#  LOGIKA HELPER TANTANGAN (BARU)
+# ==========================================
+
+def cek_akses_stage(request, stage_ke):
+    """
+    Mengecek apakah user boleh mengakses stage tertentu berdasarkan session.
+    """
+    # Ambil progress terakhir dari session, default Stage 1
+    max_stage = request.session.get('max_stage', 1)
+    if max_stage < stage_ke:
+        return False
+    return True
+
+@butuh_login_siswa
+def unlock_next_stage(request, stage_selesai):
+    """
+    Fungsi ini dipanggil ketika siswa MENYELESAIKAN sebuah stage.
+    Misal: Selesai stage 1 -> panggil url unlock/1 -> system buka stage 2.
+    """
+    current_max = request.session.get('max_stage', 1)
+    
+    # Hanya naikkan level jika stage yang diselesaikan adalah stage terakhir yg terbuka
+    if stage_selesai >= current_max:
+        request.session['max_stage'] = stage_selesai + 1
+        request.session.modified = True
+        
+    messages.success(request, f"Hebat! Stage {stage_selesai + 1} terbuka.")
+    return redirect('tantangan')
+
 # ---------- EVALUASI ----------
 def evaluasi_petunjuk(request):
     return render(request, "evaluasi/evaluasi.html")
@@ -605,51 +635,85 @@ def pengenalan(request):
     return render(request, "materi/pengenalan.html")
 
 
-# ---------- TANTANGAN ----------
+# ---------- TANTANGAN (LOGIKA DIPERBAIKI) ----------
+
+@butuh_login_siswa
+def tantangan(request):
+    # Ambil stage terakhir dari session, jika tidak ada, mulai dari 1
+    current_max_stage = request.session.get('max_stage', 1)
+    
+    context = {
+        'max_stage': current_max_stage
+    }
+    return render(request, "tantangan/tantangan.html", context)
+
 @butuh_login_siswa
 def stage1(request):
+    # Stage 1 selalu terbuka
     return render(request, "tantangan/stage1.html")
 
 @butuh_login_siswa
 def stage2(request):
+    if not cek_akses_stage(request, 2):
+        messages.warning(request, "Selesaikan Stage 1 terlebih dahulu!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage2.html")
 
 @butuh_login_siswa
 def stage3(request):
+    if not cek_akses_stage(request, 3):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage3.html")
 
 @butuh_login_siswa
 def stage4(request):
+    if not cek_akses_stage(request, 4):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage4.html")
 
 @butuh_login_siswa
 def stage5(request):
+    if not cek_akses_stage(request, 5):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage5.html")
 
 @butuh_login_siswa
 def stage6(request):
+    if not cek_akses_stage(request, 6):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage6.html")
 
 @butuh_login_siswa
 def stage7(request):
+    if not cek_akses_stage(request, 7):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage7.html")
 
 @butuh_login_siswa
 def stage8(request):
+    if not cek_akses_stage(request, 8):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage8.html")
 
 @butuh_login_siswa
 def stage9(request):
+    if not cek_akses_stage(request, 9):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage9.html")
 
 @butuh_login_siswa
 def stage10(request):
+    if not cek_akses_stage(request, 10):
+        messages.warning(request, "Stage ini masih terkunci!")
+        return redirect('tantangan')
     return render(request, "tantangan/stage10.html")
-
-@butuh_login_siswa
-def tantangan(request):
-    return render(request, "tantangan/tantangan.html")
-
 
 # ---------- HALAMAN UMUM ----------
 def landing(request):
@@ -736,6 +800,13 @@ def login_user(request):
                 # Login Berhasil
                 request.session["user_id"] = user.id_pengguna
                 request.session["user_role"] = user.peran
+
+                # Menyimpan nama lengkap ke session agar bisa dipanggil di HTML navbar
+                request.session["nama_lengkap"] = user.nama_lengkap
+                
+                # Reset progress stage untuk sesi baru (agar aman)
+                request.session['max_stage'] = 1
+                
                 messages.success(request, f"Selamat datang, {user.nama_lengkap}!")
 
                 # Arahkan (Redirect) sesuai peran
@@ -765,6 +836,7 @@ def login_user(request):
 
 
 def logout_user(request):
+    request.session.flush()
     """
     Menghapus data session dan melakukan logout.
     """
@@ -775,11 +847,9 @@ def logout_user(request):
     messages.info(request, "Anda telah berhasil logout.")
     return redirect("landing")
 
-
 def leaderboard(request):
     # ... (tidak berubah)
     return render(request, "leaderboard.html")
-
 
 def tes(request):
     # ... (tidak berubah)
@@ -788,71 +858,40 @@ def tes(request):
 @butuh_login_siswa
 @require_POST
 def simpan_skor_final_view(request):
-    """
-    Menerima data JSON dari Stage 10 dan menyimpannya ke database.
-    Memperbarui skor jika pemain mendapatkan skor lebih tinggi dari sebelumnya.
-    """
-    # 1. Pastikan user valid dari session
     user_id = request.session.get('user_id')
     try:
-        # Gunakan model Pengguna
         siswa_sekarang = Pengguna.objects.get(id_pengguna=user_id)
-    except Pengguna.DoesNotExist:
-        return JsonResponse({'status': 'gagal', 'message': 'User session expired atau tidak valid.'}, status=401)
-
-    try:
-        # 2. Baca data JSON (perbaikan utama di sini)
         data = json.loads(request.body)
         skor_baru = int(data.get('total_skor', 0))
         waktu_baru = int(data.get('total_waktu', 0))
 
-        # 3. Logika Simpan / Update High Score
-        # Cek apakah data user ini sudah ada di PeringkatFinal?
         obj, created = PeringkatFinal.objects.get_or_create(siswa=siswa_sekarang)
 
+        updated = False
         if created:
-            # Jika baru pertama kali main, simpan langsung
+            obj.total_skor = skor_baru
+            obj.total_waktu_detik = waktu_baru
+            updated = True
+        else:
+            if skor_baru > obj.total_skor: updated = True
+            elif skor_baru == obj.total_skor and waktu_baru < obj.total_waktu_detik: updated = True
+            
+        if updated:
             obj.total_skor = skor_baru
             obj.total_waktu_detik = waktu_baru
             obj.save()
-            return JsonResponse({'status': 'sukses', 'message': 'Skor berhasil disimpan ke Leaderboard!'})
-        
+            return JsonResponse({'status': 'sukses', 'message': 'Rekor baru!'})
         else:
-            # Jika sudah pernah main, kita cek apakah ini rekor baru?
-            updated = False
-            
-            if skor_baru > obj.total_skor:
-                # Skor lebih tinggi = Update
-                updated = True
-            elif skor_baru == obj.total_skor and waktu_baru < obj.total_waktu_detik:
-                # Skor sama tapi waktu lebih cepat = Update
-                updated = True
-            
-            if updated:
-                obj.total_skor = skor_baru
-                obj.total_waktu_detik = waktu_baru
-                obj.save()
-                return JsonResponse({'status': 'sukses', 'message': 'Rekor baru! Skor leaderboard diperbarui.'})
-            else:
-                return JsonResponse({
-                    'status': 'sudah_ada', 
-                    'message': f'Skor tersimpan ({skor_baru}), tapi tidak melampaui rekor terbaik ({obj.total_skor}).'
-                })
+            return JsonResponse({'status': 'sudah_ada', 'message': 'Skor tersimpan.'})
 
     except Exception as e:
         return JsonResponse({"status": "gagal", "message": str(e)}, status=500)
 
-
 @butuh_login_siswa
 def leaderboard(request):
-    # 1. Ambil semua data peringkat
-    # select_related('siswa') digunakan agar query lebih cepat saat mengambil nama
     peringkat_list = PeringkatFinal.objects.select_related('siswa').all().order_by('-total_skor', 'total_waktu_detik')
-    
-    # 2. Masukkan ke dalam context dictionary
-    context = {
-        'peringkat_list': peringkat_list
-    }
-    
-    # 3. Kirim context ke template HTML
+    context = {'peringkat_list': peringkat_list}
     return render(request, "leaderboard.html", context)
+
+def tes(request):
+    return render(request, "tes.html")

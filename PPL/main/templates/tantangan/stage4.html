@@ -9,14 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
-    <script>
-        // Cek kelulusan Stage 3
-        if (localStorage.getItem('stage3Completed') !== 'true') {
-            alert("Selesaikan Stage 3 terlebih dahulu!");
-            window.location.href = "{% url 'tantangan' %}";
-        }
-    </script>
-
     <style>
         /* CSS Style Konsisten */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
@@ -113,7 +105,6 @@
 
             <div class="petunjuk-content">
                 <h5><i class="fas fa-clipboard-list"></i> Protokol Enkripsi:</h5>
-                
                 <ul>
                     <li>Gunakan <strong>Kunci 5</strong> untuk pesan teks standar.</li>
                     <li>Hati-hati pada soal terakhir: Huruf dan Angka memiliki kunci yang berbeda!</li>
@@ -196,7 +187,12 @@
         <div class="modal-content">
             <div class="success-animation">🎉 Sempurna!</div>
             <p class="lead mt-3">Pesan berhasil dikirim. Markas telah menerimanya.</p>
-            <p>Melanjutkan ke Stage 5...</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'unlock_next_stage' 4 %}" class="btn btn-success btn-lg">
+                    Lanjut ke Misi Berikutnya <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -220,7 +216,9 @@
     <script>
         const STAGE_ID = 4;
         const PREVIOUS_STAGE_IDS = [1, 2, 3]; 
-        const NEXT_STAGE_URL = "{% url 'stage5' %}"; // URL Stage 5
+        
+        // URL Next Stage (Referensi Saja)
+        const NEXT_STAGE_URL = "{% url 'stage5' %}"; 
         
         const STAGE_CONFIG = {
             timeLimit: 720, // 12 Menit
@@ -237,7 +235,6 @@
             timeLeft: STAGE_CONFIG.timeLimit, stageScore: 0, questionStartTime: null, wrongAnswerCount: 0
         };
 
-        // Element Selectors
         const timerEl = document.getElementById('timer');
         const totalScoreEl = document.getElementById('total-score');
         const attemptsEl = document.getElementById('attempts');
@@ -257,7 +254,6 @@
             let progress = gameSession.stageProgress[`stage${STAGE_ID}`];
             stageState.attempts = progress?.attempts || 0;
 
-            // Hitung Checkpoint Score
             let checkpointScore = 0;
             PREVIOUS_STAGE_IDS.forEach(id => {
                 checkpointScore += gameSession.stageProgress[`stage${id}`]?.score || 0;
@@ -354,7 +350,6 @@
                     isCorrect = (userAnswer === config.answer);
                 
                 } else if (config.type === 'matching') {
-                    // Logika Khusus Soal 2 (Matching)
                     const gas = document.getElementById('match-gas').value;
                     const tim = document.getElementById('match-tim').value;
                     const aku = document.getElementById('match-aku').value;
@@ -364,13 +359,12 @@
                         feedbackEl.className = "feedback feedback-wrong";
                         return;
                     }
-
-                    // Cek Kunci Jawaban: GAS->LFX, TIM->YNR, AKU->FPZ
+                    
+                    // Jawaban: GAS->LFX, TIM->YNR, AKU->FPZ (Caesar 5)
                     isCorrect = (gas === 'LFX' && tim === 'YNR' && aku === 'FPZ');
                 }
 
                 if (isCorrect) {
-                    // Skor Waktu
                     const questionTime = Math.floor((Date.now() - stageState.questionStartTime) / 1000);
                     const maxPoints = config.points; 
                     const minPoints = 10; 
@@ -403,7 +397,7 @@
 
                 } else {
                     stageState.wrongAnswerCount++;
-                    feedbackEl.textContent = "✗ Enkripsi salah. Cek tabel kunci!";
+                    feedbackEl.textContent = "✗ Jawaban salah. Cek kunci enkripsi!";
                     feedbackEl.className = "feedback feedback-wrong";
 
                     stageState.timeLeft = Math.max(0, stageState.timeLeft - 5);
@@ -418,6 +412,7 @@
             }
         }
 
+        // --- FUNGSI UTAMA YANG DIPERBAIKI ---
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
@@ -432,10 +427,10 @@
             };
             saveSession();
             
-            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            // Tampilkan Modal dengan Tombol Server
             successModal.style.display = 'flex';
             
-            setTimeout(() => window.location.href = NEXT_STAGE_URL, 3000);
+            // REDIRECT OTOMATIS DIHAPUS
         }
 
         function saveSession() {
