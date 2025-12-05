@@ -9,15 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
-    <script>
-        // Cek apakah stage 1 sudah selesai
-        // Menggunakan URL Django untuk redirect jika belum selesai
-        if (localStorage.getItem('stage1Completed') !== 'true') {
-            alert("Anda harus menyelesaikan Stage 1 terlebih dahulu!");
-            window.location.href = "{% url 'tantangan' %}";
-        }
-    </script>
-
     <style>
         /* CSS TETAP SAMA SEPERTI SEBELUMNYA */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
@@ -125,8 +116,6 @@
                 <p class="story-text">Begitu resmi menjadi agen, pesan darurat pertama langsung datang: "Agen kita terjebak, cepat pecahkan pesan kunci 2." Ini adalah ujian pertamamu di lapangan. Kegagalan berarti nyawa rekanmu dalam bahaya. Waktu terus berjalan, dan kamu harus bertindak cepat namun akurat!</p>
             </div>
 
-            
-
             <div class="petunjuk-content">
                 <h5><i class="fas fa-lightbulb"></i> Petunjuk Dekripsi:</h5>
                 <p><strong>Dekripsi</strong> adalah kebalikan dari enkripsi. Untuk mendekripsi:</p>
@@ -186,7 +175,13 @@
     <div class="modal-overlay" id="successModal">
         <div class="modal-content">
             <div class="success-animation">🎉 Hebat!</div>
-            <p class="lead mt-3">Agen berhasil diselamatkan! Menuju Stage 3...</p>
+            <p class="lead mt-3">Agen berhasil diselamatkan! Misi Selesai.</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'unlock_next_stage' 2 %}" class="btn btn-success btn-lg">
+                    Lanjut ke Misi Berikutnya <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -212,13 +207,12 @@
         const STAGE_ID = 2;
         const PREVIOUS_STAGE_ID = 1; 
         
-        // PERBAIKAN URL NEXT STAGE: Menggunakan Template Tag Django
+        // URL INI HANYA REFERENSI, NAVIGASI UTAMA VIA TOMBOL DI MODAL
         const NEXT_STAGE_URL = "{% url 'stage3' %}"; 
 
         const STAGE_CONFIG = {
             timeLimit: 600,
             questions: [
-                // Soal 1: Input S dan F (SAFE) cocok dengan soal 'UCHG' (dekripsi -2)
                 { id: 1, type: 'fill-blanks', answer: 'S_F', points: 40 },
                 { id: 2, type: 'radio', answer: '3', points: 30 },
                 { id: 3, type: 'input', answer: 'JGNR', points: 30 }
@@ -257,11 +251,9 @@
             let progress = gameSession.stageProgress[`stage${STAGE_ID}`];
             stageState.attempts = progress?.attempts || 0;
 
-            // --- LOGIKA SKOR CHECKPOINT ---
             let previousStageProgress = gameSession.stageProgress[`stage${PREVIOUS_STAGE_ID}`];
             let checkpointScore = previousStageProgress?.score || 0;
             
-            // Set skor global ke checkpoint (reset skor stage ini)
             gameSession.totalScore = checkpointScore;
             stageState.stageScore = 0; 
 
@@ -367,7 +359,6 @@
                 }
 
                 if (isCorrect) {
-                    // --- LOGIKA SKOR ---
                     const questionTime = Math.floor((Date.now() - stageState.questionStartTime) / 1000);
                     const maxPoints = config.points;
                     const minPoints = 10;
@@ -414,12 +405,13 @@
             }
         }
 
+        // --- FUNGSI UTAMA YANG DIPERBAIKI ---
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
             const finalStageScore = Math.max(10, stageState.stageScore);
             
-            // Simpan skor
+            // Simpan skor session storage (opsional, untuk display di frontend)
             let previousStageProgress = gameSession.stageProgress[`stage${PREVIOUS_STAGE_ID}`];
             let checkpointScore = previousStageProgress?.score || 0;
 
@@ -432,11 +424,10 @@
             };
             saveSession();
             
-            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            // Tampilkan Modal
             successModal.style.display = 'flex';
             
-            // Redirect ke Next Stage
-            setTimeout(() => window.location.href = NEXT_STAGE_URL, 3000);
+            // Redirect otomatis DIHAPUS. User harus klik tombol di modal.
         }
 
         function saveSession() {

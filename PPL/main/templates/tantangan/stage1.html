@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* ... (Semua kode CSS Anda tidak diubah) ... */
+        /* --- STYLE TIDAK DIUBAH (SAMA SEPERTI ASLINYA) --- */
         body { 
             padding-top: 70px; 
             font-family: 'Open Sans', sans-serif; 
@@ -413,7 +413,12 @@
         <div class="modal-content">
             <div class="success-animation">🎉 Hebat!</div>
             <p class="lead mt-3">Stage 1 Selesai! Kamu resmi jadi agen.</p>
-            <p>Mempersiapkan Stage 2...</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'unlock_next_stage' 1 %}" class="btn btn-success btn-lg">
+                    Lanjut ke Misi Berikutnya <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -436,7 +441,7 @@
     <script>
         const STAGE_ID = 1;
         
-        // DIPERBAIKI (3/3): Menggunakan tag URL Django untuk variabel JavaScript
+        // URL NEXT STAGE HANYA DIGUNAKAN UNTUK REFERENSI (LOGIKA UTAMA ADA DI TOMBOL MODAL)
         const NEXT_STAGE_URL = "{% url 'stage2' %}"; 
         
         const STAGE_CONFIG = {
@@ -650,6 +655,7 @@
             }
         }
 
+        // --- FUNGSI UTAMA YANG DIPERBAIKI (LOGIC UNLOCK) ---
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             
@@ -662,12 +668,13 @@
             gameSession.stageProgress[`stage${STAGE_ID}`].time = timeTaken;
             saveSession();
             
-            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            // LocalStorage tidak lagi diperlukan untuk logika kunci, tapi boleh dibiarkan
+            // localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            
+            // Tampilkan Modal agar user mengklik tombol Unlock
             successModal.style.display = 'flex';
             
-            setTimeout(() => {
-                window.location.href = NEXT_STAGE_URL;
-            }, 3000);
+            // TIMEOUT REDIRECT DIHAPUS AGAR USER HARUS KLIK TOMBOL UNTUK MEMICU SERVER
         }
 
         function saveSession() {
@@ -675,7 +682,6 @@
         }
         
         function initQuestion2() {
-            /* ... (Fungsi initQuestion2 tidak berubah) ... */
             const col1 = document.getElementById('q2-col1');
             const col2 = document.getElementById('q2-col2');
             
@@ -709,7 +715,6 @@
         }
         
         function onMatchItemClick(item, colNum) {
-            /* ... (Fungsi onMatchItemClick tidak berubah) ... */
             if (item.classList.contains('matched')) return;
 
             const state = q2MatcherState;
@@ -743,7 +748,6 @@
         }
 
         function initQuestion3() {
-            /* ... (Fungsi initQuestion3 tidak berubah) ... */
             const letterBoxes = document.querySelectorAll('#drop-zone .letter-box-large');
             const dragSource = document.getElementById('drag-source');
 
@@ -771,7 +775,6 @@
             });
         }
 
-        /* ... (Semua fungsi drag/drop/touch tidak berubah) ... */
         let draggedElement = null;
         let touchTarget = null;
         let touchSourceElement = null;

@@ -9,16 +9,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     
-    <script>
-        // Redirect jika Stage 2 belum selesai
-        if (localStorage.getItem('stage2Completed') !== 'true') {
-            alert("Anda harus menyelesaikan Stage 2 terlebih dahulu!");
-            window.location.href = "{% url 'tantangan' %}";
-        }
-    </script>
-
     <style>
-        /* CSS Style Tetap Sama */
+        /* CSS TETAP SAMA SEPERTI ASLINYA */
         body { padding-top: 70px; font-family: 'Open Sans', sans-serif; background-color: #f8f9fa; }
         .navbar { background-color: #1B3C53; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); height: 70px; }
         .navbar-brand { font-family: 'Lato', sans-serif; font-weight: 900; color: white; font-size: 1.6rem; }
@@ -172,7 +164,12 @@
         <div class="modal-content">
             <div class="success-animation">🎉 Hebat!</div>
             <p class="lead mt-3">Stage 3 Selesai! Analisismu tajam.</p>
-            <p>Mempersiapkan Stage 4...</p>
+            
+            <div class="mt-4">
+                <a href="{% url 'unlock_next_stage' 3 %}" class="btn btn-success btn-lg">
+                    Lanjut ke Misi Berikutnya <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -196,14 +193,15 @@
     <script>
         const STAGE_ID = 3;
         const PREVIOUS_STAGE_IDS = [1, 2]; 
-        const NEXT_STAGE_URL = "{% url 'stage4' %}"; // URL Django
+        
+        // NEXT_STAGE_URL HANYA REFERENSI, NAVIGASI VIA TOMBOL MODAL
+        const NEXT_STAGE_URL = "{% url 'stage4' %}"; 
         
         const STAGE_CONFIG = {
             timeLimit: 600, 
             questions: [
                 { id: 1, type: 'radio', answer: '3', points: 30 },
                 { id: 2, type: 'input', answer: '5', points: 30 },
-                // KOREKSI: Jawaban diubah jadi SERBU agar sesuai dengan 5 huruf
                 { id: 3, type: 'input', answer: 'SERBU', points: 40 }
             ]
         };
@@ -332,24 +330,20 @@
             let userAnswer = '';
 
             try {
-                switch (config.type) {
-                    case 'input':
-                        const inputEl = document.getElementById(`q${qNum}-answer`);
-                        userAnswer = inputEl.value.toUpperCase().trim();
+                if (config.type === 'radio') {
+                    const radioEl = document.querySelector(`input[name="key-q${qNum}"]:checked`);
+                    if (radioEl) {
+                        userAnswer = radioEl.value;
                         isCorrect = (userAnswer === config.answer);
-                        break;
-                    
-                    case 'radio':
-                        const radioEl = document.querySelector(`input[name="key-q${qNum}"]:checked`);
-                        if (radioEl) {
-                            userAnswer = radioEl.value;
-                            isCorrect = (userAnswer === config.answer);
-                        } else {
-                            feedbackEl.textContent = "✗ Kamu harus memilih salah satu opsi!";
-                            feedbackEl.className = "feedback feedback-wrong";
-                            return;
-                        }
-                        break;
+                    } else {
+                        feedbackEl.textContent = "✗ Kamu harus memilih salah satu opsi!";
+                        feedbackEl.className = "feedback feedback-wrong";
+                        return;
+                    }
+                } else if (config.type === 'input') {
+                    const inputEl = document.getElementById(`q${qNum}-answer`);
+                    userAnswer = inputEl.value.toUpperCase().trim();
+                    isCorrect = (userAnswer === config.answer);
                 }
 
                 if (isCorrect) {
@@ -401,22 +395,26 @@
             }
         }
 
+        // --- FUNGSI UTAMA YANG DIPERBAIKI ---
         function handleStageComplete() {
             clearInterval(stageState.timerInterval);
             const timeTaken = Math.floor((Date.now() - stageState.startTime) / 1000);
-            
             const finalStageScore = Math.max(10, stageState.stageScore);
             
             gameSession.totalScore += finalStageScore;
             
             gameSession.stageProgress[`stage${STAGE_ID}`].score = finalStageScore;
             gameSession.stageProgress[`stage${STAGE_ID}`].time = timeTaken;
+            gameSession.stageProgress[`stage${STAGE_ID}`].attempts = stageState.attempts;
+            
             saveSession();
             
-            localStorage.setItem(`stage${STAGE_ID}Completed`, 'true');
+            // LOCALSTORAGE DIHAPUS (Tidak diperlukan)
+            
+            // Tampilkan Modal dengan Tombol Server
             successModal.style.display = 'flex';
             
-            setTimeout(() => window.location.href = NEXT_STAGE_URL, 3000);
+            // REDIRECT OTOMATIS DIHAPUS
         }
 
         function saveSession() {

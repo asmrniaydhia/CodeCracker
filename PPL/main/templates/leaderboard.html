@@ -26,12 +26,11 @@
             min-height: 100vh;
         }
 
-        /* --- NAVBAR STYLE (Sama Persis dengan Tantangan.html) --- */
+        /* --- NAVBAR STYLE (SAMA PERSIS DENGAN TANTANGAN.HTML) --- */
         .navbar {
             background-color: var(--primary-dark);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            height: 70px;
-            /* Pastikan Navbar selalu paling depan */
+            height: 80px; /* Tinggi disamakan */
             z-index: 9999; 
         }
         
@@ -39,88 +38,91 @@
             font-family: 'Lato', sans-serif;
             font-weight: 900;
             color: white !important;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+            margin-right: 2rem;
             display: flex;
             align-items: center;
         }
 
-        /* Link Navigasi */
+        /* Menu Link */
         .nav-link {
             color: rgba(255,255,255,0.9) !important;
             font-weight: 600;
-            margin: 0 8px; /* Jarak disamakan */
-            font-size: 0.95rem;
+            margin: 0 5px;
+            font-size: 1rem;
             transition: all 0.3s;
             display: inline-flex;
             align-items: center;
         }
-        .nav-link i { margin-right: 6px; }
+        .nav-link i { margin-right: 8px; font-size: 1.1rem; }
         
         .nav-link:hover, .nav-link.active {
             color: var(--accent-gold) !important;
             transform: translateY(-2px);
         }
 
-        /* Styling untuk Teks Sapaan User */
-        .navbar-text {
+        /* Profil Section di Kanan */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-name {
             color: white;
-            font-weight: 600;
-            font-size: 0.95rem;
+            font-weight: 700;
+            font-size: 1rem;
             display: flex;
             align-items: center;
         }
-        .badge-role {
-            background-color: #0dcaf0;
-            color: #212529;
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-weight: 700;
+
+        .badge-siswa {
+            background-color: #0dcaf0; /* Warna Cyan */
+            color: #000;
+            font-weight: 800;
+            padding: 5px 12px;
+            border-radius: 5px;
+            font-size: 0.85rem;
         }
 
-        /* Tombol Logout */
-        .btn-logout {
+        .btn-logout-red {
             background-color: #dc3545;
             color: white;
             border: none;
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 0.9rem;
+            padding: 8px 20px;
+            border-radius: 6px;
             font-weight: 700;
+            font-size: 0.95rem;
             text-decoration: none;
-            transition: all 0.3s;
             display: inline-flex;
             align-items: center;
+            transition: background 0.3s;
         }
-        .btn-logout:hover {
-            background-color: #c82333;
+        .btn-logout-red:hover {
+            background-color: #bb2d3b;
             color: white;
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
         }
 
-        /* Responsive Navbar Collapse */
+        /* Responsive Navbar */
         @media (max-width: 991px) {
+            .navbar { height: auto; padding-bottom: 1rem; }
             .navbar-collapse {
                 background-color: var(--primary-dark);
-                padding: 1.5rem;
-                border-radius: 0 0 15px 15px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                max-height: 80vh;
-                overflow-y: auto;
+                padding: 1rem;
+                border-radius: 0 0 10px 10px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             }
-            .navbar-nav {
-                margin-bottom: 1.5rem;
-            }
-            .navbar-right-container {
+            .profile-section {
                 flex-direction: column;
-                align-items: flex-start !important;
-                gap: 15px !important;
-                width: 100%;
-                padding-top: 1rem;
+                align-items: flex-start;
+                margin-top: 15px;
+                padding-top: 15px;
                 border-top: 1px solid rgba(255,255,255,0.1);
+                width: 100%;
             }
-            .btn-logout { width: 100%; justify-content: center; }
+            .btn-logout-red { width: 100%; justify-content: center; }
+            .navbar-nav { margin-left: 0 !important; }
         }
 
         /* --- CSS KONTEN LEADERBOARD --- */
@@ -129,6 +131,7 @@
             margin-bottom: 3rem;
             position: relative;
             z-index: 1; /* Di bawah navbar */
+            padding-top: 20px;
         }
         .page-title {
             font-family: 'Lato', sans-serif;
@@ -183,7 +186,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-        <div class="container-fluid px-lg-5 px-3">
+        <div class="container-fluid px-4">
             <a class="navbar-brand" href="{% url 'landing' %}">
                 CodeCracker
             </a>
@@ -193,38 +196,39 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto align-items-center mb-2 mb-lg-0 ms-4">
+                <ul class="navbar-nav me-auto align-items-center">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'pengenalan' %}">
-                            <i class="fa-solid fa-book-open"></i> Belajar
+                            <i class="fas fa-book-open"></i> Belajar
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'tantangan' %}">
-                            <i class="fa-solid fa-gamepad"></i> Tantangan
+                            <i class="fas fa-gamepad"></i> Tantangan
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="{% url 'leaderboard' %}">
-                            <i class="fa-solid fa-trophy"></i> Leaderboard
+                            <i class="fas fa-trophy"></i> Leaderboard
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <i class="fa-solid fa-info-circle"></i> Informasi
+                            <i class="fas fa-circle-info"></i> Informasi
                         </a>
                     </li>
                 </ul>
 
-                <div class="d-flex align-items-center gap-3 navbar-right-container">
-                    <span class="navbar-text">
-                        <i class="fas fa-user me-2"></i>
-                        Halo, {{ request.session.nama_lengkap|default:"Agen" }} 
-                        <span class="badge-role ms-2">Siswa</span>
-                    </span>
-
-                    <a href="{% url 'logout' %}" class="btn-logout">
-                        <i class="fas fa-sign-out-alt me-1"></i> Keluar
+                <div class="profile-section">
+                    <div class="user-name">
+                        <i class="fas fa-user-circle fa-lg me-2"></i>
+                        <span>Halo, {{ request.session.nama_lengkap|default:'Siswa' }}</span>
+                    </div>
+                    
+                    <span class="badge-siswa">Siswa</span>
+                    
+                    <a href="{% url 'logout' %}" class="btn-logout-red">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
                     </a>
                 </div>
             </div>

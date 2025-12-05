@@ -59,4 +59,5 @@ urlpatterns = [
     path('tes/', views.tes, name='tes'),
 
     path('api/simpan-skor-final/', views.simpan_skor_final_view, name='simpan_skor_final'),
+    path('tantangan/unlock/<int:stage_selesai>/', views.unlock_next_stage, name='unlock_next_stage'),
 ]
