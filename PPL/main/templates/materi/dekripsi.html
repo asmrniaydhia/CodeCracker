@@ -3,511 +3,6 @@
 
 {% block title %}Dekripsi - CodeCracker{% endblock %}
 
-{% block extra_css %}
-<style>
-    /* Animasi */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-
-    @keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
-    @keyframes unlockAnimation {
-        0% { transform: rotate(0deg); }
-        25% { transform: rotate(-10deg); }
-        75% { transform: rotate(10deg); }
-        100% { transform: rotate(0deg); }
-    }
-
-    /* Hero Section */
-    .hero-section {
-        background: linear-gradient(135deg, var(--lesson-brand-700) 0%, var(--lesson-brand-100) 100%);
-        border-radius: var(--lesson-radius);
-        padding: 35px;
-        color: white;
-        margin-bottom: 30px;
-        animation: fadeInUp 0.6s ease-out;
-        box-shadow: var(--lesson-shadow);
-    }
-
-    .hero-section h1 {
-        font-size: 1.8rem;
-        font-weight: bold;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .hero-section p {
-        line-height: 1.7;
-        margin-bottom: 15px;
-    }
-
-    .hero-icon {
-        animation: unlockAnimation 2s ease-in-out infinite;
-        font-size: 1.5rem;
-    }
-
-    /* Section Header */
-    .section-header {
-        color: var(--lesson-brand-700);
-        font-weight: bold;
-        font-size: 1.5rem;
-        margin: 35px 0 20px 0;
-        padding-bottom: 10px;
-        border-bottom: 3px solid var(--lesson-brand);
-    }
-
-    .section-intro {
-        color: var(--lesson-text);
-        line-height: 1.7;
-        margin-bottom: 25px;
-    }
-
-    /* Analogy Box */
-    .analogy-box {
-        background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
-        border: 2px solid var(--lesson-brand);
-        border-radius: var(--lesson-radius);
-        padding: 30px;
-        margin: 25px 0;
-        animation: fadeInUp 0.6s ease-out 0.2s backwards;
-        box-shadow: var(--lesson-shadow);
-    }
-
-    .analogy-content {
-        display: flex;
-        align-items: center;
-        gap: 25px;
-        flex-wrap: wrap;
-    }
-
-    .analogy-icon {
-        font-size: 4rem;
-        animation: pulse 2s ease-in-out infinite;
-    }
-
-    .analogy-text {
-        flex: 1;
-        min-width: 250px;
-    }
-
-    .analogy-text p {
-        color: var(--lesson-text);
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    /* Process Comparison */
-    .process-comparison {
-        background: var(--lesson-surface);
-        border-radius: var(--lesson-radius);
-        padding: 35px;
-        margin: 25px 0;
-        box-shadow: var(--lesson-shadow);
-        animation: fadeInUp 0.6s ease-out 0.3s backwards;
-    }
-
-    .comparison-title {
-        color: var(--lesson-brand-700);
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 30px;
-        font-size: 1.3rem;
-    }
-
-    .comparison-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 25px;
-    }
-
-    .process-card {
-        border-radius: var(--lesson-radius);
-        padding: 25px;
-        transition: all 0.3s ease;
-        border: 3px solid;
-    }
-
-    .process-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-    }
-
-    .encryption-card {
-        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-        border-color: #4caf50;
-    }
-
-    .decryption-card {
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        border-color: var(--lesson-brand-100);
-    }
-
-    .process-card h4 {
-        font-weight: bold;
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 1.2rem;
-    }
-
-    .encryption-card h4 {
-        color: #2e7d32;
-    }
-
-    .decryption-card h4 {
-        color: var(--lesson-brand-100);
-    }
-
-    .process-card p {
-        color: var(--lesson-text);
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    .process-arrow {
-        text-align: center;
-        font-size: 3rem;
-        color: var(--lesson-brand);
-        margin: 20px 0;
-        animation: pulse 1.5s ease-in-out infinite;
-    }
-
-    /* Example Demo */
-    .example-demo {
-        background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-        border: 2px solid #9c27b0;
-        border-radius: var(--lesson-radius);
-        padding: 30px;
-        margin: 25px 0;
-        animation: fadeInUp 0.6s ease-out 0.4s backwards;
-    }
-
-    .example-demo h3 {
-        color: #6a1b9a;
-        font-weight: bold;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .demo-flow {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .demo-step {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .demo-label {
-        font-weight: bold;
-        color: #6a1b9a;
-        margin-bottom: 8px;
-        font-size: 1.05rem;
-    }
-
-    .demo-content {
-        font-family: 'Courier New', monospace;
-        font-size: 1.3rem;
-        font-weight: bold;
-        color: var(--lesson-brand-700);
-        text-align: center;
-        padding: 15px;
-        background: #fafafa;
-        border-radius: 8px;
-    }
-
-    .demo-arrow {
-        text-align: center;
-        font-size: 2rem;
-        color: #9c27b0;
-    }
-
-    .demo-explanation {
-        margin-top: 10px;
-        color: var(--lesson-text);
-        line-height: 1.7;
-    }
-
-    /* Requirements Box */
-    .requirements-box {
-        background: var(--lesson-surface);
-        border-radius: var(--lesson-radius);
-        padding: 30px;
-        margin: 25px 0;
-        box-shadow: var(--lesson-shadow);
-        border-left: 5px solid var(--lesson-brand);
-    }
-
-    .requirements-box h3 {
-        color: var(--lesson-brand-700);
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-
-    .requirement-item {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
-        padding: 20px;
-        background: #f8f9fa;
-        border-radius: 10px;
-        align-items: flex-start;
-        transition: all 0.3s ease;
-    }
-
-    .requirement-item:hover {
-        transform: translateX(10px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    .requirement-number {
-        background: var(--lesson-brand);
-        color: var(--lesson-text);
-        font-weight: bold;
-        font-size: 1.3rem;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-    }
-
-    .requirement-content h4 {
-        color: var(--lesson-brand-700);
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-
-    .requirement-content p {
-        color: var(--lesson-text);
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    /* Real Life Examples */
-    .reallife-container {
-        background: linear-gradient(135deg, #e8f5f9 0%, #b3e5fc 100%);
-        border: 2px solid var(--lesson-brand-100);
-        border-radius: var(--lesson-radius);
-        padding: 35px;
-        margin: 25px 0;
-        animation: slideInLeft 0.8s ease-out;
-    }
-
-    .reallife-container h3 {
-        color: var(--lesson-brand-700);
-        font-weight: bold;
-        margin-bottom: 25px;
-        text-align: center;
-    }
-
-    .reallife-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    .reallife-card {
-        background: white;
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-    }
-
-    .reallife-card:hover {
-        transform: scale(1.05);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-    }
-
-    .reallife-icon {
-        font-size: 2.5rem;
-        margin-bottom: 12px;
-        display: block;
-        text-align: center;
-    }
-
-    .reallife-card h4 {
-        color: var(--lesson-brand-700);
-        font-weight: bold;
-        margin-bottom: 10px;
-        text-align: center;
-        font-size: 1.05rem;
-    }
-
-    .reallife-card p {
-        color: var(--lesson-text);
-        line-height: 1.6;
-        margin: 0;
-        text-align: center;
-    }
-
-    /* Importance Section */
-    .importance-section {
-        background: var(--lesson-surface);
-        border-radius: var(--lesson-radius);
-        padding: 35px;
-        margin: 25px 0;
-        box-shadow: var(--lesson-shadow);
-    }
-
-    .importance-visual {
-        text-align: center;
-        margin: 25px 0;
-    }
-
-    .importance-visual img {
-        max-width: 100%;
-        height: auto;
-        border-radius: var(--lesson-radius);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .points-list {
-        background: #f8f9fa;
-        border-radius: 10px;
-        padding: 25px;
-        margin: 20px 0;
-    }
-
-    .points-list h4 {
-        color: var(--lesson-brand-700);
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .points-list ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .points-list li {
-        padding: 10px 0;
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        color: var(--lesson-text);
-        line-height: 1.7;
-    }
-
-    .points-list li::before {
-        content: '✗';
-        color: #f44336;
-        font-weight: bold;
-        font-size: 1.3rem;
-        flex-shrink: 0;
-    }
-
-    .security-aspects {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-top: 20px;
-    }
-
-    .security-card {
-        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-        border: 2px solid #4caf50;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: center;
-    }
-
-    .security-card h5 {
-        color: #2e7d32;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-
-    .security-card p {
-        color: var(--lesson-text);
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    /* Info Alert */
-    .info-alert {
-        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-        border-left: 6px solid #e65100;
-        padding: 20px;
-        border-radius: var(--lesson-radius);
-        margin: 20px 0;
-    }
-
-    .info-alert strong {
-        color: #e65100;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
-    }
-
-    .info-alert p {
-        color: var(--lesson-text);
-        line-height: 1.7;
-        margin: 0;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-        .hero-section h1 {
-            font-size: 1.5rem;
-        }
-
-        .analogy-content {
-            flex-direction: column;
-            text-align: center;
-        }
-
-        .comparison-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .reallife-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .security-aspects {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <!-- Konten Utama -->
 <div class="lesson-titlebar">Dekripsi</div>
@@ -520,21 +15,21 @@
 
     <div class="lesson-card">
         <div class="lesson-goals">
-            <div>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</div>
+            <div><p>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</p></div>
 
             <div class="lesson-goal">
                 <div class="lesson-num">1</div>
-                <div>Menjelaskan konsep dasar dekripsi sebagai proses mengembalikan pesan terenkripsi menjadi pesan asli.</div>
+                <div><p>Menjelaskan konsep dasar dekripsi sebagai proses mengembalikan pesan terenkripsi menjadi pesan asli.</p></div>
             </div>
 
             <div class="lesson-goal">
                 <div class="lesson-num">2</div>
-                <div>Menentukan pesan asli dari sebuah pesan yang telah dienkripsi menggunakan Caesar Cipher dengan kunci tertentu.</div>
+                <div><p>Menentukan pesan asli dari sebuah pesan yang telah dienkripsi menggunakan Caesar Cipher dengan kunci tertentu.</p></div>
             </div>
 
             <div class="lesson-goal">
                 <div class="lesson-num">3</div>
-                <div>Menemukan besar pergeseran atau kunci yang digunakan dalam sebuah pesan terenkripsi.</div>
+                <div><p>Menemukan besar pergeseran atau kunci yang digunakan dalam sebuah pesan terenkripsi.</p></div>
             </div>
         </div>
     </div>
@@ -543,202 +38,211 @@
 
     <!-- Hero Section -->
     <div class="hero-section">
-        <h1><span class="hero-icon">🔓</span> Pengertian Dekripsi</h1>
-        <p>Pada materi sebelumnya, kita telah mempelajari enkripsi sebagai proses menyamarkan pesan agar tidak mudah dibaca oleh orang lain. Sekarang, kita akan mempelajari proses kebalikannya, yaitu <strong>dekripsi</strong>.</p>
+        <h1>Bagian 3: Dekripsi—Mengembalikan Pesan Asli</h1>
+        <p><strong>Dekripsi adalah tahap penyingkapan rahasia.</strong> Secara fundamental, dekripsi adalah proses yang membalikkan secara sempurna mekanisme enkripsi. Tujuannya adalah untuk mengambil <strong>Ciphertext</strong> dan mereproduksinya kembali menjadi <strong>Plain Text</strong> yang dapat dibaca.</p>
+    </div>
+
+    <!-- Konsep Dasar & Aturan Emas -->
+    <h2 class="section-header">💡 Konsep Dasar Dekripsi: Proses Balikan dan Aturan Emas</h2>
+
+    <div class="golden-rule-box">
+        <h3>⭐ Aturan Emas Kunci Dekripsi ⭐</h3>
+        <p class="section-intro" style="text-align: center; margin-bottom: 20px;"><strong>Kunci Dekripsi selalu merupakan kebalikan mutlak dari Kunci Enkripsi.</strong> Ini adalah inti dari komunikasi rahasia yang berhasil:</p>
         
-        <p><strong>Dekripsi adalah proses mengembalikan Ciphertext (pesan yang sudah diacak) menjadi Plaintext (pesan asli) menggunakan aturan atau kunci tertentu.</strong></p>
-    </div>
-
-    <!-- Analogy Box -->
-    <div class="analogy-box">
-        <div class="analogy-content">
-            <div class="analogy-icon">🔐</div>
-            <div class="analogy-text">
-                <h3 style="color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 10px;">Analogi Kotak Harta Karun</h3>
-                <p><strong>Jika enkripsi diibaratkan sebagai mengunci sebuah kotak harta karun, maka dekripsi adalah membuka kunci kotak tersebut agar isinya bisa diambil kembali oleh orang yang berhak.</strong></p>
-            </div>
-        </div>
-    </div>
-
-    <div class="importance-visual">
-        <img src="{% static 'assets/des1.png' %}" alt="dekripsi illustration" style="max-width: 300px;" />
-    </div>
-
-    <div class="info-alert">
-        <strong>⚠️ Ingat!</strong>
-        <p>Tanpa dekripsi, pesan terenkripsi hanya akan terlihat seperti kumpulan huruf acak yang tidak mempunyai makna. Proses ini sangat penting untuk memastikan bahwa komunikasi rahasia dapat dibaca kembali oleh penerima.</p>
-    </div>
-
-    <!-- Example Demo -->
-    <div class="example-demo">
-        <h3>💡 Contoh Dekripsi Caesar Cipher</h3>
-        
-        <div class="demo-flow">
-            <div class="demo-step">
-                <div class="demo-label">Ciphertext (Hasil Enkripsi dengan Geser +3):</div>
-                <div class="demo-content">KHOOR</div>
-            </div>
-
-            <div class="demo-arrow">⬇️</div>
-
-            <div class="demo-step">
-                <div class="demo-explanation">
-                    <strong>Proses Dekripsi:</strong> Untuk mendekripsi, kita melakukan proses kebalikannya: huruf-huruf digeser <strong>mundur 3 langkah</strong>.
+        <div class="rule-columns">
+            <div class="rule-column encryption">
+                <div class="rule-column-icon">🔒</div>
+                <div class="rule-column-title">Enkripsi</div>
+                <div class="rule-column-content">
+                    Geser N Langkah ke <strong>KANAN</strong>
                 </div>
             </div>
 
-            <div class="demo-arrow">⬇️</div>
-
-            <div class="demo-step">
-                <div class="demo-label">Hasil (Plaintext):</div>
-                <div class="demo-content" style="color: #2e7d32;">HELLO</div>
-            </div>
-        </div>
-    </div>
-
-    <p class="section-intro" style="margin-top: 20px;">Proses mengembalikan huruf ke posisi aslinya ini adalah inti dari dekripsi.</p>
-
-    <hr />
-
-    <!-- Bagaimana Dekripsi Bekerja -->
-    <h2 class="section-header">⚙️ Bagaimana Dekripsi Bekerja?</h2>
-
-    <p class="section-intro">Proses dekripsi biasanya bergantung pada dua hal penting:</p>
-
-    <div class="requirements-box">
-        <h3>Dua Komponen Penting Dekripsi</h3>
-
-        <div class="requirement-item">
-            <div class="requirement-number">1</div>
-            <div class="requirement-content">
-                <h4>Algoritma yang Digunakan</h4>
-                <p>Aturan yang menjelaskan bagaimana pesan diacak dan bagaimana membalikkan proses itu.</p>
-            </div>
-        </div>
-
-        <div class="requirement-item">
-            <div class="requirement-number">2</div>
-            <div class="requirement-content">
-                <h4>Kunci yang Tepat</h4>
-                <p>Nilai tertentu yang menentukan bagaimana pesan kembali ke bentuk aslinya.</p>
-            </div>
-        </div>
-    </div>
-
-    <div class="info-alert">
-        <strong>🔑 Poin Krusial!</strong>
-        <p>Jika salah satu dari dua hal ini tidak diketahui, pesan tidak dapat didekripsi dengan benar.</p>
-    </div>
-
-    <!-- Process Comparison -->
-    <div class="process-comparison">
-        <h3 class="comparison-title">🔄 Perbandingan Enkripsi vs Dekripsi pada Caesar Cipher</h3>
-
-        <div class="comparison-grid">
-            <div class="process-card encryption-card">
-                <h4>🔒 Enkripsi</h4>
-                <p>Huruf digeser <strong>ke depan</strong> (maju)</p>
-                <div style="text-align: center; margin-top: 15px;">
-                    <div style="font-family: 'Courier New'; font-size: 1.5rem; font-weight: bold; color: #2e7d32;">A → D</div>
-                    <div style="color: var(--lesson-text); margin-top: 5px;">Geser +3</div>
+            <div class="rule-column decryption">
+                <div class="rule-column-icon">🔓</div>
+                <div class="rule-column-title">Dekripsi</div>
+                <div class="rule-column-content">
+                    Geser N Langkah ke <strong>KIRI</strong>
                 </div>
-            </div>
-
-            <div class="process-card decryption-card">
-                <h4>🔓 Dekripsi</h4>
-                <p>Huruf digeser <strong>ke belakang</strong> (mundur)</p>
-                <div style="text-align: center; margin-top: 15px;">
-                    <div style="font-family: 'Courier New'; font-size: 1.5rem; font-weight: bold; color: var(--lesson-brand-100);">D → A</div>
-                    <div style="color: var(--lesson-text); margin-top: 5px;">Geser -3</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="importance-visual">
-        <img src="{% static 'assets/des3.png' %}" alt="proses dekripsi" style="max-width: 400px;" />
-    </div>
-
-    <div class="info-alert" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); border-left-color: #9c27b0;">
-        <strong style="color: #6a1b9a;">💡 Tips Praktis!</strong>
-        <p>Contoh lainnya: Jika Ciphertext adalah <strong>"QEB NRFZH"</strong> dan kita tidak tahu kuncinya, maka siswa dapat mencoba satu per satu pergeseran untuk menemukan kunci yang sesuai.</p>
-    </div>
-
-    <hr />
-
-    <!-- Dekripsi dalam Kehidupan Sehari-hari -->
-    <h2 class="section-header">🌍 Dekripsi dalam Kehidupan Sehari-hari</h2>
-
-    <p class="section-intro">Dekripsi ternyata bukan hanya milik hacker, agen rahasia, atau dunia mata-mata. Di kehidupan sehari-hari, kita berhadapan dengan proses dekripsi hampir setiap hari tanpa menyadarinya.</p>
-
-    <div class="reallife-container">
-        <h3>Contoh Penggunaan Dekripsi di Sekitar Kita</h3>
-
-        <div class="reallife-grid">
-            <div class="reallife-card">
-                <span class="reallife-icon">💬</span>
-                <h4>Pesan WhatsApp</h4>
-                <p>Saat pesan masuk, aplikasi otomatis mendekripsi agar kamu bisa membacanya.</p>
-            </div>
-
-            <div class="reallife-card">
-                <span class="reallife-icon">📁</span>
-                <h4>File Berpassword</h4>
-                <p>Saat memasukkan password, komputer melakukan dekripsi untuk menampilkan isi file.</p>
-            </div>
-
-            <div class="reallife-card">
-                <span class="reallife-icon">🎮</span>
-                <h4>Data Game</h4>
-                <p>Game mendekripsi data level dan progress sebelum menampilkannya.</p>
-            </div>
-
-            <div class="reallife-card">
-                <span class="reallife-icon">📝</span>
-                <h4>Soal Ujian Digital</h4>
-                <p>Guru bisa menyimpan soal dalam bentuk terenkripsi, lalu mendekripsinya saat ujian dimulai.</p>
             </div>
         </div>
     </div>
 
     <hr />
 
-    <!-- Pentingnya Dekripsi -->
-    <h2 class="section-header">⭐ Mengapa Dekripsi Penting?</h2>
+    <!-- Langkah-Langkah Mendekripsi -->
+    <h2 class="section-header">Langkah-Langkah Mendekripsi dengan Kunci yang Diketahui</h2>
 
-    <div class="importance-section">
-        <p class="section-intro"><strong>Enkripsi dan dekripsi adalah dua proses yang tidak bisa dipisahkan.</strong> Jika enkripsi menjaga agar pesan tidak dibaca orang lain, dekripsi memastikan bahwa orang yang berhak dapat membaca pesan itu dengan benar.</p>
-
-        <div class="importance-visual">
-            <img src="{% static 'assets/des2.png' %}" alt="importance" style="max-width: 400px;" />
+    <div class="decryption-demo">
+        <div class="demo-context">
+            <p><strong>Contoh Kasus:</strong> Kamu menerima Ciphertext <strong>"NRGH"</strong> dan kamu tahu bahwa <strong>Kunci Enkripsi-nya adalah Geser 3 Langkah ke KANAN</strong>.</p>
+            <p style="margin-top: 10px;"><strong>Maka, Kunci Dekripsi yang harus kamu gunakan adalah Geser 3 Langkah ke KIRI.</strong></p>
         </div>
 
-        <div class="points-list">
-            <h4>Tanpa Dekripsi:</h4>
-            <ul>
-                <li>Penerima tidak akan tahu isi pesan asli</li>
-                <li>Instruksi penting dapat disalahpahami</li>
-                <li>Komunikasi menjadi tidak efektif</li>
-            </ul>
-        </div>
-
-        <h3 style="color: var(--lesson-brand-700); font-weight: bold; margin: 30px 0 20px 0; text-align: center;">Dekripsi dan Aspek Keamanan</h3>
-
-        <div class="security-aspects">
-            <div class="security-card">
-                <h5>1. Kerahasiaan</h5>
-                <p>Hanya penerima dengan kunci yang bisa mengakses pesan asli.</p>
+        <!-- Dekripsi Kata "NRGH" -->
+        <div class="word-section">
+            <div class="word-title">
+                <span>📝</span> Langkah-Langkah Dekripsi Kata "NRGH"
             </div>
 
-            <div class="security-card">
-                <h5>2. Integritas</h5>
-                <p>Pesan yang berhasil didekripsi menunjukkan bahwa isinya tidak berubah.</p>
+            <!-- Step 1 -->
+            <div class="letter-step" id="decryptStep1">
+                <div class="step-header">
+                    <div class="letter-badge">N</div>
+                    <div class="step-process">
+                        <strong>Huruf N (Kode)</strong>
+                        <div class="step-formula">
+                            Kita geser N sebanyak 3 langkah ke KIRI<br>
+                            N → M (1), L (2), K (3)
+                        </div>
+                    </div>
+                </div>
+                <div class="step-result">
+                    <strong>Hasilnya: K</strong> (Ini adalah huruf pertama dari Plain Text)
+                </div>
+            </div>
+
+            <!-- Step 2 (Hidden) -->
+            <div class="letter-step" id="decryptStep2" style="display: none;">
+                <div class="step-header">
+                    <div class="letter-badge">R</div>
+                    <div class="step-process">
+                        <strong>Huruf R (Kode)</strong>
+                        <div class="step-formula">
+                            Kita geser R sebanyak 3 langkah ke KIRI<br>
+                            R → Q (1), P (2), O (3)
+                        </div>
+                    </div>
+                </div>
+                <div class="step-result">
+                    <strong>Hasilnya: O</strong>
+                </div>
+            </div>
+
+            <!-- Step 3 (Hidden) -->
+            <div class="letter-step" id="decryptStep3" style="display: none;">
+                <div class="step-header">
+                    <div class="letter-badge">G</div>
+                    <div class="step-process">
+                        <strong>Huruf G (Kode)</strong>
+                        <div class="step-formula">
+                            Kita geser G sebanyak 3 langkah ke KIRI<br>
+                            G → F (1), E (2), D (3)
+                        </div>
+                    </div>
+                </div>
+                <div class="step-result">
+                    <strong>Hasilnya: D</strong>
+                </div>
+            </div>
+
+            <!-- Step 4 (Hidden) -->
+            <div class="letter-step" id="decryptStep4" style="display: none;">
+                <div class="step-header">
+                    <div class="letter-badge">H</div>
+                    <div class="step-process">
+                        <strong>Huruf H (Kode)</strong>
+                        <div class="step-formula">
+                            Kita geser H sebanyak 3 langkah ke KIRI<br>
+                            H → G (1), F (2), E (3)
+                        </div>
+                    </div>
+                </div>
+                <div class="step-result">
+                    <strong>Hasilnya: E</strong>
+                </div>
+            </div>
+
+            <!-- Final Result (Hidden) -->
+            <div class="final-result" id="decryptFinal" style="display: none;">
+                <p style="color: #2e7d32; font-weight: bold; margin: 0;">✓ Maka, "NRGH" dikembalikan menjadi:</p>
+                <div class="final-result-text">KODE</div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="step-navigation">
+                <button class="step-btn" id="decryptPrevBtn" onclick="changeDecryptStep(-1)" style="display: none;">
+                    <i class="fas fa-arrow-left"></i> Sebelumnya
+                </button>
+                <div class="step-indicator">
+                    <span id="decryptStepText">Langkah 1 dari 4</span>
+                </div>
+                <button class="step-btn step-btn-next" id="decryptNextBtn" onclick="changeDecryptStep(1)">
+                    Selanjutnya <i class="fas fa-arrow-right"></i>
+                </button>
             </div>
         </div>
+    </div>
 
-        <div class="info-alert" style="margin-top: 25px;">
-            <strong>✅ Kesimpulan:</strong>
-            <p>Dengan kata lain, dekripsi membantu memastikan bahwa proses komunikasi aman berjalan hingga selesai.</p>
+    <hr />
+
+    <!-- Brute Force Section -->
+    <h2 class="section-header">Memecahkan Kunci Rahasia (Brute Force)</h2>
+
+    <p class="section-intro">Ketika kamu menerima Ciphertext tanpa tahu kuncinya sama sekali, kamu harus menggunakan teknik yang disebut <strong>Brute Force (Pemaksaan)</strong>.</p>
+
+    <div class="brute-force-box">
+        <h3>🔍 Konsep Brute Force</h3>
+
+        <div class="concept-box">
+            <h4>Apa itu Brute Force?</h4>
+            <p>Dalam Caesar's Cipher, kamu hanya perlu mencoba semua kemungkinan pergeseran dari <strong>1 hingga 25</strong>. Salah satu dari 25 percobaan itu <strong>PASTI</strong> akan menghasilkan Plain Text yang dapat dibaca dan bermakna.</p>
+        </div>
+
+        <div class="challenge-box">
+            <div class="challenge-title">Contoh Tantangan: Memecahkan "WKDQ"</div>
+            <p style="text-align: center; color: var(--lesson-text); margin-bottom: 20px;">Kita akan mencari Kunci Dekripsi yang paling masuk akal (menghasilkan kata yang memiliki arti).</p>
+
+            <!-- Percobaan 1 -->
+            <div class="attempt-item">
+                <div class="attempt-header">Percobaan 1 (Geser 1 ke KIRI):</div>
+                <div class="attempt-process">
+                    W → V, K → J, D → C, Q → P
+                </div>
+                <div class="attempt-result">
+                    <span class="result-text">V J C P</span>
+                    <span class="result-status status-fail">✗ Tidak ada arti</span>
+                </div>
+            </div>
+
+            <!-- Percobaan 2 -->
+            <div class="attempt-item">
+                <div class="attempt-header">Percobaan 2 (Geser 2 ke KIRI):</div>
+                <div class="attempt-process">
+                    W → U, K → I, D → B, Q → O
+                </div>
+                <div class="attempt-result">
+                    <span class="result-text">U I B O</span>
+                    <span class="result-status status-fail">✗ Tidak ada arti</span>
+                </div>
+            </div>
+
+            <!-- Percobaan 3 (Success) -->
+            <div class="attempt-item success">
+                <div class="attempt-header">Percobaan 3 (Geser 3 ke KIRI):</div>
+                <p style="color: var(--lesson-text); margin: 10px 0;">Kita geser semua huruf 3 langkah ke kiri.</p>
+                <div class="attempt-process">
+                    W → T, K → H, D → A, Q → N
+                </div>
+                <div class="attempt-result success">
+                    <span class="result-text" style="color: #2e7d32;">T H A N K</span>
+                    <span class="result-status status-success">✓ BERMAKNA!</span>
+                </div>
+            </div>
+
+            <!-- Kesimpulan -->
+            <div class="conclusion-box">
+                <h4>Kesimpulan:</h4>
+                <div class="conclusion-item">
+                    <span><strong>Langkah Akhir:</strong> Karena pada percobaan ke-3 (Geser 3 KIRI) menghasilkan kata "THANK" yang bermakna, maka kita telah menemukan kuncinya.</span>
+                </div>
+                <div class="conclusion-item">
+                    <span><strong>Kunci Dekripsi:</strong> Geser 3 Langkah ke KIRI</span>
+                </div>
+                <div class="conclusion-item">
+                    <span><strong>Kunci Enkripsi Asli:</strong> Geser 3 Langkah ke KANAN</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -763,5 +267,114 @@
         <i class="fa-solid fa-arrow-right ms-2"></i>
     </a>
 </div>
+
+<script>
+    let currentDecryptStep = 1;
+    const totalDecryptSteps = 4;
+
+    function changeDecryptStep(direction) {
+        // Update current step
+        currentDecryptStep += direction;
+        
+        // Ensure step is within bounds
+        if (currentDecryptStep < 1) currentDecryptStep = 1;
+        if (currentDecryptStep > totalDecryptSteps + 1) currentDecryptStep = totalDecryptSteps + 1;
+        
+        // Show all previous steps
+        for (let i = 1; i <= currentDecryptStep && i <= totalDecryptSteps; i++) {
+            document.getElementById('decryptStep' + i).style.display = 'block';
+        }
+        
+        // Show final result if we're past the last step
+        if (currentDecryptStep > totalDecryptSteps) {
+            document.getElementById('decryptFinal').style.display = 'block';
+        }
+        
+        // Update button visibility
+        const prevBtn = document.getElementById('decryptPrevBtn');
+        const nextBtn = document.getElementById('decryptNextBtn');
+        const stepText = document.getElementById('decryptStepText');
+        
+        // Previous button
+        if (currentDecryptStep === 1) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'inline-flex';
+        }
+        
+        // Next button
+        if (currentDecryptStep > totalDecryptSteps) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = 'inline-flex';
+            if (currentDecryptStep === totalDecryptSteps) {
+                nextBtn.innerHTML = 'Lihat Hasil <i class="fas fa-check"></i>';
+            } else {
+                nextBtn.innerHTML = 'Selanjutnya <i class="fas fa-arrow-right"></i>';
+            }
+        }
+        
+        // Update step indicator
+        if (currentDecryptStep <= totalDecryptSteps) {
+            stepText.textContent = `Langkah ${currentDecryptStep} dari ${totalDecryptSteps}`;
+        } else {
+            stepText.textContent = 'Hasil Akhir';
+        }
+    }
+
+    // For UDKDVLD word
+    let currentUdkdvldStep = 1;
+    const totalUdkdvldSteps = 4;
+
+    function changeUdkdvldStep(direction) {
+        // Update current step
+        currentUdkdvldStep += direction;
+        
+        // Ensure step is within bounds
+        if (currentUdkdvldStep < 1) currentUdkdvldStep = 1;
+        if (currentUdkdvldStep > totalUdkdvldSteps + 1) currentUdkdvldStep = totalUdkdvldSteps + 1;
+        
+        // Show all previous steps
+        for (let i = 1; i <= currentUdkdvldStep && i <= totalUdkdvldSteps; i++) {
+            document.getElementById('udkdvldStep' + i).style.display = 'block';
+        }
+        
+        // Show final result if we're past the last step
+        if (currentUdkdvldStep > totalUdkdvldSteps) {
+            document.getElementById('udkdvldFinal').style.display = 'block';
+        }
+        
+        // Update button visibility
+        const prevBtn = document.getElementById('udkdvldPrevBtn');
+        const nextBtn = document.getElementById('udkdvldNextBtn');
+        const stepText = document.getElementById('udkdvldStepText');
+        
+        // Previous button
+        if (currentUdkdvldStep === 1) {
+            prevBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = 'inline-flex';
+        }
+        
+        // Next button
+        if (currentUdkdvldStep > totalUdkdvldSteps) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = 'inline-flex';
+            if (currentUdkdvldStep === totalUdkdvldSteps) {
+                nextBtn.innerHTML = 'Lihat Hasil <i class="fas fa-check"></i>';
+            } else {
+                nextBtn.innerHTML = 'Selanjutnya <i class="fas fa-arrow-right"></i>';
+            }
+        }
+        
+        // Update step indicator
+        if (currentUdkdvldStep <= totalUdkdvldSteps) {
+            stepText.textContent = `Langkah ${currentUdkdvldStep} dari ${totalUdkdvldSteps}`;
+        } else {
+            stepText.textContent = 'Hasil Akhir';
+        }
+    }
+</script>
 
 {% endblock %}

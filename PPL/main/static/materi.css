@@ -1,493 +1,384 @@
-/* KONTEN */
-:root {
-  --lesson-bg: #f6f7f9;
-  --lesson-surface: #ffffff;
-  --lesson-text: #1b1f24;
-  --lesson-muted: #6b7280;
-  --lesson-border: #e5e7eb;
-  --lesson-brand: #f3c623;
-  --lesson-brand-700: #1b3c53;
-  --lesson-brand-100: #17a2b8;
-  --lesson-radius: 14px;
-  --lesson-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+/* -----------------------------------------------------------
+   KONTEN CSS UMUM DARI MATERI.CSS ASLI
+   ----------------------------------------------------------- */
+
+:root { --lesson-bg: #f6f7f9; --lesson-surface: #ffffff; --lesson-text: #1b1f24; --lesson-muted: #6b7280; --lesson-border: #e5e7eb; --lesson-brand: #f3c623; --lesson-brand-700: #1b3c53; --lesson-brand-100: #17a2b8; --lesson-radius: 14px; --lesson-shadow: 0 8px 20px rgba(0, 0, 0, 0.06); }
+
+/* --- Layout Aplikasi Utama (MODIFIKASI: Menghapus Grid dan menggunakan Block) --- */
+.lesson-app { display: block; min-height: calc(100vh - 70px); background: var(--lesson-bg); position: relative; transition: all 0.25s ease; }
+.lesson-app.is-collapsed { display: block; }
+
+/* --- SIDEBAR (MODIFIKASI KRUSIAL: Fixed Penuh) --- */
+.sidebar { 
+    width: 280px; 
+    transition: width 0.25s ease, padding 0.25s ease, background-color 0.25s ease, margin-left 0.25s ease; 
+    position: fixed; 
+    top: 10; /* Mengunci di bagian atas viewport */
+    z-index: 10; 
+    flex-shrink: 0; 
+    overflow-y: auto; 
+    padding-bottom: 80px; 
+    height: 100vh; /* Membuat tinggi penuh viewport */
 }
 
-/* --- Layout Aplikasi Utama --- */
-.lesson-app {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  min-height: calc(100vh - 70px);
-  background: var(--lesson-bg);
-  position: relative;
-  transition: grid-template-columns 0.25s ease;
+.lesson-app.is-collapsed .sidebar { width: 56px; padding-right: 6px; }
+.sidebar-content { padding: 3.5rem 0.5rem 1rem 0.5rem; }
+.lesson-app.is-collapsed .sidebar-content { display: none; }
+
+/* Menyesuaikan posisi Tombol Burger (agar tidak terlalu ke kiri) */
+.sidebar .burger-btn { margin: 0 !important; position: fixed !important; transform: none !important; top: 5rem; left: 0.5rem; z-index: 1000; width: 42px; height: 42px; border-radius: 12px; border: 1px solid #e5e7eb; background: #fff; display: grid; place-items: center; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08); }
+.burger-icon { width: 20px; height: 2px; background: #1b3c53; border-radius: 2px; position: relative; display: block; }
+.burger-icon::before, .burger-icon::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; background: #1b3c53; border-radius: 2px; }
+.burger-icon::before { top: -6px; }
+.burger-icon::after { top: 6px; }
+.accordion-item { margin-bottom: 0 !important; }
+
+/* --- KONTEN UTAMA (OFFSET MENGGESER SEMUA KONTEN KE KANAN) --- */
+.lesson-titlebar { 
+    background: var(--lesson-brand); 
+    color: #000; 
+    padding: 3px 20px; 
+    font-size: 35px; 
+    font-weight: 1000; 
+    letter-spacing: 0.9px; 
+    text-align: center; 
+    box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.06); 
+    /* Offset default 250px */
+    margin-left: 250px; 
+    transition: margin-left 0.25s ease;
 }
 
-.lesson-app.is-collapsed {
-  grid-template-columns: 56px 1fr;
+/* Wrapper p-5 di base_lesson.html */
+.p-5 {
+    /* Offset default 250px */
+    margin-left: 250px; 
+    padding: 3rem !important; 
+    transition: margin-left 0.25s ease;
 }
 
-/* --- SIDEBAR --- */
-.sidebar {
-  width: 250px;
-  transition: width 0.25s ease, padding 0.25s ease, background-color 0.25s ease;
-  position: relative;
-  top: 0;
-  z-index: 10;
-  flex-shrink: 0;
-  overflow: auto;
-  padding-bottom: 80px;
+/* Menyesuaikan Offset saat Sidebar Ciut (is-collapsed aktif) */
+.lesson-app.is-collapsed .lesson-titlebar {
+    margin-left: 0px;
 }
 
-.lesson-app.is-collapsed .sidebar {
-  width: 56px;
-  padding-right: 6px;
+.lesson-app.is-collapsed .p-5 {
+    margin-left: 56px;
 }
 
-.sidebar-content {
-  /* padding: 0.5rem 0.5rem 1rem 0.5rem; */
-  padding: 3.5rem 0.5rem 1rem 0.5rem;
-}
+.lesson-content { padding: 10px; display: flex; flex-direction: column; gap: 15px; }
+.lesson-h2 { font-size: 25px; font-weight: bolder; display: flex; align-items: center; gap: 12px; }
+.lesson-h2:before { content: ""; width: 6px; height: 28px; border-radius: 3px; background: var(--lesson-brand); display: inline-block; }
+.lesson-card { background: var(--lesson-surface); border: 1px solid var(--lesson-border); border-radius: var(--lesson-radius); box-shadow: var(--lesson-shadow); padding: 13px; }
+.lesson-goals { display: flex; flex-direction: column; gap: 10px; }
+.lesson-goal { background: #fbfbfc; border: 1px solid var(--lesson-border); border-radius: 10px; padding: 10px; font-size: 15px; display: flex; gap: 14px; align-items: flex-start; }
+.lesson-goal .lesson-num { min-width: 30px; height: 35px; border-radius: 7px; display: grid; place-items: center; background: var(--lesson-brand-100); color: var(--lesson-text); font-weight: 700; border: 1px solid #cfe7d9; }
+.lesson-wrap { background: #fff; border: 1px solid var(--lesson-border); border-radius: var(--lesson-radius); box-shadow: var(--lesson-shadow); overflow: hidden; }
+.lesson-head { padding: 22px 18px 6px; font-weight: 250; font-size: 20px; text-align: center; }
+.lesson-child { padding: 22px 18px 6px; font-weight: 500; font-size: 15px; text-align: center; font-style: italic; }
+.teks { color: #000; text-align: justify; font-size: 16.5px; font-weight: 200; }
+p { font-size: 1.1rem; }
 
-.lesson-app.is-collapsed .sidebar-content {
-  display: none;
-}
+/* --- INPUTS & FORMS --- */
+.input-section { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+.form-label { font-weight: 600; color: var(--lesson-brand-700); margin-bottom: 8px; }
+.form-control { border: 2px solid var(--lesson-border); border-radius: 8px; padding: 10px 15px; font-size: 16px; }
+.form-control:focus { border-color: var(--lesson-brand); box-shadow: 0 0 0 0.2rem rgba(243, 198, 35, 0.25); }
 
-.accordion-item {
-  margin-bottom: 0 !important;
-}
+/* --- BUTTONS & LEGENDS --- */
+.btn-custom { background: var(--lesson-brand-700); color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; }
+.btn-custom:hover { background: #153147; color: white; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(27, 60, 83, 0.3); }
+.legend-box { display: flex; gap: 20px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 8px; background: white; padding: 8px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+.legend-color { width: 25px; height: 25px; border-radius: 6px; }
+.legend-color.source { background: #dc3545; }
+.legend-color.target { background: #28a745; }
 
-.sidebar .burger-btn {
-  margin: 0 !important;
-  position: absolute !important;
-  transform: none !important;
-  top: 0.5rem;
-  left: 0.5rem;
-  z-index: 100;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
-  display: grid;
-  place-items: center;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-}
+/* -----------------------------------------------------------
+   ALPHABET GRID & STEP CARDS (dari materi.css & style block)
+   ----------------------------------------------------------- */
 
-.burger-icon {
-  width: 20px;
-  height: 2px;
-  background: #1b3c53;
-  border-radius: 2px;
-  position: relative;
-  display: block;
-}
+.step-container { display: none; }
+.step-card { background: white; border: 2px solid var(--lesson-border); border-left: 5px solid var(--lesson-brand-100); border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+.step-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+.step-number { background: var(--lesson-brand-100); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2em; box-shadow: 0 3px 8px rgba(23, 162, 184, 0.3); }
+.step-title { font-size: 1.3em; font-weight: 700; color: var(--lesson-brand-700); margin: 0; }
+.alphabet-table { display: grid; grid-template-columns: repeat(26, 1fr); gap: 4px; margin: 15px 0; font-family: "Courier New", monospace; }
+.alphabet-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: #e9ecef; border-radius: 6px; font-weight: 800; font-size: 20px; transition: all 0.3s ease; border: 2px solid transparent; }
+.alphabet-cell.source { background: #dc3545; color: white; transform: scale(1.1); box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4); border-color: #c82333; }
+.alphabet-cell.target { background: #28a745; color: white; transform: scale(1.1); box-shadow: 0 3px 10px rgba(40, 167, 69, 0.4); border-color: #218838; }
+.process-info { background: #f8f9fa; border: 2px dashed var(--lesson-brand-100); border-radius: 8px; padding: 15px; margin: 15px 0; }
+.process-info strong { color: var(--lesson-brand-700); }
+.char-display { display: inline-block; padding: 6px 14px; background: var(--lesson-brand-700); color: white; border-radius: 6px; font-weight: 700; font-size: 1.1em; margin: 0 5px; font-family: "Courier New", monospace; }
+.char-display.result { background: #28a745; }
+.arrow-down { text-align: center; font-size: 2.5em; color: var(--lesson-brand-100); margin: 15px 0; font-weight: bold; }
+.result-final { background: white; color: black; padding: 30px; border-radius: var(--lesson-radius); border: 5px solid #1b3c53; text-align: center; margin-top: 20px; }
+.result-final h3 { font-size: 1.8em; font-weight: 700; margin-bottom: 15px; }
+.result-text { font-size: 2.2em; font-weight: 900; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); font-family: "Courier New", monospace; }
+.result-info { margin-top: 15px; font-size: 1.1em; opacity: 0.95; }
 
-.burger-icon::before,
-.burger-icon::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #1b3c53;
-  border-radius: 2px;
-}
+/* -----------------------------------------------------------
+   ANIMATIONS (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes unlockAnimation { 0% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } 100% { transform: rotate(0deg); } }
+@keyframes sparkle { 0%, 100% { transform: scale(1) rotate(0deg); } 50% { transform: scale(1.1) rotate(5deg); } }
+@keyframes slideInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
 
-.burger-icon::before {
-  top: -6px;
-}
+/* -----------------------------------------------------------
+   GLOBAL STRUCTURE AND LAYOUT (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.main-content-container { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 35px; margin: 25px 0; box-shadow: var(--lesson-shadow); animation: fadeInUp 0.6s ease-out; }
+.hero-section { background: linear-gradient( 135deg, var(--lesson-brand-700) 0%, var(--lesson-brand-100) 100% ); border-radius: var(--lesson-radius); padding: 35px; color: white; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); animation: fadeInUp 0.6s ease-out; }
+.hero-section h1 { font-size: 1.8rem; font-weight: bold; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.hero-section strong { color: var(--lesson-brand); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+.hero-icon { animation: pulse 2s ease-in-out infinite; font-size: 1.5rem; }
+.hero-section h1 .hero-icon { animation: unlockAnimation 2s ease-in-out infinite; }
+.diamond-icon { animation: sparkle 2s ease-in-out infinite; font-size: 1.3rem; }
+.section-header { color: var(--lesson-brand-700); font-weight: bold; font-size: 1.5rem; margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 3px solid var(--lesson-brand); }
+.section-intro { color: var(--lesson-text); line-height: 1.7; font-size: 1.2rem; margin-bottom: 25px; }
+.sub-section { background: var(--lesson-bg); border-radius: var(--lesson-border); }
 
-.burger-icon::after {
-  top: 6px;
-}
+/* -----------------------------------------------------------
+   HISTORY & RULE STYLES (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.history-timeline { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 30px; margin: 25px 0; box-shadow: var(--lesson-shadow); border-left: 5px solid var(--lesson-brand); }
+.timeline-item { display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start; }
+.timeline-icon { font-size: 2.5rem; min-width: 60px; text-align: center; animation: pulse 2s ease-in-out infinite; }
+.timeline-content h4 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 10px; }
+.golden-rule-box { background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%); border: 3px solid var(--lesson-brand); border-radius: var(--lesson-radius); padding: 30px; margin: 25px 0; box-shadow: var(--lesson-shadow); position: relative; }
+.golden-rule-box::before { content: "⭐"; position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 2.5rem; background: white; padding: 5px 15px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+.golden-rule-box h3 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 20px; text-align: center; margin-top: 10px; }
+.rule-columns { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 15px; }
+.rule-column { background: white; padding: 25px; border-radius: 10px; border-top: 5px solid; transition: all 0.3s ease; }
+.rule-column:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); }
+.rule-column.encryption .rule-column-title { color: #2e7d32; }
+.rule-column.decryption .rule-column-title { color: var(--lesson-brand-100); }
+.rule-column-content { text-align: center; color: var(--lesson-text); line-height: 1.7; }
+.rule-arrow { text-align: center; font-size: 2.5rem; color: var(--lesson-brand); margin: 20px 0; }
 
-/* --- KONTEN LANJUTAN --- */
+/* -----------------------------------------------------------
+   CARD/BOX STYLES (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.protection-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 25px 0; }
+.protection-card { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 30px; box-shadow: var(--lesson-shadow); transition: all 0.3s ease; animation: fadeInUp 0.6s ease-out backwards; border-top: 5px solid var(--lesson-brand-100); }
+.protection-card:nth-child(1) { animation-delay: 0.1s; }
+.protection-card:nth-child(2) { animation-delay: 0.2s; }
+.protection-card:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); }
+.protection-icon { font-size: 3rem; margin-bottom: 15px; display: block; }
+.protection-card h4 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 12px; font-size: 1.2rem; }
+.key-elements { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 25px 0; }
+.key-box { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 25px; box-shadow: var(--lesson-shadow); border-top: 4px solid var(--lesson-brand-100); transition: all 0.3s ease; }
+.key-box:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); }
+.key-box-icon { font-size: 2.5rem; margin-bottom: 15px; display: block; }
+.key-box h4 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 12px; font-size: 1.2rem; }
+.concept-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 10px 0; }
+.concept-card { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 30px; box-shadow: var(--lesson-shadow); transition: all 0.3s ease; border: 2px solid var(--lesson-border); }
+.concept-card:nth-child(1) { animation-delay: 0.1s; border-top: 4px solid var(--lesson-brand-700); }
+.concept-card:nth-child(2) { animation-delay: 0.2s; border-top: 4px solid var(--lesson-brand-100); }
+.concept-card:nth-child(1) .concept-icon { animation: pulse 2s ease-in-out infinite; }
+.concept-card:nth-child(2) .concept-icon { animation: pulse 2s ease-in-out infinite 1s; }
+.concept-icon { font-size: 3.5rem; margin-bottom: 15px; display: inline-block; }
+.concept-card h3 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 15px; font-size: 1.3rem; }
 
-.lesson-titlebar {
-  background: var(--lesson-brand);
-  color: #000;
-  padding: 3px 20px;
-  font-size: 35px;
-  font-weight: 1000;
-  letter-spacing: 0.9px;
-  text-align: center;
-  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.06);
-}
+/* -----------------------------------------------------------
+   MESSAGE & COMPARISON STYLES (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.comparison-container { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 35px; margin: 25px 0; box-shadow: var(--lesson-shadow); animation: fadeInUp 0.6s ease-out 0.3s backwards; }
+.comparison-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 25px; }
+.message-box { border-radius: var(--lesson-radius); padding: 25px; transition: all 0.3s ease; position: relative; overflow: hidden; }
+.message-box:hover { transform: scale(1.03); }
+.plaintext-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 3px solid #4caf50; }
+.ciphertext-box { background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); border: 3px solid #f44336; }
+.message-label { font-weight: bold; font-size: 1.1rem; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+.plaintext-box .message-label { color: #2e7d32; }
+.ciphertext-box .message-label { color: #c62828; }
+.message-content { background: white; padding: 20px; border-radius: 8px; font-family: "Courier New", monospace; font-size: 1.1rem; font-weight: bold; text-align: center; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+.plaintext-box .message-content { color: #2e7d32; }
+.ciphertext-box .message-content { color: #c62828; letter-spacing: 2px; }
+.characteristics-list { list-style: none; padding: 0; margin: 0; }
+.characteristics-list li { padding: 8px 0; display: flex; align-items: center; gap: 8px; color: var(--lesson-text); }
+.characteristics-list li::before { content: "✓"; font-weight: bold; font-size: 1.2rem; }
+.plaintext-box .characteristics-list li::before { color: #4caf50; }
+.ciphertext-box .characteristics-list li::before { color: #f44336; }
+.interactive-example { background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%); border: 2px solid var(--lesson-brand); border-radius: var(--lesson-radius); padding: 35px; margin: 10px 0; animation: fadeInUp 0.6s ease-out 0.3s backwards; box-shadow: var(--lesson-shadow); }
+.interactive-example h3 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 20px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+.cipher-demo { display: flex; align-items: center; justify-content: center; gap: 25px; flex-wrap: wrap; margin: 10px 0; }
+.cipher-box { background: var(--lesson-surface); padding: 25px 40px; border-radius: var(--lesson-radius); font-size: 2.2rem; font-weight: bold; letter-spacing: 8px; box-shadow: var(--lesson-shadow); transition: all 0.3s ease; }
+.cipher-box:hover { transform: scale(1.05); }
+.cipher-box.original { color: var(--lesson-brand-700); border: 4px solid var(--lesson-brand-700); animation: sparkle 3s ease-in-out infinite; }
+.cipher-box.encrypted { color: #c62828; border: 4px solid #c62828; animation: sparkle 3s ease-in-out infinite 1.5s; }
+.arrow-icon { font-size: 3rem; color: var(--lesson-brand); animation: pulse 1.5s ease-in-out infinite; text-shadow: 0 2px 8px rgba(243, 198, 35, 0.5); }
 
-.lesson-content {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+/* -----------------------------------------------------------
+   TABLE STYLES (Caesar Cipher & Glossary) (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.shift-table-container { border: 2px solid var(--lesson-brand); border-radius: var(--lesson-radius); padding: 30px; margin: 25px 0; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+.shift-table-container h3 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 20px; text-align: center; }
+.shift-table-controls { text-align: center; margin-bottom: 20px; }
+.shift-table { background: var(--lesson-surface); border-radius: var(--lesson-radius); overflow-x: auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); margin-top: 20px; }
+.shift-table table { width: 100%; border-collapse: collapse; }
+.shift-table th { background: var(--lesson-brand-700); color: white; padding: 12px 8px; font-weight: bold; text-align: center; font-size: 0.9rem; }
+.shift-table td { padding: 12px 8px; text-align: center; border: 1px solid var(--lesson-border); font-weight: bold; transition: all 0.3s ease; font-size: 0.9rem; }
+.shift-table td:hover { background: var(--lesson-brand); color: white; transform: scale(1.1); cursor: pointer; z-index: 10; }
+.shift-table-row-1 td { background: #ffebee; color: #d32f2f; }
+.shift-table-row-2 td { background: #e8f5e9; color: #388e3c; }
+.shift-table-row-3 td { background: #fffde7; color: #ff8f00; }
+.shift-table-row-4 td { background: #e1f5fe; color: #0277bd; }
+.shift-table-row-5 td { background: #f3e5f5; color: #8e24aa; }
+.table-control-btn { padding: 8px 15px; border-radius: 8px; font-weight: bold; margin: 5px; cursor: pointer; transition: all 0.3s; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+.btn-kunci-1 { background-color: #d32f2f; color: white; border: none; }
+.btn-kunci-2 { background-color: #388e3c; color: white; border: none; }
+.btn-kunci-3 { background-color: #ff8f00; color: white; border: none; }
+.btn-kunci-4 { background-color: #0277bd; color: white; border: none; }
+.btn-kunci-5 { background-color: #8e24aa; color: white; border: none; }
+.glossary-table { background: var(--lesson-surface); border-radius: var(--lesson-radius); overflow: hidden; box-shadow: var(--lesson-shadow); margin-top: 20px; }
+.glossary-table table { width: 100%; margin: 0; border-collapse: collapse; }
+.glossary-table thead { background: var(--lesson-brand-700); color: white; }
+.glossary-table th { padding: 18px 15px; font-weight: bold; text-align: left; font-size: 1.05rem; }
+.glossary-table td { padding: 18px 15px; border-bottom: 1px solid var(--lesson-border); color: var(--lesson-text); }
+.glossary-table tbody tr { transition: background 0.2s ease; }
+.glossary-table tbody tr:hover { background: #fef9e7; }
+.glossary-table tbody tr:last-child td { border-bottom: none; }
+.category-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; }
+.badge-pesan { background: #e3f2fd; color: var(--lesson-brand-100); border: 1px solid var(--lesson-brand-100); }
+.badge-proses { background: #fff3e0; color: #e65100; border: 1px solid #e65100; }
+.badge-algoritma { background: #f3e5f5; color: #6a1b9a; border: 1px solid #6a1b9a; }
+.badge-rahasia { background: #ffebee; color: #c62828; border: 1px solid #c62828; }
 
-.lesson-h2 {
-  font-size: 25px;
-  font-weight: bolder;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+/* -----------------------------------------------------------
+   STEP & PROCESS FLOW STYLES (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.combined-process { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 30px; margin: 25px 0; box-shadow: var(--lesson-shadow); }
+.process-header { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 25px; font-size: 1.4rem; }
+.process-flow h3 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 30px; text-align: center; }
+.flow-steps { display: flex; flex-direction: column; gap: 20px; }
+.flow-step { background: white; border-radius: var(--lesson-radius); padding: 25px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); display: flex; align-items: flex-start; gap: 20px; transition: all 0.3s ease; border-left: 5px solid var(--lesson-brand); }
+.flow-step:hover { transform: translateX(10px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12); }
+.step-number { background: var(--lesson-brand); color: var(--lesson-text); font-weight: bold; font-size: 1.5rem; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 8px rgba(243, 198, 35, 0.3); }
+.step-content { flex: 1; }
+.step-title { color: var(--lesson-brand-700); font-weight: bold; font-size: 1.1rem; margin-bottom: 8px; }
+.step-description { color: var(--lesson-text); line-height: 1.7; margin: 0; }
+.arrow-down { text-align: center; font-size: 2rem; color: var(--lesson-brand-100); animation: pulse 1.5s ease-in-out infinite; }
+.step-item { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 5px solid var(--lesson-brand-100); transition: all 0.3s ease; }
+.step-formula { font-family: "Courier New", monospace; color: var(--lesson-text); line-height: 1.8; background: #fafafa; padding: 10px; border-radius: 5px; margin-top: 8px; }
+.identification-box { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 30px; margin: 25px 0; box-shadow: var(--lesson-shadow); }
+.id-step { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--lesson-brand); animation: fadeInUp 0.5s ease-out; }
+.id-step-title { font-weight: bold; color: var(--lesson-brand-700); margin-bottom: 8px; }
+.verification-badge { padding: 5px 10px; border-radius: 5px; background: #e8f5e9; color: #2e7d32; font-weight: bold; font-size: 0.9rem; }
+.example-box { background: #e8f5f9; border-left: 6px solid var(--lesson-brand-100); padding: 25px; border-radius: var(--lesson-radius); margin-bottom: 20px; }
+.decryption-demo { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 35px; margin: 25px 0; box-shadow: var(--lesson-shadow); }
+.demo-context { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 20px; border-radius: 10px; margin-bottom: 25px; border-left: 5px solid var(--lesson-brand-100); }
+.word-section { background: #f8f9fa; border-radius: 10px; padding: 25px; margin: 20px 0; border: 2px solid var(--lesson-border); }
+.word-title { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 20px; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; }
+.letter-step { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 5px solid var(--lesson-brand); transition: all 0.3s ease; }
+.letter-step:hover { transform: translateX(10px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+.step-header { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; }
+.letter-badge { background: var(--lesson-brand); color: var(--lesson-text); font-weight: bold; font-size: 1.5rem; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: "Courier New", monospace; }
+.step-process { flex: 1; }
+.step-result { margin-top: 10px; padding: 12px; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-radius: 8px; border: 2px solid #4caf50; }
+.step-result strong { color: #2e7d32; font-size: 1.1rem; }
+.final-result { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 3px solid #4caf50; border-radius: 10px; padding: 25px; text-align: center; margin-top: 25px; }
+.final-result-text { font-size: 2rem; font-weight: bold; color: #2e7d32; font-family: "Courier New", monospace; letter-spacing: 3px; margin: 15px 0; }
+.brute-force-box { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border: 2px solid #bbdefb; border-radius: var(--lesson-radius); padding: 35px; margin: 25px 0; box-shadow: var(--lesson-shadow); }
+.brute-force-box h3 { color: #000; font-weight: bold; margin-bottom: 20px; text-align: center; }
+.concept-box { background: white; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 5px solid var(--lesson-brand-100); }
+.concept-box h4 { color: #000; font-weight: bold; margin-bottom: 10px; }
+.challenge-title { color: #000; font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; text-align: center; }
+.challenge-box { background: white; border-radius: 10px; padding: 25px; margin: 20px 0; }
+.attempt-item { background: #f8f9fa; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 5px solid #ddd; transition: all 0.3s ease; }
+.attempt-item.success { border-left-color: #4caf50; background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
+.attempt-item:hover { transform: translateX(5px); }
+.attempt-header { font-weight: bold; color: #000; margin-bottom: 10px; font-size: 1.05rem; }
+.attempt-process { font-family: "Courier New", monospace; color: var(--lesson-text); line-height: 1.8; margin: 10px 0; }
+.attempt-result { margin-top: 12px; padding: 12px; background: white; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+.attempt-result.success { border: 2px solid #4caf50; }
+.result-text { font-family: "Courier New", monospace; font-weight: bold; font-size: 1.3rem; }
+.result-status { padding: 5px 12px; border-radius: 15px; font-weight: bold; font-size: 0.9rem; }
+.status-fail { background: #ffebee; color: #c62828; }
+.status-success { background: #e8f5e9; color: #2e7d32; }
+.conclusion-box {  border: 3px solid #4caf50; border-radius: 10px; padding: 25px; margin-top: 25px; }
+.conclusion-box h4 { color: #2e7d32; font-weight: bold; margin-bottom: 15px; }
+.conclusion-item { display: flex; align-items: flex-start; gap: 10px; margin: 10px 0; color: var(--lesson-text); line-height: 1.7; }
+.conclusion-item::before { content: "✓"; color: #4caf50; font-weight: bold; font-size: 1.3rem; flex-shrink: 0; }
 
-.lesson-h2:before {
-  content: "";
-  width: 6px;
-  height: 28px;
-  border-radius: 3px;
-  background: var(--lesson-brand);
-  display: inline-block;
-}
+/* -----------------------------------------------------------
+   INFO & ALERTS (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.info-box { background: #e8f5f9; border-left: 6px solid var(--lesson-brand-100); padding: 25px; border-radius: var(--lesson-radius); margin: 10px 0; animation: fadeInUp 0.6s ease-out 0.4s backwards; box-shadow: 0 4px 12px rgba(23, 162, 184, 0.15); }
+.info-alert { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-left: 6px solid #e65100; padding: 20px; border-radius: var(--lesson-radius); margin: 20px 0; animation: fadeInUp 0.6s ease-out; }
+.info-box strong { color: var(--lesson-brand-700); font-size: 1.15rem; display: inline-flex; align-items: center; gap: 8px; }
+.info-alert strong { color: #e65100; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.info-box p { margin-top: 10px; margin-bottom: 0; color: var(--lesson-text); line-height: 1.7; }
+.info-alert p { color: var(--lesson-text); line-height: 1.7; margin: 0; }
 
-.lesson-card {
-  background: var(--lesson-surface);
-  border: 1px solid var(--lesson-border);
-  border-radius: var(--lesson-radius);
-  box-shadow: var(--lesson-shadow);
-  padding: 13px;
-}
+/* -----------------------------------------------------------
+   MISCELLANEOUS & GLOSSARY (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.glossary-section { text-align: center; margin: 10px 0; }
+.glossary-toggle-btn { background: linear-gradient(135deg, var(--lesson-brand) 0%, #e0b11d 100%); border: none; color: var(--lesson-text); padding: 16px 35px; border-radius: 50px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 20px rgba(243, 198, 35, 0.4); display: inline-flex; align-items: center; gap: 12px; }
+.glossary-toggle-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(243, 198, 35, 0.5); background: linear-gradient(135deg, #ffd54f 0%, var(--lesson-brand) 100%); }
+.glossary-toggle-btn i { transition: transform 0.3s ease; }
+.glossary-toggle-btn.active i.fa-chevron-down { transform: rotate(180deg); }
+.glossary-container { max-height: 0; overflow: hidden; transition: max-height 0.6s ease-out, opacity 0.6s ease-out; opacity: 0; }
+.glossary-container.show { max-height: 1500px; opacity: 1; }
+.glossary-intro { background: var(--lesson-surface); padding: 20px; border-radius: var(--lesson-radius); margin-bottom: 15px; border-left: 5px solid var(--lesson-brand); color: var(--lesson-text); }
+.closing-statement { background: linear-gradient( 135deg, var(--lesson-brand-700) 0%, var(--lesson-brand-100) 100% ); color: white; padding: 30px; border-radius: var(--lesson-radius); margin-top: 40px; box-shadow: var(--lesson-shadow); animation: fadeInUp 0.6s ease-out 0.6s backwards; }
+.closing-statement p { line-height: 1.7; margin: 0; }
+.closing-statement strong { color: var(--lesson-brand); text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); }
+.visual-example { background: var(--lesson-surface); border-radius: var(--lesson-radius); padding: 30px; margin: 25px 0; box-shadow: var(--lesson-shadow); text-align: center; }
+.interactive-example { background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%); border: 2px solid var(--lesson-brand); border-radius: var(--lesson-radius); padding: 35px; margin: 10px 0; animation: fadeInUp 0.6s ease-out 0.3s backwards; box-shadow: var(--lesson-shadow); }
+.interactive-example h3 { color: var(--lesson-brand-700); font-weight: bold; margin-bottom: 20px; font-size: 1.4rem; display: flex; align-items: center; gap: 10px; }
+.step-explanation { background: var(--lesson-surface); padding: 20px; border-radius: var(--lesson-radius); margin-top: 20px; border-left: 5px solid var(--lesson-brand-100); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+.step-explanation strong { color: var(--lesson-brand-700); font-size: 1.1rem; }
+.step-explanation ul { margin-top: 12px; margin-bottom: 0; padding-left: 25px; }
+.step-explanation li { color: var(--lesson-text); line-height: 1.8; margin-bottom: 8px; }
+.step-explanation li strong { color: var(--lesson-brand-700); font-size: 1.15rem; font-weight: bold; }
 
-.lesson-goals {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+/* -----------------------------------------------------------
+   NAVIGATION & BUTTONS (STEP) (Konsolidasi dari style block)
+   ----------------------------------------------------------- */
+.step-navigation { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--lesson-border); }
+.step-btn { background: linear-gradient(135deg, var(--lesson-brand) 0%, #e0b11d 100%); border: none; color: var(--lesson-text); padding: 12px 25px; border-radius: 25px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(243, 198, 35, 0.3); display: inline-flex; align-items: center; gap: 8px; }
+.step-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(243, 198, 35, 0.4); }
+.step-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+.step-btn-next { background: linear-gradient(135deg, var(--lesson-brand-100) 0%, #1290a8 100%); color: white; box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3); }
+.step-btn-next:hover { box-shadow: 0 6px 16px rgba(23, 162, 184, 0.4); }
+.step-indicator { background: var(--lesson-surface); padding: 10px 20px; border-radius: 20px; border: 2px solid var(--lesson-brand); font-weight: bold; color: var(--lesson-brand-700); }
 
-.lesson-goal {
-  background: #fbfbfc;
-  border: 1px solid var(--lesson-border);
-  border-radius: 10px;
-  padding: 10px;
-  font-size: 15px;
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-
-.lesson-goal .lesson-num {
-  min-width: 30px;
-  height: 35px;
-  border-radius: 7px;
-  display: grid;
-  place-items: center;
-  background: var(--lesson-brand-100);
-  color: var(--lesson-brand-700);
-  font-weight: 700;
-  border: 1px solid #cfe7d9;
-}
-
-.lesson-wrap {
-  background: #fff;
-  border: 1px solid var(--lesson-border);
-  border-radius: var(--lesson-radius);
-  box-shadow: var(--lesson-shadow);
-  overflow: hidden;
-}
-
-.lesson-head {
-  padding: 22px 18px 6px;
-  font-weight: 250;
-  font-size: 20px;
-  text-align: center;
-}
-
-.lesson-child {
-  padding: 22px 18px 6px;
-  font-weight: 500;
-  font-size: 15px;
-  text-align: center;
-  font-style: italic;
-}
-
-.btn-outline-warning {
-  color: #000;
-  border-color: #f3c623;
-}
-
-.btn-outline-warning:hover,
-.btn-outline-warning:focus {
-  background-color: #f3c623;
-  color: #000;
-  border-color: #e0b41e;
-}
-
-.teks {
-  color: #000;
-  text-align: justify;
-  font-size: 16.5px;
-  font-weight: 200;
-}
-
-/* --- Media Queries --- */
-
-/* Responsif untuk sidebar dan layout utama */
+/* -----------------------------------------------------------
+   RESPONSIVE STYLES (MODIFIKASI FINAL)
+   ----------------------------------------------------------- */
 @media (max-width: 992px) {
-  /* Diambil dari KONTEN: */
-  .lesson-app {
-    grid-template-columns: 56px 1fr;
-  }
-  /* Diambil dari SIDEBAR: */
-  .sidebar {
-    width: 56px;
-  }
-  /* Diambil dari SIDEBAR: */
-  .sidebar-content {
-    display: none;
-  }
-  /* Diambil dari KONTEN: */
-  .lesson-titlebar {
-    font-size: 34px;
-  }
+  .lesson-app { display: block; }
+  .sidebar { width: 56px; padding-right: 6px; }
+  .sidebar .burger-btn { left: 0.5rem !important; } 
+  .sidebar-content { display: none; }
+  .lesson-titlebar { margin-left: 56px; font-size: 34px; }
+  .p-5 { margin-left: 56px; padding: 3rem !important; }
+  .lesson-content { padding: 10px; }
 }
-
+@media (min-width: 993px) {
+  .lesson-titlebar { margin-left: 0px; }
+  .p-5 { margin-left: 250px; padding: 3rem !important; }
+}
 @media (max-width: 760px) {
-  .lesson-titlebar {
-    font-size: 28px;
-  }
+  .lesson-titlebar { font-size: 28px; }
 }
-
-/* --- Langkah pergeseran (Caesar Cipher / Dekripsi) --- */
-
-.input-section {
-  background: #f8f9fa;
-  padding: 20px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-}
-
-.form-label {
-  font-weight: 600;
-  color: var(--lesson-brand-700);
-  margin-bottom: 8px;
-}
-
-.form-control {
-  border: 2px solid var(--lesson-border);
-  border-radius: 8px;
-  padding: 10px 15px;
-  font-size: 16px;
-}
-
-.form-control:focus {
-  border-color: var(--lesson-brand);
-  box-shadow: 0 0 0 0.2rem rgba(243, 198, 35, 0.25);
-}
-
-.btn-custom {
-  background: var(--lesson-brand-700);
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.btn-custom:hover {
-  background: #153147;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(27, 60, 83, 0.3);
-}
-
-.legend-box {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin: 20px 0;
-  flex-wrap: wrap;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.legend-color {
-  width: 25px;
-  height: 25px;
-  border-radius: 6px;
-}
-
-.legend-color.source {
-  background: #dc3545;
-}
-
-.legend-color.target {
-  background: #28a745;
-}
-
-.step-container {
-  display: none;
-}
-
-.step-card {
-  background: white;
-  border: 2px solid var(--lesson-border);
-  border-left: 5px solid var(--lesson-brand-100);
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.step-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.step-number {
-  background: var(--lesson-brand-100);
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1.2em;
-  box-shadow: 0 3px 8px rgba(23, 162, 184, 0.3);
-}
-
-.step-title {
-  font-size: 1.3em;
-  font-weight: 700;
-  color: var(--lesson-brand-700);
-  margin: 0;
-}
-
-.alphabet-table {
-  display: grid;
-  grid-template-columns: repeat(26, 1fr);
-  gap: 4px;
-  margin: 15px 0;
-  font-family: "Courier New", monospace;
-}
-
-.alphabet-cell {
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e9ecef;
-  border-radius: 6px;
-  font-weight: 800;
-  font-size: 20px;
-  transition: all 0.3s ease;
-  border: 2px solid transparent;
-}
-
-.alphabet-cell.source {
-  background: #dc3545;
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4);
-  border-color: #c82333;
-}
-
-.alphabet-cell.target {
-  background: #28a745;
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 3px 10px rgba(40, 167, 69, 0.4);
-  border-color: #218838;
-}
-
-.process-info {
-  background: #f8f9fa;
-  border: 2px dashed var(--lesson-brand-100);
-  border-radius: 8px;
-  padding: 15px;
-  margin: 15px 0;
-}
-
-.process-info strong {
-  color: var(--lesson-brand-700);
-}
-
-.char-display {
-  display: inline-block;
-  padding: 6px 14px;
-  background: var(--lesson-brand-700);
-  color: white;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 1.1em;
-  margin: 0 5px;
-  font-family: "Courier New", monospace;
-}
-
-.char-display.result {
-  background: #28a745;
-}
-
-.arrow-down {
-  text-align: center;
-  font-size: 2.5em;
-  color: var(--lesson-brand-100);
-  margin: 15px 0;
-  font-weight: bold;
-}
-
-.result-final {
-  /* background: linear-gradient(135deg, #ffffff 0%, #F3C623 100%); */
-  background: white;
-  color: black;
-  padding: 30px;
-  border-radius: var(--lesson-radius);
-  border: 5px solid #1b3c53;
-  text-align: center;
-  margin-top: 20px;
-  /* box-shadow: 0 5px 10px #1B3C53; */
-}
-
-.result-final h3 {
-  font-size: 1.8em;
-  font-weight: 700;
-  margin-bottom: 15px;
-}
-
-.result-text {
-  font-size: 2.2em;
-  font-weight: 900;
-  letter-spacing: 3px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  font-family: "Courier New", monospace;
-}
-
-.result-info {
-  margin-top: 15px;
-  font-size: 1.1em;
-  opacity: 0.95;
-}
-
 @media (max-width: 768px) {
-  .lesson-titlebar {
-    font-size: 22px;
-  }
-
-  .alphabet-table {
-    gap: 2px;
-  }
-
-  .alphabet-cell {
-    font-size: 0.75em;
-  }
-
-  .step-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .result-text {
-    font-size: 1.5em;
-    letter-spacing: 2px;
-  }
+  .hero-section h1 { font-size: 1.5rem; }
+  .hero-section p { font-size: 1rem; }
+  .key-elements, .concept-cards, .protection-cards, .comparison-grid, .rule-columns { grid-template-columns: 1fr; }
+  .cipher-demo { flex-direction: column; }
+  .cipher-box { font-size: 1.8rem; padding: 20px 30px; letter-spacing: 5px; }
+  .glossary-table, .shift-table { overflow-x: auto; }
+  .shift-table th, .shift-table td { padding: 8px 4px; font-size: 0.75rem; }
+  .flow-step, .letter-step { flex-direction: column; text-align: center; transform: none !important; }
+  .step-number { margin: 0 auto; }
+  .step-header { flex-direction: column; text-align: center; gap: 10px; }
+  .final-result-text { font-size: 1.5rem; }
+  .attempt-result { flex-direction: column; gap: 10px; text-align: center; }
+  .step-navigation { flex-direction: column; gap: 15px; }
+  .step-btn { width: 100%; justify-content: center; }
 }

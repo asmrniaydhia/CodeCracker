@@ -35,39 +35,44 @@
 
     {% include "partials/header.html" %}
 
-    {% block main_layout %} 
+    {% block main_layout %}
     <div class="lesson-app" id="lessonApp">
-        {% block sidebar %} 
-            {% include "partials/sidebar.html" %}
+        {% block sidebar %}
+        {% include "partials/sidebar.html" %}
         {% endblock %}
-        
-        <div class="p-5"> 
-            {% block content %}{% endblock %}
+
+        <div class="lesson-content-wrapper" id="contentWrapper">
+            <div class="p-5 content-padding-wrapper">
+                {% block content %}{% endblock %}
+            </div>
         </div>
     </div>
     {% endblock main_layout %}
 
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-    {% comment %}
-    <script src="{% static 'materi.js' %}?v={{ time }}"></script> {% endcomment %}
-    {% comment %}
-    <script src="{% static 'kuis.js' %}?v={{ time }}"></script> {% endcomment %}
-    <script src="{% static 'main.js' %}?v={{ time }}"></script> 
+    <script src="{% static 'main.js' %}?v={{ time }}"></script>
 
     <script>
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    
-    if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function () {
-            document.getElementById('lessonApp').classList.toggle('is-collapsed');
-            const isCollapsed = document.getElementById('lessonApp').classList.contains('is-collapsed');
-            this.setAttribute('aria-expanded', !isCollapsed);
-        });
-    }
-</script>
+        const lessonApp = document.getElementById('lessonApp');
+        // TARGETKAN ELEMEN YANG PERLU MENDAPAT MARGIN/OFFSET
+        const contentWrapper = document.querySelector('.p-5');
+
+        // Asumsi: Tombol toggle sidebar berada di dalam sidebar.html atau header.html
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function () {
+                // Memicu class is-collapsed pada container utama (untuk grid transisi)
+                lessonApp.classList.toggle('is-collapsed');
+
+                // PENTING: Menambahkan class khusus pada wrapper konten untuk penyesuaian margin
+                contentWrapper.classList.toggle('is-collapsed-content');
+
+                const isCollapsed = lessonApp.classList.contains('is-collapsed');
+                this.setAttribute('aria-expanded', !isCollapsed);
+            });
+        }
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>

@@ -74,20 +74,20 @@ WSGI_APPLICATION = 'PPL.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'codecracker',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': '127.0.0.1', 
-#         'PORT': '3307',
-#         'OPTIONS': {
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#             'charset': 'utf8mb4',
-#         },
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'codecracker',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': '127.0.0.1', 
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'charset': 'utf8mb4',
+        },
+    }
+}
 
 
 # Password validation
@@ -134,16 +134,16 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+# try:
+#     from .local_settings import *
+# except ImportError:
+#     pass
 
-# Memberitahu Django bahwa halaman login ada di URL dengan nama 'login' (yaitu /login/)
-LOGIN_URL = 'login'
+# # Memberitahu Django bahwa halaman login ada di URL dengan nama 'login' (yaitu /login/)
+# LOGIN_URL = 'login'
 
-# (Opsional) Halaman tujuan setelah login berhasil jika tidak ada parameter ?next
-LOGIN_REDIRECT_URL = 'landing' 
+# # (Opsional) Halaman tujuan setelah login berhasil jika tidak ada parameter ?next
+# LOGIN_REDIRECT_URL = 'landing' 
 
-# (Opsional) Halaman tujuan setelah logout
-LOGOUT_REDIRECT_URL = 'landing'
+# # (Opsional) Halaman tujuan setelah logout
+# LOGOUT_REDIRECT_URL = 'landing'
