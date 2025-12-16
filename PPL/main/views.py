@@ -1,25 +1,24 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib import messages
-
-from .models import Pengguna, Kuis, HasilKuis, RincianJawaban   
-from .models import HasilEvaluasi 
-from .models import PeringkatFinal
+import random, string
+from .models import Pengguna, Kelas, AnggotaKelas, Kuis, HasilKuis, RincianJawaban,HasilEvaluasi, PeringkatFinal, SectionItem, ProgresItem  
 from functools import wraps
 import json
+import time
+from django.db.models import Max
 
 # --- DECORATOR KHUSUS TANTANGAN ---
 def butuh_login_siswa(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        # Cek apakah siswa punya session 'user_id'
-        if 'user_id' not in request.session:
-            return redirect('login') # Tendang ke login jika tidak ada session
+        # GANTI 'user_id' MENJADI 'id_pengguna'
+        if 'id_pengguna' not in request.session:
+            return redirect('login') 
         return function(request, *args, **kwargs)
     return wrap
 
@@ -54,8 +53,33 @@ def unlock_next_stage(request, stage_selesai):
     return redirect('tantangan')
 
 # ---------- EVALUASI ----------
+@butuh_login_siswa
 def evaluasi_petunjuk(request):
-    return render(request, "evaluasi/evaluasi.html")
+    """
+    Menampilkan halaman petunjuk evaluasi. 
+    Jika sudah selesai (Evaluasi tidak bisa diulang), langsung alihkan ke hasil nilai detail.
+    """
+    siswa = get_logged_in_user(request)
+    if not siswa:
+        return redirect('login')
+    
+    # 1. Cek apakah sudah ada hasil evaluasi untuk siswa ini
+    # Ambil hasil yang paling baru (asumsi hanya ada satu hasil permanen)
+    hasil_evaluasi = HasilEvaluasi.objects.filter(id_siswa=siswa).order_by('-id_hasil_evaluasi').first()
+    
+    if hasil_evaluasi:
+        # **LOGIKA BYPASS**: Jika sudah selesai, langsung redirect ke halaman nilai
+        return redirect('evaluasi_nilai_detail', hasil_id=hasil_evaluasi.id_hasil_evaluasi)
+    else:
+        # 2. Ambil Status Sidebar (Jika belum selesai, untuk sidebar)
+        sidebar_status = get_sidebar_status(siswa.id_pengguna)
+        
+        context = {
+            'sidebar_status': sidebar_status
+        }
+        
+        # 3. Kirim ke template (evaluasi.html)
+        return render(request, "evaluasi/evaluasi.html", context)
 
 
 def evaluasi_pengerjaan(request):
@@ -183,30 +207,33 @@ EVALUASI_QUESTIONS_SERVER = [
 ]
 
 
+# views.py (Revisi fungsi simpan_evaluasi_nilai)
+
 @require_POST
 def simpan_evaluasi_nilai(request):
-    siswa = get_logged_in_user(request)
+    siswa = get_logged_in_user(request) # Asumsikan helper ini ada
     if not siswa:
         messages.error(request, "Anda harus login untuk menyimpan hasil evaluasi.")
         return redirect("login")
 
+    # ASUMSI: EVALUASI_QUESTIONS_SERVER sudah didefinisikan (misalnya, list of dict)
     questions = EVALUASI_QUESTIONS_SERVER
     total_soal = len(questions)
 
-    # ⚠️ AMBIL WAKTU PENGERJAAN DARI POST
-    # Asumsi frontend mengirim data waktu (misal dari JavaScript) dengan nama 'waktu_pengerjaan'
     waktu_pengerjaan_detik = int(request.POST.get("waktu_pengerjaan", 0))
 
-    # 1. Hitung Nilai Evaluasi di Server
+    # 1. Hitung Nilai Evaluasi
     skor_sebenarnya = 0
-    total_benar = 0 # ⚠️ VARIABEL BARU
+    total_benar = 0 
     poin_per_soal = 100 // total_soal 
     
+    # Logika Perhitungan Skor (diasumsikan sudah benar)
     for i, q in enumerate(questions):
         q_num = i + 1
         jawaban_siswa = request.POST.get(f"jawaban_{q_num}", "").strip()
         is_benar = False
         
+        # Logika pengecekan MCQ dan Fill-in
         if q["type"] == "mcq":
             jawaban_benar = q["options"][q["correct"]]
             is_benar = (jawaban_siswa == jawaban_benar)
@@ -216,111 +243,187 @@ def simpan_evaluasi_nilai(request):
 
         if is_benar:
             skor_sebenarnya += poin_per_soal
-            total_benar += 1 # ⚠️ HITUNG BENAR
+            total_benar += 1
+            
+    # Koreksi skor agar genap 100 jika ada sisa pembagian
+    if total_soal > 0:
+        skor_sebenarnya += (100 % total_soal) 
     
-    # 2. Simpan Hasil Evaluasi Ringkasan (MENGGUNAKAN FIELD BARU)
-    
+    # 2. Simpan Hasil Evaluasi Ringkasan
     hasil_evaluasi_obj = HasilEvaluasi.objects.create(
         id_siswa=siswa,
         nilai=skor_sebenarnya,
-        total_benar=total_benar, # ⚠️ SIMPAN TOTAL BENAR
-        waktu_evaluasi_detik=waktu_pengerjaan_detik, # ⚠️ SIMPAN WAKTU
+        total_benar=total_benar,
+        waktu_evaluasi_detik=waktu_pengerjaan_detik,
     )
 
-    # 3. Redirect
+    # 3. LOGIKA UPDATE PROGRES (Selalu Selesai)
+    try:
+        item_evaluasi = SectionItem.objects.filter(
+            id_section__nama_section__iexact='Evaluasi', 
+            nama_item__iexact='Evaluasi Akhir'           
+        ).first()
+        
+        if item_evaluasi:
+            # Update status menjadi 'selesai' tanpa perlu cek skor
+            ProgresItem.objects.get_or_create(
+                id_siswa=siswa, 
+                id_item=item_evaluasi,
+            )
+            ProgresItem.objects.filter(id_siswa=siswa, id_item=item_evaluasi).update(status='selesai')
+            
+    except Exception as e:
+        # Menangani error update progres secara pasif
+        pass
+
+    # 4. Redirect ke halaman nilai
+    # Ini yang membuat halaman hasil muncul setelah submit, seperti kuis.
     return redirect("evaluasi_nilai_detail", hasil_id=hasil_evaluasi_obj.id_hasil_evaluasi)
 
-# B. Ubah `evaluasi_nilai_detail` (Mengirimkan Konteks):
 
+# --- Fungsi untuk Menampilkan Nilai Evaluasi ---
 def evaluasi_nilai_detail(request, hasil_id):
-    siswa = get_logged_in_user(request)
+    """Menampilkan detail nilai evaluasi dengan konteks sidebar."""
+    siswa = get_logged_in_user(request) 
     if not siswa:
         return redirect("login")
     
-    from .models import HasilEvaluasi
-    questions = EVALUASI_QUESTIONS_SERVER # Muat soal untuk hitung total
+    # ASUMSI: EVALUASI_QUESTIONS_SERVER sudah didefinisikan (Total soal 15)
+    questions = EVALUASI_QUESTIONS_SERVER 
     
     try:
+        # Ambil hasil evaluasi berdasarkan ID dan pastikan milik siswa yang login
         hasil_evaluasi = HasilEvaluasi.objects.get(id_hasil_evaluasi=hasil_id, id_siswa=siswa)
         
+        total_soal = len(questions) # Total soal 15
+        jawaban_salah = total_soal - hasil_evaluasi.total_benar
+
+        # Dapatkan Konteks Sidebar (PENTING)
+        sidebar_context = get_sidebar_status(siswa.id_pengguna)
+
         context = {
             "hasil_evaluasi": hasil_evaluasi,
-            "total_soal": len(questions),
-             "nama_user": siswa.nama_lengkap,
+            "total_soal": total_soal,
+            "jawaban_salah": jawaban_salah, 
+            "nama_user": siswa.nama_lengkap, 
+            "sidebar_status": sidebar_context, # Kirim status sidebar
         }
+        
+        if 'mode_fokus' in request.session:
+            del request.session['mode_fokus']
+
         return render(request, "evaluasi/nilaiEval.html", context)
 
     except HasilEvaluasi.DoesNotExist:
         messages.error(request, "Hasil evaluasi tidak ditemukan atau bukan milik Anda.")
-        return redirect("landing")
+        return redirect("dashboard")
 
-
-# ---------- HALAMAN GURU ----------
-def dashboard(request):
-    return render(request, "halaman guru/dashboard.html")
-
-
-def data_nilai(request):
-    return render(request, "halaman guru/data-nilai.html")
-
-
-def data_siswa(request):
-    return render(request, "halaman guru/data-siswa.html")
-
+    except HasilEvaluasi.DoesNotExist:
+        messages.error(request, "Hasil evaluasi tidak ditemukan atau bukan milik Anda.")
+        return redirect("dashboard")
 
 # ---------- KUIS ----------
 def kuis_petunjuk(request):
     """
     Halaman petunjuk kuis.
-    Parameter: ?jenis=enkripsi / caesar / dekripsi
+    Memastikan sidebar sinkron dan mengecek apakah siswa sudah pernah mengerjakan.
     """
+    # 1. Cek Login
+    # Ganti 'get_logged_in_user' dengan logika manual jika helper belum diimport
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+    
+    # Ambil object user
+    user_id = request.session.get('id_pengguna')
+    try:
+        siswa = Pengguna.objects.get(id_pengguna=user_id)
+    except Pengguna.DoesNotExist:
+        return redirect('login')
+
     jenis = request.GET.get("jenis")
+    mode = request.GET.get("mode") # Menangkap parameter ?mode=ulangi
 
-    # Validasi agar ?jenis wajib ada
+    # Validasi Jenis Kuis
     if jenis not in ["enkripsi", "caesar", "dekripsi"]:
-        return render(
-            request, "kuis/kuis_invalid.html", {"error": "Jenis kuis tidak valid."}
-        )
+        return render(request, "kuis/kuis.html", {"error": "Jenis kuis tidak valid."})
 
-    return render(request, "kuis/kuis.html", {"jenis": jenis})
+    # 2. LOGIKA REDIRECT KE HASIL (Jika sudah pernah & bukan mode ulangi)
+    NAMA_KUIS_DB = {
+        "enkripsi": "Kuis Enkripsi",
+        "caesar": "Kuis Caesar Cipher",
+        "dekripsi": "Kuis Dekripsi"
+    }
+
+    # Jika BUKAN sedang mengulang, cek apakah sudah ada nilai?
+    if mode != 'ulangi':
+        try:
+            nama_db = NAMA_KUIS_DB.get(jenis)
+            kuis_obj = Kuis.objects.get(nama_kuis=nama_db)
+            
+            # Cek apakah ada hasil kuis untuk siswa ini
+            last_result = HasilKuis.objects.filter(id_siswa=siswa, id_kuis=kuis_obj).last()
+            
+            if last_result:
+                # Jika sudah ada, lempar langsung ke halaman nilai
+                return redirect('kuis_nilai_detail', hasil_id=last_result.id_hasil_kuis)
+                
+        except Kuis.DoesNotExist:
+            pass 
+        except Exception as e:
+            print(f"Error cek history kuis: {e}")
+
+    status_sidebar = get_sidebar_status(user_id) 
+
+    context = {
+        "jenis": jenis,
+        "sidebar_status": status_sidebar  # <--- WAJIB DIKIRIM KE TEMPLATE
+    }
+
+    return render(request, "kuis/kuis.html", context)
 
 
 def kuis_pengerjaan(request):
     """
     Halaman pengerjaan kuis.
-    Parameter: ?jenis=enkripsi / caesar / dekripsi
     """
-    jenis = request.GET.get("jenis")
+    # 1. Cek Login
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
 
-    # Ambil timestamp saat ini
+    jenis = request.GET.get("jenis")
     current_time_stamp = int(time.time())
 
     if jenis not in ["enkripsi", "caesar", "dekripsi"]:
         return render(
-            request, "kuis/kuis_invalid.html", {"error": "Jenis kuis tidak valid."}
+            request, "kuis/kuis.html", {"error": "Jenis kuis tidak valid."}
         )
-    return render(request, "kuis/kuis_pengerjaan.html", {"jenis": jenis})
+    
+    list_soal = QUIZ_QUESTIONS_SERVER.get(jenis, [])
+
+    # 2. 👇 TAMBAHKAN INI: Ambil Status Sidebar
+    user_id = request.session.get('id_pengguna')
+    status_sidebar = get_sidebar_status(user_id)
 
     context = {
         "jenis": jenis,
-        "time": current_time_stamp,  # Teruskan timestamp ke template
+        "time": current_time_stamp,
+        "questions": list_soal,
+        "sidebar_status": status_sidebar # 3. 👇 Kirim ke HTML
     }
 
     return render(request, "kuis/kuis_pengerjaan.html", context)
 
 
-
 def get_logged_in_user(request):
     """Mengambil objek Pengguna dari session jika ada."""
-    user_id = request.session.get("user_id")
+    # GANTI 'user_id' MENJADI 'id_pengguna' (Sesuai login_view)
+    user_id = request.session.get("id_pengguna") 
     if user_id:
         try:
             return Pengguna.objects.get(id_pengguna=user_id)
         except Pengguna.DoesNotExist:
-            # Jika user_id ada di session tetapi objek tidak ada di DB
             return None
     return None
-
 
 # ⚠️ DATA SOAL KUIS UNTUK VALIDASI SERVER
 QUIZ_QUESTIONS_SERVER = {
@@ -479,6 +582,8 @@ QUIZ_QUESTIONS_SERVER = {
 KUIST_ID_MAP = {"enkripsi": 1, "caesar": 2, "dekripsi": 3}
 
 
+# main/views.py
+
 @require_POST
 def simpan_kuis_nilai(request):
     siswa = get_logged_in_user(request)
@@ -489,68 +594,81 @@ def simpan_kuis_nilai(request):
     jenis = request.POST.get("jenis")
     waktu_pengerjaan = int(request.POST.get("waktu_pengerjaan", 0))
 
-    if jenis not in KUIST_ID_MAP:
+    # PETA NAMA KUIS
+    NAMA_KUIS_DB = {
+        "enkripsi": "Kuis Enkripsi",
+        "caesar": "Kuis Caesar Cipher",
+        "dekripsi": "Kuis Dekripsi"
+    }
+
+    if jenis not in NAMA_KUIS_DB:
         messages.error(request, "Jenis kuis tidak valid.")
         return redirect("landing")
 
-    kuis_id = KUIST_ID_MAP[jenis]
-    kuis_obj = Kuis.objects.get(id_kuis=kuis_id)
+    try:
+        nama_db = NAMA_KUIS_DB[jenis]
+        kuis_obj = Kuis.objects.get(nama_kuis=nama_db)
+    except Kuis.DoesNotExist:
+        messages.error(request, f"Data kuis '{nama_db}' tidak ditemukan di database.")
+        return redirect("dashboard")
+
     questions = QUIZ_QUESTIONS_SERVER.get(jenis, [])
 
-    # 1. Hitung Ulang dan Validasi Skor di Server
+    # 1. Hitung Skor
     skor_sebenarnya = 0
     rincian_jawaban_list = []
 
     for i, q in enumerate(questions):
         q_num = i + 1
-        # Mengambil jawaban siswa (berbentuk teks/pilihan)
         jawaban_siswa_text = request.POST.get(f"jawaban_{q_num}", "(kosong)")
-
-        # Mengambil jawaban benar (teks/pilihan) dari data soal server
         jawaban_benar_text = q["options"][q["correct"]]
 
         is_benar = jawaban_siswa_text == jawaban_benar_text
         if is_benar:
-            skor_sebenarnya += 20
+            skor_sebenarnya += 20 
+        
         rincian_jawaban_list.append(
-            {
-                "id_pertanyaan_json": str(q_num),  # ID di JSON adalah nomor urut
-                "teks_pertanyaan": q["question"],
-                "jawaban_siswa": jawaban_siswa_text,
-                "is_benar": is_benar,
-            }
+            RincianJawaban(
+                id_pertanyaan_json=str(q_num),
+                teks_pertanyaan=q["question"],
+                jawaban_siswa=jawaban_siswa_text,
+                jawaban_benar=jawaban_benar_text,
+                is_benar=is_benar,
+            )
         )
 
-    # 2. Simpan Hasil Kuis Ringkasan
-    existing_attempts = HasilKuis.objects.filter(
-        id_siswa=siswa, id_kuis=kuis_obj
-    ).count()
-    percobaan_ke = existing_attempts + 1
-
+    # 2. Simpan Hasil Kuis
+    existing_attempts = HasilKuis.objects.filter(id_siswa=siswa, id_kuis=kuis_obj).count()
+    
     hasil_kuis_obj = HasilKuis.objects.create(
         id_siswa=siswa,
         id_kuis=kuis_obj,
         skor_kuis=skor_sebenarnya,
         waktu_kuis=waktu_pengerjaan,
-        percobaan_kuis=percobaan_ke,
+        percobaan_kuis=existing_attempts + 1,
     )
 
-    # 3. Simpan Rincian Jawaban
-    rincian_batch = []
+    # 3. Simpan Rincian
     for rincian in rincian_jawaban_list:
-        rincian_batch.append(
-            RincianJawaban(
-                id_hasil_kuis=hasil_kuis_obj,
-                id_pertanyaan_json=rincian["id_pertanyaan_json"],
-                teks_pertanyaan=rincian["teks_pertanyaan"],
-                jawaban_siswa=rincian["jawaban_siswa"],
-                is_benar=rincian["is_benar"],
-            )
-        )
-    RincianJawaban.objects.bulk_create(rincian_batch)
+        rincian.id_hasil_kuis = hasil_kuis_obj
+    RincianJawaban.objects.bulk_create(rincian_jawaban_list)
 
-    # 4. Redirect ke Halaman Nilai
-    # Redirect ke fungsi baru dengan ID hasil kuis
+    # 4. Update Progres Item (BUKA GEMBOK)
+    # ⚠️ LOGIKA BARU: Hanya tandai 'selesai' jika NILAI >= 70 (KKM)
+    KKM = 70
+    if skor_sebenarnya >= KKM:
+        try:
+            item_materi = SectionItem.objects.filter(id_kuis=kuis_obj).first()
+            if item_materi:
+                ProgresItem.objects.get_or_create(
+                    id_siswa=siswa, 
+                    id_item=item_materi,
+                    defaults={'status': 'selesai'}
+                )
+                ProgresItem.objects.filter(id_siswa=siswa, id_item=item_materi).update(status='selesai')
+        except Exception as e:
+            print(f"Gagal update progres kuis: {e}")
+
     return redirect("kuis_nilai_detail", hasil_id=hasil_kuis_obj.id_hasil_kuis)
 
 
@@ -564,79 +682,281 @@ def kuis_nilai_detail(request, hasil_id):
         rincian_jawaban = hasil_kuis.rincian_jawaban.all()
 
         jenis_kuis = hasil_kuis.id_kuis.nama_kuis.lower()
-        next_url_name = (
-            "landing"  # Default kembali ke landing jika tidak ada yang cocok
-        )
+        
+        # Inisialisasi jenis kuis pendek
+        jenis_kuis_pendek = ""
+        next_url_name = "dashboard"
+        prev_url_name = "dashboard" 
 
-        if jenis_kuis == "enkripsi":
-            # Jika dari kuis enkripsi, lanjutkan ke materi caesar
-            next_url_name = "caesar"
-        elif jenis_kuis == "caesar":
-            # Jika dari kuis caesar, lanjutkan ke materi dekripsi
+        # Tentukan Link Selanjutnya, Sebelumnya, dan Jenis Kuis Pendek
+        if "enkripsi" in jenis_kuis:
+            jenis_kuis_pendek = "enkripsi"
+            next_url_name = "caesar"        
+            prev_url_name = "enkripsi"   
+        elif "caesar" in jenis_kuis:
+            jenis_kuis_pendek = "caesar"
             next_url_name = "dekripsi"
-        elif jenis_kuis == "dekripsi":
-            # Jika dari kuis dekripsi, lanjutkan ke petunjuk evaluasi
+            prev_url_name = "aktivitas3"    
+        elif "dekripsi" in jenis_kuis:
+            jenis_kuis_pendek = "dekripsi"
             next_url_name = "evaluasi_petunjuk"
+            prev_url_name = "aktivitas4"    
 
         correct_count = rincian_jawaban.filter(is_benar=True).count()
+        is_lulus = hasil_kuis.skor_kuis >= 70
+
+        # 👇 TAMBAHAN PENTING: Ambil Status Sidebar agar menu terbuka sesuai progres
+        user_id = request.session.get('id_pengguna')
+        status_sidebar = get_sidebar_status(user_id)
 
         context = {
             "hasil_kuis": hasil_kuis,
             "rincian_jawaban": rincian_jawaban,
             "correct_count": correct_count,
-            "next_url_name": next_url_name,  # Kirim Named URL ke template
+            "next_url_name": next_url_name,
+            "prev_url_name": prev_url_name,
+            "is_lulus": is_lulus,
+            "jenis_kuis_pendek": jenis_kuis_pendek, 
+            "sidebar_status": status_sidebar, 
         }
         return render(request, "kuis/nilaiKuis.html", context)
 
     except HasilKuis.DoesNotExist:
-        messages.error(request, "Hasil kuis tidak ditemukan atau bukan milik Anda.")
-        return redirect("landing")
+        messages.error(request, "Hasil kuis tidak ditemukan.")
+        return redirect("dashboard")
 
 
 # ---------- MATERI ----------
-def aktivitas1(request):
-    return render(request, "materi/aktivitas1.html")
+# main/views.py
 
+def aktivitas1(request):
+    if 'id_pengguna' not in request.session: 
+        return redirect('login')
+    
+    user_id = request.session['id_pengguna']
+    
+    # 1. Ambil Status Sidebar (untuk menu gembok)
+    sidebar_status = get_sidebar_status(user_id)
+
+    # 2. Cek Status Pengerjaan Item Ini
+    status_pengerjaan = "belum"
+    try:
+        # Cari Item "Aktivitas" di Section "Pengenalan"
+        item_obj = SectionItem.objects.get(
+            nama_item__iexact="Aktivitas",
+            id_section__nama_section__iexact="Pengenalan"
+        )
+        
+        # Cek di tabel Progres
+        progres = ProgresItem.objects.filter(
+            id_siswa__id_pengguna=user_id,
+            id_item=item_obj
+        ).first()
+        
+        if progres and progres.status == 'selesai':
+            status_pengerjaan = "selesai"
+            
+    except SectionItem.DoesNotExist:
+        print("Item Aktivitas (Pengenalan) tidak ditemukan di database")
+
+    context = {
+        'sidebar_status': sidebar_status,
+        'status_pengerjaan': status_pengerjaan  # Kirim ke template
+    }
+    return render(request, 'dashboard/siswa/aktivitas1.html', context)
 
 def aktivitas2(request):
-    return render(request, "materi/aktivitas2.html")
+    if 'id_pengguna' not in request.session: 
+        return redirect('login')
+    
+    user_id = request.session['id_pengguna']
+    
+    # 1. Cek Status Gembok Sidebar (Kode Lama)
+    sidebar_status = get_sidebar_status(user_id)
+    if not sidebar_status['enkripsi_buka']:
+        return redirect('dashboard')
+
+    # 2. [BARU] Cek Apakah Item Ini Sudah Selesai?
+    status_pengerjaan = "belum" # Default
+    try:
+        # Cari Item "Aktivitas" di Section "Enkripsi"
+        item_obj = SectionItem.objects.get(
+            nama_item__iexact="Aktivitas",
+            id_section__nama_section__iexact="Enkripsi"
+        )
+        
+        # Cek Progres User
+        progres = ProgresItem.objects.filter(
+            id_siswa__id_pengguna=user_id,
+            id_item=item_obj
+        ).first()
+        
+        if progres and progres.status == 'selesai':
+            status_pengerjaan = "selesai"
+            
+    except SectionItem.DoesNotExist:
+        print("Item tidak ditemukan di database")
+
+    context = {
+        'sidebar_status': sidebar_status,
+        'status_pengerjaan': status_pengerjaan # Kirim ke HTML
+    }
+    return render(request, 'dashboard/siswa/aktivitas2.html', context)
 
 
 def aktivitas3(request):
-    return render(request, "materi/aktivitas3.html")
+    if 'id_pengguna' not in request.session: 
+        return redirect('login')
+    
+    user_id = request.session['id_pengguna']
+    
+    # 1. Cek Status Gembok Sidebar
+    sidebar_status = get_sidebar_status(user_id)
+    # Anda mungkin ingin menambahkan cek gembok di sini, misal:
+    # if not sidebar_status['caesar_buka']: return redirect('dashboard')
 
+    # 2. [BARU] Cek Apakah Item Ini Sudah Selesai?
+    status_pengerjaan = "belum" # Default
+    try:
+        # Cari Item "Aktivitas" di Section "Caesar Cipher"
+        item_obj = SectionItem.objects.get(
+            nama_item__iexact="Aktivitas",
+            id_section__nama_section__iexact="Caesar Cipher" # <- PENTING: Section Caesar Cipher
+        )
+        
+        # Cek Progres User
+        progres = ProgresItem.objects.filter(
+            id_siswa__id_pengguna=user_id,
+            id_item=item_obj
+        ).first()
+        
+        if progres and progres.status == 'selesai':
+            status_pengerjaan = "selesai"
+            
+    except SectionItem.DoesNotExist:
+        print("Item Aktivitas Caesar Cipher tidak ditemukan di database")
+
+    context = {
+        'sidebar_status': sidebar_status,
+        'status_pengerjaan': status_pengerjaan # Kirim ke HTML
+    }
+    return render(request, 'dashboard/siswa/aktivitas3.html', context)
+
+
+# views.py (Ganti fungsi aktivitas4 dengan kode ini)
 
 def aktivitas4(request):
-    return render(request, "materi/aktivitas4.html")
+    if 'id_pengguna' not in request.session: return redirect('login')
+    
+    user_id = request.session['id_pengguna']
+    
+    # 1. Cek Status Gembok Sidebar
+    sidebar_status = get_sidebar_status(user_id)
+    # Anda mungkin ingin menambahkan cek gembok di sini agar aktivitas tidak bisa diakses jika Bab Dekripsi belum terbuka.
+    # if not sidebar_status['dekripsi_buka']: return redirect('dashboard')
 
+    # 2. [BARU] Cek Apakah Item Ini Sudah Selesai?
+    status_pengerjaan = "belum" # Default
+    try:
+        # Cari Item "Aktivitas" di Section "Dekripsi"
+        item_obj = SectionItem.objects.get(
+            nama_item__iexact="Aktivitas",
+            id_section__nama_section__iexact="Dekripsi" # <- PENTING: Section Dekripsi
+        )
+        
+        # Cek Progres User
+        progres = ProgresItem.objects.filter(
+            id_siswa__id_pengguna=user_id,
+            id_item=item_obj
+        ).first()
+        
+        if progres and progres.status == 'selesai':
+            status_pengerjaan = "selesai"
+            
+    except SectionItem.DoesNotExist:
+        print("Item Aktivitas Dekripsi tidak ditemukan di database. Pastikan seeder sudah dijalankan!")
+
+    context = {
+        'sidebar_status': sidebar_status,
+        'status_pengerjaan': status_pengerjaan # Kirim ke HTML
+    }
+    return render(request, 'dashboard/siswa/aktivitas4.html', context)
+
+def pengenalan_view(request):
+    if 'id_pengguna' not in request.session: return redirect('login')
+    
+    context = {
+        'sidebar_status': get_sidebar_status(request.session['id_pengguna'])
+    }
+    return render(request, 'dashboard/siswa/pengenalan.html', context)
 
 def caesar(request):
-    return render(request, "materi/caesarcipher.html")
+    # 1. Cek Login
+    siswa = get_logged_in_user(request) # atau logika cek session manual Anda
+    if not siswa:
+        return redirect('login')
+    
+    # 2. Ambil Status Sidebar
+    user_id = request.session.get('id_pengguna')
+    status_sidebar = get_sidebar_status(user_id)
 
+    context = {
+        'sidebar_status': status_sidebar
+    }
+    
+    # 3. Render ke lokasi file BARU
+    return render(request, 'dashboard/siswa/caesarcipher.html', context)
 
 def caesar2(request):
-    return render(request, "materi/caesarcipher2.html")
+    # 1. Cek Login
+    siswa = get_logged_in_user(request) # atau logika cek session manual Anda
+    if not siswa:
+        return redirect('login')
+    
+    # 2. Ambil Status Sidebar
+    user_id = request.session.get('id_pengguna')
+    status_sidebar = get_sidebar_status(user_id)
 
+    context = {
+        'sidebar_status': status_sidebar
+    }
+    
+    # 3. Render ke lokasi file BARU
+    return render(request, 'dashboard/siswa/caesarcipher2.html', context)
 
-# Jika kamu punya file tambahan seperti enkripsi/deskripsi/pengenalan:
 def dekripsi(request):
-    return render(request, "materi/dekripsi.html")
+    siswa = get_logged_in_user(request) # atau logika cek session manual Anda
+    if not siswa:
+        return redirect('login')
+    
+    # 2. Ambil Status Sidebar
+    user_id = request.session.get('id_pengguna')
+    status_sidebar = get_sidebar_status(user_id)
 
+    context = {
+        'sidebar_status': status_sidebar
+    }
+    
+    # 3. Render ke lokasi file BARU
+    return render(request, 'dashboard/siswa/dekripsi.html', context)
 
 def dekripsi2(request):
-    return render(request, "materi/dekripsi2.html")
-
+    if 'id_pengguna' not in request.session: return redirect('login')
+    
+    context = {
+        'sidebar_status': get_sidebar_status(request.session['id_pengguna'])
+    }
+    return render(request, 'dashboard/siswa/dekripsi2.html', context)
 
 def enkripsi(request):
-    return render(request, "materi/enkripsi.html")
-
-
-def pengenalan(request):
-    return render(request, "materi/pengenalan.html")
-
+    if 'id_pengguna' not in request.session: return redirect('login')
+    
+    context = {
+        'sidebar_status': get_sidebar_status(request.session['id_pengguna'])
+    }
+    return render(request, 'dashboard/siswa/enkripsi.html', context)
 
 # ---------- TANTANGAN (LOGIKA DIPERBAIKI) ----------
-
 @butuh_login_siswa
 def tantangan(request):
     # Ambil stage terakhir dari session, jika tidak ada, mulai dari 1
@@ -719,146 +1039,13 @@ def stage10(request):
 def landing(request):
     return render(request, "landing.html")
 
-
-def register_user(request, peran):
-    """
-    Fungsi helper untuk menangani logic pendaftaran Guru atau Siswa.
-    """
-    if request.method == "POST":
-        nama_lengkap = request.POST.get("nama_lengkap")
-        email = request.POST.get("email")
-        kata_sandi = request.POST.get("kata_sandi")
-        konfirmasi_sandi = request.POST.get("konfirmasi_sandi")
-
-        # 1. Validasi input
-        if kata_sandi != konfirmasi_sandi:
-            messages.error(request, "Kata sandi dan konfirmasi kata sandi tidak cocok.")
-            # Kembali ke halaman formulir yang sesuai
-            template = "guru-daftar.html" if peran == "guru" else "siswa-daftar.html"
-            return render(request, template, request.POST)
-
-        # 2. Cek apakah email sudah terdaftar
-        if Pengguna.objects.filter(email=email).exists():
-            messages.error(request, f'Email "{email}" sudah terdaftar. Silakan login.')
-            template = "guru-daftar.html" if peran == "guru" else "siswa-daftar.html"
-            return render(request, template, request.POST)
-
-        # 3. Proses Hashing Kata Sandi dan Simpan
-        try:
-            # Hashing kata sandi sebelum disimpan
-            hashed_password = make_password(kata_sandi)
-
-            Pengguna.objects.create(
-                nama_lengkap=nama_lengkap,
-                email=email,
-                # Simpan kata sandi yang sudah di-hash
-                kata_sandi=hashed_password,
-                peran=peran,
-            )
-            messages.success(request, "Pendaftaran berhasil! Silakan login.")
-            return redirect("login")  # Arahkan ke halaman login
-
-        except Exception as e:
-            messages.error(request, f"Terjadi kesalahan saat menyimpan data: {e}")
-            template = "guru-daftar.html" if peran == "guru" else "siswa-daftar.html"
-            return render(request, template, request.POST)
-
-    # Untuk permintaan GET, tampilkan formulir
-    template = "guru-daftar.html" if peran == "guru" else "siswa-daftar.html"
-    return render(request, template)
-
-
-def guru_daftar(request):
-    # Panggil fungsi register_user dengan peran 'guru'
-    return register_user(request, peran="guru")
-
-
-def siswa_daftar(request):
-    # Panggil fungsi register_user dengan peran 'siswa'
-    return register_user(request, peran="siswa")
-
-
-def pilihan_daftar(request):
-    return render(request, "pilihan-daftar.html")
-
-
-def login_user(request):
-    """
-    Menangani proses login pengguna.
-    """
-    if request.method == "POST":
-        email = request.POST.get("email")
-        kata_sandi = request.POST.get("kata_sandi")
-
-        try:
-            user = Pengguna.objects.get(email=email)
-
-            # Verifikasi Kata Sandi dengan Hashing
-            # Menggunakan check_password untuk membandingkan kata sandi yang dimasukkan
-            # dengan kata sandi yang di-hash di database.
-            if check_password(kata_sandi, user.kata_sandi):
-                # Login Berhasil
-                request.session["user_id"] = user.id_pengguna
-                request.session["user_role"] = user.peran
-
-                # Menyimpan nama lengkap ke session agar bisa dipanggil di HTML navbar
-                request.session["nama_lengkap"] = user.nama_lengkap
-                
-                # Reset progress stage untuk sesi baru (agar aman)
-                request.session['max_stage'] = 1
-                
-                messages.success(request, f"Selamat datang, {user.nama_lengkap}!")
-
-                # Arahkan (Redirect) sesuai peran
-                if user.peran == "guru":
-                    # Guru diarahkan ke dashboard guru
-                    return redirect("dashboard")
-                else:
-                    # Siswa diarahkan ke landing page
-                    return redirect("landing")
-
-            else:
-                # Kata Sandi Salah
-                messages.error(request, "Kata sandi salah.")
-                return render(request, "login.html", {"email": email})
-
-        except Pengguna.DoesNotExist:
-            # Email Tidak Ditemukan
-            messages.error(request, "Email tidak terdaftar.")
-            return render(request, "login.html", {"email": email})
-
-        except Exception as e:
-            messages.error(request, f"Terjadi kesalahan saat login: {e}")
-            return render(request, "login.html")
-
-    # Untuk permintaan GET, tampilkan formulir login
-    return render(request, "login.html")
-
-
-def logout_user(request):
-    request.session.flush()
-    """
-    Menghapus data session dan melakukan logout.
-    """
-    if "user_id" in request.session:
-        del request.session["user_id"]
-    if "user_role" in request.session:
-        del request.session["user_role"]
-    messages.info(request, "Anda telah berhasil logout.")
-    return redirect("landing")
-
 def leaderboard(request):
-    # ... (tidak berubah)
-    return render(request, "leaderboard.html")
-
-def tes(request):
-    # ... (tidak berubah)
-    return render(request, "tes.html")
+    return render(request, "tantangan/leaderboard.html")
 
 @butuh_login_siswa
 @require_POST
 def simpan_skor_final_view(request):
-    user_id = request.session.get('user_id')
+    user_id = request.session.get('id_pengguna')
     try:
         siswa_sekarang = Pengguna.objects.get(id_pengguna=user_id)
         data = json.loads(request.body)
@@ -891,7 +1078,416 @@ def simpan_skor_final_view(request):
 def leaderboard(request):
     peringkat_list = PeringkatFinal.objects.select_related('siswa').all().order_by('-total_skor', 'total_waktu_detik')
     context = {'peringkat_list': peringkat_list}
-    return render(request, "leaderboard.html", context)
+    return render(request, "tantangan/leaderboard.html", context)
 
-def tes(request):
-    return render(request, "tes.html")
+# ---------- PUNYA RANIIIIII ----------
+def siswa_daftar(request):
+    if request.method == 'POST':
+        nama = request.POST.get('nama_lengkap')
+        email_input = request.POST.get('email')
+        sandi = request.POST.get('kata_sandi')
+        konfirmasi = request.POST.get('konfirmasi_sandi')
+
+        # 2. Validasi
+        if sandi != konfirmasi:
+            print("ERROR: Password tidak cocok!") # Debug
+            messages.error(request, 'Kata sandi tidak cocok!')
+            return render(request, 'auth/register_guru.html')
+
+        if Pengguna.objects.filter(email=email_input).exists():
+            print("ERROR: Email sudah ada!") # Debug
+            messages.error(request, 'Email sudah terdaftar!')
+            return render(request, 'auth/register_siswa.html')
+
+        # 3. Simpan
+        try:
+            Pengguna.objects.create(
+                nama_lengkap=nama,
+                email=email_input,
+                kata_sandi=sandi,
+                peran='siswa'
+            )
+            messages.success(request, 'Akun kamu berhasil dibuat! Silakan masuk.')
+            return redirect('login')
+        except Exception as e:
+            print(f"ERROR DATABASE: {e}") # Debug Penting!
+            messages.error(request, f'Terjadi kesalahan: {e}')
+
+    return render(request, 'auth/register_siswa.html')
+
+def guru_daftar(request):
+    if request.method == 'POST':
+        nama = request.POST.get('nama_lengkap')
+        email_input = request.POST.get('email')
+        sandi = request.POST.get('kata_sandi')
+        konfirmasi = request.POST.get('konfirmasi_sandi')
+
+        # 2. Validasi
+        if sandi != konfirmasi:
+            print("ERROR: Password tidak cocok!") # Debug
+            messages.error(request, 'Kata sandi tidak cocok!')
+            return render(request, 'auth/register_guru.html')
+
+        if Pengguna.objects.filter(email=email_input).exists():
+            print("ERROR: Email sudah ada!") # Debug
+            messages.error(request, 'Email sudah terdaftar!')
+            return render(request, 'auth/register_guru.html')
+
+        # 3. Simpan
+        try:
+            Pengguna.objects.create(
+                nama_lengkap=nama,
+                email=email_input,
+                kata_sandi=sandi,
+                peran='guru'
+            )
+            messages.success(request, 'Akun Guru berhasil dibuat! Silakan masuk.')
+            return redirect('login')
+        except Exception as e:
+            print(f"ERROR DATABASE: {e}") # Debug Penting!
+            messages.error(request, f'Terjadi kesalahan: {e}')
+
+    return render(request, 'auth/register_guru.html')
+
+def login_view(request):
+    if request.method == 'POST':
+        email_input = request.POST.get('email') 
+        password_input = request.POST.get('password')
+
+        try:
+            # 1. Cari pengguna berdasarkan email
+            user = Pengguna.objects.get(email=email_input)
+
+            # 2. Cek Password (Plain text matching sesuai database anda)
+            if user.kata_sandi == password_input:
+                # 3. SUKSES: Simpan data ke SESSION (Kantung Saku Browser)
+                request.session['id_pengguna'] = user.id_pengguna
+                request.session['nama_lengkap'] = user.nama_lengkap
+                request.session['peran'] = user.peran
+                
+                messages.success(request, f'Selamat datang, {user.nama_lengkap}!')
+                
+                # Redirect sesuai peran (Nanti bisa diarahkan ke dashboard khusus)
+                return redirect('dashboard') 
+            
+            else:
+                messages.error(request, 'Kata sandi salah!')
+        
+        except Pengguna.DoesNotExist:
+            messages.error(request, 'Email tidak terdaftar!')
+
+    return render(request, 'auth/login.html')
+
+def logout_view(request):
+    request.session.flush()
+    return redirect('login')
+
+def dashboard(request):
+    # Cek session menggunakan 'id_pengguna' (sesuai login_view)
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+    
+    user_id = request.session['id_pengguna']
+    role_user = request.session.get('peran')
+
+    if role_user == 'guru':
+        return render(request, 'dashboard/index.html')
+
+    # Cek Siswa
+    sudah_punya_kelas = AnggotaKelas.objects.filter(siswa_id=user_id).exists()
+
+    if sudah_punya_kelas:
+        # --- PERBAIKAN UTAMA DI SINI ---
+        # Kita harus mengambil status gembok dan mengirimnya ke template
+        context = {
+            'sidebar_status': get_sidebar_status(user_id) 
+        }
+        return render(request, 'dashboard/index.html', context)
+    else:
+        return redirect('input_token')
+
+def input_token_view(request):
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+
+    user_id = request.session['id_pengguna']
+    if AnggotaKelas.objects.filter(siswa_id=user_id).exists():
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        token_input = request.POST.get('token_kelas')
+        
+        try:
+            kelas_ditemukan = Kelas.objects.get(token=token_input)
+            
+            siswa_login = Pengguna.objects.get(id_pengguna=user_id)
+
+            AnggotaKelas.objects.create(
+                kelas=kelas_ditemukan,
+                siswa=siswa_login
+            )
+
+            messages.success(request, f'Berhasil bergabung ke kelas {kelas_ditemukan.nama_kelas}!')
+            return redirect('dashboard')
+            
+        except Kelas.DoesNotExist:
+            messages.error(request, 'Token tidak ditemukan! Pastikan kode benar.')
+        except Exception as e:
+            messages.error(request, f'Terjadi kesalahan: {e}')
+
+    return render(request, 'auth/input_token.html')
+
+def generate_token(length=6):
+    # Menghasilkan huruf besar + angka acak (Misal: 4F9JA2)
+    characters = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(characters) for _ in range(length))
+
+def kelola_kelas(request):
+    # 1. CEK LOGIN MANUAL (Sesuai style kode Anda)
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+
+    # 2. CEK PERAN (Hanya Guru)
+    if request.session.get('peran') != 'guru':
+        messages.error(request, "Akses ditolak. Halaman ini khusus Guru.")
+        return redirect('dashboard')
+
+    id_guru = request.session['id_pengguna']
+    obj_guru = get_object_or_404(Pengguna, id_pengguna=id_guru)
+
+    # --- LOGIKA TAMBAH KELAS ---
+    if request.method == 'POST':
+        nama_kelas_input = request.POST.get('nama_kelas')
+        
+        # Cek apakah guru ini sudah punya kelas dengan nama yang sama (case-insensitive)
+        cek_duplikat = Kelas.objects.filter(
+            guru=obj_guru, 
+            nama_kelas__iexact=nama_kelas_input
+        ).exists()
+
+        if cek_duplikat:
+            # Kirim pesan error (nanti ditangkap SweetAlert)
+            messages.error(request, f'Gagal! Kelas dengan nama "{nama_kelas_input}" sudah ada.')
+            return redirect('kelola_kelas')
+
+        # Jika lolos validasi, lanjut buat token dan simpan
+        token_unik = generate_token()
+        while Kelas.objects.filter(token=token_unik).exists():
+            token_unik = generate_token()
+
+        try:
+            Kelas.objects.create(
+                guru=obj_guru,
+                nama_kelas=nama_kelas_input,
+                token=token_unik
+            )
+            messages.success(request, 'Kelas berhasil dibuat!')
+            return redirect('kelola_kelas')
+        except Exception as e:
+            messages.error(request, f'Gagal membuat kelas: {e}')
+
+    # --- TAMPILKAN DATA ---
+    daftar_kelas = Kelas.objects.filter(guru=obj_guru).order_by('-id_kelas')
+
+    context = {
+        'daftar_kelas': daftar_kelas
+    }
+    return render(request, 'dashboard/guru/data_kelas.html', context)
+
+
+def hapus_kelas(request, id_kelas):
+    # 1. CEK LOGIN MANUAL
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+        
+    try:
+        # Pastikan hanya menghapus kelas milik guru yang sedang login
+        kelas = Kelas.objects.get(id_kelas=id_kelas, guru__id_pengguna=request.session['id_pengguna'])
+        kelas.delete()
+        messages.success(request, 'Kelas berhasil dihapus.')
+    except Kelas.DoesNotExist:
+        messages.error(request, 'Kelas tidak ditemukan atau bukan milik Anda.')
+    
+    return redirect('kelola_kelas')
+
+
+def edit_kelas(request, id_kelas):
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+    
+    # Ambil data kelas spesifik
+    kelas_target = get_object_or_404(Kelas, id_kelas=id_kelas, guru__id_pengguna=request.session['id_pengguna'])
+
+    if request.method == 'POST':
+        nama_baru = request.POST.get('nama_kelas')
+        
+        kelas_target.nama_kelas = nama_baru
+        kelas_target.save()
+        
+        messages.success(request, 'Nama kelas berhasil diperbarui!')
+    
+    return redirect('kelola_kelas')
+
+def data_siswa(request):
+    # 1. Cek Login & Peran
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+    
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+
+    id_guru = request.session['id_pengguna']
+    
+    # 2. Ambil parameter Filter & Search dari URL (GET request)
+    filter_kelas_id = request.GET.get('kelas') # ID kelas dari dropdown
+    search_query = request.GET.get('q')        # Kata kunci pencarian nama
+
+    # 3. Query Dasar: Ambil semua anggota kelas yang gurunya adalah user saat ini
+    data_anggota = AnggotaKelas.objects.filter(kelas__guru__id_pengguna=id_guru).select_related('siswa', 'kelas')
+
+    # 4. Terapkan Filter Kelas (Jika ada)
+    if filter_kelas_id:
+        data_anggota = data_anggota.filter(kelas__id_kelas=filter_kelas_id)
+
+    # 5. Terapkan Pencarian Nama (Jika ada)
+    if search_query:
+        data_anggota = data_anggota.filter(siswa__nama_lengkap__icontains=search_query)
+
+    # 6. Urutkan berdasarkan Nama Kelas lalu Nama Siswa
+    data_anggota = data_anggota.order_by('kelas__nama_kelas', 'siswa__nama_lengkap')
+
+    # 7. Ambil daftar semua kelas guru ini (Untuk isi opsi Dropdown Filter)
+    daftar_kelas_guru = Kelas.objects.filter(guru__id_pengguna=id_guru).order_by('nama_kelas')
+
+    context = {
+        'data_anggota': data_anggota,
+        'daftar_kelas_guru': daftar_kelas_guru,
+        'selected_kelas': int(filter_kelas_id) if filter_kelas_id else None,
+        'search_query': search_query
+    }
+
+    return render(request, 'dashboard/guru/data_siswa.html', context)
+
+def hapus_anggota_kelas(request, id_anggota):
+    # 1. Cek Login
+    if 'id_pengguna' not in request.session:
+        return redirect('login')
+    
+    # 2. Cek Peran Guru
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+
+    try:
+        # 3. Cari data keanggotaan
+        # Kita juga cek 'kelas__guru__id_pengguna' untuk keamanan
+        # Supaya guru A tidak bisa menghapus siswa dari kelas milik guru B
+        anggota = get_object_or_404(AnggotaKelas, 
+                                    id_anggota=id_anggota, 
+                                    kelas__guru__id_pengguna=request.session['id_pengguna'])
+        
+        nama_siswa = anggota.siswa.nama_lengkap
+        nama_kelas = anggota.kelas.nama_kelas
+        
+        # 4. Hapus data (Siswa keluar dari kelas, tapi akun tetap ada)
+        anggota.delete()
+        
+        messages.success(request, f'Berhasil mengeluarkan {nama_siswa} dari kelas {nama_kelas}.')
+        
+    except Exception as e:
+        messages.error(request, 'Gagal menghapus siswa atau Anda tidak memiliki akses.')
+
+    return redirect('data_siswa')
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import SectionItem, ProgresItem, Pengguna
+import json
+
+def get_sidebar_status(user_id):
+    # Ambil semua item yang SUDAH SELESAI
+    item_selesai = ProgresItem.objects.filter(
+        id_siswa__id_pengguna=user_id,
+        status='selesai'
+    ).values_list('id_item__id_section__nama_section', 'id_item__nama_item')
+    
+    selesai_set = set(item_selesai) # Contoh: {('Pengenalan', 'Aktivitas'), ...}
+
+    status = {
+        'pengenalan_buka': True,
+        
+        # Syarat Buka Bab Enkripsi: Aktivitas di Pengenalan selesai
+        'enkripsi_buka': ('Pengenalan', 'Aktivitas') in selesai_set,
+        
+        # Syarat Buka Kuis Enkripsi: Aktivitas di Enkripsi selesai
+        'enkripsi_kuis_buka': ('Enkripsi', 'Aktivitas') in selesai_set,
+
+        # Syarat Buka Bab Caesar: Kuis Enkripsi selesai
+        'caesar_buka': ('Enkripsi', 'Kuis Enkripsi') in selesai_set,
+        
+        # Syarat Buka Kuis Caesar: Aktivitas di Caesar selesai
+        'caesar_kuis_buka': ('Caesar Cipher', 'Aktivitas') in selesai_set,
+
+        # Syarat Buka Bab Dekripsi: Kuis Caesar Cipher selesai
+        'dekripsi_buka': ('Caesar Cipher', 'Kuis Caesar Cipher') in selesai_set,
+        
+        # Syarat Buka Kuis Dekripsi: Aktivitas di Dekripsi selesai
+        'dekripsi_kuis_buka': ('Dekripsi', 'Aktivitas') in selesai_set,
+        
+        # Syarat Buka Evaluasi: Kuis Dekripsi selesai
+        'evaluasi_buka': ('Dekripsi', 'Kuis Dekripsi') in selesai_set,
+    }
+    return status
+
+# --- API SIMPAN PROGRES ---
+@csrf_exempt
+def update_progres_item(request):
+    if request.method == 'POST' and 'id_pengguna' in request.session:
+        try:
+            data = json.loads(request.body)
+            req_section = data.get('section')
+            req_item = data.get('item')
+            
+            user_id = request.session['id_pengguna']
+            siswa = Pengguna.objects.get(id_pengguna=user_id)
+
+            # Cari Item di Database (iexact = tidak peduli huruf besar/kecil)
+            item_target = SectionItem.objects.filter(
+                id_section__nama_section__iexact=req_section, 
+                nama_item__iexact=req_item
+            ).first()
+
+            if item_target:
+                progres, created = ProgresItem.objects.get_or_create(
+                    id_siswa=siswa,
+                    id_item=item_target
+                )
+                progres.status = 'selesai'
+                progres.save()
+                
+                return JsonResponse({'status': 'success', 'message': 'Tersimpan!'})
+            else:
+                print(f"GAGAL: {req_section} - {req_item} tidak ditemukan di DB")
+                return JsonResponse({'status': 'error', 'message': 'Item tidak valid'})
+
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    
+    return JsonResponse({'status': 'error', 'message': 'Akses ditolak'})
+
+
+
+
+def index(request):
+    return render(request, 'landing/index.html')
+def login_page(request):
+    return render(request, 'login.html')
+def pilihan_daftar(request):
+    return render(request, 'auth/role_selection.html')
+

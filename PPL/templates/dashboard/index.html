@@ -1,0 +1,28 @@
+{% extends 'layouts/base_app.html' %}
+{% load static %}
+
+{% block title %}Dashboard Utama{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h4 class="page-title">Dashboard {{ request.session.peran|title }}</h4>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Selamat Datang!</div>
+                </div>
+                <div class="card-body">
+                    <h3>Halo, {{ request.session.nama_lengkap }}!</h3>
+                    <p class="lead">
+                        Anda telah berhasil masuk sebagai <strong>{{ request.session.peran|title }}</strong>.
+                        <br>
+                        Silakan pilih menu di sebelah kiri (Sidebar) atau menu cepat di atas (Header) untuk mulai beraktivitas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

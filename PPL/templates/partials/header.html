@@ -1,0 +1,108 @@
+{% load static %}
+
+<div id="landing-header-override">
+    
+    <div class="main-header" style="background: transparent !important; padding: 0;">
+        <div class="main-header-logo">
+            <div class="logo-header" data-background-color="white">
+                <a href="{% url 'index' %}" class="logo">
+                    <span class="fw-bold" style="color: #1B3C53; font-family: 'Lato', sans-serif;">CodeCracker</span>
+                </a>
+                <div class="nav-toggle">
+                    <button class="btn btn-toggle toggle-sidebar"><i class="gg-menu-right"></i></button>
+                    <button class="btn btn-toggle sidenav-toggler"><i class="gg-menu-left"></i></button>
+                </div>
+                <button class="topbar-toggler more"><i class="gg-more-vertical-alt"></i></button>
+            </div>
+        </div>
+        
+        <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg" 
+            style="background-color: #1B3C53 !important; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+
+            <div class="container-fluid px-5">
+
+                <!-- Toggler untuk layar kecil -->
+                <button class="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardNav" aria-controls="dashboardNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+                </button>
+
+                <!-- Wrapper Collapse -->
+                <div class="collapse navbar-collapse" id="dashboardNav">
+
+                    <!-- MENU KIRI -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 align-items-lg-center gap-lg-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Belajar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'tantangan' %}">Tantangan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'leaderboard' %}">Papan Peringkat</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Informasi</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </div>
+
+    <style>
+        /* 1. Navbar Container: Padding Normal, Tinggi Otomatis */
+        #landing-header-override .navbar-header {
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+            min-height: auto !important;
+        }
+
+        /* 2. Menu Link: Open Sans, Tebal, Besar, Putih Transparan */
+        #landing-header-override .navbar-nav .nav-item .nav-link {
+            font-family: 'Open Sans', sans-serif !important;
+            font-weight: 400 !important; 
+            font-size: 1.1rem !important; /* Ukuran font diperbesar agar mirip landing */
+            color: rgba(255, 255, 255, 0.55) !important; 
+            transition: all 0.3s ease;
+        }
+
+        /* 3. Hover Effect: Kuning & Naik */
+        #landing-header-override .navbar-nav .nav-item .nav-link:hover {
+            color: #F3C623 !important;
+            transform: translateY(-2px);
+        }
+
+        #landing-header-override .profile-pic .text-end {
+            display: block !important;
+        }
+
+        #landing-header-override .profile-pic span {
+            display: block !important;
+        }
+
+
+        @media (max-width: 991px) {
+            /* Buat menu menjadi kolom */
+            #landing-header-override .navbar-nav {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 10px !important;
+                padding-top: 10px;
+            }
+
+            /* Link full width */
+            #landing-header-override .navbar-nav .nav-link {
+                width: 100% !important;
+                padding: 10px 0 !important;
+            }
+
+            /* Hilangkan align-items-center yang bikin memanjang */
+            #landing-header-override .navbar-nav.align-items-lg-center {
+                align-items: flex-start !important;
+            }
+        }
+
+    </style>
+
+</div>

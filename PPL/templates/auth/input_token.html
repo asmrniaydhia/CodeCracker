@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Gabung Kelas - CodeCracker</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" href="{% static 'dashboard/assets/img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+
+    <script src="{% static 'dashboard/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Lato:400,700,900", "Open+Sans:400,600"] },
+        custom: {
+          families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+          urls: ["{% static 'dashboard/assets/css/fonts.min.css' %}"],
+        },
+        active: function () { sessionStorage.fonts = true; },
+      });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/kaiadmin.min.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #f5f9ee; /* Background Krem */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .token-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        .token-title {
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            color: #1B3C53;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .token-subtitle {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: 700;
+            color: #1B3C53;
+            text-align: left;
+            display: block;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #1B3C53;
+            font-size: 1.1rem;
+            text-align: center;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .form-control:focus {
+            border-color: #F3C623;
+            box-shadow: 0 0 0 0.2rem rgba(243, 198, 35, 0.25);
+        }
+
+        .btn-join {
+            background: #1B3C53;
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 6px;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        .btn-join:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            background-color: #1B3C53;
+            color: #F3C623;
+        }
+
+        .icon-header {
+            font-size: 3rem;
+            color: #F3C623;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="token-box">
+        <i class="fas fa-key icon-header"></i>
+        <h3 class="token-title">Masukkan Token Kelas</h3>
+        <p class="token-subtitle">Mintalah token unik kepada gurumu untuk mulai mengerjakan tugas.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3 text-start">
+                <label class="form-label">Token Kelas</label>
+                <input type="text" name="token_kelas" class="form-control" placeholder="Contoh: A1B2C" required autofocus>
+            </div>
+
+            <button type="submit" class="btn-join">Gabung Sekarang</button>
+        </form>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'logout' %}" class="small text-muted text-decoration-none">
+                <i class="fas fa-sign-out-alt me-1"></i> Keluar / Ganti Akun
+            </a>
+        </div>
+    </div>
+
+    <script src="{% static 'dashboard/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/bootstrap.min.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% if messages %}
+                {% for message in messages %}
+                    Swal.fire({
+                        icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                        title: "{% if message.tags == 'error' %}Gagal!{% elif message.tags == 'success' %}Berhasil!{% elif message.tags == 'warning' %}Peringatan{% else %}Info{% endif %}",
+                        text: "{{ message|escapejs }}",
+                        confirmButtonColor: "#1B3C53",
+                        confirmButtonText: "OK"
+                    });
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+
+</body>
+</html>

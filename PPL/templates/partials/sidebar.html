@@ -1,0 +1,220 @@
+{% load static %}
+<div class="sidebar" data-background-color="white">
+    <div class="sidebar-logo">
+        <div class="logo-header" data-background-color="white">
+            <a href="{% url 'index' %}" class="logo">
+                <span class="fw-bold" style="color: #1B3C53; font-size: 1.2rem;">CodeCracker</span>
+            </a>
+            <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar"><i class="gg-menu-right"></i></button>
+                <button class="btn btn-toggle sidenav-toggler"><i class="gg-menu-left"></i></button>
+            </div>
+            <button class="topbar-toggler more"><i class="gg-more-vertical-alt"></i></button>
+        </div>
+    </div>
+    
+    <div class="sidebar-wrapper scrollbar scrollbar-inner">
+        <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+                
+                <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                    <a href="{% url 'dashboard' %}">
+                        <i class="fas fa-home"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                
+                {% if request.session.peran == 'siswa' %}
+                    <li class="nav-section">
+                        <span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span>
+                        <h4 class="text-section">Area Belajar</h4>
+                    </li>
+
+                    <li class="nav-item {% if 'pengenalan' in request.path or 'aktivitas1' in request.path %}active submenu{% endif %}">
+                        <a data-bs-toggle="collapse" href="#menuPengenalan">
+                            <i class="fas fa-book-open"></i>
+                            <p>Pengenalan</p>
+                            <span class="caret"></span>
+                        </a>
+                        <div class="collapse {% if 'pengenalan' in request.path or 'aktivitas1' in request.path %}show{% endif %}" id="menuPengenalan">
+                            <ul class="nav nav-collapse">
+                                <li class="{% if request.resolver_match.url_name == 'pengenalan' %}active{% endif %}">
+                                    <a href="{% url 'pengenalan' %}"><span class="sub-item">Definisi</span></a>
+                                </li>
+                                <li class="{% if request.resolver_match.url_name == 'aktivitas1' %}active{% endif %}">
+                                    <a href="{% url 'aktivitas1' %}"><span class="sub-item">Aktivitas</span></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    {% if sidebar_status.enkripsi_buka %}
+                        <li class="nav-item {% if 'enkripsi' in request.path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'enkripsi' in hasil_kuis.id_kuis.nama_kuis|lower or request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'enkripsi' %}active submenu{% endif %}">
+                            <a data-bs-toggle="collapse" href="#menuEnkripsi">
+                                <i class="fas fa-lock"></i> <p>Enkripsi</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse {% if 'enkripsi' in request.path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'enkripsi' in hasil_kuis.id_kuis.nama_kuis|lower or request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'enkripsi' %}show{% endif %}" id="menuEnkripsi">
+                                <ul class="nav nav-collapse">
+                                    <li class="{% if request.resolver_match.url_name == 'enkripsi' %}active{% endif %}">
+                                        <a href="{% url 'enkripsi' %}"><span class="sub-item">Enkripsi</span></a>
+                                    </li>
+                                    <li class="{% if request.resolver_match.url_name == 'aktivitas2' %}active{% endif %}">
+                                        <a href="{% url 'aktivitas2' %}"><span class="sub-item">Aktivitas</span></a>
+                                    </li>
+                                    
+                                    {% if sidebar_status.enkripsi_kuis_buka %}
+                                        <li class="{% if request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'enkripsi' or 'jenis=enkripsi' in request.get_full_path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'enkripsi' in hasil_kuis.id_kuis.nama_kuis|lower %}active{% endif %}">
+                                            <a href="{% url 'kuis_petunjuk' %}?jenis=enkripsi">
+                                                <span class="sub-item">Kuis Enkripsi</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a href="#" style="cursor: not-allowed; opacity: 0.6;" onclick="Swal.fire('Terkunci', 'Selesaikan Aktivitas dulu!', 'info')">
+                                                <span class="sub-item d-flex justify-content-between align-items-center">
+                                                    Kuis Enkripsi <i class="fas fa-lock" style="font-size: 0.8rem;"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="#" style="cursor: not-allowed; opacity: 0.6;" onclick="Swal.fire('Terkunci', 'Selesaikan Bab Pengenalan dulu!', 'warning')">
+                                <i class="fas fa-lock"></i> <p>Enkripsi</p>
+                                <span class="ms-auto"><i class="fas fa-lock"></i></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if sidebar_status.caesar_buka %}
+                        <li class="nav-item {% if 'caesar/' in request.path or 'caesar2/' in request.path or 'aktivitas3' in request.path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'caesar' in hasil_kuis.id_kuis.nama_kuis|lower or request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'caesar' %}active submenu{% endif %}">
+                            <a data-bs-toggle="collapse" href="#menuCaesar">
+                                <i class="fas fa-key"></i>
+                                <p>Caesar Cipher</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse {% if 'caesar/' in request.path or 'caesar2/' in request.path or 'aktivitas3' in request.path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'caesar' in hasil_kuis.id_kuis.nama_kuis|lower or request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'caesar' %}show{% endif %}" id="menuCaesar">
+                                <ul class="nav nav-collapse">
+                                    
+                                    <li class="{% if request.resolver_match.url_name == 'caesar' %}active{% endif %}">
+                                        <a href="{% url 'caesar' %}"><span class="sub-item">Konsep Dasar 1</span></a>
+                                    </li>
+                                    
+                                    <li class="{% if request.resolver_match.url_name == 'caesar2' %}active{% endif %}">
+                                        <a href="{% url 'caesar2' %}"><span class="sub-item">Konsep Dasar 2</span></a>
+                                    </li>
+                                    
+                                    <li class="{% if request.resolver_match.url_name == 'aktivitas3' %}active{% endif %}">
+                                        <a href="{% url 'aktivitas3' %}"><span class="sub-item">Aktivitas</span></a>
+                                    </li>
+                                    
+                                    {% if sidebar_status.caesar_kuis_buka %}
+                                        <li class="{% if request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'caesar' or 'jenis=caesar' in request.get_full_path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'caesar' in hasil_kuis.id_kuis.nama_kuis|lower %}active{% endif %}">
+                                            <a href="{% url 'kuis_petunjuk' %}?jenis=caesar">
+                                                <span class="sub-item">Kuis Caesar</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a href="#" style="cursor: not-allowed; opacity: 0.6;" onclick="Swal.fire('Terkunci', 'Selesaikan Aktivitas Caesar dulu!', 'info')">
+                                                <span class="sub-item d-flex justify-content-between align-items-center">
+                                                    Kuis Caesar <i class="fas fa-lock" style="font-size: 0.8rem;"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="#" style="cursor: not-allowed; opacity: 0.6;" onclick="Swal.fire('Terkunci', 'Selesaikan Enkripsi dulu!', 'warning')">
+                                <i class="fas fa-key"></i> 
+                                <p>Caesar Cipher</p>
+                                <span class="ms-auto"><i class="fas fa-lock"></i></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if sidebar_status.dekripsi_buka %}
+                        <li class="nav-item {% if 'dekripsi' in request.path or 'aktivitas4' in request.path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'dekripsi' in hasil_kuis.id_kuis.nama_kuis|lower or request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'dekripsi' %}active submenu{% endif %}">
+                            <a data-bs-toggle="collapse" href="#menuDekripsi">
+                                <i class="fas fa-unlock"></i>
+                                <p>Dekripsi</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse {% if 'dekripsi' in request.path or 'aktivitas4' in request.path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'dekripsi' in hasil_kuis.id_kuis.nama_kuis|lower or request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'dekripsi' %}show{% endif %}" id="menuDekripsi">
+                                <ul class="nav nav-collapse">
+                                    <li class="{% if request.resolver_match.url_name == 'dekripsi' %}active{% endif %}">
+                                        <a href="{% url 'dekripsi' %}"><span class="sub-item">Konsep Dekripsi 1</span></a>
+                                    </li>
+                                    
+                                    <li class="{% if request.resolver_match.url_name == 'dekripsi2' %}active{% endif %}">
+                                        <a href="{% url 'dekripsi2' %}"><span class="sub-item">Konsep Dekripsi 2</span></a>
+                                    </li>
+                                    
+                                    <li class="{% if request.resolver_match.url_name == 'aktivitas4' %}active{% endif %}">
+                                        <a href="{% url 'aktivitas4' %}"><span class="sub-item">Aktivitas</span></a>
+                                    </li>
+
+                                    {% if sidebar_status.dekripsi_kuis_buka %}
+                                        <li class="{% if request.resolver_match.url_name == 'kuis_petunjuk' and request.GET.jenis == 'dekripsi' or 'jenis=dekripsi' in request.get_full_path or request.resolver_match.url_name == 'kuis_nilai_detail' and 'dekripsi' in hasil_kuis.id_kuis.nama_kuis|lower %}active{% endif %}">
+                                            <a href="{% url 'kuis_petunjuk' %}?jenis=dekripsi"><span class="sub-item">Kuis Dekripsi</span></a>
+                                        </li>
+                                    {% else %}
+                                        <li>
+                                            <a href="#" style="cursor: not-allowed; opacity: 0.6;" onclick="Swal.fire('Terkunci', 'Selesaikan Aktivitas Dekripsi dulu!', 'info')">
+                                                <span class="sub-item d-flex justify-content-between align-items-center">
+                                                    Kuis Dekripsi <i class="fas fa-lock" style="font-size: 0.8rem;"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="#" style="cursor: not-allowed; opacity: 0.6;" onclick="Swal.fire('Terkunci', 'Selesaikan Caesar dulu!', 'warning')">
+                                <i class="fas fa-unlock"></i> 
+                                <p>Dekripsi</p>
+                                <span class="ms-auto"><i class="fas fa-lock"></i></span>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item {% if request.resolver_match.url_name == 'evaluasi_petunjuk' or request.resolver_match.url_name == 'evaluasi_pengerjaan' or request.resolver_match.url_name == 'evaluasi_nilai_detail' %}active{% endif %}">
+                        {% if sidebar_status.evaluasi_buka %}
+                            <a href="{% url 'evaluasi_petunjuk' %}">
+                                <i class="fas fa-clipboard-check text-success"></i>
+                                <p>Evaluasi Akhir</p>
+                                <span class="badge badge-success">BUKA</span>
+                            </a>
+                        {% else %}
+                            <a href="#" style="cursor: not-allowed; opacity: 0.6;" onclick="Swal.fire('Terkunci', 'Selesaikan SEMUA materi!', 'error')">
+                                <i class="fas fa-clipboard-check"></i>
+                                <p>Evaluasi Akhir</p>
+                                <span class="ms-auto"><i class="fas fa-lock"></i></span>
+                            </a>
+                        {% endif %}
+                    </li>
+
+                {% elif request.session.peran == 'guru' %}
+                    <li class="nav-section"><span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span><h4 class="text-section">Manajemen Kelas</h4></li>
+                    <li class="nav-item"><a href="{% url 'kelola_kelas' %}"><i class="fas fa-layer-group"></i><p>Data Kelas</p></a></li>
+                    <li class="nav-item"><a href="{% url 'data_siswa' %}"><i class="fas fa-users"></i><p>Data Siswa</p></a></li>
+                {% endif %}
+
+                <li class="nav-section"><span class="sidebar-mini-icon"><i class="fa fa-ellipsis-h"></i></span><h4 class="text-section">Akun</h4></li>
+                <li class="nav-item"><a href="#"><i class="fas fa-user"></i><p>Profil Saya</p></a></li>
+                <li class="nav-item"><a href="{% url 'logout' %}" id="btn-logout"><i class="fas fa-sign-out-alt"></i><p>Keluar</p></a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,63 +1,46 @@
 from django.db import models
-from django.contrib.auth.models import User
 
-
-# ============================
-#        TABEL PENGGUNA
-# ============================
+# ----- PUNNYAA RANIIII ------
 class Pengguna(models.Model):
-    PERAN_CHOICES = (
-        ("guru", "Guru"),
-        ("siswa", "Siswa"),
-    )
+    # Definisi Kolom Tabel
     id_pengguna = models.AutoField(primary_key=True)
-    nama_lengkap = models.CharField(max_length=45)
-    email = models.CharField(max_length=45)
-    kata_sandi = models.CharField(max_length=255)
+    nama_lengkap = models.CharField(max_length=100)
+    email = models.EmailField(max_length=100, unique=True)
+    kata_sandi = models.CharField(max_length=255) # Disimpan plain text sesuai request (sebaiknya di-hash nanti)
+    
+    # Pilihan Peran (Enum)
+    PERAN_CHOICES = [
+        ('siswa', 'Siswa'),
+        ('guru', 'Guru'),
+    ]
     peran = models.CharField(max_length=10, choices=PERAN_CHOICES)
 
-    @property
-    def is_guru(self):
-        return self.peran == "guru"
-
-    @property
-    def is_siswa(self):
-        return self.peran == "siswa"
-
     def __str__(self):
-        return self.nama_lengkap
+        return f"{self.nama_lengkap} ({self.peran})"
+
+    class Meta:
+        db_table = 'pengguna'
 
 
-# ============================
-#        TABEL KELAS
-# ============================
 class Kelas(models.Model):
     id_kelas = models.AutoField(primary_key=True)
-    id_guru = models.ForeignKey(
-        Pengguna, on_delete=models.CASCADE, related_name="kelas_guru"
-    )
+    # Menggunakan ForeignKey ke Pengguna (khusus yg perannya guru)
+    guru = models.ForeignKey(Pengguna, on_delete=models.CASCADE, db_column='id_guru') 
     nama_kelas = models.CharField(max_length=45)
-    token = models.CharField(max_length=45)
+    token = models.CharField(max_length=45, unique=True)
 
-    def __str__(self):
-        return self.nama_kelas
+    class Meta:
+        db_table = 'kelas'
 
-
-# ============================
-#     ANGGOTA_KELAS (RELASI)
-# ============================
 class AnggotaKelas(models.Model):
     id_anggota = models.AutoField(primary_key=True)
-    id_kelas = models.ForeignKey(
-        Kelas, on_delete=models.CASCADE, related_name="anggota"
-    )
-    id_siswa = models.ForeignKey(
-        Pengguna, on_delete=models.CASCADE, related_name="kelas_siswa", null=True
-    )
+    kelas = models.ForeignKey(Kelas, on_delete=models.CASCADE, db_column='id_kelas')
+    siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE, db_column='id_siswa')
 
-    def __str__(self):
-        return f"{self.id_siswa} di {self.id_kelas}"
+    class Meta:
+        db_table = 'anggota_kelas'
 
+# ----- Batas punya Rani ----- 
 
 # ============================
 #            KUIS
@@ -65,7 +48,6 @@ class AnggotaKelas(models.Model):
 class Kuis(models.Model):
     id_kuis = models.AutoField(primary_key=True)
     nama_kuis = models.CharField(max_length=45)
-    durasi = models.IntegerField()
 
     def __str__(self):
         return self.nama_kuis
@@ -140,10 +122,9 @@ class Section(models.Model):
 # ============================
 class SectionItem(models.Model):
     JENIS_ITEM_CHOICES = (
-        ("video", "Video"),
         ("teks", "Teks"),
         ("kuis", "Kuis"),
-        ("game", "Game"),
+        ("latihan", "Latihan"),
     )
 
     id_item = models.AutoField(primary_key=True)
@@ -235,3 +216,4 @@ class PeringkatFinal(models.Model):
 
     def __str__(self):
         return f"{self.siswa.nama_lengkap} - {self.total_skor} Poin"
+    

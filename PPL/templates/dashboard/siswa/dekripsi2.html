@@ -1,0 +1,105 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Simulasi Dekripsi - CodeCracker{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'materi.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4 class="page-title">Bab Dekripsi</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home"><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a></li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Materi</li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Simulasi Dekripsi</li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <div class="lesson-wrapper">
+                    <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+                        <div style="width: 5px; height: 35px; background: #F3C623; margin-right: 15px; border-radius: 2px;"></div>
+                        <h1 class="fw-bold m-0" style="color: #1B3C53;">Proses Dekripsi</h1>
+                    </div>
+                
+                    <div class="lesson-content">
+                        
+                        <div class="hero-section" style="padding: 25px;">
+                            <h2 class="lesson-h2 text-white mb-3"><i class="fas fa-laptop-code me-2"></i>Lab Eksperimen</h2>
+                            <p class="m-0">
+                                Gunakan panel kontrol di bawah ini untuk melihat bagaimana proses dekripsi bekerja secara bertahap. Ingat, dekripsi selalu menggunakan **kunci geser berlawanan** dari kunci enkripsi.
+                            </p>
+                        </div>
+
+                        <div class="interactive-example mt-4">
+                            <h3 class="mb-4">🎛️ Panel Kontrol Dekripsi</h3>
+                            
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <label for="ciphertext" class="form-label fw-bold text-dark">
+                                        Ciphertext (Pesan Terenkripsi)
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><i class="fas fa-lock text-danger"></i></span>
+                                        <input type="text" class="form-control form-control-lg" id="ciphertext" 
+                                               placeholder="Contoh: ZRUOG" value="ZRUOG" autocomplete="off">
+                                    </div>
+                                    <small class="text-muted"><i class="fas fa-info-circle me-1"></i>Hanya huruf A-Z yang akan diproses.</small>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label for="key" class="form-label fw-bold text-dark">
+                                        Kunci Geser Dekripsi (1-25)
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-white"><i class="fas fa-key text-warning"></i></span>
+                                        <input type="number" class="form-control form-control-lg" id="key" 
+                                               min="1" max="25" value="3">
+                                    </div>
+                                    <small class="text-muted">Geser antara 1 - 25 ke KIRI.</small>
+                                </div>
+                                
+                                <div class="col-12 mt-3">
+                                    <button class="btn btn-primary w-100 fw-bold btn-round" onclick="startDecryption()"
+                                            style="background-color: #1B3C53; border-color: #1B3C53;">
+                                        <i class="fas fa-sync-alt me-2"></i> Proses Dekripsi Sekarang
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-5">
+
+                        <div id="stepContainer" class="step-container">
+                            </div>
+
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4 pt-4 border-top">
+                    <a href="{% url 'dekripsi' %}" class="btn btn-danger btn-round px-4 py-2">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali
+                    </a>
+                    
+                    <a href="{% url 'aktivitas4' %}" class="btn btn-success btn-round px-4 py-2">
+                        Lanjut Aktivitas <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'materi.js' %}"></script>
+{% endblock %}

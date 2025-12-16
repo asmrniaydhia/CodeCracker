@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Daftar Siswa - CodeCracker</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" href="{% static 'dashboard/assets/img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+
+    <script src="{% static 'dashboard/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Lato:400,700,900", "Open+Sans:400,600"] },
+        custom: {
+          families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+          urls: ["{% static 'dashboard/assets/css/fonts.min.css' %}"],
+        },
+        active: function () { sessionStorage.fonts = true; },
+      });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/kaiadmin.min.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        body { 
+            margin: 0; 
+            font-family: 'Open Sans', sans-serif; 
+            min-height: 100vh; 
+            display: flex; 
+            overflow-x: hidden; 
+        }
+        
+        /* PANEL KIRI (NAVY) */
+        .left-panel { 
+            background: #1B3C53; 
+            flex: 1; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column; 
+            padding: 40px; 
+            text-align: center; 
+            color: #fff; 
+            position: relative; 
+        }
+        .left-panel .illustration-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 400px; 
+            margin-bottom: 20px; 
+        }
+        .left-panel .illustration-container img { 
+            max-width: 100%; 
+            height: auto; 
+            display: block; 
+            margin-bottom: 15px; 
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.2));
+        }
+        .left-panel h2 { 
+            font-family: 'Lato', sans-serif; 
+            font-weight: 900; 
+            font-size: 2.5rem;
+            margin: 10px 0; 
+            color: #F3C623; 
+        }
+        .left-panel p { 
+            color: #e0e0e0; 
+            font-size: 1.1rem; 
+        }
+
+        /* PANEL KANAN (CREAM) */
+        .right-panel { 
+            flex: 1; 
+            background: #f5f9ee; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 40px; 
+        }
+        .form-container { 
+            width: 100%; 
+            max-width: 450px; 
+            background: white; 
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .form-container h3 { 
+            font-family: 'Lato', sans-serif; 
+            font-weight: 900; 
+            color: #1B3C53; 
+            margin-bottom: 25px; 
+            text-align: center; 
+        }
+        
+        .form-control { 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            border: 1px solid #1B3C53; 
+            height: auto !important;
+        }
+        .form-control:focus {
+            border-color: #F3C623;
+            box-shadow: 0 0 0 0.25rem rgba(243, 198, 35, 0.25);
+        }
+        .form-label { 
+            font-weight: 700; 
+            color: #1B3C53; 
+            margin-bottom: 5px;
+        }
+
+        .btn-custom { 
+            background: #1B3C53; 
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 6px; 
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px; 
+        }
+        .btn-custom:hover { 
+            background-color: #142e40;
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2); 
+            color: #F3C623;
+        }
+
+        @media (max-width: 991px) {
+            body { flex-direction: column; }
+            .left-panel { padding: 40px 20px; min-height: 300px; }
+            .left-panel .illustration-container { max-width: 250px; }
+            .right-panel { padding: 40px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+  <div class="left-panel">
+    <div class="illustration-container">
+      <img src="{% static 'assets/daftarSiswa.png' %}" alt="Ilustrasi Siswa Daftar">
+    </div>
+    <div class="brand-text">
+      <h2>CodeCracker</h2>
+      <p>Belajar & Pecahkan Kode Bersama!</p>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="form-container">
+      <h3>Daftar Siswa</h3>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label">Nama Lengkap</label>
+          <input type="text" name="nama_lengkap" class="form-control" placeholder="Masukkan nama lengkap" value="{{ request.POST.nama_lengkap }}" required>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Alamat Email</label>
+          <input type="email" name="email" class="form-control" placeholder="Masukkan email" value="{{ request.POST.email }}" required>
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <label class="form-label">Kata Sandi</label>
+            <input type="password" name="kata_sandi" class="form-control" placeholder="Kata sandi" required>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Ulangi Sandi</label>
+            <input type="password" name="konfirmasi_sandi" class="form-control" placeholder="Ulangi kata sandi" required>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-custom">Daftar Sekarang</button>
+      </form>
+
+      <p class="text-center mt-4 mb-0">
+        Sudah punya akun? <a href="{% url 'login' %}" style="color: #1B3C53; font-weight: 800; text-decoration: none;">Login di sini</a>
+      </p>
+      
+      <div class="text-center mt-2">
+          <a href="{% url 'pilihan_daftar' %}" class="small text-muted">
+              <i class="fas fa-arrow-left"></i> Kembali ke Pilihan Peran
+          </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'dashboard/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+  <script src="{% static 'dashboard/assets/js/core/popper.min.js' %}"></script>
+  <script src="{% static 'dashboard/assets/js/core/bootstrap.min.js' %}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        {% if messages %}
+            {% for message in messages %}
+                Swal.fire({
+                    icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                    title: "{% if message.tags == 'error' %}Gagal!{% elif message.tags == 'success' %}Berhasil!{% elif message.tags == 'warning' %}Peringatan{% else %}Info{% endif %}",
+                    text: "{{ message|escapejs }}",
+                    confirmButtonColor: "#1B3C53",
+                    confirmButtonText: "OK"
+                });
+            {% endfor %}
+        {% endif %}
+    });
+  </script>
+
+</body>
+</html>

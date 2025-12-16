@@ -1,0 +1,344 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Dekripsi - CodeCracker{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'materi.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4 class="page-title">Bab Dekripsi</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home"><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a></li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Materi</li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Dekripsi</li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                
+                <div class="lesson-wrapper">
+                    <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+                        <div style="width: 5px; height: 35px; background: #F3C623; margin-right: 15px; border-radius: 2px;"></div>
+                        <h1 class="fw-bold m-0" style="color: #1B3C53;">Dekripsi</h1>
+                    </div>
+                
+                    <div class="lesson-content">
+
+                        <h2 class="lesson-h2">Tujuan Pembelajaran</h2>
+
+                        <div class="lesson-card">
+                            <div class="lesson-goals">
+                                <div><p>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</p></div>
+
+                                <div class="lesson-goal">
+                                    <div class="lesson-num">1</div>
+                                    <div><p>Menjelaskan konsep dasar dekripsi sebagai proses mengembalikan pesan terenkripsi menjadi pesan asli.</p></div>
+                                </div>
+
+                                <div class="lesson-goal">
+                                    <div class="lesson-num">2</div>
+                                    <div><p>Menentukan pesan asli dari sebuah pesan yang telah dienkripsi menggunakan Caesar Cipher dengan kunci tertentu.</p></div>
+                                </div>
+
+                                <div class="lesson-goal">
+                                    <div class="lesson-num">3</div>
+                                    <div><p>Menemukan besar pergeseran atau kunci yang digunakan dalam sebuah pesan terenkripsi.</p></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="hero-section">
+                            <h1>Bagian 3: Dekripsi—Mengembalikan Pesan Asli</h1>
+                            <p><strong>Dekripsi adalah tahap penyingkapan rahasia.</strong> Secara fundamental, dekripsi adalah proses yang membalikkan secara sempurna mekanisme enkripsi. Tujuannya adalah untuk mengambil <strong>Ciphertext</strong> dan mereproduksinya kembali menjadi <strong>Plain Text</strong> yang dapat dibaca.</p>
+                        </div>
+
+                        <h2 class="section-header">💡 Konsep Dasar Dekripsi: Proses Balikan dan Aturan Emas</h2>
+
+                        <div class="golden-rule-box">
+                            <h3>⭐ Aturan Emas Kunci Dekripsi ⭐</h3>
+                            <p class="section-intro" style="text-align: center; margin-bottom: 20px;"><strong>Kunci Dekripsi selalu merupakan kebalikan mutlak dari Kunci Enkripsi.</strong> Ini adalah inti dari komunikasi rahasia yang berhasil:</p>
+                            
+                            <div class="rule-columns">
+                                <div class="rule-column encryption">
+                                    <div class="rule-column-icon">🔒</div>
+                                    <div class="rule-column-title">Enkripsi</div>
+                                    <div class="rule-column-content">
+                                        Geser N Langkah ke <strong>KANAN</strong>
+                                    </div>
+                                </div>
+
+                                <div class="rule-column decryption">
+                                    <div class="rule-column-icon">🔓</div>
+                                    <div class="rule-column-title">Dekripsi</div>
+                                    <div class="rule-column-content">
+                                        Geser N Langkah ke <strong>KIRI</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <h2 class="section-header">Langkah-Langkah Mendekripsi dengan Kunci yang Diketahui</h2>
+
+                        <div class="decryption-demo">
+                            <div class="demo-context">
+                                <p><strong>Contoh Kasus:</strong> Kamu menerima Ciphertext <strong>"NRGH"</strong> dan kamu tahu bahwa <strong>Kunci Enkripsi-nya adalah Geser 3 Langkah ke KANAN</strong>.</p>
+                                <p style="margin-top: 10px;"><strong>Maka, Kunci Dekripsi yang harus kamu gunakan adalah Geser 3 Langkah ke KIRI.</strong></p>
+                            </div>
+
+                            <div class="word-section">
+                                <div class="word-title">
+                                    <span>📝</span> Langkah-Langkah Dekripsi Kata "NRGH"
+                                </div>
+
+                                <div class="letter-step" id="decryptStep1">
+                                    <div class="step-header">
+                                        <div class="letter-badge">N</div>
+                                        <div class="step-process">
+                                            <strong>Huruf N (Kode)</strong>
+                                            <div class="step-formula">
+                                                Kita geser N sebanyak 3 langkah ke KIRI<br>
+                                                N → M (1), L (2), K (3)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="step-result">
+                                        <strong>Hasilnya: K</strong> (Ini adalah huruf pertama dari Plain Text)
+                                    </div>
+                                </div>
+
+                                <div class="letter-step" id="decryptStep2" style="display: none;">
+                                    <div class="step-header">
+                                        <div class="letter-badge">R</div>
+                                        <div class="step-process">
+                                            <strong>Huruf R (Kode)</strong>
+                                            <div class="step-formula">
+                                                Kita geser R sebanyak 3 langkah ke KIRI<br>
+                                                R → Q (1), P (2), O (3)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="step-result">
+                                        <strong>Hasilnya: O</strong>
+                                    </div>
+                                </div>
+
+                                <div class="letter-step" id="decryptStep3" style="display: none;">
+                                    <div class="step-header">
+                                        <div class="letter-badge">G</div>
+                                        <div class="step-process">
+                                            <strong>Huruf G (Kode)</strong>
+                                            <div class="step-formula">
+                                                Kita geser G sebanyak 3 langkah ke KIRI<br>
+                                                G → F (1), E (2), D (3)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="step-result">
+                                        <strong>Hasilnya: D</strong>
+                                    </div>
+                                </div>
+
+                                <div class="letter-step" id="decryptStep4" style="display: none;">
+                                    <div class="step-header">
+                                        <div class="letter-badge">H</div>
+                                        <div class="step-process">
+                                            <strong>Huruf H (Kode)</strong>
+                                            <div class="step-formula">
+                                                Kita geser H sebanyak 3 langkah ke KIRI<br>
+                                                H → G (1), F (2), E (3)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="step-result">
+                                        <strong>Hasilnya: E</strong>
+                                    </div>
+                                </div>
+
+                                <div class="final-result" id="decryptFinal" style="display: none;">
+                                    <p style="color: #2e7d32; font-weight: bold; margin: 0;">✓ Maka, "NRGH" dikembalikan menjadi:</p>
+                                    <div class="final-result-text">KODE</div>
+                                </div>
+
+                                <div class="step-navigation">
+                                    <button class="step-btn" id="decryptPrevBtn" onclick="changeDecryptStep(-1)" style="display: none;">
+                                        <i class="fas fa-arrow-left"></i> Sebelumnya
+                                    </button>
+                                    <div class="step-indicator">
+                                        <span id="decryptStepText">Langkah 1 dari 4</span>
+                                    </div>
+                                    <button class="step-btn step-btn-next" id="decryptNextBtn" onclick="changeDecryptStep(1)">
+                                        Selanjutnya <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <h2 class="section-header">Memecahkan Kunci Rahasia (Brute Force)</h2>
+
+                        <p class="section-intro">Ketika kamu menerima Ciphertext tanpa tahu kuncinya sama sekali, kamu harus menggunakan teknik yang disebut <strong>Brute Force (Pemaksaan)</strong>.</p>
+
+                        <div class="brute-force-box">
+                            <h3>🔍 Konsep Brute Force</h3>
+
+                            <div class="concept-box">
+                                <h4>Apa itu Brute Force?</h4>
+                                <p>Dalam Caesar's Cipher, kamu hanya perlu mencoba semua kemungkinan pergeseran dari <strong>1 hingga 25</strong>. Salah satu dari 25 percobaan itu <strong>PASTI</strong> akan menghasilkan Plain Text yang dapat dibaca dan bermakna.</p>
+                            </div>
+
+                            <div class="challenge-box">
+                                <div class="challenge-title">Contoh Tantangan: Memecahkan "WKDQ"</div>
+                                <p style="text-align: center; color: var(--lesson-text); margin-bottom: 20px;">Kita akan mencari Kunci Dekripsi yang paling masuk akal (menghasilkan kata yang memiliki arti).</p>
+
+                                <div class="attempt-item">
+                                    <div class="attempt-header">Percobaan 1 (Geser 1 ke KIRI):</div>
+                                    <div class="attempt-process">
+                                        W → V, K → J, D → C, Q → P
+                                    </div>
+                                    <div class="attempt-result">
+                                        <span class="result-text">V J C P</span>
+                                        <span class="result-status status-fail">✗ Tidak ada arti</span>
+                                    </div>
+                                </div>
+
+                                <div class="attempt-item">
+                                    <div class="attempt-header">Percobaan 2 (Geser 2 ke KIRI):</div>
+                                    <div class="attempt-process">
+                                        W → U, K → I, D → B, Q → O
+                                    </div>
+                                    <div class="attempt-result">
+                                        <span class="result-text">U I B O</span>
+                                        <span class="result-status status-fail">✗ Tidak ada arti</span>
+                                    </div>
+                                </div>
+
+                                <div class="attempt-item success">
+                                    <div class="attempt-header">Percobaan 3 (Geser 3 ke KIRI):</div>
+                                    <p style="color: var(--lesson-text); margin: 10px 0;">Kita geser semua huruf 3 langkah ke kiri.</p>
+                                    <div class="attempt-process">
+                                        W → T, K → H, D → A, Q → N
+                                    </div>
+                                    <div class="attempt-result success">
+                                        <span class="result-text" style="color: #2e7d32;">T H A N K</span>
+                                        <span class="result-status status-success">✓ BERMAKNA!</span>
+                                    </div>
+                                </div>
+
+                                <div class="conclusion-box">
+                                    <h4>Kesimpulan:</h4>
+                                    <div class="conclusion-item">
+                                        <span><strong>Langkah Akhir:</strong> Karena pada percobaan ke-3 (Geser 3 KIRI) menghasilkan kata "THANK" yang bermakna, maka kita telah menemukan kuncinya.</span>
+                                    </div>
+                                    <div class="conclusion-item">
+                                        <span><strong>Kunci Dekripsi:</strong> Geser 3 Langkah ke KIRI</span>
+                                    </div>
+                                    <div class="conclusion-item">
+                                        <span><strong>Kunci Enkripsi Asli:</strong> Geser 3 Langkah ke KANAN</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-4 pt-4 border-top">
+                    <a href="{% url 'caesar2' %}" class="btn btn-danger btn-round px-4 py-2">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali
+                    </a>
+                    
+                    <a href="{% url 'dekripsi2' %}" class="btn btn-primary btn-round px-4 py-2"
+                       style="background-color: #1B3C53; border-color: #1B3C53;">
+                        Selanjutnya <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Hanya perlu JS yang mengatur logika transisi langkah-langkah Dekripsi ("NRGH")
+    let currentDecryptStep = 1;
+    const totalDecryptSteps = 4;
+
+    function changeDecryptStep(direction) {
+        // Update current step
+        currentDecryptStep += direction;
+        
+        // Ensure step is within bounds
+        if (currentDecryptStep < 1) currentDecryptStep = 1;
+        if (currentDecryptStep > totalDecryptSteps + 1) currentDecryptStep = totalDecryptSteps + 1;
+        
+        // Show all previous steps
+        for (let i = 1; i <= currentDecryptStep && i <= totalDecryptSteps; i++) {
+            const stepEl = document.getElementById('decryptStep' + i);
+            if (stepEl) stepEl.style.display = 'block';
+        }
+        
+        // Hide subsequent steps
+        for (let i = currentDecryptStep + 1; i <= totalDecryptSteps; i++) {
+            const stepEl = document.getElementById('decryptStep' + i);
+            if (stepEl) stepEl.style.display = 'none';
+        }
+
+        // Show final result if we're past the last step
+        const finalEl = document.getElementById('decryptFinal');
+        if (finalEl) {
+            finalEl.style.display = (currentDecryptStep > totalDecryptSteps) ? 'block' : 'none';
+        }
+        
+        // Update button visibility
+        const prevBtn = document.getElementById('decryptPrevBtn');
+        const nextBtn = document.getElementById('decryptNextBtn');
+        const stepText = document.getElementById('decryptStepText');
+        
+        // Previous button
+        if (prevBtn) prevBtn.style.display = (currentDecryptStep === 1) ? 'none' : 'inline-flex';
+        
+        // Next button
+        if (nextBtn) {
+            if (currentDecryptStep > totalDecryptSteps) {
+                nextBtn.style.display = 'none';
+            } else {
+                nextBtn.style.display = 'inline-flex';
+                if (currentDecryptStep === totalDecryptSteps) {
+                    nextBtn.innerHTML = 'Lihat Hasil <i class="fas fa-check"></i>';
+                } else {
+                    nextBtn.innerHTML = 'Selanjutnya <i class="fas fa-arrow-right"></i>';
+                }
+            }
+        }
+        
+        // Update step indicator
+        if (stepText) {
+            if (currentDecryptStep <= totalDecryptSteps) {
+                stepText.textContent = `Langkah ${currentDecryptStep} dari ${totalDecryptSteps}`;
+            } else {
+                stepText.textContent = 'Hasil Akhir';
+            }
+        }
+    }
+
+    // Panggil langkah pertama saat DOM siap (agar tombol navigasi muncul)
+    document.addEventListener('DOMContentLoaded', () => {
+        changeDecryptStep(0);
+    });
+</script>
+{% endblock %}

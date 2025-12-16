@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}CodeCracker{% endblock %}</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" href="{% static 'dashboard/assets/img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+
+    <script src="{% static 'dashboard/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { 
+            families: ["Lato:400,700,900", "Open+Sans:400,600", "Public Sans:300,400,500,600,700"] 
+        },
+        custom: {
+          families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+          urls: ["{% static 'dashboard/assets/css/fonts.min.css' %}"],
+        },
+        active: function () { sessionStorage.fonts = true; },
+      });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/kaiadmin.min.css' %}" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        /* Override Warna Header menjadi Navy */
+        .main-header .navbar-header {
+            background-color: #1B3C53 !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .main-header .navbar-header .nav-link,
+        .main-header .navbar-header .navbar-brand {
+            color: #ffffff !important;
+        }
+        .main-header .navbar-header .nav-link:hover {
+            color: #F3C623 !important;
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="wrapper">
+        
+        {% include 'partials/sidebar.html' %}
+
+        <div class="main-panel">
+            {% include 'partials/header.html' %}
+
+            <div class="container">
+                <div class="page-inner">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+            </div>
+            
+            <footer class="footer">
+                <div class="container-fluid d-flex justify-content-between">
+                    <div class="copyright">
+                        2025, CodeCracker Team.
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="{% static 'dashboard/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/kaiadmin.min.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // 1. Script untuk Notifikasi Pesan (Success/Error/Warning)
+            {% if messages %}
+                {% for message in messages %}
+                    Swal.fire({
+                        icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                        title: "{% if message.tags == 'error' %}Gagal!{% elif message.tags == 'success' %}Berhasil!{% elif message.tags == 'warning' %}Peringatan{% else %}Info{% endif %}",
+                        text: "{{ message|escapejs }}",
+                        confirmButtonColor: "#1B3C53",
+                        confirmButtonText: "OK"
+                    });
+                {% endfor %}
+            {% endif %}
+
+            // 2. Script Konfirmasi Logout [BARU]
+            const btnLogout = document.getElementById('btn-logout');
+            if (btnLogout) {
+                btnLogout.addEventListener('click', function(e) {
+                    e.preventDefault(); // Mencegah langsung pindah halaman
+                    const href = this.getAttribute('href'); // Ambil link logout
+
+                    Swal.fire({
+                        title: 'Yakin ingin keluar?',
+                        text: "Sesi Anda akan diakhiri.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33', // Warna Merah untuk tombol Keluar
+                        cancelButtonColor: '#1B3C53', // Warna Navy untuk Batal
+                        confirmButtonText: 'Ya, Keluar!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Jika user klik Ya, baru arahkan ke link logout
+                            window.location.href = href;
+                        }
+                    });
+                });
+            }
+
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

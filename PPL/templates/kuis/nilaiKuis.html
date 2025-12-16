@@ -1,0 +1,221 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Hasil Kuis {{ hasil_kuis.id_kuis.nama_kuis }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'materi.css' %}">
+<link rel="stylesheet" href="{% static 'kuis.css' %}">
+<style>
+    /* Override sedikit CSS agar menyatu dalam satu card body */
+    .ring {
+        /* Perkecil sedikit agar proporsional */
+        width: 150px; 
+        height: 150px;
+        box-shadow: none; /* Hilangkan bayangan ring agar flat */
+        background: conic-gradient(#1B3C53 calc(var(--p, 0)*1%), #f1f1f1 0);
+    }
+    .ring-inner {
+        width: 120px;
+        height: 120px;
+    }
+    /* Hapus background putih statistik agar menyatu */
+    .stat-box {
+        background: #f8f9fa; /* Abu sangat muda */
+        border: 1px solid #eee;
+        box-shadow: none; 
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h4 class="page-title">Evaluasi</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home"><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a></li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Kuis</li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Laporan Hasil</li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card border-0 shadow-sm">
+            
+            <div class="card-body p-4 p-md-5">
+                
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                    <div>
+                        <h2 class="fw-bold mb-1" style="color: #1B3C53;">{{ hasil_kuis.id_kuis.nama_kuis }}</h2>
+                        <span class="badge bg-light text-muted border">Percobaan Ke-{{ hasil_kuis.percobaan_kuis }}</span>
+                    </div>
+                    <div id="passFail" class="h4 fw-bold m-0"></div>
+                </div>
+
+                <div class="row g-5 align-items-center mb-5">
+                    
+                    <div class="col-12 col-md-4 text-center">
+                        <div id="scoreRing" class="ring mb-3" style="--p:0">
+                            <div class="ring-inner">
+                                <div>
+                                    <div class="display-5 fw-bold" style="color: #1B3C53;">{{ hasil_kuis.skor_kuis }}</div>
+                                    <small class="text-uppercase fw-bold text-muted" style="font-size: 0.7rem;">Skor Akhir</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-8">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <div class="stat-box p-3 rounded d-flex align-items-center gap-3">
+                                    <div class="fs-3 text-success"><i class="fas fa-check-circle"></i></div>
+                                    <div>
+                                        <div class="h4 fw-bold mb-0 text-dark">{{ correct_count }}</div>
+                                        <div class="small text-muted">Benar</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stat-box p-3 rounded d-flex align-items-center gap-3">
+                                    <div class="fs-3 text-primary"><i class="fas fa-layer-group"></i></div>
+                                    <div>
+                                        <div class="h4 fw-bold mb-0 text-dark">{{ rincian_jawaban|length }}</div>
+                                        <div class="small text-muted">Total Soal</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="stat-box p-3 rounded d-flex align-items-center gap-3">
+                                    <div class="fs-3 text-warning"><i class="fas fa-stopwatch"></i></div>
+                                    <div class="w-100">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="small text-muted">Waktu Pengerjaan</span>
+                                            <span id="waktuPengerjaan" class="fw-bold text-dark">00:00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mt-5 mb-3 text-dark"><i class="fas fa-list-ul me-2"></i>Detail Jawaban</h5>
+                
+                <div class="table-responsive border rounded mb-5">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="ps-4 py-3 text-muted" style="width: 50px;">#</th>
+                                <th class="py-3 text-muted">Pertanyaan & Jawaban Anda</th>
+                                <th class="pe-4 py-3 text-center text-muted" style="width: 120px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rincian in rincian_jawaban %}
+                            <tr>
+                                <td class="ps-4 fw-bold text-muted">{{ forloop.counter }}</td>
+                                <td class="py-3">
+                                    <div class="mb-2 fw-bold text-dark">{{ rincian.teks_pertanyaan }}</div>
+                                    
+                                    <div class="small">
+                                        {% if rincian.is_benar %}
+                                            <span class="text-success fw-bold">
+                                                <i class="fas fa-check me-1"></i> {{ rincian.jawaban_siswa }}
+                                            </span>
+                                        {% else %}
+                                            <span class="text-danger fw-bold text-decoration-line-through">
+                                                <i class="fas fa-times me-1"></i> {{ rincian.jawaban_siswa }}
+                                            </span>
+                                            <div class="text-muted mt-1 fst-italic">
+                                                * Jawaban kurang tepat, silakan pelajari materi kembali.
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="pe-4 text-center">
+                                    {% if rincian.is_benar %}
+                                        <i class="fas fa-check-circle text-success fs-4"></i>
+                                    {% else %}
+                                        <i class="fas fa-times-circle text-danger fs-4"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    
+                    <a href="{% url 'kuis_petunjuk' %}?jenis={{ jenis_kuis_pendek }}&mode=ulangi" 
+                      class="btn btn-outline-secondary btn-round px-4 fw-bold">
+                      <i class="fas fa-redo me-2"></i>Ulangi
+                    </a>
+
+                    {% if is_lulus %}
+                        {% if jenis_kuis_pendek == 'dekripsi' %}
+                            <a href="{% url next_url_name %}" id="nextMateriBtn" 
+                              class="btn btn-success btn-round px-5 fw-bold pulse-animation">
+                              Buka Evaluasi Akhir <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        {% else %}
+                            <a href="{% url next_url_name %}" id="nextMateriBtn" 
+                              class="btn btn-primary btn-round px-5 fw-bold"
+                              style="background-color: #1B3C53; border-color: #1B3C53;">
+                              Lanjut Materi <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url prev_url_name %}" 
+                          class="btn btn-warning btn-round px-4 fw-bold text-dark">
+                          <i class="fas fa-book-reader me-2"></i>Pelajari Lagi
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            </div> </div> </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+  function formatTime(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return `${minutes.toString().padStart(2, '0')}m ${seconds.toString().padStart(2, '0')}d`;
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+      const score = {{ hasil_kuis.skor_kuis }};
+      const totalCount = {{ rincian_jawaban|length }};
+      const totalSeconds = {{ hasil_kuis.waktu_kuis }};
+      const passFailElement = document.getElementById('passFail');
+      
+      const maxScore = totalCount * 20; 
+      const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
+      
+      const scoreRing = document.getElementById('scoreRing');
+      if (scoreRing) {
+        setTimeout(() => { scoreRing.style.setProperty('--p', percentage); }, 300);
+      }
+
+      document.getElementById('waktuPengerjaan').innerText = formatTime(totalSeconds);
+
+      // Status Lulus/Gagal (Hanya untuk Teks Tampilan)
+      const kkm = 70;
+      if (score >= kkm) {
+          passFailElement.innerHTML = `<span class="text-success"><i class="fas fa-check-circle me-2"></i>LULUS</span>`;
+      } else {
+          passFailElement.innerHTML = `<span class="text-danger"><i class="fas fa-times-circle me-2"></i>BELUM LULUS</span>`;
+      }
+      
+      // LOGIKA TOMBOL 'DISABLED' SUDAH DIHAPUS 
+      // KARENA SUDAH DITANGANI OLEH DJANGO TEMPLATE (IF/ELSE)
+  });
+</script>
+{% endblock %}

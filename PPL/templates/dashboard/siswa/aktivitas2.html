@@ -1,0 +1,356 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Aktivitas Enkripsi - CodeCracker{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Layout area drag */
+    .drag-area-container {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .choices,
+    .dropArea {
+        border: 3px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 20px;
+        width: 48%;
+        min-height: 350px;
+        background-color: #f8f9fa;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Item draggable */
+    .choice {
+        background-color: #fff;
+        border: 1px solid #1B3C53;
+        border-left: 5px solid #1B3C53;
+        border-radius: 8px;
+        padding: 12px 15px;
+        cursor: grab;
+        color: #333;
+        font-weight: 600;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .choice:active {
+        cursor: grabbing;
+    }
+
+    .choice.dragging {
+        opacity: 0.5;
+        transform: scale(0.98);
+    }
+
+    .dropArea.dragover {
+        border-color: #1B3C53;
+        background-color: #e3f2fd;
+        transform: scale(1.01);
+        transition: all 0.2s;
+    }
+
+    /* Header label */
+    .box-header {
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 10px;
+        color: #1B3C53;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    /* Tombol */
+    .btn-action {
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    @keyframes pulse-green {
+        0%   { box-shadow: 0 0 0 0 rgba(25,135,84,0.7); }
+        70%  { box-shadow: 0 0 0 10px rgba(25,135,84,0); }
+        100% { box-shadow: 0 0 0 0 rgba(25,135,84,0); }
+    }
+
+    .pulse-animation {
+        animation: pulse-green 2s infinite;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h4 class="page-title">Bab Enkripsi</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+
+                <div class="lesson-wrapper">
+
+                    <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+                        <div style="width: 5px; height: 35px; background: #F3C623; margin-right: 15px; border-radius: 2px;"></div>
+                        <h1 class="fw-bold m-0" style="color: #1B3C53;">Aktivitas: Proses Enkripsi</h1>
+                    </div>
+
+                    <div class="lesson-wrap p-4">
+                        <h2 class="lesson-h2">Mengurutkan Proses Enkripsi dengan Benar</h2>
+
+                        <p class="teks">
+                            Pada bagian ini, Anda diminta untuk mengurutkan langkah-langkah yang benar dalam
+                            proses enkripsi dan dekripsi.
+                        </p>
+
+                        <p class="teks">
+                            <b>Instruksi Pengerjaan:</b>
+                            Seret kotak dari kiri (Pilihan) ke kanan (Urutan) dan susun dari atas ke bawah sesuai alur yang benar.
+                        </p>
+
+                        <div class="drag-area-container mt-4">
+
+                            <!-- PILIHAN -->
+                            <div class="choices" id="choices">
+                                <div class="box-header">
+                                    <i class="fas fa-list me-2"></i>Pilihan Acak
+                                </div>
+
+                                <div class="choice" id="5" draggable="true">Data atau pesan asli dapat dibaca oleh penerima</div>
+                                <div class="choice" id="1" draggable="true">Data asli (plaintext) diterima</div>
+                                <div class="choice" id="3" draggable="true">Data terenkripsi (ciphertext) dikirim ke penerima</div>
+                                <div class="choice" id="4" draggable="true">Penerima menggunakan kunci dekripsi untuk mengubah ciphertext menjadi plaintext</div>
+                                <div class="choice" id="2" draggable="true">Proses enkripsi dilakukan dengan algoritma dan kunci enkripsi</div>
+                            </div>
+
+                            <!-- DROP AREA -->
+                            <div class="dropArea" id="dropArea">
+                                <div class="box-header">
+                                    <i class="fas fa-sort-numeric-down me-2"></i>Urutkan di sini
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex gap-2 mt-4 justify-content-center">
+                            <button id="reset" class="btn btn-secondary btn-round btn-action">
+                                <i class="fas fa-undo me-2"></i>Reset
+                            </button>
+
+                            <button id="check" class="btn btn-primary btn-round btn-action">
+                                <i class="fas fa-check-circle me-2"></i>Cek Jawaban
+                            </button>
+                        </div>
+
+                        <div id="hasil-pemeriksaan" class="mt-4 text-center"></div>
+                    </div>
+
+                </div>
+
+                <div class="d-flex justify-content-between mt-4 pt-4 border-top align-items-center">
+                    <a href="{% url 'enkripsi' %}" class="btn btn-danger btn-round">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali
+                    </a>
+
+                    <div id="nextButtonContainer" class="d-none">
+                        <a href="{% url 'kuis_petunjuk' %}?jenis=enkripsi" class="btn btn-success btn-round pulse-animation">
+                            <i class="fas fa-unlock me-2"></i> Buka Kuis Enkripsi
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+
+    const STATUS_SUDAH_SELESAI = "{{ status_pengerjaan }}" === "selesai";
+
+    const dropArea = document.getElementById('dropArea');
+    const choiceBox = document.getElementById('choices');
+    const checkButton = document.getElementById('check');
+    const resetButton = document.getElementById('reset');
+    const resultDiv = document.getElementById('hasil-pemeriksaan');
+    const nextButtonContainer = document.getElementById('nextButtonContainer');
+
+    const CORRECT_ORDER = ["1", "2", "3", "4", "5"];
+
+    const originalItems = Array.from(choiceBox.querySelectorAll('.choice'));
+
+    /* -----------------------------
+       TAMPILAN JIKA SUDAH SELESAI
+    ------------------------------*/
+    function setTampilanSelesai() {
+
+        choiceBox.innerHTML = "";
+        dropArea.innerHTML = `
+            <div class="box-header">
+                <i class="fas fa-sort-numeric-down me-2"></i>Urutkan Di Sini
+            </div>`;
+
+        CORRECT_ORDER.forEach(id => {
+            const item = originalItems.find(i => i.id === id);
+            if (item) {
+                const clone = item.cloneNode(true);
+                clone.setAttribute("draggable", false);
+                dropArea.appendChild(clone);
+            }
+        });
+
+        resultDiv.innerHTML = `
+            <div class="alert alert-success border-0 shadow-sm" 
+                 style="background:#d1e7dd;color:#0f5132;">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong>Sudah dikerjakan!</strong> Anda telah menyelesaikan aktivitas ini.
+            </div>`;
+
+        nextButtonContainer.classList.remove("d-none");
+        checkButton.disabled = true;
+        resetButton.disabled = true;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        if (STATUS_SUDAH_SELESAI) {
+            setTampilanSelesai();
+        }
+    });
+
+    /* -----------------------------
+       DRAG & DROP
+    ------------------------------*/
+    document.querySelectorAll('.choice').forEach(choice => {
+
+        choice.addEventListener('dragstart', e => {
+            if (STATUS_SUDAH_SELESAI) return;
+            e.dataTransfer.setData('text/plain', choice.id);
+            choice.classList.add('dragging');
+        });
+
+        choice.addEventListener('dragend', () => {
+            choice.classList.remove('dragging');
+        });
+
+    });
+
+    [dropArea, choiceBox].forEach(zone => {
+
+        zone.addEventListener('dragover', e => {
+            e.preventDefault();
+            if (!STATUS_SUDAH_SELESAI) zone.classList.add('dragover');
+        });
+
+        zone.addEventListener('dragleave', () => {
+            zone.classList.remove('dragover');
+        });
+
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('dragover');
+
+            if (STATUS_SUDAH_SELESAI) return;
+
+            const id = e.dataTransfer.getData('text/plain');
+            const el = document.getElementById(id);
+
+            if (el && zone !== el.parentElement) {
+                zone.appendChild(el);
+            }
+
+            resultDiv.innerHTML = "";
+        });
+
+    });
+
+    /* -----------------------------
+       RESET
+    ------------------------------*/
+    resetButton.onclick = () => {
+        if (STATUS_SUDAH_SELESAI) return;
+
+        originalItems.forEach(item => {
+            const el = document.getElementById(item.id);
+            if (el) {
+                el.setAttribute("draggable", true);
+                choiceBox.appendChild(el);
+            }
+        });
+
+        resultDiv.innerHTML = "";
+        nextButtonContainer.classList.add("d-none");
+    };
+
+    /* -----------------------------
+       CEK JAWABAN
+    ------------------------------*/
+    checkButton.onclick = () => {
+
+        if (STATUS_SUDAH_SELESAI) return;
+
+        const currentOrder = Array.from(dropArea.querySelectorAll('.choice'))
+                                  .map(el => el.id);
+
+        if (currentOrder.length !== CORRECT_ORDER.length) {
+            resultDiv.innerHTML = `
+                <div class="alert alert-warning border-0 shadow-sm">
+                    ⚠️ Peringatan! Pindahkan semua langkah terlebih dahulu.
+                </div>`;
+            return;
+        }
+
+        const isCorrect = currentOrder.every((v, i) => v === CORRECT_ORDER[i]);
+
+        if (isCorrect) {
+
+            resultDiv.innerHTML = `
+                <div class="alert alert-success border-0 shadow-sm"
+                     style="background:#d1e7dd;color:#0f5132;">
+                    ✅ Jawaban Benar! Progres tersimpan.
+                </div>`;
+
+            document.querySelectorAll('.choice')
+                .forEach(c => c.setAttribute('draggable', false));
+
+            checkButton.disabled = true;
+            resetButton.disabled = true;
+
+            fetch("{% url 'update_progres_item' %}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    section: "Enkripsi",
+                    item: "Aktivitas"
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "success") {
+                    nextButtonContainer.classList.remove("d-none");
+                    nextButtonContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+
+        } else {
+            resultDiv.innerHTML = `
+                <div class="alert alert-danger border-0 shadow-sm">
+                    ❌ Jawaban Salah! Periksa kembali.
+                </div>`;
+        }
+    };
+
+</script>
+{% endblock %}

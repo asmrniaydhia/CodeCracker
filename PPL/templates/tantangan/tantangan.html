@@ -1,0 +1,353 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>CodeCracker - Tantangan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'dashboard/assets/img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+
+    <script src="{% static 'dashboard/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Lato:400,700,900", "Open+Sans:400,600", "Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+          urls: ["{% static 'dashboard/assets/css/fonts.min.css' %}"],
+        },
+        active: function () { sessionStorage.fonts = true; },
+      });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/kaiadmin.min.css' %}" />
+
+    <style>
+        /* Penyesuaian agar font & background sama dengan Landing */
+        body {
+            padding-top: 80px; /* Tinggi navbar landing */
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8f9fa; /* Warna background sedikit abu agar kartu kontras */
+        }
+
+        h1, h2, h3, .navbar-brand {
+            font-family: 'Lato', sans-serif !important;
+        }
+
+        /* --- NAVBAR STYLE (PERSIS LANDING PAGE) --- */
+        .landing-navbar {
+            background-color: #1B3C53 !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-link {
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #F3C623 !important; 
+            transform: translateY(-2px);
+        }
+        
+        /* Tombol Logout menyesuaikan tema landing */
+        .btn-logout-custom {
+            background-color: #dc3545; /* Merah */
+            color: white !important;
+            font-weight: 700;
+            border: none;
+            padding: 8px 24px;
+            transition: all 0.3s;
+        }
+        .btn-logout-custom:hover {
+            background-color: #bb2d3b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4);
+        }
+
+        /* --- STYLE KONTEN TANTANGAN (MODAL & GRID) --- */
+        /* Style ini dipertahankan agar tampilan kartu tantangan tidak rusak */
+        
+        .challenges-header { text-align: center; padding: 3rem 0 2rem; }
+        .header-agent-icon { font-size: 3.5rem; color: #1B3C53; margin-bottom: 0.5rem; display: inline-block; }
+        .challenges-header h1 { font-weight: 900; font-size: 3rem; color: #1B3C53; }
+        
+        .challenges-container { padding: 0 0 3rem; max-width: 1400px; margin: 0 auto; }
+        .challenges-grid { display: flex; flex-direction: column; gap: 1.5rem; padding: 0 2rem; }
+        .challenge-row { display: flex; gap: 1.5rem; justify-content: flex-start; flex-wrap: wrap; }
+        .challenge-row:last-child { justify-content: center; }
+
+        .challenge-card {
+            background-color: white; border-radius: 15px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); padding: 2rem;
+            transition: all 0.3s ease; display: flex; align-items: center;
+            gap: 1.5rem; border: 2px solid transparent;
+            flex: 1 1 calc(33.333% - 1rem); min-width: 320px; max-width: 450px;
+            color: inherit; text-decoration: none;
+        }
+        .challenge-card:not(.locked):hover {
+            transform: translateY(-10px); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            border-color: #F3C623; 
+        }
+        .challenge-card.locked {
+            filter: grayscale(100%); opacity: 0.7; background-color: #e9ecef;
+            cursor: not-allowed; pointer-events: none;
+        }
+        
+        .challenge-thumbnail {
+            width: 80px; height: 80px; border-radius: 10px; overflow: hidden; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; background: #f1f1f1;
+        }
+        .challenge-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .challenge-info { flex: 1; text-align: center; }
+        .challenge-number { font-weight: 700; color: #6c757d; font-size: 0.9rem; text-transform: uppercase; }
+        .episode-number { font-weight: 900; color: #1B3C53; font-size: 2rem; line-height: 1; }
+        
+        .status-badge {
+            background-color: #F3C623; color: #1B3C53; font-weight: 700;
+            padding: 0.4rem 1rem; border-radius: 50px; display: inline-block; font-size: 0.8rem;
+        }
+        .status-badge.selesai { background-color: #28a745; color: white; }
+        .status-badge.terkunci { background-color: #6c757d; color: white; }
+
+        /* Modal Prolog Style */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; }
+        .prolog-modal { background: linear-gradient(135deg, #1B3C53 0%, #2c5364 100%); border-radius: 20px; max-width: 550px; width: 90%; max-height: 70vh; box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; overflow: hidden; }
+        .prolog-header { padding: 1.5rem; text-align: center; border-bottom: 3px solid #F3C623; }
+        .prolog-header h2 { font-weight: 900; color: #F3C623; margin: 0; font-family: 'Lato', sans-serif; }
+        .prolog-content { padding: 2rem; overflow-y: auto; color: white; line-height: 1.8; flex: 1; font-size: 1rem; }
+        .btn-next { background: #F3C623; color: #1B3C53; font-weight: 800; padding: 0.8rem 2.5rem; border-radius: 50px; border: none; transition: all 0.3s; font-family: 'Lato', sans-serif; text-transform: uppercase; }
+        .btn-next:hover:not(:disabled) { background: white; transform: scale(1.05); }
+        .btn-next:disabled { background: #6c757d; color: #ccc; cursor: not-allowed; }
+        
+        /* Scroll Indicator Animation */
+        .scroll-indicator { text-align: center; color: #F3C623; font-size: 0.85rem; animation: pulse 2s infinite; margin-top: 1rem; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top landing-navbar">
+        <div class="container-fluid px-5"> 
+            
+            <a class="navbar-brand fw-bold fs-2" href="{% url 'index' %}">
+                CodeCracker
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link fs-5" href="{% url 'pengenalan' %}">Belajar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 active" href="{% url 'tantangan' %}">Tantangan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5" href="{% url 'leaderboard' %}">Papan Peringkat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5" href="#">Informasi</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-white text-end d-none d-md-block" style="line-height: 1.2;">
+                        <span class="fw-bold d-block" style="font-size: 1rem;">
+                            <i class="fas fa-user-circle me-1"></i> {{ request.session.nama_lengkap|default:'Siswa' }}
+                        </span>
+                        <small class="text-white-50 fw-bold" style="font-size: 0.75rem;">SISWA</small>
+                    </div>
+                    
+                    <a href="{% url 'logout' %}" class="btn btn-logout-custom btn-round">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal-overlay" id="prologModal">
+        <div class="prolog-modal">
+            <div class="prolog-header">
+                <h2><i class="fas fa-user-secret"></i> MISI AGEN 7</h2>
+                <p class="subtitle mb-0 text-white-50">Prolog: Permulaan Misi</p>
+            </div>
+            <div class="prolog-content" id="prologContent">
+                <p>Di tengah malam yang sunyi, pesan terenkripsi tiba di markas besar Divisi Kriptografi Nasional. "Agen 7, dunia bergantung padamu." Begitulah bunyi pesan itu.</p>
+                <p>Sejak saat itu, seorang agen muda bernama Agen 7 resmi memulai misinya — memecahkan kode rahasia peninggalan CipherX, musuh legendaris yang dikenal mahir menyembunyikan pesan lewat sandi Caesar.</p>
+                <p>Perjalanan ini tidak akan mudah. Setiap episode akan menguji kemampuan dekripsi dan logika Agen 7. Namun dengan ketekunan dan keberanian, tidak ada kode yang tidak bisa dipecahkan.</p>
+                
+                <div class="scroll-indicator" id="scrollIndicator">
+                    <span>Scroll untuk melanjutkan</span><br>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="p-3 text-center" style="background: rgba(0,0,0,0.2);">
+                <button class="btn-next" id="btnNext" disabled>Mulai Misi <i class="fas fa-arrow-right ms-2"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="challenges-header">
+        <div class="container-fluid text-center">
+            <i class="fas fa-user-secret header-agent-icon"></i>
+            <h1>Peta Tantangan</h1>
+            
+            {% if messages %}
+            <div class="container mt-3" style="max-width: 600px;">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="challenges-container">
+        <div class="challenges-grid" id="challenges-grid"></div>
+    </div>
+
+    <script src="{% static 'dashboard/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/bootstrap.min.js' %}"></script>
+    
+    <script>
+        // --- POP-UP MODAL LOGIC (PROLOG) ---
+        const prologModal = document.getElementById('prologModal');
+        const prologContent = document.getElementById('prologContent');
+        const btnNext = document.getElementById('btnNext');
+        const scrollIndicator = document.getElementById('scrollIndicator');
+        let hasScrolledToBottom = false;
+
+        function checkScrollPosition() {
+            const { scrollTop, scrollHeight, clientHeight } = prologContent;
+            // Toleransi 20px
+            if (scrollTop + clientHeight >= scrollHeight - 20) {
+                if (!hasScrolledToBottom) {
+                    hasScrolledToBottom = true;
+                    btnNext.disabled = false;
+                    scrollIndicator.style.display = 'none';
+                }
+            }
+        }
+        prologContent.addEventListener('scroll', checkScrollPosition);
+
+        function checkInitialScroll() {
+            const { scrollHeight, clientHeight } = prologContent;
+            if (scrollHeight <= clientHeight + 10) {
+                hasScrolledToBottom = true;
+                btnNext.disabled = false;
+                scrollIndicator.style.display = 'none';
+            } else {
+                scrollIndicator.style.display = 'block';
+            }
+        }
+        
+        btnNext.addEventListener('click', () => {
+            prologModal.classList.remove('active');
+            window.location.href = "{% url 'stage1' %}"; 
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // AMBIL DATA DARI VIEW DJANGO
+            const currentMaxStage = {{ max_stage|default:1 }};
+
+            // LOGIKA PEMBERSIH SESSION (JIKA RESET KE 1)
+            if (currentMaxStage === 1) {
+                sessionStorage.clear();
+                localStorage.clear();
+                const newSession = { totalScore: 0, stageProgress: {} };
+                sessionStorage.setItem('gameSession', JSON.stringify(newSession));
+            }
+
+            const challengesGrid = document.getElementById('challenges-grid');
+            const totalStages = 10;
+            
+            let currentRow;
+            const cardsPerRow = 3;
+
+            for (let i = 1; i <= totalStages; i++) {
+                if ((i - 1) % cardsPerRow === 0) {
+                    currentRow = document.createElement('div');
+                    currentRow.className = 'challenge-row';
+                    challengesGrid.appendChild(currentRow);
+                }
+
+                // Logika Status Stage
+                let isLocked = false;
+                let isCompleted = false;
+
+                if (i < currentMaxStage) {
+                    isCompleted = true; // Selesai
+                } else if (i === currentMaxStage) {
+                    isCompleted = false; // Terbuka (current)
+                } else {
+                    isLocked = true; // Terkunci
+                }
+
+                const cardWrapper = document.createElement('a');
+                cardWrapper.className = `challenge-card ${isLocked ? 'locked' : ''}`;
+                cardWrapper.href = '#'; 
+                cardWrapper.dataset.stage = i;
+                
+                let statusText = 'Belum Selesai';
+                let statusClass = '';
+
+                if (isLocked) {
+                    statusText = 'Terkunci';
+                    statusClass = 'terkunci';
+                } else if (isCompleted) {
+                    statusText = 'Selesai';
+                    statusClass = 'selesai';
+                } else {
+                    statusText = 'Terbuka';
+                }
+                
+                // Gunakan ikon FontAwesome sebagai fallback jika gambar tidak ada
+                cardWrapper.innerHTML = `
+                    <div class="challenge-thumbnail">
+                        <img src="/static/assets/challenge_${i}.png" alt="Stage ${i}" 
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-gamepad fa-2x text-muted\'></i>'"> 
+                    </div>
+                    <div class="challenge-info">
+                        <div class="challenge-number">Episode</div>
+                        <div class="episode-number">${i}</div>
+                    </div>
+                    <div class="challenge-status">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+                
+                if (!isLocked) {
+                    cardWrapper.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const stage = e.currentTarget.dataset.stage;
+                        if (stage === '1' && currentMaxStage === 1) { 
+                            // Tampilkan prolog hanya jika di Stage 1 dan baru mulai
+                            hasScrolledToBottom = false;
+                            btnNext.disabled = true;
+                            prologModal.classList.add('active');
+                            setTimeout(checkInitialScroll, 100);
+                        } else {
+                            window.location.href = `/tantangan/stage${stage}/`; 
+                        }
+                    });
+                }
+                currentRow.appendChild(cardWrapper);
+            }
+        });
+    </script>
+
+</body>
+</html>

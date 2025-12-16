@@ -1,0 +1,151 @@
+{% extends "layouts/base_app.html" %}
+{% load static %}
+
+{% block title %}Petunjuk Evaluasi Akhir - CodeCracker{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'materi.css' %}">
+<link rel="stylesheet" href="{% static 'kuis.css' %}">
+<style>
+    .rules-list li { margin-bottom: 12px; padding-left: 10px; font-size: 1.05rem; }
+    .pulse-animation { animation: pulse-green 2s infinite; }
+    @keyframes pulse-green {
+        0% { box-shadow: 0 0 0 0 rgba(27, 60, 83, 0.4); }
+        70% { box-shadow: 0 0 0 10px rgba(27, 60, 83, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(27, 60, 83, 0); }
+    }
+    .teks {
+        line-height: 1.8;
+        color: #333;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h4 class="page-title">Evaluasi Akhir</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home"><a href="{% url 'dashboard' %}"><i class="fas fa-home"></i></a></li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Evaluasi</li>
+        <li class="separator"><i class="fas fa-chevron-right"></i></li>
+        <li class="nav-item">Petunjuk</li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="lesson-wrapper">
+                    
+                    <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
+                        <div style="width: 5px; height: 35px; background: #F3C623; margin-right: 15px; border-radius: 2px;"></div>
+                        <h1 class="fw-bold m-0" style="color: #1B3C53;">Petunjuk Pengerjaan Evaluasi Akhir</h1>
+                    </div>
+
+                    <div class="lesson-wrap pt-4 pb-4" style="background: #f8f9fa; border-radius: 12px; border: 1px solid #eee;">
+                        
+                        <div class="text-center mb-4">
+                            <span class="badge bg-primary fs-6 px-3 py-2 text-uppercase mb-3">
+                                <i class="fas fa-tag me-2"></i>Evaluasi Akhir Modul
+                            </span>
+                            <h2 class="fw-bold" style="color: #1B3C53;">Uji Pemahaman Akhirmu</h2>
+                            <p class="text-muted">Baca aturan main di bawah ini sebelum memulai.</p>
+                        </div>
+
+                        <div class="row justify-content-center">
+                            <div class="col-md-8">
+                                <div class="alert bg-white border shadow-sm p-4">
+                                    <ol class="rules-list text-dark m-0">
+                                        <li>Baca setiap soal dengan cermat.</li>
+                                        <li>Waktu pengerjaan adalah <strong>60 menit</strong>.</li>
+                                        <li>Tidak ada pengurangan nilai.</li>
+                                        <li>Jangan menutup/refresh halaman.</li>
+                                        <li>Pastikan koneksi dan perangkat stabil.</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-4">
+                            <div class="form-check p-3 bg-white border rounded shadow-sm d-flex align-items-center gap-2 px-4">
+                                <input class="form-check-input" type="checkbox" id="agreeCheck" style="transform: scale(1.3);">
+                                <label class="form-check-label fw-bold ms-2 text-dark" for="agreeCheck" style="cursor: pointer; user-select: none;">
+                                    Saya telah membaca dan siap mengerjakan evaluasi.
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5 pt-4 border-top">
+                    <a href="{% url 'kuis_petunjuk' %}?jenis=dekripsi" class="btn btn-danger btn-round px-4">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali ke Materi
+                    </a>
+
+                    <button id="startBtn" class="btn btn-primary btn-round px-5 pulse-animation" style="background-color: #1B3C53; border-color: #1B3C53;">
+                        Mulai Evaluasi <i class="fas fa-play ms-2"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 overflow-hidden">
+            <div class="modal-header text-white" style="background-color: #1B3C53;">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-stopwatch me-2"></i>Konfirmasi Mulai Evaluasi
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center p-4">
+                <div class="mb-3" style="color: #1B3C53;">
+                    <i class="fas fa-stopwatch fa-4x"></i>
+                </div>
+                <h4 class="fw-bold mb-2">Waktu akan berjalan!</h4>
+                <p class="text-muted">Apakah Anda yakin ingin memulai Evaluasi Akhir sekarang?</p>
+            </div>
+            <div class="modal-footer justify-content-center bg-light">
+                <button type="button" class="btn btn-secondary btn-round px-4" data-bs-dismiss="modal">Nanti Dulu</button>
+                <a href="{% url 'evaluasi_pengerjaan' %}" class="btn btn-success btn-round fw-bold px-4">
+                    Ya, Kerjakan!
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{% static 'evaluasi.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const agreeCheck = document.getElementById('agreeCheck');
+        const startBtn = document.getElementById('startBtn');
+        
+        // HAPUS SEMUA LOGIKA YANG BERHUBUNGAN DENGAN startBtn.classList.add/remove('disabled') DI SINI.
+        // Biarkan tombol selalu aktif di HTML, validasi diserahkan ke JS.
+        
+        // Logika sederhana untuk UX visual:
+        agreeCheck.addEventListener('change', function() {
+            if (this.checked) {
+                startBtn.style.opacity = 1; 
+            } else {
+                startBtn.style.opacity = 0.8; 
+            }
+        });
+        
+        // Atur opacity awal jika perlu, tapi fokus utamanya adalah menghapus .disabled
+    });
+</script>
+{% endblock %}

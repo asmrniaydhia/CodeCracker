@@ -1,0 +1,143 @@
+{% extends 'layouts/base_app.html' %}
+{% load static %}
+
+{% block title %}Data Siswa{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4 class="page-title">Data Siswa</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home">
+            <a href="{% url 'dashboard' %}"><i class="flaticon-home"></i></a>
+        </li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <h4 class="card-title">Daftar Siswa Saya</h4>
+                    
+                    <form method="GET" action="{% url 'data_siswa' %}" class="d-flex gap-2">
+                        
+                        <select name="kelas" class="form-select form-control" style="min-width: 200px;" onchange="this.form.submit()">
+                            <option value="">-- Semua Kelas --</option>
+                            {% for k in daftar_kelas_guru %}
+                                <option value="{{ k.id_kelas }}" {% if selected_kelas == k.id_kelas %}selected{% endif %}>
+                                    {{ k.nama_kelas }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Cari nama siswa..." value="{{ search_query|default:'' }}">
+                            <button class="btn btn-primary btn-round ms-2" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+
+                        {% if selected_kelas or search_query %}
+                            <a href="{% url 'data_siswa' %}" class="btn btn-warning btn-round" title="Reset Filter">
+                                <i class="fas fa-sync-alt"></i>
+                            </a>
+                        {% endif %}
+                    </form>
+
+                </div>
+            </div>
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col" class="text-center" style="width: 5%">No</th>
+                                <th scope="col">Nama Lengkap</th>
+                                <th scope="col">Email</th>
+                                <th scope="col" class="text-center">Kelas</th>
+                                <th scope="col" class="text-center" style="width: 10%">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for anggota in data_anggota %}
+                            <tr class="align-middle">
+                                <td class="text-center">{{ forloop.counter }}</td>
+                                
+                                <td class="fw-bold text-navy">
+                                    {{ anggota.siswa.nama_lengkap }}
+                                </td>
+                                
+                                <td>{{ anggota.siswa.email }}</td>
+                                
+                                <td class="text-center">
+                                    <span class="badge bg-primary">
+                                        {{ anggota.kelas.nama_kelas }}
+                                    </span>
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="{% url 'hapus_anggota_kelas' anggota.id_anggota %}" 
+                                       class="btn btn-link btn-danger btn-keluarkan"
+                                       data-nama="{{ anggota.siswa.nama_lengkap }}"
+                                       data-kelas="{{ anggota.kelas.nama_kelas }}"
+                                       title="Keluarkan Siswa">
+                                        <i class="fa fa-trash fa-lg"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-5">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <i class="fas fa-search fa-3x mb-3 text-secondary"></i>
+                                        <span>
+                                            {% if search_query or selected_kelas %}
+                                                Data tidak ditemukan dengan filter tersebut.
+                                            {% else %}
+                                                Belum ada siswa yang bergabung di kelas Anda.
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll('.btn-keluarkan');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                const href = this.getAttribute('href');
+                const namaSiswa = this.getAttribute('data-nama');
+                const namaKelas = this.getAttribute('data-kelas');
+
+                Swal.fire({
+                    title: 'Keluarkan Siswa?',
+                    html: `Apakah Anda yakin ingin mengeluarkan <b>${namaSiswa}</b> dari kelas <b>${namaKelas}</b>?<br><small class="text-muted">Siswa ini harus memasukkan token lagi jika ingin bergabung kembali.</small>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#1B3C53',
+                    confirmButtonText: 'Ya, Keluarkan',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock %}

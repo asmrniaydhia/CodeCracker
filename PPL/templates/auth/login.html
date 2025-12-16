@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Masuk - CodeCracker</title>
+    <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
+    <link rel="icon" href="{% static 'dashboard/assets/img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+
+    <script src="{% static 'dashboard/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Lato:400,700,900", "Open+Sans:400,600"] },
+        custom: {
+          families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+          urls: ["{% static 'dashboard/assets/css/fonts.min.css' %}"],
+        },
+        active: function () { sessionStorage.fonts = true; },
+      });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/kaiadmin.min.css' %}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #f5f9ee; /* Background Krem */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .login-title {
+            font-family: 'Lato', sans-serif;
+            font-weight: 900;
+            color: #1B3C53;
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .form-label {
+            font-weight: 700;
+            color: #1B3C53;
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #1B3C53;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: #F3C623;
+            box-shadow: 0 0 0 0.2rem rgba(243, 198, 35, 0.25);
+        }
+
+        .btn-login {
+            background: #1B3C53; /* Navy */
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            padding: 12px;
+            border-radius: 6px;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            background-color: #1B3C53;
+            color: #F3C623;
+        }
+
+        .link-text {
+            color: #1B3C53;
+            font-weight: 800;
+            text-decoration: none;
+        }
+        .link-text:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h3 class="login-title">Masuk</h3>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="text" name="email" class="form-control" placeholder="Masukkan email" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Kata Sandi</label>
+                <input type="password" name="password" class="form-control" placeholder="Masukkan kata sandi" required>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <a href="#" class="small text-muted text-decoration-none">Lupa Sandi?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Masuk</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0 small">
+            Belum punya akun? <a href="{% url 'pilihan_daftar' %}" class="link-text">Daftar di sini</a>
+        </p>
+        
+        <div class="text-center mt-2">
+            <a href="{% url 'index' %}" class="small text-muted text-decoration-none">
+                <i class="fas fa-arrow-left me-1"></i> Kembali ke Beranda
+            </a>
+        </div>
+    </div>
+
+    <script src="{% static 'dashboard/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/bootstrap.min.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            {% if messages %}
+                {% for message in messages %}
+                    Swal.fire({
+                        icon: "{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}",
+                        title: "{% if message.tags == 'error' %}Gagal!{% elif message.tags == 'success' %}Berhasil!{% elif message.tags == 'warning' %}Peringatan{% else %}Info{% endif %}",
+                        text: "{{ message|escapejs }}",
+                        confirmButtonColor: "#1B3C53",
+                        confirmButtonText: "OK"
+                    });
+                {% endfor %}
+            {% endif %}
+        });
+    </script>
+
+</body>
+</html>

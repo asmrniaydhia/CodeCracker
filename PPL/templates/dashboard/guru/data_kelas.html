@@ -1,0 +1,228 @@
+{% extends 'layouts/base_app.html' %}
+{% load static %}
+
+{% block title %}Manajemen Kelas{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4 class="page-title">Manajemen Kelas</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home">
+            <a href="{% url 'dashboard' %}">
+                <i class="flaticon-home"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Daftar Kelas Saya</h4>
+                    <button class="btn btn-primary btn-round ms-auto" data-bs-toggle="modal" data-bs-target="#modalTambahKelas">
+                        <i class="fa fa-plus"></i>
+                        Tambah Kelas
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light"> 
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 5%">No</th>
+                            <th scope="col">Nama Kelas</th>
+                            <th scope="col" class="text-center">Token Kelas</th>
+                            <th scope="col" class="text-center">Jumlah Siswa</th>
+                            <th scope="col" class="text-center" style="width: 15%">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for k in daftar_kelas %}
+                        <tr class="align-middle"> 
+                            <td class="text-center">{{ forloop.counter }}</td>
+                            
+                            <td class="fw-bold text-navy">{{ k.nama_kelas }}</td>
+                            
+                            <td class="text-center">
+                                <span class="badge bg-warning text-dark" style="font-size: 0.9rem; letter-spacing: 2px;">
+                                    {{ k.token }}
+                                </span>
+                            </td>
+                            
+                            <td class="text-center">
+                                <i class="fas fa-users me-2 text-muted"></i> 
+                                {{ k.anggotakelas_set.count }} Siswa
+                            </td>
+                            
+                            <td class="text-center">
+                                <div class="form-button-action">
+                                    <button type="button" class="btn btn-link btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit{{ k.id_kelas }}" title="Edit Nama Kelas">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+
+                                    <a href="{% url 'hapus_kelas' k.id_kelas %}" 
+                                       class="btn btn-link btn-danger btn-hapus" 
+                                       data-nama="{{ k.nama_kelas }}"
+                                       data-jumlah="{{ k.anggotakelas_set.count }}"
+                                       title="Hapus Kelas">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </div>
+
+                                <div class="modal fade text-start" id="modalEdit{{ k.id_kelas }}" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title">
+                                                    <span class="fw-mediumbold">Edit</span> 
+                                                    <span class="fw-light">Kelas</span>
+                                                </h5>
+                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            
+                                            <form method="POST" action="{% url 'edit_kelas' k.id_kelas %}">
+                                                {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Nama Kelas</label>
+                                                                <input type="text" name="nama_kelas" class="form-control" value="{{ k.nama_kelas }}" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                            <div class="alert alert-warning small p-2">
+                                                                <i class="fas fa-exclamation-triangle"></i> Token kelas (<b>{{ k.token }}</b>) tidak dapat diubah.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer border-0">
+                                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                                                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-5">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-box-open fa-3x mb-3 text-secondary"></i>
+                                    <span>Belum ada kelas yang dibuat.<br>Silakan klik tombol "Tambah Kelas".</span>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalTambahKelas" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <span class="fw-mediumbold">Kelas</span> 
+                    <span class="fw-light">Baru</span>
+                </h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <form method="POST" action="{% url 'kelola_kelas' %}">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <p class="small text-muted">Buat kelas baru untuk mengelompokkan siswa Anda.</p>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group form-group-default">
+                                <label>Nama Kelas</label>
+                                <input type="text" name="nama_kelas" class="form-control" placeholder="Contoh: XII RPL 1 - Kriptografi" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="alert alert-info small p-2">
+                                <i class="fas fa-info-circle"></i> Token kelas akan dibuat secara <b>otomatis</b> oleh sistem setelah Anda menyimpan.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Kelas</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Ambil semua tombol dengan class 'btn-hapus'
+        const deleteButtons = document.querySelectorAll('.btn-hapus');
+
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // Mencegah link langsung dieksekusi
+
+                const href = this.getAttribute('href');
+                const namaKelas = this.getAttribute('data-nama');
+                // Konversi string jumlah ke integer agar bisa dibandingkan
+                const jumlahSiswa = parseInt(this.getAttribute('data-jumlah'));
+
+                // Logika Percabangan Validasi
+                if (jumlahSiswa > 0) {
+                    // KONDISI 1: ADA SISWA (BAHAYA)
+                    Swal.fire({
+                        title: 'PERHATIAN! ADA SISWA!',
+                        html: `Kelas <b>${namaKelas}</b> berisi <b>${jumlahSiswa} siswa</b>.<br>Jika dihapus, siswa-siswa ini akan kehilangan akses kelas.<br>Yakin ingin melanjutkan?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33', // Merah
+                        cancelButtonColor: '#1B3C53', // Navy
+                        confirmButtonText: 'Ya, Hapus & Keluarkan Siswa',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = href;
+                        }
+                    });
+                } else {
+                    // KONDISI 2: KELAS KOSONG (AMAN)
+                    Swal.fire({
+                        title: 'Hapus Kelas?',
+                        text: `Kelas "${namaKelas}" akan dihapus permanen.`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#1B3C53',
+                        confirmButtonText: 'Ya, Hapus',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = href;
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

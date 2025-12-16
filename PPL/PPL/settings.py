@@ -14,7 +14,7 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATIC_ROOT = os.path.join(BASE_DIR, 'static_copy')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static_copy')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
+    'django_seed',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
@@ -55,7 +56,7 @@ ROOT_URLCONF = 'PPL.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -81,7 +82,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '',
         'HOST': '127.0.0.1', 
-        'PORT': '3306',
+        'PORT': '3308',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
@@ -126,24 +127,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "main/static",  
+    os.path.join(BASE_DIR, 'static'), # Folder static global (CSS/JS/Img)
 ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# try:
-#     from .local_settings import *
-# except ImportError:
-#     pass
-
-# # Memberitahu Django bahwa halaman login ada di URL dengan nama 'login' (yaitu /login/)
-# LOGIN_URL = 'login'
-
-# # (Opsional) Halaman tujuan setelah login berhasil jika tidak ada parameter ?next
-# LOGIN_REDIRECT_URL = 'landing' 
-
-# # (Opsional) Halaman tujuan setelah logout
-# LOGOUT_REDIRECT_URL = 'landing'

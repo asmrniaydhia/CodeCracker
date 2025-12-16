@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Papan Peringkat - CodeCracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'dashboard/assets/img/kaiadmin/favicon.ico' %}" type="image/x-icon" />
+
+    <script src="{% static 'dashboard/assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Lato:400,700,900", "Open+Sans:400,600", "Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: ["Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"],
+          urls: ["{% static 'dashboard/assets/css/fonts.min.css' %}"],
+        },
+        active: function () { sessionStorage.fonts = true; },
+      });
+    </script>
+
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'dashboard/assets/css/kaiadmin.min.css' %}" />
+
+    <style>
+        /* GLOBAL STYLE */
+        body {
+            padding-top: 80px; /* Tinggi navbar */
+            font-family: 'Open Sans', sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3, .navbar-brand, .page-title {
+            font-family: 'Lato', sans-serif !important;
+        }
+
+        /* NAVBAR STYLE */
+        .landing-navbar {
+            background-color: #1B3C53 !important;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .nav-link {
+            transition: all 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: #F3C623 !important; 
+            transform: translateY(-2px);
+        }
+        
+        .nav-link.active {
+            color: #F3C623 !important;
+            font-weight: 700;
+        }
+
+        /* Tombol Logout */
+        .btn-logout-custom {
+            background-color: #dc3545;
+            color: white !important;
+            font-weight: 700;
+            border: none;
+            padding: 8px 24px;
+            transition: all 0.3s;
+        }
+        .btn-logout-custom:hover {
+            background-color: #bb2d3b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.4);
+        }
+
+        /* HEADER LEADERBOARD */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+        .page-title {
+            font-weight: 900;
+            font-size: 2.8rem;
+            color: #1B3C53;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        .page-subtitle { color: #64748b; font-size: 1.1rem; }
+
+        .rank-container { max-width: 1000px; margin: 0 auto 5rem auto; padding: 0 20px; }
+
+        /* TABEL STYLE */
+        .custom-table { width: 100%; border-collapse: separate; border-spacing: 0 15px; }
+        .custom-table thead th { 
+            border: none; color: #64748b; text-transform: uppercase; 
+            font-size: 0.85rem; font-weight: 700; padding: 0 20px; letter-spacing: 0.5px;
+        }
+
+        /* --- PERBAIKAN DI SINI (HAPUS SCALE) --- */
+        .rank-row { 
+            background: white; 
+            transition: all 0.3s ease; 
+        }
+        
+        .rank-row:hover { 
+            /* Ganti scale(1.02) dengan translateY(-5px) agar tidak melebar ke samping */
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
+            z-index: 2; 
+            position: relative; 
+        }
+        
+        /* Radius Tumpul */
+        .rank-row td:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+        .rank-row td:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+        .rank-row td { padding: 20px; border: none; vertical-align: middle; }
+
+        /* Warna Peringkat Top 3 */
+        .row-rank-1 td { background: linear-gradient(90deg, #fff9c4, #ffffff); border-top: 2px solid #F3C623; border-bottom: 2px solid #F3C623; }
+        .row-rank-1 td:first-child { border-left: 2px solid #F3C623; }
+        .row-rank-1 td:last-child { border-right: 2px solid #F3C623; }
+
+        .row-rank-2 td { border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1; }
+        .row-rank-3 td { border-top: 1px solid #e2bc9d; border-bottom: 1px solid #e2bc9d; }
+        
+        /* Highlight Diri Sendiri */
+        .row-me td { background-color: #e0f2fe !important; }
+        .row-me td:first-child { border-left: 5px solid #1B3C53 !important; }
+
+        /* Elemen Lain */
+        .rank-num { 
+            width: 45px; height: 45px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 900; font-size: 1.2rem; background: #f1f5f9; color: #64748b; 
+            margin: 0 auto;
+        }
+        .row-rank-1 .rank-num { background: #F3C623; color: #1B3C53; box-shadow: 0 4px 10px rgba(243, 198, 35, 0.4); }
+        .row-rank-2 .rank-num { background: #94a3b8; color: white; }
+        .row-rank-3 .rank-num { background: #d4a373; color: white; }
+
+        .agent-profile { display: flex; align-items: center; gap: 15px; }
+        .agent-avatar { 
+            width: 50px; height: 50px; border-radius: 50%; 
+            background: #1B3C53; color: white; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 700; font-size: 1.2rem;
+        }
+        .agent-name { font-weight: 700; color: #334155; font-size: 1.1rem; }
+        .badge-you { 
+            background: #1B3C53; color: #F3C623; font-size: 0.7rem; 
+            padding: 3px 10px; border-radius: 50px; margin-left: 10px; 
+            font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        
+        .score-box { background: #d1fae5; color: #059669; padding: 8px 15px; border-radius: 50px; font-weight: 800; font-size: 1rem; }
+        .time-box { color: #64748b; font-weight: 600; font-size: 0.95rem; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top landing-navbar">
+        <div class="container-fluid px-5"> 
+            
+            <a class="navbar-brand fw-bold fs-2" href="{% url 'index' %}">
+                CodeCracker
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link fs-5" href="{% url 'pengenalan' %}">Belajar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5" href="{% url 'tantangan' %}">Tantangan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5 active" href="{% url 'leaderboard' %}">Papan Peringkat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link fs-5" href="#">Informasi</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-white text-end d-none d-md-block" style="line-height: 1.2;">
+                        <span class="fw-bold d-block" style="font-size: 1rem;">
+                            <i class="fas fa-user-circle me-1"></i> {{ request.session.nama_lengkap|default:'Siswa' }}
+                        </span>
+                        <small class="text-white-50 fw-bold" style="font-size: 0.75rem;">SISWA</small>
+                    </div>
+                    
+                    <a href="#" id="btn-logout" class="btn btn-logout-custom btn-round">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container rank-container">
+        
+        <div class="page-header">
+            <h1 class="page-title">Papan Peringkat</h1>
+            <p class="page-subtitle">Agen terbaik yang berhasil memecahkan kode dengan cepat dan tepat.</p>
+        </div>
+
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th class="text-center" width="10%">#</th>
+                        <th width="45%">Identitas Agen</th>
+                        <th class="text-center" width="20%">Total XP</th>
+                        <th class="text-center" width="25%">Waktu Misi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for peringkat in peringkat_list %}
+                    <tr class="rank-row 
+                        {% if forloop.counter == 1 %}row-rank-1{% endif %}
+                        {% if forloop.counter == 2 %}row-rank-2{% endif %}
+                        {% if forloop.counter == 3 %}row-rank-3{% endif %}
+                        {% if peringkat.siswa.id_pengguna == request.session.id_pengguna %}row-me{% endif %}
+                    ">
+                        <td class="text-center">
+                            <div class="rank-num">
+                                {% if forloop.counter == 1 %}
+                                    <i class="fas fa-crown"></i>
+                                {% elif forloop.counter == 2 %}
+                                    <i class="fas fa-medal"></i>
+                                {% elif forloop.counter == 3 %}
+                                    <i class="fas fa-medal"></i>
+                                {% else %}
+                                    {{ forloop.counter }}
+                                {% endif %}
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="agent-profile">
+                                <div class="agent-avatar">
+                                    {{ peringkat.siswa.nama_lengkap|slice:":1"|upper }}
+                                </div>
+                                <div>
+                                    <div class="agent-name">{{ peringkat.siswa.nama_lengkap }}</div>
+                                    {% if peringkat.siswa.id_pengguna == request.session.id_pengguna %}
+                                        <div class="badge-you">ANDA</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="text-center">
+                            <div class="score-box">{{ peringkat.total_skor }} XP</div>
+                        </td>
+
+                        <td class="text-center">
+                            <div class="time-box">
+                                <i class="far fa-clock me-1"></i> {{ peringkat.total_waktu_detik }} detik
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5">
+                            <div class="py-4">
+                                <i class="fas fa-ghost fa-3x text-muted mb-3" style="opacity: 0.5;"></i>
+                                <h4 class="text-muted fw-bold">Belum ada agen yang masuk peringkat</h4>
+                                <p class="text-muted small">Selesaikan tantangan untuk menjadi yang pertama!</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="{% static 'dashboard/assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'dashboard/assets/js/core/bootstrap.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Konfirmasi Logout
+        document.getElementById('btn-logout').addEventListener('click', function(e) {
+            e.preventDefault(); 
+            
+            Swal.fire({
+                title: 'Yakin ingin keluar?',
+                text: "Sesi Anda akan berakhir.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{% url 'logout' %}";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
