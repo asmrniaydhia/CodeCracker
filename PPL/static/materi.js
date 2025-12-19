@@ -97,7 +97,7 @@ function startEncryption() {
       detailsHTML += `
                 <div class="process-detail mb-2">
                     <span class="char-display">${char}</span>
-                    <span style="font-size: 1.2em; margin: 0 8px;">→</span>
+                    <span style="font-size: 1.2rem; margin: 0 8px;">→</span>
                     <span class="char-display result">${
                       encryptedChars[index]
                     }</span>
@@ -137,8 +137,8 @@ function startEncryption() {
                 <small>Huruf yang ditandai hijau adalah hasil enkripsi</small>
             </p>
 
-            <button class="btn btn-custom w-100" onclick="startEncryption()">
-                Mulai Proses Enkripsi
+            <button class="btn btn-primary w-100 fw-bold btn-round" onclick="startEncryption()">
+                <i class="fas fa-sync-alt me-2"></i> Proses Enkripsi Sekarang
             </button>
 
             <div class="process-info mt-4">
@@ -155,7 +155,7 @@ function startEncryption() {
   resultDiv.innerHTML = `
         <div class="result-final">
             <h3>Hasil Enkripsi Lengkap</h3>
-            <div class="result-text">${encryptedText}</div>
+            <div class="result-text" style="font-size: 2.5rem;">${encryptedText}</div>
             <div class="result-info">
                 Plaintext "<strong>${plaintext}</strong>" dengan kunci geser <strong>${key}</strong><br>
                 berhasil dienkripsi menjadi "<strong>${encryptedText}</strong>"
@@ -267,7 +267,7 @@ function startDecryption() {
       detailsHTML += `
                 <div class="process-detail mb-2">
                     <span class="char-display">${char}</span>
-                    <span style="font-size: 1.2em; margin: 0 8px;">→</span>
+                    <span style="font-size: 1.2rem; margin: 0 8px;">→</span>
                     <span class="char-display result">${
                       decryptedChars[index]
                     }</span>
@@ -307,8 +307,9 @@ function startDecryption() {
                 <small>Huruf yang ditandai hijau adalah hasil dekripsi</small>
             </p>
 
-            <button class="btn btn-custom w-100" onclick="startEncryption()">
-                Mulai Proses Enkripsi
+            <button class="btn btn-primary w-100 fw-bold btn-round" onclick="startDecryption()"
+                style="background-color: #1B3C53; border-color: #1B3C53;">
+                <i class="fas fa-sync-alt me-2"></i>Proses Dekripsi Sekarang
             </button>
 
             <div class="process-info mt-4">
@@ -325,7 +326,7 @@ function startDecryption() {
   resultDiv.innerHTML = `
         <div class="result-final">
             <h3>Hasil Dekripsi Lengkap</h3>
-            <div class="result-text">${decryptedText}</div>
+            <div class="result-text" style="font-size: 2.5rem;">${decryptedText}</div>
             <div class="result-info">
                 Ciphertext "<strong>${ciphertext}</strong>" dengan kunci geser <strong>${key}</strong><br>
                 berhasil didekripsi menjadi "<strong>${decryptedText}</strong>"

@@ -45,29 +45,29 @@ document.addEventListener("DOMContentLoaded", function () {
     // DATA SOAL (Disimpan di Client Side sesuai request)
     let questions = [];
 
-    if (jenis === "enkripsi") {
-        questions = [
-            { question: "Sebuah aplikasi sekolah mengirimkan pesan nilai rapor melalui server pusat. Agar data tidak mudah dibaca jika terjadi kebocoran jaringan, aplikasi tersebut menambahkan proses khusus sebelum pengiriman. Langkah apakah yang paling tepat dilakukan?", options: ["Mengubah format file menjadi PDF", "Mengganti nama file sebelum dikirim", "Melakukan enkripsi pada data rapor", "Menghapus sebagian data penting"], correct: 2 },
-            { question: "Rina membuat aplikasi pengaduan anonim. Ia ingin memastikan setiap laporan aman walaupun database dicuri orang. Apa alasan utama ia perlu menerapkan enkripsi?", options: ["Agar laporan lebih cepat diproses", "Agar laporan tetap bisa dibaca hanya oleh pihak berwenang", "Agar database tidak bisa dihapus", "Agar server tidak cepat penuh"], correct: 1 },
-            { question: "Sebuah pesan terenkripsi dapat dikirim dengan aman melalui jaringan sekolah yang sering mengalami gangguan keamanan. Mengapa enkripsi tetap penting meskipun jaringan sudah dilindungi firewall?", options: ["Firewall tidak menjamin data selalu aman", "Enkripsi membuat pesan jadi lebih pendek", "Firewall tidak boleh digunakan bersamaan dengan enkripsi", "Firewall menghapus pesan asli"], correct: 0 },
-            { question: "Guru ingin berbagi file kunci ujian. Ia melakukan enkripsi, tetapi tidak mengirimkan kunci dekripsinya kepada siswa. Apa akibatnya?", options: ["File akan terbaca otomatis", "File tetap aman dan tidak dapat dibaca", "Siswa dapat menebak isinya dengan mudah", "File berubah ukuran menjadi lebih besar"], correct: 1 },
-            { question: "Anto membuat sistem presensi otomatis. Ia menyadari data siswa dapat dilihat oleh admin jaringan. Untuk mencegah penyalahgunaan data, langkah apa yang harus ia tambahkan?", options: ["Mengganti warna tampilan aplikasi", "Menyimpan data di folder berbeda", "Menyembunyikan aplikasi dari layar utama", "Menyandikan data saat disimpan (enkripsi)"], correct: 3 },
+    if(jenis==="enkripsi"){
+        questions=[
+            {question:"Agus mengirimkan foto kartu pelajar berisi data sensitif melalui aplikasi chat dengan fitur End-to-End Encryption. Jika data disadap di tengah jalan, penyadap hanya akan melihat kode acak tidak bermakna yang disebut ....",options:["Plain Text","Password","Ciphertext","Glosarium"],correct:2},
+            {question:"Saat membuka sebuah file dokumen di komputer sekolah, kamu hanya menemukan deretan karakter aneh seperti \"Xy29!#amZ\" yang tidak dapat dipahami. File tersebut sedang berada dalam wujud ....",options:["Pesan asli","Data orisinal","Ciphertext","Plain Text"],correct:2},
+            {question:"Sebuah bank mengganti sebagian nomor rekening pada struk ATM menjadi tanda bintang (contoh: 123XXXX890). Tindakan ini merupakan penerapan prinsip ....",options:["Transparansi data","Kerahasiaan (confidentiality)","Kecepatan transaksi","Penghapusan data"],correct:1},
+            {question:"Saat menggunakan Wi-Fi publik untuk aktivitas perbankan, risiko terbesar jika data tidak dienkripsi adalah data dikirimkan dalam bentuk ....",options:["Plain Text","Ciphertext","Kode rahasia","Algoritma"],correct:0},
+            {question:"Dalam alur komunikasi digital, proses mengubah pesan asli menjadi kode acak menggunakan algoritma tertentu disebut ....",options:["Deskripsi","Dekripsi","Enkripsi","Glosarium"],correct:2}
         ];
-    } else if (jenis === "caesar") {
-        questions = [
-            { question: "Pesan: “DRO AESMU LBYGX” (Geser +10). Apa isi pesannya?", options: ["THE QUICK BROWN", "THE QUICK ROBOT", "THE CLOUD BROWN", "THE BROWN HOUSE"], correct: 0 },
-            { question: "Guru memberikan pesan terenkripsi “KHOOR ZRUOG” tanpa kunci. Teknik menebak paling efektif?", options: ["Menebak acak hingga muncul kata “WOW”", "Menggeser huruf satu per satu sampai pesan terbaca", "Mengganti huruf vokal saja", "Menghapus spasi lalu mencoba gabungan kata baru"], correct: 1 },
-            { question: "Pesan “ZL AOLYPUF”, kata terakhir “HAPPY”. Geseran yang benar?", options: ["+5", "+7", "–7", "–5"], correct: 2 },
-            { question: "Program Caesar mengubah angka jadi huruf. Perbaikan?", options: ["Mematikan fitur enkripsi", "Menambahkan aturan untuk membiarkan angka tetap sama", "Mengubah semua angka menjadi simbol", "Menghapus angka dari pesan"], correct: 1 },
-            { question: "Cara memeriksa apakah pesan mencurigakan adalah Caesar Cipher?", options: ["Mengirim pesan kembali ke pengirim", "Menguji beberapa pergeseran untuk melihat apakah menghasilkan kata yang bermakna", "Mengganti semua huruf dengan vokal", "Menghapus huruf pertama dan terakhir"], correct: 1 },
+    } else if(jenis==="caesar"){
+        questions=[
+            {question:"Pesan asli \"DUNIA\" dienkripsi dengan kunci Geser 3 ke Kanan. Hasil perubahannya adalah ....",options:["GVQLD","FWPKC","GXQLD","HWQLE"],correct:2},
+            {question:"Kata \"DATA\" dienkripsi menggunakan kunci Geser 2 ke Kanan. Hasil alfabet sandinya adalah ....",options:["FCVD","FCVC","EBVB","GDWD"],correct:1},
+            {question:"Jika huruf \"B\" berubah menjadi \"E\", maka pesan \"MUKA\" dengan kunci yang sama akan menjadi ....",options:["PXND","QYOE","OWMC","PVNC"],correct:0},
+            {question:"Jika huruf \"K\" digeser 5 langkah ke kanan menjadi \"P\", maka hasil enkripsi kata \"BOLA\" adalah ....",options:["CPMA","DQNB","GTQF","FSPE"],correct:2},
+            {question:"Jika huruf \"Z\" dienkripsi dengan Geser 1 ke Kanan, maka huruf hasilnya adalah ....",options:["A","B","Y","X"],correct:0}
         ];
-    } else if (jenis === "dekripsi") {
-        questions = [
-            { question: "Pesan rahasia siswa berbunyi “RIJVS UYVJN”. Setelah dianalisis, ternyata ini hasil enkripsi tertentu. Apa tujuan proses dekripsi?", options: ["Mengubah pesan menjadi lebih sulit dibaca", "Mengembalikan pesan ke bentuk aslinya", "Menghasilkan pesan baru untuk dikirim", "Menghapus pesan dari sistem"], correct: 1 },
-            { question: "Guru menerima file nilai yang terenkripsi, tetapi kunci dekripsinya hilang. Apa risiko yang terjadi?", options: ["File dapat dibuka siapa saja", "File tidak bisa dibaca meskipun datanya benar", "File berubah ukuran dan rusak", "File otomatis terhapus"], correct: 1 },
-            { question: "Dalam simulasi keamanan, siswa mencoba membuka pesan yang disandikan. Namun ketika dekripsi dilakukan dengan kunci salah, hasilnya tidak masuk akal. Apa yang bisa disimpulkan?", options: ["Sistem enkripsi tidak berfungsi", "Dekripsi hanya bisa dilakukan dengan kunci yang tepat", "Pesan tidak perlu didekripsi", "Semua kunci menghasilkan pesan yang sama"], correct: 1 },
-            { question: "Sebuah aplikasi melakukan enkripsi saat mengirim data, tetapi tidak melakukan dekripsi saat menerima. Apa dampaknya?", options: ["Data yang diterima tetap terenkripsi dan tidak terbaca", "Data menjadi lebih cepat terkirim", "Data otomatis berubah menjadi teks asli", "Data tersimpan dua kali lebih besar"], correct: 0 },
-            { question: "Rani mencoba mendekripsi pesan yang digeser 8 langkah ke kanan. Ia ingin mengembalikannya ke teks asli. Apa yang harus ia lakukan?", options: ["Menggeser huruf maju 8 langkah", "Menggeser huruf mundur 8 langkah", "Menggeser huruf maju 16 langkah", "Menghapus huruf vokal lalu membaca ulang"], correct: 1 },
+    } else if(jenis==="dekripsi"){
+        questions=[
+            {question:"Pesan rahasia \"FDVD\" dienkripsi dengan Geser 3 ke Kanan. Untuk mendapatkan pesan asli, hasil dekripsinya adalah ....",options:["BOLA","CASA","DATA","GAGA"],correct:1},
+            {question:"Dengan teknik Brute Force, kode \"PHVD\" menghasilkan kata \"MESA\" setelah dilakukan pergeseran sebanyak ....",options:["1 langkah ke kiri","2 langkah ke kiri","3 langkah ke kiri","4 langkah ke kiri"],correct:2},
+            {question:"Pesan terenkripsi \"LUL\" diketahui menggunakan kunci Geser 1 ke Kanan. Pesan aslinya adalah ....",options:["MUM","KTK","JSK","LVL"],correct:1},
+            {question:"Jika huruf sandi \"V\" berasal dari huruf asli \"T\", maka proses dekripsi dilakukan dengan menggeser ke kiri sebanyak ....",options:["1 langkah","2 langkah","3 langkah","4 langkah"],correct:1},
+            {question:"Kode \"WKDQ\" setelah digeser 3 langkah ke kiri menghasilkan kata \"THANK\". Kunci enkripsi awal yang digunakan adalah ....",options:["Geser 1 ke Kanan","Geser 2 ke Kanan","Geser 3 ke Kanan","Geser 4 ke Kanan"],correct:2}
         ];
     }
 
@@ -135,13 +135,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Render HTML Soal
         soalContainer.innerHTML = `
-            <p class="fw-bold mb-4 text-dark" style="font-size: 1.15rem; line-height: 1.6;">${q.question}</p>
+            <p class="fw-bold mb-4 text-dark" style="font-size: 1.3rem; line-height: 1.6;">${q.question}</p>
             
             <div class="option-list">
                 ${q.options.map((opt, idx) => `
                     <label class="option ${answers[num] === idx ? 'checked' : ''}">
                         <input type="radio" name="q${num}" value="${idx}" ${answers[num] === idx ? "checked" : ""}> 
-                        <span class="option-text">${opt}</span>
+                        <span class="option-text" style="font-size: 1.3rem">${opt}</span>
                         ${answers[num] === idx ? '<i class="fas fa-check-circle ms-auto text-primary"></i>' : ''}
                     </label>
                 `).join("")}

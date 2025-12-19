@@ -131,7 +131,7 @@
                     <div class="lesson-content">
                         
                         <div class="instruction-box">
-                            <p class="teks">Pada latihan ini, Anda akan mendekripsi pesan yang telah terenkripsi menggunakan metode <b>Caesar Cipher</b>. Kunci dekripsi yang akan digunakan adalah <b>4</b>, yang berarti setiap huruf sandi harus digeser **empat posisi ke kiri**.</p>
+                            <p class="teks">Pada latihan ini, Anda akan mendekripsi pesan yang telah terenkripsi menggunakan metode <b>Caesar Cipher</b>. Kunci dekripsi yang akan digunakan adalah <b>4</b>, yang berarti setiap huruf sandi harus digeser <strong>empat posisi ke kiri</strong>.</p>
                             
                             <p class="teks"><b>Pesan yang akan didekripsi:</b> "xvkrph lwlrq"</p>
                             
@@ -196,11 +196,6 @@
     const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const KEY_DECRYPT = 4; // Kunci Dekripsi (Mundur/Kiri)
 
-    // *** PENTING: KOREKSI JAWABAN TERKAIT TYPO DI SOAL ANDA ***
-    // 'xvkrph lwlrq' didekripsi K=4 menjadi 'TRGNLD HWHNQ' (Bukan kata yang bermakna)
-    // Jawaban yang PALING SERING dimaksud di kuis/aktivitas adalah kata yang bermakna.
-    // Asumsi kita menggunakan kunci yang menghasilkan kata bermakna (misal, Kunci 5 Kiri -> 'TRGNDL HWHNQ' menjadi 'HELLO WORLD' jika pesannya beda)
-    // Untuk tujuan fungsionalitas, kita gunakan jawaban yang Anda tetapkan sebelumnya, yaitu "tenang kawan"
     const CORRECT_DECRYPTED_TEXT_CHECK = "tenang kawan"; 
     
     let matches = 0;
@@ -407,7 +402,7 @@
 
         if (userAnswer === expectedAnswer) {
             // Jawaban Teks BENAR
-            resultMessage.innerHTML = '<div class="alert alert-success">🎉 Selamat! Jawaban Dekripsi Anda **BENAR**! Progres tersimpan.</div>';
+            resultMessage.innerHTML = '<div class="alert alert-success">🎉 Selamat! Jawaban Dekripsi Anda <strong>BENAR</strong>! Progres tersimpan.</div>';
             userAnswerInput.setAttribute('readonly', true);
             checkButton.disabled = true;
             resetButton.disabled = true;
@@ -429,7 +424,7 @@
             });
 
         } else {
-            resultMessage.innerHTML = `<div class="alert alert-danger">❌ Jawaban Anda **SALAH**. Cek kembali hasil dekripsi "xvkrph lwlrq".</div>`;
+            resultMessage.innerHTML = `<div class="alert alert-danger">❌ Jawaban Anda <strong>SALAH</strong>. Cek kembali hasil dekripsi "xvkrph lwlrq".</div>`;
         }
     }
 

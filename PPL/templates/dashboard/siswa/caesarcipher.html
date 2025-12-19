@@ -35,11 +35,13 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                
+
                 <div class="lesson-wrapper">
 
                     <div class="d-flex align-items-center mb-4 pb-2 border-bottom">
-                        <div style="width: 5px; height: 35px; background: #F3C623; margin-right: 15px; border-radius: 2px;"></div>
+                        <div
+                            style="width: 5px; height: 35px; background: #F3C623; margin-right: 15px; border-radius: 2px;">
+                        </div>
                         <h1 class="fw-bold m-0" style="color: #1B3C53;">Caesar Cipher</h1>
                     </div>
 
@@ -48,21 +50,10 @@
                         <h2 class="lesson-h2">Tujuan Pembelajaran</h2>
                         <div class="lesson-card">
                             <div class="lesson-goals">
-                                <div><p>Setelah mengikuti pembelajaran, siswa diharapkan mampu:</p></div>
-
-                                <div class="lesson-goal">
-                                    <div class="lesson-num">1</div>
-                                    <div><p>Menjelaskan cara kerja Caesar Cipher sebagai teknik enkripsi dengan metode penggeseran huruf.</p></div>
-                                </div>
-
-                                <div class="lesson-goal">
-                                    <div class="lesson-num">2</div>
-                                    <div><p>Menentukan hasil enkripsi suatu kata atau kalimat menggunakan Caesar Cipher dengan kunci tertentu.</p></div>
-                                </div>
-
-                                <div class="lesson-goal">
-                                    <div class="lesson-num">3</div>
-                                    <div><p>Mengidentifikasi arah dan besar pergeseran yang digunakan dalam sebuah contoh pesan Caesar Cipher.</p></div>
+                                <div>
+                                    <p>Siswa dapat menerapkan algoritma pergeseran
+                                        alfabet (shift) untuk menghasilkan kode rahasia melalui simulasi interaktif
+                                        Caesar Cipher dengan akurat sesuai kunci yang ditentukan.</p>
                                 </div>
                             </div>
                         </div>
@@ -71,27 +62,43 @@
 
                         <div class="hero-section">
                             <h1>Caesar's Cipher: Teknik Sandi Geser</h1>
-                            <p><strong>Caesar's Cipher</strong> adalah salah satu <strong>Algoritma Enkripsi klasik</strong> yang paling tua, diperkirakan berasal dari tahun **100 SM**. Algoritma ini dinamakan sesuai nama Kaisar Romawi, **Julius Caesar**, yang menggunakannya untuk mengirimkan pesan-pesan penting militer kepada jenderalnya. Tujuannya sederhana: agar musuh yang berhasil menyadap pesan tidak dapat mengerti isinya.</p>
-                            
-                            <p><strong>Prinsip Kerja Inti:</strong> Caesar's Cipher termasuk dalam kategori **Substitution Cipher (Sandi Substitusi)**, yang berarti setiap huruf dalam pesan asli digantikan (disubstitusi) oleh huruf lain yang berada pada posisi yang tetap dalam urutan alfabet. Mekanisme inilah yang disebut **Penggeseran Alfabet**.</p>
+                            <p><strong>Caesar's Cipher</strong> adalah salah satu <strong>Algoritma Enkripsi
+                                    klasik</strong> yang paling tua, diperkirakan berasal dari tahun <strong>100
+                                    SM</strong>.
+                                Algoritma ini dinamakan sesuai nama Kaisar Romawi, <strong>Julius Caesar</strong>, yang
+                                menggunakannya untuk mengirimkan pesan-pesan penting militer kepada jenderalnya.
+                                Tujuannya sederhana: agar musuh yang berhasil menyadap pesan tidak dapat mengerti
+                                isinya.</p>
+
+                            <p><strong>Prinsip Kerja Inti:</strong> Caesar's Cipher termasuk dalam kategori
+                                <strong>Substitution Cipher (Sandi Substitusi)</strong>, yang berarti setiap huruf dalam
+                                pesan asli
+                                digantikan (disubstitusi) oleh huruf lain yang berada pada posisi yang tetap dalam
+                                urutan alfabet. Mekanisme inilah yang disebut <strong>Penggeseran Alfabet</strong>.
+                            </p>
                         </div>
 
                         <h2 class="section-header">Pengenalan pada Caesar's Cipher</h2>
-                        
+
                         <div class="history-timeline">
                             <div class="timeline-item">
                                 <div class="timeline-icon">⚔️</div>
                                 <div class="timeline-content">
                                     <h4>Era Julius Caesar (100 SM)</h4>
-                                    <p>Kaisar Romawi menggunakan teknik ini untuk mengamankan komunikasi militer strategis dengan para jenderalnya di medan perang. Metode sederhana namun efektif untuk zaman itu.</p>
+                                    <p>Kaisar Romawi menggunakan teknik ini untuk mengamankan komunikasi militer
+                                        strategis dengan para jenderalnya di medan perang. Metode sederhana namun
+                                        efektif untuk zaman itu.</p>
                                 </div>
                             </div>
-                            
+
                             <div class="timeline-item">
                                 <div class="timeline-icon">🔐</div>
                                 <div class="timeline-content">
                                     <h4>Substitution Cipher</h4>
-                                    <p>Caesar Cipher merupakan contoh paling awal dari **Substitution Cipher**, di mana setiap huruf dalam pesan asli digantikan dengan huruf lain berdasarkan aturan penggeseran yang telah ditentukan.</p>
+                                    <p>Caesar Cipher merupakan contoh paling awal dari <strong>Substitution
+                                            Cipher</strong>, di mana
+                                        setiap huruf dalam pesan asli digantikan dengan huruf lain berdasarkan aturan
+                                        penggeseran yang telah ditentukan.</p>
                                 </div>
                             </div>
                         </div>
@@ -99,25 +106,30 @@
                         <hr />
 
                         <h2 class="section-header">Mekanisme Pergeseran dan Kunci Enkripsi (Shift Key)</h2>
-                        
-                        <p class="section-intro">Kunci Enkripsi dalam Caesar's Cipher adalah <strong>satu-satunya elemen rahasia</strong>. Kunci ini harus disepakati oleh pengirim dan penerima sebelum komunikasi dimulai. Kunci ini terdiri dari dua elemen wajib:</p>
+
+                        <p class="section-intro">Kunci Enkripsi dalam Caesar's Cipher adalah <strong>satu-satunya elemen
+                                rahasia</strong>. Kunci ini harus disepakati oleh pengirim dan penerima sebelum
+                            komunikasi dimulai. Kunci ini terdiri dari dua elemen wajib:</p>
 
                         <div class="key-elements">
                             <div class="key-box">
                                 <h4>1. Arah Pergeseran</h4>
-                                <p><strong>Maju (Kanan)</strong> atau <strong>Mundur (Kiri)</strong>. Arah ini menentukan ke mana setiap huruf akan bergeser dalam urutan alfabet.</p>
+                                <p><strong>Maju (Kanan)</strong> atau <strong>Mundur (Kiri)</strong>. Arah ini
+                                    menentukan ke mana setiap huruf akan bergeser dalam urutan alfabet.</p>
                             </div>
-                            
+
                             <div class="key-box">
                                 <h4>2. Besar Pergeseran (Shift Value)</h4>
-                                <p>Jumlah langkah huruf harus digeser. Nilai ini bisa antara <strong>1 hingga 25</strong>. Jika geser 26, pesan akan kembali ke posisi aslinya.</p>
+                                <p>Jumlah langkah huruf harus digeser. Nilai ini bisa antara <strong>1 hingga
+                                        25</strong>. Jika geser 26, pesan akan kembali ke posisi aslinya.</p>
                             </div>
                         </div>
 
                         <div class="shift-table-container">
                             <h3>Tabel Pergeseran Alfabet (Maju/Kanan)</h3>
-                            <p style="text-align: center; color: var(--lesson-text); margin-bottom: 20px;">Klik tombol di bawah untuk melihat <b>Kunci</b> pergeseran yang berbeda.</p>
-                            
+                            <p style="text-align: center; color: var(--lesson-text); margin-bottom: 20px;">Klik tombol
+                                di bawah untuk melihat <b>Kunci</b> pergeseran yang berbeda.</p>
+
                             <div class="shift-table-controls">
                                 <button class="table-control-btn btn-kunci-1" onclick="showShiftRow(1)">Kunci 1</button>
                                 <button class="table-control-btn btn-kunci-2" onclick="showShiftRow(2)">Kunci 2</button>
@@ -130,24 +142,174 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th><th>Q</th><th>R</th><th>S</th><th>T</th><th>U</th><th>V</th><th>W</th><th>X</th><th>Y</th><th>Z</th>
+                                            <th>A</th>
+                                            <th>B</th>
+                                            <th>C</th>
+                                            <th>D</th>
+                                            <th>E</th>
+                                            <th>F</th>
+                                            <th>G</th>
+                                            <th>H</th>
+                                            <th>I</th>
+                                            <th>J</th>
+                                            <th>K</th>
+                                            <th>L</th>
+                                            <th>M</th>
+                                            <th>N</th>
+                                            <th>O</th>
+                                            <th>P</th>
+                                            <th>Q</th>
+                                            <th>R</th>
+                                            <th>S</th>
+                                            <th>T</th>
+                                            <th>U</th>
+                                            <th>V</th>
+                                            <th>W</th>
+                                            <th>X</th>
+                                            <th>Y</th>
+                                            <th>Z</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="shift-table-row-1" id="cipherRow1" style="display: none;">
-                                            <td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td>
+                                            <td>B</td>
+                                            <td>C</td>
+                                            <td>D</td>
+                                            <td>E</td>
+                                            <td>F</td>
+                                            <td>G</td>
+                                            <td>H</td>
+                                            <td>I</td>
+                                            <td>J</td>
+                                            <td>K</td>
+                                            <td>L</td>
+                                            <td>M</td>
+                                            <td>N</td>
+                                            <td>O</td>
+                                            <td>P</td>
+                                            <td>Q</td>
+                                            <td>R</td>
+                                            <td>S</td>
+                                            <td>T</td>
+                                            <td>U</td>
+                                            <td>V</td>
+                                            <td>W</td>
+                                            <td>X</td>
+                                            <td>Y</td>
+                                            <td>Z</td>
+                                            <td>A</td>
                                         </tr>
                                         <tr class="shift-table-row-2" id="cipherRow2" style="display: none;">
-                                            <td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td>
+                                            <td>C</td>
+                                            <td>D</td>
+                                            <td>E</td>
+                                            <td>F</td>
+                                            <td>G</td>
+                                            <td>H</td>
+                                            <td>I</td>
+                                            <td>J</td>
+                                            <td>K</td>
+                                            <td>L</td>
+                                            <td>M</td>
+                                            <td>N</td>
+                                            <td>O</td>
+                                            <td>P</td>
+                                            <td>Q</td>
+                                            <td>R</td>
+                                            <td>S</td>
+                                            <td>T</td>
+                                            <td>U</td>
+                                            <td>V</td>
+                                            <td>W</td>
+                                            <td>X</td>
+                                            <td>Y</td>
+                                            <td>Z</td>
+                                            <td>A</td>
+                                            <td>B</td>
                                         </tr>
                                         <tr class="shift-table-row-3" id="cipherRow3" style="display: none;">
-                                            <td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td><td>C</td>
+                                            <td>D</td>
+                                            <td>E</td>
+                                            <td>F</td>
+                                            <td>G</td>
+                                            <td>H</td>
+                                            <td>I</td>
+                                            <td>J</td>
+                                            <td>K</td>
+                                            <td>L</td>
+                                            <td>M</td>
+                                            <td>N</td>
+                                            <td>O</td>
+                                            <td>P</td>
+                                            <td>Q</td>
+                                            <td>R</td>
+                                            <td>S</td>
+                                            <td>T</td>
+                                            <td>U</td>
+                                            <td>V</td>
+                                            <td>W</td>
+                                            <td>X</td>
+                                            <td>Y</td>
+                                            <td>Z</td>
+                                            <td>A</td>
+                                            <td>B</td>
+                                            <td>C</td>
                                         </tr>
                                         <tr class="shift-table-row-4" id="cipherRow4" style="display: none;">
-                                            <td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td><td>C</td><td>D</td>
+                                            <td>E</td>
+                                            <td>F</td>
+                                            <td>G</td>
+                                            <td>H</td>
+                                            <td>I</td>
+                                            <td>J</td>
+                                            <td>K</td>
+                                            <td>L</td>
+                                            <td>M</td>
+                                            <td>N</td>
+                                            <td>O</td>
+                                            <td>P</td>
+                                            <td>Q</td>
+                                            <td>R</td>
+                                            <td>S</td>
+                                            <td>T</td>
+                                            <td>U</td>
+                                            <td>V</td>
+                                            <td>W</td>
+                                            <td>X</td>
+                                            <td>Y</td>
+                                            <td>Z</td>
+                                            <td>A</td>
+                                            <td>B</td>
+                                            <td>C</td>
+                                            <td>D</td>
                                         </tr>
                                         <tr class="shift-table-row-5" id="cipherRow5" style="display: none;">
-                                            <td>F</td><td>G</td><td>H</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td>
+                                            <td>F</td>
+                                            <td>G</td>
+                                            <td>H</td>
+                                            <td>I</td>
+                                            <td>J</td>
+                                            <td>K</td>
+                                            <td>L</td>
+                                            <td>M</td>
+                                            <td>N</td>
+                                            <td>O</td>
+                                            <td>P</td>
+                                            <td>Q</td>
+                                            <td>R</td>
+                                            <td>S</td>
+                                            <td>T</td>
+                                            <td>U</td>
+                                            <td>V</td>
+                                            <td>W</td>
+                                            <td>X</td>
+                                            <td>Y</td>
+                                            <td>Z</td>
+                                            <td>A</td>
+                                            <td>B</td>
+                                            <td>C</td>
+                                            <td>D</td>
+                                            <td>E</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -157,11 +319,12 @@
                         <hr />
 
                         <h2 class="section-header">Proses Enkripsi dan Contoh</h2>
-                        
+
                         <div class="combined-process">
-                            
+
                             <h3 class="process-header">💡 Contoh: "RUMAH"</h3>
-                            <p style="color: var(--lesson-text); margin-bottom: 15px;">Menggunakan Kunci: <strong>Geser 3 ke Kanan</strong></p>
+                            <p style="color: var(--lesson-text); margin-bottom: 15px;">Menggunakan Kunci: <strong>Geser
+                                    3 ke Kanan</strong></p>
 
                             <h3 class="process-header" style="margin-top: 40px;">Proses Enkripsi Step-by-Step:</h3>
 
@@ -209,37 +372,42 @@
                                     <div class="step-formula">H + 3 = K</div>
                                 </div>
                             </div>
-                            
+
                             <div class="step-item" id="stepEncrypt6" style="display: none;">
                                 <div class="step-number">✅</div>
                                 <div class="step-content">
                                     <strong>Selesai!</strong>
-                                    <p>Setelah semua huruf digeser 3 langkah ke kanan, Plain Text <b>RUMAH</b> menjadi Ciphertext <b>UXPDK</b>.</p>
+                                    <p>Setelah semua huruf digeser 3 langkah ke kanan, Plain Text <b>RUMAH</b> menjadi
+                                        Ciphertext <b>UXPDK</b>.</p>
                                 </div>
                             </div>
-                            
+
                             <div class="step-navigation" id="navEncrypt">
-                                <button class="step-btn" id="prevBtnEncrypt" onclick="changeEncryptStep(-1)" style="display: none;">
+                                <button class="step-btn" id="prevBtnEncrypt" onclick="changeEncryptStep(-1)"
+                                    style="display: none;">
                                     <i class="fas fa-arrow-left"></i> Sebelumnya
                                 </button>
                                 <div class="step-indicator">
                                     <span id="currentStepTextEncrypt">Langkah 0 dari 5</span>
                                 </div>
-                                <button class="step-btn step-btn-next" id="nextBtnEncrypt" onclick="changeEncryptStep(1)">
+                                <button class="step-btn step-btn-next" id="nextBtnEncrypt"
+                                    onclick="changeEncryptStep(1)">
                                     Lanjutkan Proses <i class="fas fa-arrow-right"></i>
                                 </button>
                             </div>
                         </div>
-                        
+
                         <hr />
 
                         <h2 class="section-header">🔍 Cara Mengidentifikasi Kunci yang Digunakan</h2>
-                        
-                        <p class="section-intro">Dalam skenario ini, kamu adalah seorang <b>analis</b> yang diberikan dua versi pesan (asli dan terenkripsi) dan diminta mencari kuncinya. Proses ini memerlukan perbandingan dan perhitungan jarak.</p>
+
+                        <p class="section-intro">Dalam skenario ini, kamu adalah seorang <b>analis</b> yang diberikan
+                            dua versi pesan (asli dan terenkripsi) dan diminta mencari kuncinya. Proses ini memerlukan
+                            perbandingan dan perhitungan jarak.</p>
 
                         <div class="identification-box">
                             <h3>Contoh Kasus: Plain Text "BELAJAR" → Ciphertext "DGNCNCT"</h3>
-                            
+
                             <div class="id-step" id="idStep1">
                                 <div class="id-step-title">Langkah 1: Ambil Pasangan Huruf Pertama</div>
                                 <p><strong>B (Asli) → D (Kode)</strong>. Ini adalah titik awal perbandingan kita.</p>
@@ -247,7 +415,8 @@
 
                             <div class="id-step" id="idStep2" style="display: none;">
                                 <div class="id-step-title">Langkah 2: Tentukan Arah Pergeseran</div>
-                                <p>Kita lihat posisi huruf D relatif terhadap B di alfabet. Karena D berada <b>setelah B</b>, ini jelas berarti terjadi pergeseran ke <b>KANAN (maju)</b>.</p>
+                                <p>Kita lihat posisi huruf D relatif terhadap B di alfabet. Karena D berada <b>setelah
+                                        B</b>, ini jelas berarti terjadi pergeseran ke <b>KANAN (maju)</b>.</p>
                             </div>
 
                             <div class="id-step" id="idStep3" style="display: none;">
@@ -268,14 +437,17 @@
                                     E → F (1), F → G (2)
                                 </div>
                                 <span class="verification-badge">✓ Cocok!</span>
-                                <p style="margin-top: 10px;">Ini membuktikan bahwa kunci <b>Geser 2 Langkah ke KANAN</b> diterapkan secara konsisten.</p>
+                                <p style="margin-top: 10px;">Ini membuktikan bahwa kunci <b>Geser 2 Langkah ke KANAN</b>
+                                    diterapkan secara konsisten.</p>
                             </div>
 
                             <div class="example-box" id="idConclusion" style="margin-top: 20px; display: none;">
                                 <h4>Kesimpulan Kunci Enkripsi:</h4>
                                 <div class="example-content">
-                                    <p style="font-size: 1.2rem; font-weight: bold; color: var(--lesson-brand-700); text-align: center; margin: 0;">
-                                        Kunci yang digunakan adalah <span style="color: #c62828;">Geser 2 Langkah ke KANAN</span>
+                                    <p
+                                        style="font-size: 1.2rem; font-weight: bold; color: var(--lesson-brand-700); text-align: center; margin: 0;">
+                                        Kunci yang digunakan adalah <span style="color: #c62828;">Geser 2 Langkah ke
+                                            KANAN</span>
                                     </p>
                                 </div>
                             </div>
@@ -293,18 +465,19 @@
                             </div>
                         </div>
 
-                    </div> </div> 
-                    <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
-                        
-                        <a href="{% url 'enkripsi' %}" class="btn btn-danger btn-round px-4 py-2">
-                        <i class="fas fa-arrow-left me-2"></i> Kembali
-                        </a>
-
-                        <a href="{% url 'caesar2' %}" class="btn btn-primary btn-round px-4 py-2"
-                        style="background-color: #1B3C53; border-color: #1B3C53;">
-                            Selanjutnya <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
                     </div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-5 pt-4 border-top">
+
+                    <a href="{% url 'enkripsi' %}" class="btn btn-danger btn-round px-4 py-2">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali
+                    </a>
+
+                    <a href="{% url 'caesar2' %}" class="btn btn-primary btn-round px-4 py-2"
+                        style="background-color: #1B3C53; border-color: #1B3C53;">
+                        Selanjutnya <i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
 
             </div>
         </div>
@@ -319,8 +492,8 @@
         const rowCipher = document.getElementById(rowCipherId);
         if (rowCipher) {
             rowCipher.style.display = 'table-row';
-            document.querySelector('.shift-table-container').scrollIntoView({ 
-                behavior: 'smooth', block: 'center' 
+            document.querySelector('.shift-table-container').scrollIntoView({
+                behavior: 'smooth', block: 'center'
             });
         }
     }
@@ -344,34 +517,34 @@
         currentStep += direction;
         if (currentStep < 1) currentStep = 1;
         if (currentStep > totalSteps + 1) currentStep = totalSteps + 1;
-        
+
         for (let i = 0; i < currentStep && i < totalSteps; i++) {
             steps[i].style.display = 'block';
         }
 
         if (currentStep > totalSteps) conclusion.style.display = 'block';
-        
+
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const stepText = document.getElementById('currentStepText');
-        
+
         prevBtn.style.display = (currentStep === 1) ? 'none' : 'inline-flex';
-        
+
         if (currentStep > totalSteps) {
             nextBtn.style.display = 'none';
         } else {
             nextBtn.style.display = 'inline-flex';
-            nextBtn.innerHTML = (currentStep === totalSteps) ? 
-                'Lihat Kesimpulan <i class="fas fa-check"></i>' : 
+            nextBtn.innerHTML = (currentStep === totalSteps) ?
+                'Lihat Kesimpulan <i class="fas fa-check"></i>' :
                 'Selanjutnya <i class="fas fa-arrow-right"></i>';
         }
-        
-        stepText.textContent = (currentStep <= totalSteps) ? 
+
+        stepText.textContent = (currentStep <= totalSteps) ?
             `Langkah ${currentStep} dari ${totalSteps}` : 'Kesimpulan';
     }
-    
+
     // --- JS LOGIC for Combined Encryption Steps (RUMAH) ---
-    let currentEncryptStep = 0; 
+    let currentEncryptStep = 0;
     const totalEncryptSteps = 5;
 
     function changeEncryptStep(direction) {
@@ -381,13 +554,13 @@
             document.getElementById('stepEncrypt3'),
             document.getElementById('stepEncrypt4'),
             document.getElementById('stepEncrypt5'),
-            document.getElementById('stepEncrypt6') 
+            document.getElementById('stepEncrypt6')
         ];
-        
+
         currentEncryptStep += direction;
         if (currentEncryptStep < 0) currentEncryptStep = 0;
         if (currentEncryptStep > totalEncryptSteps + 1) currentEncryptStep = totalEncryptSteps + 1;
-        
+
         for (let i = 0; i < encryptSteps.length; i++) {
             encryptSteps[i].style.display = (i + 1 <= currentEncryptStep) ? 'flex' : 'none';
         }
@@ -395,19 +568,19 @@
         const prevBtn = document.getElementById('prevBtnEncrypt');
         const nextBtn = document.getElementById('nextBtnEncrypt');
         const stepText = document.getElementById('currentStepTextEncrypt');
-        
+
         prevBtn.style.display = (currentEncryptStep === 0) ? 'none' : 'inline-flex';
-        
+
         if (currentEncryptStep > totalEncryptSteps) {
-            nextBtn.style.display = 'none'; 
+            nextBtn.style.display = 'none';
         } else {
             nextBtn.style.display = 'inline-flex';
-            nextBtn.innerHTML = (currentEncryptStep === totalEncryptSteps) ? 
-                'Lihat Hasil Akhir <i class="fas fa-check"></i>' : 
+            nextBtn.innerHTML = (currentEncryptStep === totalEncryptSteps) ?
+                'Lihat Hasil Akhir <i class="fas fa-check"></i>' :
                 'Lanjutkan Proses <i class="fas fa-arrow-right"></i>';
         }
-        
-        stepText.textContent = (currentEncryptStep <= totalEncryptSteps) ? 
+
+        stepText.textContent = (currentEncryptStep <= totalEncryptSteps) ?
             `Langkah ${currentEncryptStep} dari ${totalEncryptSteps}` : 'Hasil Akhir';
     }
 </script>

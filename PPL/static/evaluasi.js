@@ -72,140 +72,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (window.location.pathname.includes("/evaluasi/pengerjaan")) {
     
-    // ❗ FIX 1: AKTIFKAN MODE FOKUS
+    // AKTIFKAN MODE FOKUS
     document.body.classList.add('mode-fokus'); 
     
     window.addEventListener("beforeunload", handleBeforeUnload);
 
     // SOAL EVALUASI (BAB 2–4)
     const questions = [
-      // 🔹 PILIHAN GANDA
-      {
-        question: "Enkripsi disebut berhasil jika …",
-        options: [
-          "Ciphertext tidak dapat dimengerti tanpa kunci",
-          "Plaintext dan ciphertext memiliki arti yang sama",
-          "Semua orang bisa membaca ciphertext",
-          "Pesan berubah tetapi tetap mudah ditebak",
-        ],
-        correct: 0,
-        type: "mcq",
-      },
-      {
-        question: "Caesar Cipher termasuk kriptografi simetris karena …",
-        options: [
-          "Menggunakan dua kunci berbeda",
-          "Kunci enkripsi dan dekripsi sama",
-          "Tidak membutuhkan kunci",
-          "Menggunakan kunci acak setiap kali",
-        ],
-        correct: 1,
-        type: "mcq",
-      },
-      {
-        question: "Gunakan kunci 3 untuk mengenkripsi kata “DATA”.",
-        options: ["GDXD", "EDWD", "FDXD", "GDWD"],
-        correct: 3,
-        type: "mcq",
-      },
-      {
-        question: "Dekripsilah ciphertext “WKH” dengan kunci 3.",
-        options: ["THE", "QEB", "ZKH", "TXE"],
-        correct: 0,
-        type: "mcq",
-      },
-      {
-        question:
-          "Seseorang mengenkripsi pesan “SEHAT” dengan kunci 5, tetapi penerima melakukan dekripsi dengan kunci 4. Apa akibatnya?",
-        options: [
-          "Pesan tetap terbaca benar",
-          "Pesan rusak karena pergeseran tidak sesuai",
-          "Pesan berubah menjadi plaintext semula",
-          "Pesan hilang seluruhnya",
-        ],
-        correct: 1,
-        type: "mcq",
-      },
-      {
-        question:
-          "Mengapa Caesar Cipher dianggap lemah dari sisi keamanan modern?",
-        options: [
-          "Karena terlalu banyak kunci yang mungkin",
-          "Karena hasil enkripsinya selalu sama",
-          "Karena hanya memiliki 25 kemungkinan kunci",
-          "Karena tidak bisa mengenkripsi angka",
-        ],
-        correct: 2,
-        type: "mcq",
-      },
-      {
-        question: "Dalam komunikasi digital, dekripsi dilakukan oleh pihak …",
-        options: ["Pengirim", "Server", "Penerima", "Penyedia layanan"],
-        correct: 2,
-        type: "mcq",
-      },
-      {
-        question: "Urutan yang benar dari proses komunikasi aman adalah …",
-        options: [
-          "Dekripsi → Enkripsi → Pengiriman",
-          "Enkripsi → Pengiriman → Dekripsi",
-          "Pengiriman → Dekripsi → Enkripsi",
-          "Enkripsi → Dekripsi → Pengiriman",
-        ],
-        correct: 1,
-        type: "mcq",
-      },
-      {
-        question:
-          "Seorang siswa menulis ciphertext “YMNX NX F YJXY” hasil dari plaintext “THIS IS A TEST”. Kunci yang digunakan adalah …",
-        options: ["2", "3", "4", "5"],
-        correct: 3,
-        type: "mcq",
-      },
-      {
-        question:
-          "Ciphertext “JCU” jika didekripsi dengan kunci 2 menjadi “HAS”. Jika ingin mengirim kembali pesan yang sama, tetapi hasil ciphertext-nya berbeda, maka tindakan yang paling logis adalah …",
-        options: [
-          "Mengganti algoritma enkripsi",
-          "Mengubah posisi huruf secara acak tanpa kunci",
-          "Menambah kunci menjadi 4",
-          "Menghapus proses dekripsi",
-        ],
-        correct: 0,
-        type: "mcq",
-      },
-      // 🔹 ISIAN SINGKAT
-      {
-        question:
-          "Proses mengubah ciphertext menjadi bentuk asli disebut ____________.",
-        answer: "Dekripsi",
-        type: "fill",
-      },
-      {
-        question:
-          "Enkripsilah “KOMPUTER” dengan kunci 2 → hasil ciphertext: ____________.",
-        answer: "MQORWVGT",
-        type: "fill",
-      },
-      {
-        question:
-          "Dekripsilah ciphertext “ZRUOG” dengan kunci 3 → plaintext: ____________.",
-        answer: "WORLD",
-        type: "fill",
-      },
-      {
-        question:
-          "Jumlah maksimum kemungkinan kunci dalam Caesar Cipher adalah ____________.",
-        answer: "25",
-        type: "fill",
-      },
-      {
-        question:
-          "Dalam Caesar Cipher, huruf digeser sejauh jumlah langkah yang disebut ____________.",
-        answer: "Kunci",
-        type: "fill",
-      },
+      // PILIHAN GANDA
+      { question: "Saat kamu melakukan login ke akun media sosial melalui jaringan Wi-Fi publik yang tidak aman, risiko pencurian data pribadi oleh peretas dapat dikurangi jika aplikasi tersebut telah mengubah kata sandimu menjadi deretan karakter acak yang disebut ....", options: ["Plain Text", "Glosarium", "Ciphertext", "Password asli"], correct: 2, type: "mcq" },
+      { question: "Di sebuah perusahaan, seorang admin sistem menerapkan enkripsi pada data karyawan yang disimpan di dalam hard drive agar jika perangkat tersebut dicuri, pencuri tetap tidak bisa membaca informasi sensitif karena data berada dalam kondisi ....", options: ["Data in transit", "Data at rest", "Data in process", "Data deleted"], correct: 1, type: "mcq" },
+      { question: "Seorang detektif menemukan potongan kertas berisi instruksi militer kuno yang menggunakan metode substitution cipher. Prinsip kerja algoritma ini adalah mengganti setiap huruf asli dengan huruf lain berdasarkan ....", options: ["Panjang kalimat", "Simbol acak", "Posisi tetap dalam alfabet", "Frekuensi suara"], correct: 2, type: "mcq" },
+      { question: "Jika kamu ingin mengirim pesan rahasia \"AMAN\" menggunakan kunci pergeseran Geser 2 ke Kanan, maka hasil perubahan huruf yang diterima adalah ....", options: ["BOCP", "CPBQ", "COCP", "BNDO"], correct: 2, type: "mcq" },
+      { question: "Kata \"BUKU\" berubah menjadi \"EXNX\". Hal ini menunjukkan bahwa pengirim pesan menggunakan kunci pergeseran sebanyak ....", options: ["1 langkah ke kanan", "2 langkah ke kanan", "3 langkah ke kanan", "4 langkah ke kanan"], correct: 2, type: "mcq" },
+      { question: "Dalam simulasi, kata \"ZOO\" dienkripsi dengan kunci Geser 1 ke Kanan. Setelah huruf Z berputar kembali ke awal alfabet, hasil sandi yang benar adalah ....", options: ["APP", "BPP", "YNN", "AQQ"], correct: 0, type: "mcq" },
+      { question: "Seorang siswa menerima pesan sandi \"EDCB\" dan mengetahui pengirim menggunakan kunci Geser 1 ke Kanan. Untuk mendapatkan kembali pesan asli \"DCBA\", siswa tersebut harus menerapkan ....", options: ["Enkripsi 1 langkah ke kanan", "Dekripsi 1 langkah ke kiri", "Enkripsi 2 langkah ke kanan", "Dekripsi 2 langkah ke kiri"], correct: 1, type: "mcq" },
+      { question: "Kamu mendapatkan ciphertext berupa huruf \"D\" dan mengetahui bahwa kunci enkripsi aslinya adalah Geser 3 ke Kanan. Pesan asli setelah digeser manual 3 langkah ke kiri adalah ....", options: ["A", "B", "G", "H"], correct: 0, type: "mcq" },
+      { question: "Saat seorang analis keamanan tidak mengetahui kunci Caesar Cipher yang digunakan, ia mencoba seluruh kemungkinan pergeseran dari 1 hingga 25 secara sistematis. Teknik ini dikenal dengan ....", options: ["Substitusi", "Algoritma", "Brute Force", "Glosarium"], correct: 2, type: "mcq" },
+      { question: "Penggunaan Caesar Cipher di era digital dianggap tidak cukup aman untuk melindungi data perbankan karena peretas dapat memecahkan kodenya dengan cepat menggunakan teknik ....", options: ["Manual", "Acak", "Brute Force", "Rahasia"], correct: 2, type: "mcq" },
+
+      // ISIAN SINGKAT
+      { question: "Proses mengubah pesan asli (Plain Text) menjadi pesan rahasia (Ciphertext) disebut dengan proses ....", answer: "Enkripsi", type: "fill" },
+      { question: "Pesan asli yang masih dalam wujud orisinal, mudah dibaca, dan dapat dipahami oleh siapa saja disebut dengan ....", answer: "Plaintext", type: "fill" },
+      { question: "Pada algoritma Caesar Cipher, elemen rahasia yang menentukan seberapa jauh posisi alfabet akan digeser disebut dengan ....", answer: "Kunci", type: "fill" },
+      { question: "Jika proses enkripsi menggunakan arah kanan, maka menurut Aturan Emas proses dekripsi harus menggunakan arah ....", answer: "Kiri", type: "fill" },
+      { question: "Teknik pemecahan sandi dengan mencoba semua kemungkinan pergeseran alfabet hingga menemukan kata yang bermakna disebut ....", answer: "Brute Force", type: "fill" }
     ];
+
 
     let currentQuestion = 1;
     const totalQuestions = questions.length;
@@ -214,9 +107,9 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     let timer;
 
-    // ❗ FIX 2: Hapus Option Container, hanya gunakan Soal Container
+    // Hapus Option Container, hanya gunakan Soal Container
     const soalContainer = document.getElementById("quiz-question");
-    // const optionContainer = document.getElementById("quiz-options"); // Dihapus dari HTML & JS
+    // const optionContainer = document.getElementById("quiz-options");
     const quizTitle = document.getElementById("quiz-title");
     const nextBtn = document.getElementById("nextBtn");
     const prevBtn = document.getElementById("prevBtn");
@@ -300,7 +193,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Render Soal MCQs
         htmlContent = `
-            <p class="fw-bold mb-4 text-dark" style="font-size: 1.15rem; line-height: 1.6;">${q.question}</p>
+            <p class="fw-bold mb-4 text-dark" style="font-size: 1.3rem; line-height: 1.6;">${q.question}</p>
             
             <div class="option-list">
                 ${q.options.map((opt, i) => `
@@ -317,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         // Render Soal Isian Singkat
         htmlContent = `
-            <p class="fw-bold mb-4 text-dark" style="font-size: 1.15rem; line-height: 1.6;">${q.question}</p>
+            <p class="fw-bold mb-4 text-dark" style="font-size: 1.3rem; line-height: 1.6;">${q.question}</p>
             <input type="text" id="fillInput" class="form-control" placeholder="Ketik jawaban..." value="${
               answers[num] || ""
             }">

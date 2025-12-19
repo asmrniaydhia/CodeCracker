@@ -87,124 +87,24 @@ def evaluasi_pengerjaan(request):
 
 # ⚠️ DATA SOAL EVALUASI UNTUK VALIDASI SERVER
 EVALUASI_QUESTIONS_SERVER = [
-    # 🔹 PILIHAN GANDA (MCQ)
-    {
-        "question": "Enkripsi disebut berhasil jika …",
-        "options": [
-            "Ciphertext tidak dapat dimengerti tanpa kunci",
-            "Plaintext dan ciphertext memiliki arti yang sama",
-            "Semua orang bisa membaca ciphertext",
-            "Pesan berubah tetapi tetap mudah ditebak",
-        ],
-        "correct": 0,  # Index 0 adalah jawaban benar
-        "type": "mcq",
-    },
-    {
-        "question": "Caesar Cipher termasuk kriptografi simetris karena …",
-        "options": [
-            "Menggunakan dua kunci berbeda",
-            "Kunci enkripsi dan dekripsi sama",
-            "Tidak membutuhkan kunci",
-            "Menggunakan kunci acak setiap kali",
-        ],
-        "correct": 1,
-        "type": "mcq",
-    },
-    {
-        "question": "Gunakan kunci 3 untuk mengenkripsi kata “DATA”.",
-        "options": ["GDXD", "EDWD", "FDXD", "GDWD"],
-        "correct": 3,
-        "type": "mcq",
-    },
-    {
-        "question": "Dekripsilah ciphertext “WKH” dengan kunci 3.",
-        "options": ["THE", "QEB", "ZKH", "TXE"],
-        "correct": 0,
-        "type": "mcq",
-    },
-    {
-        "question": "Seseorang mengenkripsi pesan “SEHAT” dengan kunci 5, tetapi penerima melakukan dekripsi dengan kunci 4. Apa akibatnya?",
-        "options": [
-            "Pesan tetap terbaca benar",
-            "Pesan rusak karena pergeseran tidak sesuai",
-            "Pesan berubah menjadi plaintext semula",
-            "Pesan hilang seluruhnya",
-        ],
-        "correct": 1,
-        "type": "mcq",
-    },
-    {
-        "question": "Mengapa Caesar Cipher dianggap lemah dari sisi keamanan modern?",
-        "options": [
-            "Karena terlalu banyak kunci yang mungkin",
-            "Karena hasil enkripsinya selalu sama",
-            "Karena hanya memiliki 25 kemungkinan kunci",
-            "Karena tidak bisa mengenkripsi angka",
-        ],
-        "correct": 2,
-        "type": "mcq",
-    },
-    {
-        "question": "Dalam komunikasi digital, dekripsi dilakukan oleh pihak …",
-        "options": ["Pengirim", "Server", "Penerima", "Penyedia layanan"],
-        "correct": 2,
-        "type": "mcq",
-    },
-    {
-        "question": "Urutan yang benar dari proses komunikasi aman adalah …",
-        "options": [
-            "Dekripsi → Enkripsi → Pengiriman",
-            "Enkripsi → Pengiriman → Dekripsi",
-            "Pengiriman → Dekripsi → Enkripsi",
-            "Enkripsi → Dekripsi → Pengiriman",
-        ],
-        "correct": 1,
-        "type": "mcq",
-    },
-    {
-        "question": "Seorang siswa menulis ciphertext “YMNX NX F YJXY” hasil dari plaintext “THIS IS A TEST”. Kunci yang digunakan adalah …",
-        "options": ["2", "3", "4", "5"],
-        "correct": 3,
-        "type": "mcq",
-    },
-    {
-        "question": "Ciphertext “JCU” jika didekripsi dengan kunci 2 menjadi “HAS”. Jika ingin mengirim kembali pesan yang sama, tetapi hasil ciphertext-nya berbeda, maka tindakan yang paling logis adalah …",
-        "options": [
-            "Mengganti algoritma enkripsi",
-            "Mengubah posisi huruf secara acak tanpa kunci",
-            "Menambah kunci menjadi 4",
-            "Menghapus proses dekripsi",
-        ],
-        "correct": 0,
-        "type": "mcq",
-    },
-    # 🔹 ISIAN SINGKAT (FILL)
-    {
-        "question": "Proses mengubah ciphertext menjadi bentuk asli disebut ____________.",
-        "answer": "Dekripsi",
-        "type": "fill",
-    },
-    {
-        "question": "Enkripsilah “KOMPUTER” dengan kunci 2 → hasil ciphertext: ____________.",
-        "answer": "MQORWVGT",
-        "type": "fill",
-    },
-    {
-        "question": "Dekripsilah ciphertext “ZRUOG” dengan kunci 3 → plaintext: ____________.",
-        "answer": "WORLD",
-        "type": "fill",
-    },
-    {
-        "question": "Jumlah maksimum kemungkinan kunci dalam Caesar Cipher adalah ____________.",
-        "answer": "25",
-        "type": "fill",
-    },
-    {
-        "question": "Dalam Caesar Cipher, huruf digeser sejauh jumlah langkah yang disebut ____________.",
-        "answer": "Kunci",
-        "type": "fill",
-    },
+    {"question":"Saat kamu melakukan login ke akun media sosial melalui jaringan Wi-Fi publik yang tidak aman, risiko pencurian data pribadi oleh peretas dapat dikurangi jika aplikasi tersebut telah mengubah kata sandimu menjadi deretan karakter acak yang disebut ....","options":["Plain Text","Glosarium","Ciphertext","Password asli"],"correct":2,"type":"mcq"},
+    {"question":"Di sebuah perusahaan, seorang admin sistem menerapkan enkripsi pada data karyawan yang disimpan di dalam hard drive agar jika perangkat tersebut dicuri, pencuri tetap tidak bisa membaca informasi sensitif karena data berada dalam kondisi ....","options":["Data in transit","Data at rest","Data in process","Data deleted"],"correct":1,"type":"mcq"},
+    {"question":"Seorang detektif menemukan potongan kertas berisi instruksi militer kuno yang menggunakan metode substitution cipher. Prinsip kerja algoritma ini adalah mengganti setiap huruf asli dengan huruf lain berdasarkan ....","options":["Panjang kalimat","Simbol acak","Posisi tetap dalam alfabet","Frekuensi suara"],"correct":2,"type":"mcq"},
+    {"question":"Jika kamu ingin mengirim pesan rahasia \"AMAN\" menggunakan kunci pergeseran Geser 2 ke Kanan, maka hasil perubahan huruf yang diterima adalah ....","options":["BOCP","CPBQ","COCP","BNDO"],"correct":2,"type":"mcq"},
+    {"question":"Kata \"BUKU\" berubah menjadi \"EXNX\". Hal ini menunjukkan bahwa pengirim pesan menggunakan kunci pergeseran sebanyak ....","options":["1 langkah ke kanan","2 langkah ke kanan","3 langkah ke kanan","4 langkah ke kanan"],"correct":2,"type":"mcq"},
+    {"question":"Dalam sebuah aktivitas simulasi, kamu harus mengenkripsi kata \"ZOO\" dengan kunci Geser 1 ke Kanan. Setelah huruf Z berputar kembali ke awal alfabet, hasil sandi yang benar adalah ....","options":["APP","BPP","YNN","AQQ"],"correct":0,"type":"mcq"},
+    {"question":"Seorang siswa menerima pesan sandi \"EDCB\" dan mengetahui bahwa pengirim menggunakan kunci Geser 1 ke Kanan. Untuk mendapatkan kembali pesan asli \"DCBA\", siswa tersebut harus menerapkan ....","options":["Enkripsi 1 langkah ke kanan","Dekripsi 1 langkah ke kiri","Enkripsi 2 langkah ke kanan","Dekripsi 2 langkah ke kiri"],"correct":1,"type":"mcq"},
+    {"question":"Kamu mendapatkan ciphertext berupa huruf \"D\" dan mengetahui bahwa kunci enkripsi aslinya adalah Geser 3 ke Kanan. Pesan asli setelah digeser manual 3 langkah ke kiri adalah ....","options":["A","B","G","H"],"correct":0,"type":"mcq"},
+    {"question":"Saat seorang analis keamanan tidak mengetahui kunci yang digunakan pada sebuah pesan sandi Caesar, ia mencoba seluruh kemungkinan pergeseran dari 1 hingga 25 secara sistematis. Teknik ini dikenal dengan ....","options":["Substitusi","Algoritma","Brute Force","Glosarium"],"correct":2,"type":"mcq"},
+    {"question":"Penggunaan Caesar Cipher di era digital saat ini dianggap tidak cukup aman untuk melindungi data perbankan karena peretas dapat memecahkan kodenya dengan sangat cepat menggunakan teknik ....","options":["Manual","Acak","Brute Force","Rahasia"],"correct":2,"type":"mcq"},
+
+    {"question":"Proses mengubah pesan asli (Plain Text) menjadi pesan rahasia (Ciphertext) disebut dengan proses ....","answer":"enkripsi","type":"fill"},
+    {"question":"Pesan asli yang masih dalam wujud orisinal, mudah dibaca, dan dapat dipahami oleh siapa saja disebut dengan ....","answer":"plaintext","type":"fill"},
+    {"question":"Pada algoritma Caesar Cipher, elemen rahasia yang menentukan seberapa jauh posisi alfabet akan digeser disebut dengan ....","answer":"kunci","type":"fill"},
+    {"question":"Jika proses enkripsi menggunakan arah kanan, maka menurut Aturan Emas proses dekripsi harus menggunakan arah ....","answer":"kiri","type":"fill"},
+    {"question":"Teknik pemecahan sandi dengan mencoba semua kemungkinan pergeseran alfabet hingga menemukan kata yang bermakna disebut ....","answer":"brute force","type":"fill"}
 ]
+
 
 
 # views.py (Revisi fungsi simpan_evaluasi_nilai)
@@ -426,159 +326,30 @@ def get_logged_in_user(request):
     return None
 
 # ⚠️ DATA SOAL KUIS UNTUK VALIDASI SERVER
-QUIZ_QUESTIONS_SERVER = {
-    "enkripsi": [
-        {
-            "question": "Sebuah aplikasi sekolah mengirimkan pesan nilai rapor melalui server pusat. Agar data tidak mudah dibaca jika terjadi kebocoran jaringan, aplikasi tersebut menambahkan proses khusus sebelum pengiriman. Langkah apakah yang paling tepat dilakukan?",
-            "options": [
-                "Mengubah format file menjadi PDF",
-                "Mengganti nama file sebelum dikirim",
-                "Melakukan enkripsi pada data rapor",
-                "Menghapus sebagian data penting",
-            ],
-            "correct": 2,
-        },
-        {
-            "question": "Rina membuat aplikasi pengaduan anonim. Ia ingin memastikan setiap laporan aman walaupun database dicuri orang. Apa alasan utama ia perlu menerapkan enkripsi?",
-            "options": [
-                "Agar laporan lebih cepat diproses",
-                "Agar laporan tetap bisa dibaca hanya oleh pihak berwenang",
-                "Agar database tidak bisa dihapus",
-                "Agar server tidak cepat penuh",
-            ],
-            "correct": 1,
-        },
-        {
-            "question": "Sebuah pesan terenkripsi dapat dikirim dengan aman melalui jaringan sekolah yang sering mengalami gangguan keamanan. Mengapa enkripsi tetap penting meskipun jaringan sudah dilindungi firewall?",
-            "options": [
-                "Firewall tidak menjamin data selalu aman",
-                "Enkripsi membuat pesan jadi lebih pendek",
-                "Firewall tidak boleh digunakan bersamaan dengan enkripsi",
-                "Firewall menghapus pesan asli",
-            ],
-            "correct": 0,
-        },
-        {
-            "question": "Guru ingin berbagi file kunci ujian. Ia melakukan enkripsi, tetapi tidak mengirimkan kunci dekripsinya kepada siswa. Apa akibatnya?",
-            "options": [
-                "File akan terbaca otomatis",
-                "File tetap aman dan tidak dapat dibaca",
-                "Siswa dapat menebak isinya dengan mudah",
-                "File berubah ukuran menjadi lebih besar",
-            ],
-            "correct": 1,
-        },
-        {
-            "question": "Anto membuat sistem presensi otomatis. Ia menyadari data siswa dapat dilihat oleh admin jaringan. Untuk mencegah penyalahgunaan data, langkah apa yang harus ia tambahkan?",
-            "options": [
-                "Mengganti warna tampilan aplikasi",
-                "Menyimpan data di folder berbeda",
-                "Menyembunyikan aplikasi dari layar utama",
-                "Menyandikan data saat disimpan (enkripsi)",
-            ],
-            "correct": 3,
-        },
+QUIZ_QUESTIONS_SERVER={
+    "enkripsi":[
+        {"question":"Agus mengirimkan foto kartu pelajar berisi data sensitif melalui aplikasi chat dengan fitur End-to-End Encryption. Jika data disadap di tengah jalan, penyadap hanya akan melihat kode acak tidak bermakna yang disebut ....","options":["Plain Text","Password","Ciphertext","Glosarium"],"correct":2},
+        {"question":"Saat membuka sebuah file dokumen di komputer sekolah, kamu hanya menemukan deretan karakter aneh seperti \"Xy29!#amZ\" yang tidak dapat dipahami. File tersebut sedang berada dalam wujud ....","options":["Pesan asli","Data orisinal","Ciphertext","Plain Text"],"correct":2},
+        {"question":"Sebuah bank mengganti sebagian nomor rekening pada struk ATM menjadi tanda bintang (contoh: 123XXXX890). Tindakan ini merupakan penerapan prinsip ....","options":["Transparansi data","Kerahasiaan (confidentiality)","Kecepatan transaksi","Penghapusan data"],"correct":1},
+        {"question":"Saat menggunakan Wi-Fi publik untuk aktivitas perbankan, risiko terbesar jika data tidak dienkripsi adalah data dikirimkan dalam bentuk ....","options":["Plain Text","Ciphertext","Kode rahasia","Algoritma"],"correct":0},
+        {"question":"Dalam alur komunikasi digital, proses mengubah pesan asli menjadi kode acak menggunakan algoritma tertentu disebut ....","options":["Deskripsi","Dekripsi","Enkripsi","Glosarium"],"correct":2}
     ],
-    "caesar": [
-        {
-            "question": "Sebuah pesan: “DRO AESMU LBYGX” ditemukan di kelas komputer. Siswa menduga ini adalah Caesar Cipher dengan geser +10. Apa isi pesannya?",
-            "options": [
-                "THE QUICK BROWN",
-                "THE QUICK ROBOT",
-                "THE CLOUD BROWN",
-                "THE BROWN HOUSE",
-            ],
-            "correct": 0,
-        },
-        {
-            "question": "Guru memberikan pesan terenkripsi “KHOOR ZRUOG” kepada siswa, namun lupa memberi petunjuk geseran. Siswa mencoba menebak pola pergeseran. Manakah teknik paling efektif?",
-            "options": [
-                "Menebak acak hingga muncul kata “WOW”",
-                "Menggeser huruf satu per satu sampai pesan terbaca",
-                "Mengganti huruf vokal saja",
-                "Menghapus spasi lalu mencoba gabungan kata baru",
-            ],
-            "correct": 1,
-        },
-        {
-            "question": "Aplikasi belajar membuat fitur tantangan Caesar Cipher. Pesan “ZL AOLYPUF” muncul saat kunci geser tidak diketahui. Siswa menyadari kata terakhir kemungkinan “HAPPY”. Maka geseran yang benar adalah…",
-            "options": ["+5", "+7", "–7", "–5"],
-            "correct": 2,
-        },
-        {
-            "question": "Aldi membuat program Caesar Cipher. Namun saat pesan terdiri dari angka, program malah mengubah angka menjadi huruf. Apa perbaikan yang paling tepat?",
-            "options": [
-                "Mematikan fitur enkripsi",
-                "Menambahkan aturan untuk membiarkan angka tetap sama",
-                "Mengubah semua angka menjadi simbol",
-                "Menghapus angka dari pesan",
-            ],
-            "correct": 1,
-        },
-        {
-            "question": "Pesan “WKLV LV D VHFUHW” dikirimkan namun tampak mencurigakan. Siswa melihat pola huruf tidak biasa. Apa langkah paling tepat untuk memeriksa apakah itu Caesar Cipher?",
-            "options": [
-                "Mengirim pesan kembali ke pengirim",
-                "Menguji beberapa pergeseran untuk melihat apakah menghasilkan kata yang bermakna",
-                "Mengganti semua huruf dengan vokal",
-                "Menghapus huruf pertama dan terakhir",
-            ],
-            "correct": 1,
-        },
+    "caesar":[
+        {"question":"Pesan asli \"DUNIA\" dienkripsi dengan kunci Geser 3 ke Kanan. Hasil perubahannya adalah ....","options":["GVQLD","FWPKC","GXQLD","HWQLE"],"correct":2},
+        {"question":"Kata \"DATA\" dienkripsi menggunakan kunci Geser 2 ke Kanan. Hasil alfabet sandinya adalah ....","options":["FCVD","FCVC","EBVB","GDWD"],"correct":1},
+        {"question":"Jika huruf \"B\" berubah menjadi \"E\", maka pesan \"MUKA\" dengan kunci yang sama akan menjadi ....","options":["PXND","QYOE","OWMC","PVNC"],"correct":0},
+        {"question":"Jika huruf \"K\" digeser 5 langkah ke kanan menjadi \"P\", maka hasil enkripsi kata \"BOLA\" adalah ....","options":["CPMA","DQNB","GTQF","FSPE"],"correct":2},
+        {"question":"Jika huruf \"Z\" dienkripsi dengan Geser 1 ke Kanan, maka huruf hasilnya adalah ....","options":["A","B","Y","X"],"correct":0}
     ],
-    "dekripsi": [
-        {
-            "question": "Pesan rahasia siswa berbunyi “RIJVS UYVJN”. Setelah dianalisis, ternyata ini hasil enkripsi tertentu. Apa tujuan proses dekripsi?",
-            "options": [
-                "Mengubah pesan menjadi lebih sulit dibaca",
-                "Mengembalikan pesan ke bentuk aslinya",
-                "Menghasilkan pesan baru untuk dikirim",
-                "Menghapus pesan dari sistem",
-            ],
-            "correct": 1,
-        },
-        {
-            "question": "Guru menerima file nilai yang terenkripsi, tetapi kunci dekripsinya hilang. Apa risiko yang terjadi?",
-            "options": [
-                "File dapat dibuka siapa saja",
-                "File tidak bisa dibaca meskipun datanya benar",
-                "File berubah ukuran dan rusak",
-                "File otomatis terhapus",
-            ],
-            "correct": 1,
-        },
-        {
-            "question": "Dalam simulasi keamanan, siswa mencoba membuka pesan yang disandikan. Namun ketika dekripsi dilakukan dengan kunci salah, hasilnya tidak masuk akal. Apa yang bisa disimpulkan?",
-            "options": [
-                "Sistem enkripsi tidak berfungsi",
-                "Dekripsi hanya bisa dilakukan dengan kunci yang tepat",
-                "Pesan tidak perlu didekripsi",
-                "Semua kunci menghasilkan pesan yang sama",
-            ],
-            "correct": 1,
-        },
-        {
-            "question": "Sebuah aplikasi melakukan enkripsi saat mengirim data, tetapi tidak melakukan dekripsi saat menerima. Apa dampaknya?",
-            "options": [
-                "Data yang diterima tetap terenkripsi dan tidak terbaca",
-                "Data menjadi lebih cepat terkirim",
-                "Data otomatis berubah menjadi teks asli",
-                "Data tersimpan dua kali lebih besar",
-            ],
-            "correct": 0,
-        },
-        {
-            "question": "Rani mencoba mendekripsi pesan yang digeser 8 langkah ke kanan. Ia ingin mengembalikannya ke teks asli. Apa yang harus ia lakukan?",
-            "options": [
-                "Menggeser huruf maju 8 langkah",
-                "Menggeser huruf mundur 8 langkah",
-                "Menggeser huruf maju 16 langkah",
-                "Menghapus huruf vokal lalu membaca ulang",
-            ],
-            "correct": 1,
-        },
-    ],
+    "dekripsi":[
+        {"question":"Pesan rahasia \"FDVD\" dienkripsi dengan Geser 3 ke Kanan. Untuk mendapatkan pesan asli, hasil dekripsinya adalah ....","options":["BOLA","CASA","DATA","GAGA"],"correct":1},
+        {"question":"Dengan teknik Brute Force, kode \"PHVD\" menghasilkan kata \"MESA\" setelah dilakukan pergeseran sebanyak ....","options":["1 langkah ke kiri","2 langkah ke kiri","3 langkah ke kiri","4 langkah ke kiri"],"correct":2},
+        {"question":"Pesan terenkripsi \"LUL\" diketahui menggunakan kunci Geser 1 ke Kanan. Pesan aslinya adalah ....","options":["MUM","KTK","JSK","LVL"],"correct":1},
+        {"question":"Jika huruf sandi \"V\" berasal dari huruf asli \"T\", maka proses dekripsi dilakukan dengan menggeser ke kiri sebanyak ....","options":["1 langkah","2 langkah","3 langkah","4 langkah"],"correct":1},
+        {"question":"Kode \"WKDQ\" setelah digeser 3 langkah ke kiri menghasilkan kata \"THANK\". Kunci enkripsi awal yang digunakan adalah ....","options":["Geser 1 ke Kanan","Geser 2 ke Kanan","Geser 3 ke Kanan","Geser 4 ke Kanan"],"correct":2}
+    ]
 }
+
 KUIST_ID_MAP = {"enkripsi": 1, "caesar": 2, "dekripsi": 3}
 
 
