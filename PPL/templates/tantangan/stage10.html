@@ -113,7 +113,7 @@
                 
                 <div class="question-container active" id="question-1">
                     <p class="question-text"><strong>Soal 1/3:</strong> Kode Akses Gerbang</p>
-                    <p>Sistem keamanan meminta kata sandi. Pesan terenkripsi di layar adalah <strong>OCUWM</strong>. Intel mengatakan sandi ini menggunakan <strong>Kunci 2</strong>. Dekripsi untuk mendapatkan akses <strong>MASUK</strong>!</p>
+                    <p>Sistem keamanan meminta kata sandi. Pesan terenkripsi di layar adalah <strong>OCUWM</strong>. Intel mengatakan sandi ini menggunakan <strong>Kunci 2</strong>. Dekripsi untuk mendapatkan akses masuk!</p>
                     <input type="text" class="form-control answer-input" id="q1-answer" placeholder="Ketik hasil dekripsi (5 huruf)">
                     <button class="btn btn-primary btn-periksa" onclick="checkAnswer(1)">Periksa Jawaban</button>
                     <p class="feedback" id="q1-feedback"></p>
@@ -206,7 +206,6 @@
 
         const timerEl = document.getElementById('timer');
         const totalScoreEl = document.getElementById('total-score');
-        const attemptsEl = document.getElementById('attempts');
         const successModal = document.getElementById('successModal');
         const timeoutModal = document.getElementById('timeoutModal');
         const penaltyModal = document.getElementById('penaltyModal');
@@ -237,7 +236,6 @@
             
             totalScoreEl.textContent = gameSession.totalScore;
             updateTimerDisplay();
-            attemptsEl.textContent = stageState.attempts;
             
             document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
             document.getElementById('question-1').classList.add('active');

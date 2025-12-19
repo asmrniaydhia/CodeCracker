@@ -159,32 +159,6 @@ class ProgresItem(models.Model):
 
 
 # ============================
-#         STAGE GAME
-# ============================
-class StageGame(models.Model):
-    id_stage = models.AutoField(primary_key=True)
-    nama_stage = models.CharField(max_length=45)
-
-    def __str__(self):
-        return self.nama_stage
-
-
-# ============================
-#          HASIL GAME
-# ============================
-class HasilGame(models.Model):
-    id_hasil_game = models.AutoField(primary_key=True)
-    id_siswa = models.ForeignKey(Pengguna, on_delete=models.CASCADE)
-    id_stage = models.ForeignKey(StageGame, on_delete=models.CASCADE)
-    skor_game = models.IntegerField()
-    waktu_game = models.IntegerField()
-    percobaan_game = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.id_siswa} - {self.id_stage}"
-
-
-# ============================
 #        HASIL EVALUASI
 # ============================
 class HasilEvaluasi(models.Model):

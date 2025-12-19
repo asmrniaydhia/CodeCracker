@@ -192,7 +192,6 @@
 
         const timerEl = document.getElementById('timer');
         const totalScoreEl = document.getElementById('total-score');
-        const attemptsEl = document.getElementById('attempts');
         const successModal = document.getElementById('successModal');
         const timeoutModal = document.getElementById('timeoutModal');
         const penaltyModal = document.getElementById('penaltyModal');
@@ -223,7 +222,6 @@
             
             totalScoreEl.textContent = gameSession.totalScore;
             updateTimerDisplay();
-            attemptsEl.textContent = stageState.attempts;
             
             document.querySelectorAll('.question-container').forEach(q => q.classList.remove('active'));
             document.getElementById('question-1').classList.add('active');

@@ -52,6 +52,7 @@ urlpatterns = [
     path('daftar/siswa/', views.siswa_daftar, name='siswa_daftar'),
     path('daftar/guru/', views.guru_daftar, name='guru_daftar'),  
     path('login/', views.login_view, name='login'),
+    path('lupa-sandi/', views.lupa_sandi_view, name='lupa_sandi'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('join-kelas/', views.input_token_view, name='input_token'), 
     path('logout/', views.logout_view, name='logout'),

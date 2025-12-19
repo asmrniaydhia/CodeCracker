@@ -14,24 +14,16 @@ from django.db.models import Max, Avg, Count, Q
 from .utils import render_to_pdf
 from .decorators import butuh_login_siswa 
 
-# --- DECORATOR KHUSUS TANTANGAN ---
 def butuh_login_siswa(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
-        # GANTI 'user_id' MENJADI 'id_pengguna'
         if 'id_pengguna' not in request.session:
             return redirect('login') 
         return function(request, *args, **kwargs)
     return wrap
 
-# ==========================================
-#  LOGIKA HELPER TANTANGAN (BARU)
-# ==========================================
 
 def cek_akses_stage(request, stage_ke):
-    """
-    Mengecek apakah user boleh mengakses stage tertentu berdasarkan session.
-    """
     # Ambil progress terakhir dari session, default Stage 1
     max_stage = request.session.get('max_stage', 1)
     if max_stage < stage_ke:
@@ -40,10 +32,7 @@ def cek_akses_stage(request, stage_ke):
 
 @butuh_login_siswa
 def unlock_next_stage(request, stage_selesai):
-    """
-    Fungsi ini dipanggil ketika siswa MENYELESAIKAN sebuah stage.
-    Misal: Selesai stage 1 -> panggil url unlock/1 -> system buka stage 2.
-    """
+
     current_max = request.session.get('max_stage', 1)
     
     # Hanya naikkan level jika stage yang diselesaikan adalah stage terakhir yg terbuka
@@ -57,10 +46,6 @@ def unlock_next_stage(request, stage_selesai):
 # ---------- EVALUASI ----------
 @butuh_login_siswa
 def evaluasi_petunjuk(request):
-    """
-    Menampilkan halaman petunjuk evaluasi. 
-    Jika sudah selesai (Evaluasi tidak bisa diulang), langsung alihkan ke hasil nilai detail.
-    """
     siswa = get_logged_in_user(request)
     if not siswa:
         return redirect('login')
@@ -1590,18 +1575,13 @@ def dashboard(request):
             'top_siswa': top_siswa,
         }
         return render(request, 'dashboard/index.html', context)
-
-
-    # ==========================
-    # LOGIKA SISWA
-    # ==========================
     else:
         # 1. Info Kelas
         try:
             anggota = AnggotaKelas.objects.get(siswa__id_pengguna=id_pengguna)
             nama_kelas = anggota.kelas.nama_kelas
         except AnggotaKelas.DoesNotExist:
-            nama_kelas = "Belum masuk kelas"
+            return redirect('input_token')
         
         # 2. Nilai Evaluasi Akhir
         try:
@@ -1636,7 +1616,40 @@ def dashboard(request):
             'sidebar_status': get_sidebar_status(id_pengguna)
         }
         return render(request, 'dashboard/index.html', context)
+
+def lupa_sandi_view(request):
+    if request.method == 'POST':
+        email_input = request.POST.get('email')
+        sandi_baru = request.POST.get('password_baru')
+        konfirmasi = request.POST.get('konfirmasi_sandi')
+
+        # 1. Validasi Input Kosong
+        if not email_input or not sandi_baru:
+            messages.error(request, 'Semua kolom harus diisi!')
+            return render(request, 'auth/forgot_password.html')
+
+        # 2. Validasi Kecocokan Sandi
+        if sandi_baru != konfirmasi:
+            messages.error(request, 'Konfirmasi kata sandi tidak cocok!')
+            return render(request, 'auth/forgot_password.html')
+
+        try:
+            # 3. Cari Pengguna berdasarkan Email
+            user = Pengguna.objects.get(email=email_input)
+            
+            # 4. Update Password
+            user.kata_sandi = sandi_baru
+            user.save()
+            
+            messages.success(request, 'Kata sandi berhasil direset! Silakan login dengan sandi baru.')
+            return redirect('login')
+
+        except Pengguna.DoesNotExist:
+            # Demi keamanan, biasanya pesannya samar, tapi untuk dev kita kasih tahu
+            messages.error(request, 'Email tidak ditemukan dalam sistem kami.')
     
+    return render(request, 'auth/forgot_password.html')
+
 def index(request):
     return render(request, 'landing/index.html')
 
