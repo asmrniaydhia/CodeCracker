@@ -1,28 +1,416 @@
 {% extends 'layouts/base_app.html' %}
 {% load static %}
 
-{% block title %}Dashboard Utama{% endblock %}
+{% block title %}Dashboard - CodeCracker{% endblock %}
 
 {% block content %}
-    <div class="page-header">
-        <h4 class="page-title">Dashboard {{ request.session.peran|title }}</h4>
-    </div>
+
+<div class="page-inner">
+
+    {% if role == 'guru' %}
     
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h3 class="fw-bold mb-0" style="color: #1B3C53; font-family: 'Lato', sans-serif;">Dashboard</h3>
+            <span class="text-muted small">Ringkasan data kelas & performa siswa.</span>
+        </div>
+        <div>
+            <a href="{% url 'kelola_kelas' %}" class="btn btn-round fw-bold me-2" 
+               style="background-color: #F3C623; color: #1B3C53; border: none;">
+                <i class="fas fa-plus-circle me-1"></i> Kelola Kelas
+            </a>
+            <a href="{% url 'rekap_nilai_siswa' %}" class="btn btn-round btn-border" 
+               style="border-color: #1B3C53; color: #1B3C53;">
+                <i class="fas fa-file-export me-1"></i> Rekap Nilai
+            </a>
+        </div>
+    </div>
+
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Selamat Datang!</div>
-                </div>
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
                 <div class="card-body">
-                    <h3>Halo, {{ request.session.nama_lengkap }}!</h3>
-                    <p class="lead">
-                        Anda telah berhasil masuk sebagai <strong>{{ request.session.peran|title }}</strong>.
-                        <br>
-                        Silakan pilih menu di sebelah kiri (Sidebar) atau menu cepat di atas (Header) untuk mulai beraktivitas.
-                    </p>
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center bubble-shadow-small" 
+                                 style="background-color: #E6EAF2; color: #1B3C53;">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Kelas Aktif</p>
+                                <h4 class="card-title" style="color: #1B3C53;">{{ total_kelas }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center bubble-shadow-small" 
+                                 style="background-color: #FFF5D6; color: #F3C623;">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Total Siswa</p>
+                                <h4 class="card-title" style="color: #1B3C53;">{{ total_siswa }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-success bubble-shadow-small">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Rata-rata Kelas</p>
+                                <h4 class="card-title text-success">{{ rata_rata_evaluasi }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-3">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-danger bubble-shadow-small">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Perlu Remedial</p>
+                                <h4 class="card-title text-danger">{{ siswa_remedial }} Siswa</h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="row mt-2">
+        
+        <div class="col-md-8">
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-title" style="color: #1B3C53;">Progres & Performa Materi</div>
+                    <small class="text-muted">Persentase kelulusan (Nilai &ge; 70) & rata-rata skor terbaik.</small>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-bold text-dark">Enkripsi</span>
+                        <span class="badge badge-success">Rata-rata: {{ materi.enkripsi.avg }}</span>
+                    </div>
+                    <div class="progress mb-4" style="height: 20px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ materi.enkripsi.progress }}%" 
+                             aria-valuenow="{{ materi.enkripsi.progress }}" aria-valuemin="0" aria-valuemax="100">
+                             {{ materi.enkripsi.progress }}% Lulus
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-bold text-dark">Caesar Cipher</span>
+                        <span class="badge badge-warning text-dark">Rata-rata: {{ materi.caesar.avg }}</span>
+                    </div>
+                    <div class="progress mb-4" style="height: 20px;">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ materi.caesar.progress }}%" 
+                             aria-valuenow="{{ materi.caesar.progress }}" aria-valuemin="0" aria-valuemax="100">
+                             <span class="text-dark fw-bold">{{ materi.caesar.progress }}% Lulus</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-bold text-dark">Dekripsi</span>
+                        <span class="badge badge-info">Rata-rata: {{ materi.dekripsi.avg }}</span>
+                    </div>
+                    <div class="progress mb-4" style="height: 20px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ materi.dekripsi.progress }}%" 
+                             aria-valuenow="{{ materi.dekripsi.progress }}" aria-valuemin="0" aria-valuemax="100">
+                             {{ materi.dekripsi.progress }}% Lulus
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                        <span class="fw-bold text-dark">Evaluasi Akhir</span>
+                        <span class="badge badge-secondary">Rata-rata: {{ materi.evaluasi.avg }}</span>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ materi.evaluasi.progress }}%" 
+                             aria-valuenow="{{ materi.evaluasi.progress }}" aria-valuemin="0" aria-valuemax="100">
+                             {{ materi.evaluasi.progress }}% Lulus
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-title" style="color: #1B3C53;">Top 5 Siswa</div>
+                    <small class="text-muted">Berdasarkan Evaluasi Akhir</small>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Nama</th>
+                                    <th class="text-center">Nilai</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for s in top_siswa %}
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold text-navy">{{ s.id_siswa.nama_lengkap }}</div>
+                                        <small class="text-muted">
+                                            {# Coba ambil kelas via reverse relation #}
+                                            {{ s.id_siswa.anggotakelas_set.first.kelas.nama_kelas|default:"-" }}
+                                        </small>
+                                    </td>
+                                    <td class="text-center align-middle">
+                                        <span class="badge bg-success">{{ s.nilai }}</span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="2" class="text-center text-muted py-4">
+                                        Belum ada data evaluasi.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{% url 'rekap_nilai_siswa' %}" class="btn btn-xs btn-link">Lihat Semua Nilai</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% else %}
+    
+    <div class="d-flex align-items-center mb-4">
+        <div>
+            <h3 class="fw-bold mb-0" style="color: #1B3C53; font-family: 'Lato', sans-serif;">Dashboard Siswa</h3>
+            <span class="text-muted small">Pantau progres dan hasil belajarmu di sini.</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6 col-md-6">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center bubble-shadow-small" style="background-color: #FFF5D6; color: #F3C623;">
+                                <i class="fas fa-school"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Kelas Saya</p>
+                                <h4 class="card-title" style="color: #1B3C53;">{{ kelas }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-6">
+            <div class="card card-stats card-round">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-icon">
+                            <div class="icon-big text-center icon-success bubble-shadow-small">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                        </div>
+                        <div class="col col-stats ms-3 ms-sm-0">
+                            <div class="numbers">
+                                <p class="card-category">Nilai Evaluasi Akhir</p>
+                                <h4 class="card-title text-success">{{ nilai_evaluasi }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="fw-bold mt-4 mb-3" style="color: #1B3C53;">Riwayat Kuis Materi</h4>
+    
+    <div class="row">
+        
+        <div class="col-md-4">
+            <div class="card card-round h-100">
+                <div class="card-header" style="background-color: #1B3C53; color: white;">
+                    <div class="card-title text-white small fw-bold">
+                        <i class="fas fa-lock me-2 text-warning"></i>Kuis Enkripsi
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Skor</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in histori_enkripsi %}
+                                <tr>
+                                    <td class="text-center text-muted">Ke-{{ item.percobaan_kuis }}</td>
+                                    <td class="text-center fw-bold">
+                                        <span class="badge {% if item.skor_kuis >= 70 %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ item.skor_kuis }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'kuis_nilai_detail' item.id_hasil_kuis %}" class="btn btn-xs btn-link p-0" title="Lihat Detail">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4 small">
+                                        Belum ada riwayat.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-round h-100">
+                <div class="card-header" style="background-color: #1B3C53; color: white;">
+                    <div class="card-title text-white small fw-bold">
+                        <i class="fas fa-exchange-alt me-2 text-warning"></i>Kuis Caesar Cipher
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Skor</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in histori_caesar %}
+                                <tr>
+                                    <td class="text-center text-muted">Ke-{{ item.percobaan_kuis }}</td>
+                                    <td class="text-center fw-bold">
+                                        <span class="badge {% if item.skor_kuis >= 70 %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ item.skor_kuis }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'kuis_nilai_detail' item.id_hasil_kuis %}" class="btn btn-xs btn-link p-0">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4 small">
+                                        Belum ada riwayat.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card card-round h-100">
+                <div class="card-header" style="background-color: #1B3C53; color: white;">
+                    <div class="card-title text-white small fw-bold">
+                        <i class="fas fa-key me-2 text-warning"></i>Kuis Dekripsi
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Skor</th>
+                                    <th class="text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in histori_dekripsi %}
+                                <tr>
+                                    <td class="text-center text-muted">Ke-{{ item.percobaan_kuis }}</td>
+                                    <td class="text-center fw-bold">
+                                        <span class="badge {% if item.skor_kuis >= 70 %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ item.skor_kuis }}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{% url 'kuis_nilai_detail' item.id_hasil_kuis %}" class="btn btn-xs btn-link p-0">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4 small">
+                                        Belum ada riwayat.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {% endif %} </div>
+
 {% endblock %}

@@ -1,0 +1,102 @@
+{% extends 'layouts/base_app.html' %}
+{% load static %}
+
+{% block title %}Download Nilai - {{ jenis|title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4 class="page-title">Download Nilai Per Kelas</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home"><a href="{% url 'dashboard' %}"><i class="flaticon-home"></i></a></li>
+        <li class="separator"><i class="flaticon-right-arrow"></i></li>
+        <li class="nav-item"><a href="{% url 'rekap_nilai_siswa' %}">Rekap Nilai</a></li>
+        <li class="separator"><i class="flaticon-right-arrow"></i></li>
+        <li class="nav-item">Pilih File</li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h4 class="card-title">
+                        <i class="fas fa-file-pdf text-danger me-2"></i> 
+                        File Laporan Materi: <span class="text-primary fw-bold">{{ jenis|title }}</span>
+                    </h4>
+                    
+                    <a href="{% url 'rekap_nilai_siswa' %}" class="btn btn-secondary btn-round btn-sm">
+                        <i class="fas fa-arrow-left me-2"></i> Kembali
+                    </a>
+                </div>
+            </div>
+
+            <div class="card-body">
+                
+                <div class="alert alert-light border border-secondary border-opacity-10 mb-4">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-info-circle text-info fa-lg me-3"></i>
+                        <div>
+                            <strong>Silakan pilih kelas di bawah ini.</strong>
+                            <p class="mb-0 text-muted small">Sistem akan mengunduh file PDF yang berisi rekap nilai <b>{{ jenis|title }}</b> hanya untuk siswa di kelas yang Anda pilih.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list-group list-group-flush border rounded">
+                    {% for kelas in daftar_kelas %}
+                    <a href="{% url 'export_rekap_nilai_pdf' %}?kelas={{ kelas.id_kelas }}&jenis={{ jenis }}" target="_blank" class="list-group-item list-group-item-action p-3 download-item">
+                        <div class="d-flex align-items-center justify-content-between">
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="avatar avatar-sm me-3">
+                                    <span class="avatar-title rounded-circle border border-white bg-danger">
+                                        <i class="fas fa-file-pdf text-white"></i>
+                                    </span>
+                                </div>
+                                <div>
+                                    <h5 class="mb-1 text-dark fw-bold">Nilai_{{ jenis|title }}_{{ kelas.nama_kelas|slugify }}.pdf</h5>
+                                    <div class="text-muted small">
+                                        <i class="fas fa-users me-1"></i> Kelas: {{ kelas.nama_kelas }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="btn btn-outline-primary btn-round btn-sm">
+                                    <i class="fas fa-download me-2"></i> Unduh File
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                    {% empty %}
+                    <div class="text-center p-5">
+                        <div class="avatar avatar-xl mx-auto mb-3">
+                            <span class="avatar-title rounded-circle bg-light text-muted">
+                                <i class="fas fa-folder-open fa-2x"></i>
+                            </span>
+                        </div>
+                        <h5 class="text-muted">Anda belum memiliki data kelas.</h5>
+                    </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .download-item:hover {
+        background-color: #f8f9fa;
+        transform: translateX(5px);
+        transition: all 0.3s ease;
+        border-left: 3px solid #1572e8; /* Warna biru primary */
+    }
+    .download-item {
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+    }
+</style>
+{% endblock %}

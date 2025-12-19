@@ -40,11 +40,13 @@ urlpatterns = [
     path('tantangan/tantangan/', views.tantangan, name='tantangan'),
 
     path('leaderboard/', views.leaderboard, name='leaderboard'),
-
+    path('manajemen-nilai/', views.rekap_nilai_siswa, name='rekap_nilai_siswa'),
+    path('export-nilai-pdf/', views.export_rekap_nilai_pdf, name='export_rekap_nilai_pdf'),
+    path('hapus-nilai/<int:id_siswa>/<str:jenis>/', views.hapus_nilai_siswa, name='hapus_nilai_siswa'),
+    path('export-nilai/pilih-kelas/', views.halaman_download_per_kelas, name='halaman_download_per_kelas'),
     path('api/simpan-skor-final/', views.simpan_skor_final_view, name='simpan_skor_final_view'),
     path('tantangan/unlock/<int:stage_selesai>/', views.unlock_next_stage, name='unlock_next_stage'),
-
-    # ----- PUNYAA RANIIII ------ 
+    path('profil/', views.profil_view, name='profil'),
     path('', views.index, name='index'),  
     path('daftar/', views.pilihan_daftar, name='pilihan_daftar'),
     path('daftar/siswa/', views.siswa_daftar, name='siswa_daftar'),
