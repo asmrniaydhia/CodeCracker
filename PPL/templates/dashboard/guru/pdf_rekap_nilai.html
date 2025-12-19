@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Helvetica, Arial, sans-serif; font-size: 11px; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #1B3C53; padding-bottom: 10px; }
+        .header h1 { margin: 0; font-size: 16px; color: #1B3C53; text-transform: uppercase; }
+        .header p { margin: 2px; font-size: 10px; color: #555; }
+        
+        .class-section { margin-bottom: 25px; page-break-inside: avoid; }
+        .class-title { 
+        background-color: #eee; 
+        padding: 8px; 
+        font-weight: bold; 
+        font-size: 12px; 
+        border: 1px solid #333;
+        border-bottom: none; 
+        margin-bottom: 0px;
+        color: #000;}
+
+        table { width: 100%; border-collapse: collapse; margin-top: 0px;}
+        th, td { border: 1px solid #333; padding: 6px; text-align: left; }
+        th { background-color: #1B3C53; color: white; text-align: center; font-weight: bold; }
+        td.center { text-align: center; }
+        
+        .footer { position: fixed; bottom: 0; width: 100%; font-size: 9px; text-align: right; color: #777; border-top: 1px solid #ddd; padding-top: 5px; }
+        
+        /* Warna Nilai */
+        .pass { color: green; font-weight: bold; }
+        .fail { color: red; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ judul_laporan }}</h1>
+        <p>Guru Pengampu: {{ nama_guru }} | Dicetak: {{ tanggal_cetak|date:"d F Y H:i" }}</p>
+    </div>
+
+    {% for kelas_data in laporan_data %}
+        <div class="class-section">
+            <div class="class-title">
+                Kelas: {{ kelas_data.nama_kelas }}
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th width="5%">No</th>
+                        <th width="45%">Nama Siswa</th>
+                        <th width="15%">Nilai</th>
+                        <th width="20%">Waktu Pengerjaan</th>
+                        <th width="15%">Percobaan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for siswa in kelas_data.siswa_list %}
+                    <tr>
+                        <td class="center">{{ siswa.no }}</td>
+                        <td>{{ siswa.nama }}</td>
+                        
+                        <td class="center {% if siswa.nilai >= 70 %}pass{% else %}fail{% endif %}">
+                            {{ siswa.nilai }}
+                        </td>
+                        
+                        <td class="center">{{ siswa.waktu }}</td>
+                        <td class="center">{{ siswa.percobaan }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="center" style="padding: 10px; color: #777;">
+                            Belum ada siswa di kelas ini.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% empty %}
+        <div style="text-align: center; padding: 50px;">Tidak ada data kelas.</div>
+    {% endfor %}
+
+    <div class="footer">
+        Dicetak otomatis oleh sistem CodeCracker.
+    </div>
+</body>
+</html>

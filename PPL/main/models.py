@@ -1,6 +1,5 @@
 from django.db import models
 
-# ----- PUNNYAA RANIIII ------
 class Pengguna(models.Model):
     # Definisi Kolom Tabel
     id_pengguna = models.AutoField(primary_key=True)

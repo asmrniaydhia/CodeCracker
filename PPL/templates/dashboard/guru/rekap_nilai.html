@@ -1,0 +1,235 @@
+{% extends 'layouts/base_app.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}Rekap Nilai Siswa{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h4 class="page-title">Rekap Nilai Siswa</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <h4 class="card-title">Daftar Nilai Per Materi</h4>
+                    
+                    <div class="d-flex gap-2 flex-wrap justify-content-end">
+                        <form method="GET" action="" class="d-flex align-items-center">
+                            <select name="kelas" class="form-select form-control" onchange="this.form.submit()" style="min-width: 200px;">
+                                <option value="">-- Filter Tabel: Semua Kelas --</option>
+                                {% for k in daftar_kelas_guru %}
+                                    <option value="{{ k.id_kelas }}" {% if selected_kelas == k.id_kelas %}selected{% endif %}>
+                                        {{ k.nama_kelas }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+
+                        <a href="#" id="btnExportAll" target="_blank" class="btn btn-dark btn-round">
+                            <i class="fas fa-file-pdf me-2"></i> Export Semua Kelas
+                        </a>
+
+                        <a href="#" id="btnExportClass" class="btn btn-danger btn-round">
+                            <i class="fas fa-list-ul me-2"></i> Export Per Kelas
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                
+                <ul class="nav nav-pills nav-secondary nav-pills-no-bd mb-3" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-enkripsi-tab" data-bs-toggle="pill" href="#pills-enkripsi" role="tab">
+                            <i class="fas fa-lock me-2"></i> Enkripsi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-caesar-tab" data-bs-toggle="pill" href="#pills-caesar" role="tab">
+                            <i class="fas fa-key me-2"></i> Caesar Cipher
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-dekripsi-tab" data-bs-toggle="pill" href="#pills-dekripsi" role="tab">
+                            <i class="fas fa-unlock me-2"></i> Dekripsi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-evaluasi-tab" data-bs-toggle="pill" href="#pills-evaluasi" role="tab">
+                            <i class="fas fa-clipboard-check me-2"></i> Evaluasi Akhir
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-2 mb-3" id="pills-tabContent">
+                    
+                    <div class="tab-pane fade show active" id="pills-enkripsi" role="tabpanel">
+                        {% include "dashboard/guru/partial_tabel_nilai.html" with data_type="enkripsi" %}
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-caesar" role="tabpanel">
+                        {% include "dashboard/guru/partial_tabel_nilai.html" with data_type="caesar" %}
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-dekripsi" role="tabpanel">
+                        {% include "dashboard/guru/partial_tabel_nilai.html" with data_type="dekripsi" %}
+                    </div>
+
+                    <div class="tab-pane fade" id="pills-evaluasi" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-head-bg-success">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" width="5%" style="color: white;">No</th>
+                                        <th width="30%" style="color: white;">Nama Siswa</th>
+                                        <th width="15%" style="color: white;">Kelas</th>
+                                        <th class="text-center" width="15%" style="color: white;">Nilai Akhir</th>
+                                        <th class="text-center" width="15%" style="color: white;">Total Benar</th>
+                                        <th class="text-center" width="15%" style="color: white;">Waktu</th>
+                                        <th class="text-center" width="5%" style="color: white;">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in rekap_list %}
+                                    <tr>
+                                        <td class="text-center">{{ forloop.counter }}</td>
+                                        <td class="fw-bold">{{ item.siswa.nama_lengkap }}</td>
+                                        <td><span class="badge bg-light text-dark">{{ item.kelas }}</span></td>
+                                        
+                                        <td class="text-center">
+                                            {% if item.evaluasi %}
+                                                <span class="badge {% if item.evaluasi.nilai >= 70 %}bg-success{% else %}bg-danger{% endif %} fs-6">
+                                                    {{ item.evaluasi.nilai }}
+                                                </span>
+                                            {% else %}
+                                                <span class="text-muted small">-</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-center">
+                                            {% if item.evaluasi %}{{ item.evaluasi.total_benar }} Soal{% else %}-{% endif %}
+                                        </td>
+                                        
+                                        <td class="text-center">
+                                            {% if item.evaluasi %}
+                                                <i class="far fa-clock me-1"></i> {{ item.evaluasi.waktu_evaluasi_detik|format_waktu }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-center">
+                                            {% if item.evaluasi %}
+                                                <a href="{% url 'hapus_nilai_siswa' item.siswa.id_pengguna 'evaluasi' %}" 
+                                                   class="btn btn-link btn-danger btn-lg btn-hapus-nilai" 
+                                                   data-nama="{{ item.siswa.nama_lengkap }}"
+                                                   data-jenis="Evaluasi Akhir"
+                                                   title="Reset Evaluasi">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="7" class="text-center py-4">Belum ada data siswa.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        
+        // Cek apakah ada tab yang tersimpan di localStorage?
+        var activeTab = localStorage.getItem('activeTabRekapNilai');
+        if (activeTab) {
+            var tabTrigger = document.querySelector(`a[href="${activeTab}"]`);
+            if (tabTrigger) {
+                var tab = new bootstrap.Tab(tabTrigger);
+                tab.show();
+            }
+        }
+        
+        const btnExportAll = document.getElementById('btnExportAll');
+        const btnExportClass = document.getElementById('btnExportClass');
+        
+        // Mapping ID Tab HTML ke Parameter 'jenis' untuk URL
+        const tabMap = {
+            'pills-enkripsi-tab': 'enkripsi',
+            'pills-caesar-tab': 'caesar',
+            'pills-dekripsi-tab': 'dekripsi',
+            'pills-evaluasi-tab': 'evaluasi'
+        };
+
+        function updateExportLinks() {
+            // Cari tab yang sedang memiliki class 'active'
+            const activeTabElement = document.querySelector('.nav-link.active');
+            
+            if (activeTabElement && btnExportAll && btnExportClass) {
+                const tabId = activeTabElement.id; 
+                const jenis = tabMap[tabId] || 'enkripsi'; 
+
+                btnExportAll.href = "{% url 'export_rekap_nilai_pdf' %}?jenis=" + jenis;
+                
+                btnExportClass.href = "{% url 'halaman_download_per_kelas' %}?jenis=" + jenis;
+            }
+        }
+
+        // Jalankan fungsi ini sekali saat halaman baru dibuka
+        updateExportLinks();
+        
+        var tabLinks = document.querySelectorAll('a[data-bs-toggle="pill"]');
+        tabLinks.forEach(function(link) {
+            link.addEventListener('shown.bs.tab', function(event) {
+                // A. Simpan posisi tab baru ke memori browser
+                localStorage.setItem('activeTabRekapNilai', event.target.getAttribute('href'));
+                
+                // B. Update link tombol export sesuai tab baru
+                updateExportLinks();
+            });
+        });
+
+        // ============================================================
+        // 4. LOGIKA KONFIRMASI HAPUS (SweetAlert2)
+        // ============================================================
+        
+        const deleteBtns = document.querySelectorAll('.btn-hapus-nilai');
+        
+        deleteBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault(); // Cegah link langsung jalan
+                
+                const href = this.getAttribute('href');
+                const nama = this.getAttribute('data-nama');
+                const jenis = this.getAttribute('data-jenis');
+
+                Swal.fire({
+                    title: 'Reset Nilai?',
+                    html: `Anda akan menghapus seluruh data <b>${jenis}</b> milik <b>${nama}</b>.<br><small class="text-danger">Data yang dihapus tidak bisa dikembalikan!</small>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33', // Merah
+                    cancelButtonColor: '#1B3C53', // Navy
+                    confirmButtonText: 'Ya, Hapus Data',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = href;
+                    }
+                });
+            });
+        });
+
+    });
+</script>
+
+{% endblock %}

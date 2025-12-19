@@ -48,24 +48,43 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top landing-navbar">
         <div class="container-fluid px-5"> 
             <a class="navbar-brand fw-bold fs-2" href="#">CodeCracker</a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item"><a class="nav-link fs-5 active" href="{% url 'pengenalan' %}">Belajar</a></li>
-                    <li class="nav-item"><a class="nav-link fs-5" href="{% url 'tantangan' %}">Tantangan</a></li>
-                    <li class="nav-item"><a class="nav-link fs-5" href="{% url 'leaderboard' %}">Papan Peringkat</a></li>
-                    <li class="nav-item"><a class="nav-link fs-5" href="#">Informasi</a></li>
-                </ul>
+                
+            <ul class="navbar-nav me-auto">
+                
+                {% if request.session.id_pengguna %}
+                    
+                    {% if request.session.peran == 'siswa' %}
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'pengenalan' %}">Belajar</a></li>
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'tantangan' %}">Tantangan</a></li>
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'leaderboard' %}">Papan Peringkat</a></li>
+                    
+                    {% elif request.session.peran == 'guru' %}
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'kelola_kelas' %}">Manajemen Kelas</a></li>
+                        <li class="nav-item"><a class="nav-link fs-5" href="{% url 'leaderboard' %}">Papan Peringkat</a></li>
+                    {% endif %}
+
+                {% else %}
+                    {% endif %}
+                
+            </ul>
+
                 <div class="d-flex gap-2">
                     {% if request.session.id_pengguna %}
+                        <span class="navbar-text text-white me-3 d-none d-lg-block">Halo, <b>{{ request.session.nama_lengkap }}</b></span>
                         <a href="{% url 'dashboard' %}" class="btn btn-start btn-round">Dashboard</a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-round">Keluar</a>
                     {% else %}
                         <a href="{% url 'pilihan_daftar' %}" class="btn btn-outline-light btn-round fw-bold">Daftar</a>
                         <a href="{% url 'login' %}" class="btn btn-start btn-round">Masuk</a>
                     {% endif %}
                 </div>
+
             </div>
         </div>
     </nav>
@@ -78,7 +97,17 @@
                 <p class="lead text-muted mb-4" style="line-height: 1.8;">
                     CodeCracker adalah media pembelajaran interaktif yang dirancang untuk membantu siswa memahami konsep Algoritma Caesar Cipher. Melalui aplikasi ini, siswa dapat mempelajari cara kerja enkripsi sederhana dengan metode geser huruf serta langsung berlatih memecahkan kode melalui latihan dan tantangan yang menarik.
                 </p>
-                <a href="#" class="btn btn-start btn-round btn-lg px-5">Mulai Belajar</a>
+                
+                {% if request.session.id_pengguna %}
+                    {% if request.session.peran == 'siswa' %}
+                        <a href="{% url 'pengenalan' %}" class="btn btn-start btn-round btn-lg px-5">Lanjut Belajar</a>
+                    {% else %}
+                        <a href="{% url 'dashboard' %}" class="btn btn-start btn-round btn-lg px-5">Ke Dashboard</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-start btn-round btn-lg px-5">Mulai Belajar</a>
+                {% endif %}
+                
             </div>
             <div class="col-lg-6 text-center d-none d-lg-block"> 
                 <img src="{% static 'assets/landing.png' %}" alt="Ilustrasi" class="img-fluid" style="max-height: 450px;">            
@@ -99,7 +128,11 @@
                             <div class="mb-3"><i class="fas fa-book-open fa-3x" style="color: #1B3C53;"></i></div>
                             <h3 class="fw-bold mb-3" style="color: #1B3C53;">Belajar</h3>
                             <p class="text-muted mb-4 flex-grow-1">Pelajari dasar-dasar Algoritma Caesar Cipher secara mendalam melalui tutorial interaktif.</p>
-                            <a href="#" class="btn btn-card btn-round">Mulai Belajar</a>
+                            
+                            <a href="{% if request.session.id_pengguna %}{% url 'pengenalan' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-card btn-round">
+                                Mulai Belajar
+                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -110,7 +143,11 @@
                             <div class="mb-3"><i class="fas fa-gamepad fa-3x" style="color: #1B3C53;"></i></div>
                             <h3 class="fw-bold mb-3" style="color: #1B3C53;">Tantangan</h3>
                             <p class="text-muted mb-4 flex-grow-1">Uji kemampuanmu dalam memecahkan kode dan naik ke peringkat tertinggi di Papan Peringkat.</p>
-                            <a href="#" class="btn btn-card btn-round">Mulai Tantangan</a>
+                            
+                            <a href="{% if request.session.id_pengguna %}{% url 'tantangan' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-card btn-round">
+                                Mulai Tantangan
+                            </a>
+
                         </div>
                     </div>
                 </div>
@@ -121,7 +158,11 @@
                             <div class="mb-3"><i class="fas fa-trophy fa-3x" style="color: #1B3C53;"></i></div>
                             <h3 class="fw-bold mb-3" style="color: #1B3C53;">Papan Peringkat</h3>
                             <p class="text-muted mb-4 flex-grow-1">Lihat peringkatmu dan bandingkan hasil dengan teman-teman di Papan Peringkat.</p>
-                            <a href="#" class="btn btn-card btn-round">Lihat Peringkat</a>
+                            
+                            <a href="{% if request.session.id_pengguna %}{% url 'leaderboard' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-card btn-round">
+                                Lihat Peringkat
+                            </a>
+
                         </div>
                     </div>
                 </div>

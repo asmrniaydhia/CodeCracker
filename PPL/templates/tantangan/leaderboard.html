@@ -56,6 +56,10 @@
             font-weight: 700;
         }
 
+        /* Tombol Custom (Copy dari Landing Page agar konsisten) */
+        .btn-start { background-color: #F3C623; color: #1B3C53; font-weight: 900; border: 2px solid #F3C623; transition: all 0.3s; }
+        .btn-start:hover { background-color: #e0b41e; border-color: #e0b41e; transform: translateY(-3px); }
+
         /* Tombol Logout */
         .btn-logout-custom {
             background-color: #dc3545;
@@ -96,14 +100,12 @@
             font-size: 0.85rem; font-weight: 700; padding: 0 20px; letter-spacing: 0.5px;
         }
 
-        /* --- PERBAIKAN DI SINI (HAPUS SCALE) --- */
         .rank-row { 
             background: white; 
             transition: all 0.3s ease; 
         }
         
         .rank-row:hover { 
-            /* Ganti scale(1.02) dengan translateY(-5px) agar tidak melebar ke samping */
             transform: translateY(-5px); 
             box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
             z-index: 2; 
@@ -170,32 +172,52 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link fs-5" href="{% url 'pengenalan' %}">Belajar</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-5" href="{% url 'tantangan' %}">Tantangan</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-5 active" href="{% url 'leaderboard' %}">Papan Peringkat</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link fs-5" href="#">Informasi</a>
-                    </li>
-                </ul>
+                
+            <ul class="navbar-nav me-auto">
+                {% if request.session.id_pengguna %}
+                    
+                    {% if request.session.peran == 'siswa' %}
+                        <li class="nav-item">
+                            <a class="nav-link fs-5" href="{% url 'pengenalan' %}">Belajar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-5" href="{% url 'tantangan' %}">Tantangan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-5 active" href="{% url 'leaderboard' %}">Papan Peringkat</a>
+                        </li>
+                    
+                    {% elif request.session.peran == 'guru' %}
+                        <li class="nav-item">
+                            <a class="nav-link fs-5" href="{% url 'kelola_kelas' %}">Manajemen Kelas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fs-5 active" href="{% url 'leaderboard' %}">Papan Peringkat</a>
+                        </li>
+                    {% endif %}
+
+                {% endif %}
+            </ul>
 
                 <div class="d-flex align-items-center gap-3">
-                    <div class="text-white text-end d-none d-md-block" style="line-height: 1.2;">
-                        <span class="fw-bold d-block" style="font-size: 1rem;">
-                            <i class="fas fa-user-circle me-1"></i> {{ request.session.nama_lengkap|default:'Siswa' }}
-                        </span>
-                        <small class="text-white-50 fw-bold" style="font-size: 0.75rem;">SISWA</small>
-                    </div>
                     
-                    <a href="#" id="btn-logout" class="btn btn-logout-custom btn-round">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </a>
+                    {% if request.session.id_pengguna %}
+                        <div class="text-white text-end d-none d-md-block" style="line-height: 1.2;">
+                            <span class="fw-bold d-block" style="font-size: 1rem;">
+                                <i class="fas fa-user-circle me-1"></i> {{ request.session.nama_lengkap|default:'Siswa' }}
+                            </span>
+                            <small class="text-white-50 fw-bold" style="font-size: 0.75rem;">{{ request.session.peran|upper }}</small>
+                        </div>
+                        
+                        <a href="#" id="btn-logout" class="btn btn-logout-custom btn-round">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+
+                    {% else %}
+                        <a href="{% url 'pilihan_daftar' %}" class="btn btn-outline-light btn-round fw-bold">Daftar</a>
+                         <a href="{% url 'login' %}" class="btn btn-start btn-round">Masuk</a>
+                    {% endif %}
+
                 </div>
             </div>
         </div>
@@ -287,24 +309,27 @@
 
     <script>
         // Konfirmasi Logout
-        document.getElementById('btn-logout').addEventListener('click', function(e) {
-            e.preventDefault(); 
-            
-            Swal.fire({
-                title: 'Yakin ingin keluar?',
-                text: "Sesi Anda akan berakhir.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "{% url 'logout' %}";
-                }
+        const btnLogout = document.getElementById('btn-logout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                Swal.fire({
+                    title: 'Yakin ingin keluar?',
+                    text: "Sesi Anda akan berakhir.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, Keluar',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "{% url 'logout' %}";
+                    }
+                });
             });
-        });
+        }
     </script>
 </body>
 </html>

@@ -1,0 +1,122 @@
+{% load custom_filters %}
+
+<div class="table-responsive">
+    <table class="table table-hover table-head-bg-primary">
+        <thead>
+            <tr>
+                <th class="text-center" width="5%" style="color: white;">No</th>
+                <th width="25%" style="color: white;">Nama Siswa</th>
+                <th width="15%" style="color: white;">Kelas</th>
+                <th class="text-center" width="15%" style="color: white;">Nilai Tertinggi</th>
+                <th class="text-center" width="15%" style="color: white;">Waktu</th>
+                <th class="text-center" width="10%" style="color: white;">Percobaan</th>
+                <th class="text-center" width="15%" style="color: white;">Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in rekap_list %}
+                {% with data=item|get_item:data_type %} 
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="fw-bold">{{ item.siswa.nama_lengkap }}</td>
+                    <td><span class="badge bg-light text-dark">{{ item.kelas }}</span></td>
+                    
+                    <td class="text-center">
+                        {% if data.terbaik %}
+                            <span class="badge {% if data.terbaik.skor_kuis >= 70 %}bg-success{% else %}bg-danger{% endif %} fs-6">
+                                {{ data.terbaik.skor_kuis }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted small">-</span>
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        {% if data.terbaik %}
+                            <span class="text-muted fw-bold">
+                                <i class="far fa-clock me-1"></i> {{ data.terbaik.waktu_kuis|format_waktu }}
+                            </span>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        {% if data.total_coba > 0 %}
+                            <span class="badge bg-secondary">{{ data.total_coba }}x</span>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        {% if data.total_coba > 0 %}
+                            <div class="form-button-action">
+                                <button type="button" class="btn btn-link btn-info btn-lg" data-bs-toggle="modal" data-bs-target="#modalRiwayat{{ data_type }}{{ item.siswa.id_pengguna }}" title="Lihat Detail">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+
+                                <a href="{% url 'hapus_nilai_siswa' item.siswa.id_pengguna data_type %}" 
+                                   class="btn btn-link btn-danger btn-lg btn-hapus-nilai" 
+                                   data-nama="{{ item.siswa.nama_lengkap }}"
+                                   data-jenis="{{ data_type|title }}"
+                                   title="Hapus/Reset Nilai">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endwith %}
+            {% empty %}
+                <tr><td colspan="7" class="text-center py-4">Belum ada siswa.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% for item in rekap_list %}
+    {% with data=item|get_item:data_type %}
+        {% if data.total_coba > 0 %}
+        <div class="modal fade" id="modalRiwayat{{ data_type }}{{ item.siswa.id_pengguna }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title"><i class="fas fa-history me-2"></i>Riwayat {{ data_type|title }} - {{ item.siswa.nama_lengkap }}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="text-center">Percobaan Ke-</th>
+                                        <th class="text-center">Nilai</th>
+                                        <th class="text-center">Waktu Pengerjaan</th>
+                                        <th class="text-center">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for h in data.histori %}
+                                    <tr>
+                                        <td class="text-center fw-bold">#{{ h.percobaan_kuis }}</td>
+                                        <td class="text-center"><span class="fw-bold {% if h.skor_kuis >= 70 %}text-success{% else %}text-danger{% endif %}">{{ h.skor_kuis }}</span></td>
+                                        
+                                        <td class="text-center">{{ h.waktu_kuis|format_waktu }}</td>
+                                        
+                                        <td class="text-center">{% if h.skor_kuis >= 70 %}<span class="badge bg-success">Lulus</span>{% else %}<span class="badge bg-danger">Belum Lulus</span>{% endif %}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endwith %}
+{% endfor %}

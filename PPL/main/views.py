@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
@@ -10,7 +10,9 @@ from .models import Pengguna, Kelas, AnggotaKelas, Kuis, HasilKuis, RincianJawab
 from functools import wraps
 import json
 import time
-from django.db.models import Max
+from django.db.models import Max, Avg, Count, Q
+from .utils import render_to_pdf
+from .decorators import butuh_login_siswa 
 
 # --- DECORATOR KHUSUS TANTANGAN ---
 def butuh_login_siswa(function):
@@ -1080,7 +1082,6 @@ def leaderboard(request):
     context = {'peringkat_list': peringkat_list}
     return render(request, "tantangan/leaderboard.html", context)
 
-# ---------- PUNYA RANIIIIII ----------
 def siswa_daftar(request):
     if request.method == 'POST':
         nama = request.POST.get('nama_lengkap')
@@ -1481,13 +1482,393 @@ def update_progres_item(request):
     
     return JsonResponse({'status': 'error', 'message': 'Akses ditolak'})
 
+from django.db.models import Max
+
+@butuh_login_siswa
+def rekap_nilai_siswa(request):
+    # 1. Cek Akses Guru
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+
+    id_guru = request.session['id_pengguna']
+    
+    # 2. Filter Kelas
+    filter_kelas_id = request.GET.get('kelas')
+    data_anggota = AnggotaKelas.objects.filter(kelas__guru__id_pengguna=id_guru).select_related('siswa', 'kelas')
+    
+    if filter_kelas_id:
+        data_anggota = data_anggota.filter(kelas__id_kelas=filter_kelas_id)
+        
+    data_anggota = data_anggota.order_by('kelas__nama_kelas', 'siswa__nama_lengkap')
+
+    # 3. Struktur Data
+    rekap_list = []
+
+    for anggota in data_anggota:
+        siswa = anggota.siswa
+        
+        # --- Helper Function untuk Mengambil Data Per Kategori ---
+        def get_quiz_data(keyword):
+            # Ambil semua riwayat urut dari percobaan pertama
+            histori = HasilKuis.objects.filter(
+                id_siswa=siswa, 
+                id_kuis__nama_kuis__icontains=keyword
+            ).order_by('percobaan_kuis')
+            
+            # Cari percobaan TERBAIK (Skor Tertinggi, Waktu Tercepat)
+            terbaik = histori.order_by('-skor_kuis', 'waktu_kuis').first()
+            
+            return {
+                'histori': histori,
+                'total_coba': histori.count(),
+                'terbaik': terbaik, # Objek HasilKuis (bisa ambil skor & waktu)
+            }
+
+        # --- EVALUASI (Hanya 1 kali) ---
+        hasil_eval = HasilEvaluasi.objects.filter(id_siswa=siswa).first()
+
+        rekap_list.append({
+            'siswa': siswa,
+            'kelas': anggota.kelas.nama_kelas,
+            'enkripsi': get_quiz_data("Enkripsi"),
+            'caesar': get_quiz_data("Caesar"),
+            'dekripsi': get_quiz_data("Dekripsi"),
+            'evaluasi': hasil_eval
+        })
+
+    # Dropdown Kelas
+    daftar_kelas_guru = Kelas.objects.filter(guru__id_pengguna=id_guru).order_by('nama_kelas')
+
+    context = {
+        'rekap_list': rekap_list,
+        'daftar_kelas_guru': daftar_kelas_guru,
+        'selected_kelas': int(filter_kelas_id) if filter_kelas_id else None,
+    }
+
+    return render(request, 'dashboard/guru/rekap_nilai.html', context)
+
+@butuh_login_siswa
+def hapus_nilai_siswa(request, id_siswa, jenis):
+    # 1. Cek Akses Guru
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+
+    try:
+        siswa = Pengguna.objects.get(id_pengguna=id_siswa)
+        
+        # 2. Logika Hapus Berdasarkan Jenis
+        if jenis == 'evaluasi':
+            # Hapus Evaluasi Akhir
+            HasilEvaluasi.objects.filter(id_siswa=siswa).delete()
+            # Opsional: Reset status progres jika perlu
+            # ...
+            messages.success(request, f"Data Evaluasi {siswa.nama_lengkap} berhasil direset.")
+            
+        else:
+            # Hapus Kuis (Enkripsi, Caesar, Dekripsi)
+            keyword_map = {
+                'enkripsi': 'Enkripsi',
+                'caesar': 'Caesar',
+                'dekripsi': 'Dekripsi'
+            }
+            keyword = keyword_map.get(jenis)
+            
+            if keyword:
+                # Hapus semua riwayat kuis tersebut
+                HasilKuis.objects.filter(
+                    id_siswa=siswa, 
+                    id_kuis__nama_kuis__icontains=keyword
+                ).delete()
+                
+                messages.success(request, f"Data Kuis {keyword} {siswa.nama_lengkap} berhasil direset.")
+
+    except Exception as e:
+        messages.error(request, f"Gagal menghapus data: {e}")
+
+    # Redirect kembali ke rekap nilai
+    return redirect('rekap_nilai_siswa')
+
+@butuh_login_siswa
+def halaman_download_per_kelas(request):
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+
+    id_guru = request.session['id_pengguna']
+    jenis = request.GET.get('jenis', 'enkripsi') # Tangkap jenis dari URL
+    
+    daftar_kelas = Kelas.objects.filter(guru__id_pengguna=id_guru).order_by('nama_kelas')
+    
+    context = {
+        'daftar_kelas': daftar_kelas,
+        'jenis': jenis, # Kirim jenis ke template agar link downloadnya benar
+        'judul_halaman': f"Download Nilai {jenis.title()}"
+    }
+    return render(request, 'dashboard/guru/list_download_kelas.html', context)
+
+from .utils import render_to_pdf # Import helper yang tadi dibuat
+from django.db.models import Max
+import datetime
+
+@butuh_login_siswa
+def export_rekap_nilai_pdf(request):
+    if request.session.get('peran') != 'guru':
+        return redirect('dashboard')
+
+    id_guru = request.session['id_pengguna']
+    
+    # 1. TANGKAP FILTER DARI URL
+    jenis = request.GET.get('jenis', 'enkripsi')  # Default enkripsi jika tidak ada param
+    filter_kelas_id = request.GET.get('kelas')    # Jika ada, berarti mode "Download Per Kelas"
+    
+    # Helper Format Waktu (Detik -> HH:MM:SS)
+    def format_hms(seconds):
+        if not seconds: return "00:00:00"
+        m, s = divmod(int(seconds), 60)
+        h, m = divmod(m, 60)
+        return f"{h:02d}:{m:02d}:{s:02d}"
+
+    # 2. JUDUL LAPORAN
+    judul_map = {
+        'enkripsi': 'Hasil Kuis Enkripsi',
+        'caesar': 'Hasil Kuis Caesar Cipher',
+        'dekripsi': 'Hasil Kuis Dekripsi',
+        'evaluasi': 'Hasil Evaluasi Akhir'
+    }
+    judul_laporan = judul_map.get(jenis, 'Laporan Nilai')
+
+    # 3. AMBIL DAFTAR KELAS GURU
+    daftar_kelas = Kelas.objects.filter(guru__id_pengguna=id_guru).order_by('nama_kelas')
+    
+    # Jika mode "Per Kelas", filter hanya satu kelas itu saja
+    if filter_kelas_id:
+        daftar_kelas = daftar_kelas.filter(id_kelas=filter_kelas_id)
+        # Update nama file agar spesifik
+        if daftar_kelas.exists():
+            judul_laporan += f" - {daftar_kelas.first().nama_kelas}"
+
+    # 4. SUSUN DATA HIERARKI (KELAS -> SISWA)
+    laporan_data = []
+
+    for kelas in daftar_kelas:
+        # Ambil siswa di kelas ini
+        anggota_kelas = AnggotaKelas.objects.filter(kelas=kelas).select_related('siswa').order_by('siswa__nama_lengkap')
+        
+        list_siswa = []
+        for idx, anggota in enumerate(anggota_kelas, 1):
+            siswa = anggota.siswa
+            
+            # Cari Nilai Sesuai Jenis
+            nilai = 0
+            waktu_str = "00:00:00"
+            percobaan = 0
+
+            if jenis == 'evaluasi':
+                res = HasilEvaluasi.objects.filter(id_siswa=siswa).first()
+                if res:
+                    nilai = res.nilai
+                    waktu_str = format_hms(res.waktu_evaluasi_detik)
+                    percobaan = 1 # Evaluasi cuma 1x
+            else:
+                # Kuis (Enkripsi/Caesar/Dekripsi)
+                keyword = jenis.title() # "Enkripsi", "Caesar", "Dekripsi"
+                if jenis == 'caesar': keyword = "Caesar" # Pastikan sesuai nama di DB
+
+                # Ambil histori terbaik
+                # Kita perlu objek lengkap untuk ambil waktu, bukan cuma Max skor
+                histori = HasilKuis.objects.filter(
+                    id_siswa=siswa, 
+                    id_kuis__nama_kuis__icontains=keyword
+                ).order_by('-skor_kuis', 'waktu_kuis') # Prioritas: Skor tinggi, Waktu cepat (kecil)
+                
+                terbaik = histori.first()
+                total_coba = histori.count()
+
+                if terbaik:
+                    nilai = terbaik.skor_kuis
+                    waktu_str = format_hms(terbaik.waktu_kuis)
+                    percobaan = total_coba
+
+            list_siswa.append({
+                'no': idx,
+                'nama': siswa.nama_lengkap,
+                'nilai': nilai,
+                'waktu': waktu_str,
+                'percobaan': percobaan
+            })
+
+        # Masukkan ke list utama jika kelas ada siswanya (opsional: atau tetap tampilkan meski kosong)
+        laporan_data.append({
+            'nama_kelas': kelas.nama_kelas,
+            'siswa_list': list_siswa
+        })
+
+    # 5. RENDER PDF
+    context = {
+        'judul_laporan': judul_laporan,
+        'nama_guru': request.session.get('nama_lengkap'),
+        'laporan_data': laporan_data,
+        'tanggal_cetak': datetime.datetime.now()
+    }
+
+    pdf = render_to_pdf('dashboard/guru/pdf_rekap_nilai.html', context)
+    
+    if pdf:
+        response = HttpResponse(pdf, content_type='application/pdf')
+        filename = f"{judul_laporan.replace(' ', '_')}.pdf"
+        content = f"inline; filename='{filename}'"
+        response['Content-Disposition'] = content
+        return response
+    
+    return HttpResponse("Gagal membuat PDF")
+
+@butuh_login_siswa # Atau decorator manual jika untuk guru juga
+def profil_view(request):
+    # 1. Ambil data user yang sedang login
+    user_id = request.session.get('id_pengguna')
+    if not user_id:
+        return redirect('login')
+    
+    try:
+        pengguna = Pengguna.objects.get(id_pengguna=user_id)
+    except Pengguna.DoesNotExist:
+        return redirect('logout')
+
+    # 2. Logika Ganti Password (POST)
+    if request.method == 'POST':
+        password_baru = request.POST.get('password_baru')
+        
+        if password_baru:
+            # Langsung timpa password lama (Sesuai permintaan: tanpa konfirmasi/pass lama)
+            pengguna.kata_sandi = password_baru
+            pengguna.save()
+            messages.success(request, 'Kata sandi berhasil diperbarui!')
+        else:
+            messages.error(request, 'Password tidak boleh kosong.')
+        
+        return redirect('profil')
+
+    # 3. Tampilkan Halaman
+    context = {
+        'user': pengguna,
+        # Ambil status sidebar agar menu tetap sinkron (khusus siswa)
+        'sidebar_status': get_sidebar_status(user_id) if pengguna.peran == 'siswa' else None
+    }
+    return render(request, 'dashboard/profile.html', context)
+    
+# main/views.py (Pastikan ini menggantikan fungsi dashboard & index lama Anda)
+
+@butuh_login_siswa
+def dashboard(request):
+    peran = request.session.get('peran')
+    id_pengguna = request.session.get('id_pengguna')
+    nama_lengkap = request.session.get('nama_lengkap')
+
+    # ==========================
+    # LOGIKA GURU (Tidak Berubah)
+    # ==========================
+    if peran == 'guru':
+        total_kelas = Kelas.objects.filter(guru__id_pengguna=id_pengguna).count()
+        siswa_guru_qs = AnggotaKelas.objects.filter(kelas__guru__id_pengguna=id_pengguna)
+        total_siswa = siswa_guru_qs.count()
+        
+        evaluasi_qs = HasilEvaluasi.objects.filter(
+            id_siswa__anggotakelas__kelas__guru__id_pengguna=id_pengguna
+        )
+        rata_rata_evaluasi = evaluasi_qs.aggregate(Avg('nilai'))['nilai__avg'] or 0
+        siswa_remedial = evaluasi_qs.filter(nilai__lt=70).count()
+
+        def get_materi_stats(keyword):
+            if total_siswa == 0: return 0, 0
+            base_qs = HasilKuis.objects.filter(
+                id_siswa__anggotakelas__kelas__guru__id_pengguna=id_pengguna,
+                id_kuis__nama_kuis__icontains=keyword
+            )
+            siswa_lulus = base_qs.values('id_siswa').annotate(max_skor=Max('skor_kuis')).filter(max_skor__gte=70).count()
+            progress_persen = round((siswa_lulus / total_siswa) * 100, 1)
+            
+            data_max = base_qs.values('id_siswa').annotate(max_skor=Max('skor_kuis'))
+            if data_max.exists():
+                total_skor = sum(item['max_skor'] for item in data_max)
+                avg_score = round(total_skor / data_max.count(), 1)
+            else:
+                avg_score = 0
+            return progress_persen, avg_score
+
+        prog_enkripsi, avg_enkripsi = get_materi_stats('Enkripsi')
+        prog_caesar, avg_caesar = get_materi_stats('Caesar')
+        prog_dekripsi, avg_dekripsi = get_materi_stats('Dekripsi')
+        
+        lulus_eval = evaluasi_qs.filter(nilai__gte=70).count()
+        prog_eval = round((lulus_eval / total_siswa) * 100, 1) if total_siswa > 0 else 0
+
+        top_siswa = evaluasi_qs.select_related('id_siswa').order_by('-nilai')[:5]
+
+        context = {
+            'role': 'guru',
+            'nama_guru': nama_lengkap,
+            'total_kelas': total_kelas,
+            'total_siswa': total_siswa,
+            'rata_rata_evaluasi': round(rata_rata_evaluasi, 1),
+            'siswa_remedial': siswa_remedial,
+            'materi': {
+                'enkripsi': {'progress': prog_enkripsi, 'avg': avg_enkripsi},
+                'caesar':   {'progress': prog_caesar,   'avg': avg_caesar},
+                'dekripsi': {'progress': prog_dekripsi, 'avg': avg_dekripsi},
+                'evaluasi': {'progress': prog_eval,     'avg': round(rata_rata_evaluasi, 1)}
+            },
+            'top_siswa': top_siswa,
+        }
+        return render(request, 'dashboard/index.html', context)
 
 
+    # ==========================
+    # LOGIKA SISWA
+    # ==========================
+    else:
+        # 1. Info Kelas
+        try:
+            anggota = AnggotaKelas.objects.get(siswa__id_pengguna=id_pengguna)
+            nama_kelas = anggota.kelas.nama_kelas
+        except AnggotaKelas.DoesNotExist:
+            nama_kelas = "Belum masuk kelas"
+        
+        # 2. Nilai Evaluasi Akhir
+        try:
+            hasil = HasilEvaluasi.objects.get(id_siswa__id_pengguna=id_pengguna)
+            nilai_evaluasi = hasil.nilai
+        except HasilEvaluasi.DoesNotExist:
+            nilai_evaluasi = "-"
 
+        # 3. DATA RIWAYAT PER KATEGORI (Dipisah-pisah)
+        # Helper kecil untuk mengambil riwayat berdasarkan nama kuis
+        def get_histori_kuis(keyword):
+            return HasilKuis.objects.filter(
+                id_siswa__id_pengguna=id_pengguna,
+                id_kuis__nama_kuis__icontains=keyword
+            ).order_by('percobaan_kuis') # Urutkan dari percobaan ke-1, 2, dst.
+
+        histori_enkripsi = get_histori_kuis('Enkripsi')
+        histori_caesar = get_histori_kuis('Caesar')
+        histori_dekripsi = get_histori_kuis('Dekripsi')
+
+        context = {
+            'role': 'siswa',
+            'nama_siswa': nama_lengkap,
+            'kelas': nama_kelas,
+            'nilai_evaluasi': nilai_evaluasi,
+            
+            # Kirim data yang sudah dipisah ke HTML
+            'histori_enkripsi': histori_enkripsi,
+            'histori_caesar': histori_caesar,
+            'histori_dekripsi': histori_dekripsi,
+            
+            'sidebar_status': get_sidebar_status(id_pengguna)
+        }
+        return render(request, 'dashboard/index.html', context)
+    
 def index(request):
     return render(request, 'landing/index.html')
-def login_page(request):
-    return render(request, 'login.html')
+
 def pilihan_daftar(request):
     return render(request, 'auth/role_selection.html')
 
